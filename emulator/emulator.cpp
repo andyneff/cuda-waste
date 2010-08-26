@@ -1,23 +1,24 @@
 #include "emulator.h"
 #include <assert.h>
+#include <iostream>
 
-EMULATOR * EMULATOR::singleton;
+CUDA_EMULATOR * CUDA_EMULATOR::singleton;
 
-EMULATOR * EMULATOR::Singleton()
+CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 {
     if (singleton)
         return singleton;
-    singleton = new EMULATOR();
+    singleton = new CUDA_EMULATOR();
     return singleton;
 }
 
-EMULATOR::EMULATOR()
+CUDA_EMULATOR::CUDA_EMULATOR()
 {
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
 
-void EMULATOR::Extract_From_Source(char * source)
+void CUDA_EMULATOR::Extract_From_Source(char * source)
 {
     pANTLR3_BASE_TREE mod = parse(source);
     if (! mod)
@@ -26,7 +27,7 @@ void EMULATOR::Extract_From_Source(char * source)
     Extract_From_Tree(mod);
 }
 
-void EMULATOR::Extract_From_Tree(pANTLR3_BASE_TREE node)
+void CUDA_EMULATOR::Extract_From_Tree(pANTLR3_BASE_TREE node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->getType(node) == TREE_ENTRY)
@@ -50,14 +51,14 @@ void EMULATOR::Extract_From_Tree(pANTLR3_BASE_TREE node)
         i.second = node;
         this->func.insert(i);
     }
-    for (int i = 0; i < node->getChildCount(node); ++i)
+    for (int i = 0; i < (int)node->getChildCount(node); ++i)
     {
         pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
         Extract_From_Tree(child);
     }
 } 
 
-void ** EMULATOR::RegisterFunction(void * fun, char * name)
+void ** CUDA_EMULATOR::RegisterFunction(void * fun, char * name)
 {
     std::pair<void*, char*> i;
     i.first = fun;
@@ -66,10 +67,10 @@ void ** EMULATOR::RegisterFunction(void * fun, char * name)
     return 0;
 }
 
-cudaError_t EMULATOR::SetupArgument(const void *arg, size_t size, size_t offset)
+cudaError_t CUDA_EMULATOR::SetupArgument(const void *arg, size_t size, size_t offset)
 {
     // record argument, size, offset.
-    EMULATOR::arg a;
+    CUDA_EMULATOR::arg a;
     a.argument = arg;
     a.size = size;
     a.offset = offset;
@@ -77,7 +78,7 @@ cudaError_t EMULATOR::SetupArgument(const void *arg, size_t size, size_t offset)
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream)
+cudaError_t CUDA_EMULATOR::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream)
 {
     conf.gridDim = gridDim;
     conf.blockDim = blockDim;
@@ -86,7 +87,13 @@ cudaError_t EMULATOR::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMe
     return cudaSuccess;
 }
 
-void EMULATOR::Execute(void* hostfun)
+
+cudaError_t CUDA_EMULATOR::ThreadSynchronize()
+{
+	return cudaSuccess;
+}
+
+void CUDA_EMULATOR::Execute(void* hostfun)
 {
     std::map<void*, char*>::iterator i = this->fun_to_name.find(hostfun);
     if (i == this->fun_to_name.end())
@@ -113,9 +120,9 @@ void EMULATOR::Execute(void* hostfun)
     }
 }
 
-pANTLR3_BASE_TREE EMULATOR::FindBlock(pANTLR3_BASE_TREE node)
+pANTLR3_BASE_TREE CUDA_EMULATOR::FindBlock(pANTLR3_BASE_TREE node)
 {
-    for (int i = 0; i < node->getChildCount(node); ++i)
+    for (int i = 0; i < (int)node->getChildCount(node); ++i)
     {
         pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
         if (child->getType(child) == TREE_BLOCK)
@@ -124,9 +131,9 @@ pANTLR3_BASE_TREE EMULATOR::FindBlock(pANTLR3_BASE_TREE node)
     return 0;
 }
 
-int EMULATOR::FindFirstInst(pANTLR3_BASE_TREE block, int first)
+int CUDA_EMULATOR::FindFirstInst(pANTLR3_BASE_TREE block, int first)
 {
-    for (int i = first; i < block->getChildCount(block); ++i)
+    for (int i = first; i < (int)block->getChildCount(block); ++i)
     {
         pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)block->getChild(block, i);
         if (child->getType(child) == TREE_INST)
@@ -135,14 +142,14 @@ int EMULATOR::FindFirstInst(pANTLR3_BASE_TREE block, int first)
     return -1;
 }
 
-pANTLR3_BASE_TREE EMULATOR::GetInst(pANTLR3_BASE_TREE block, int pc)
+pANTLR3_BASE_TREE CUDA_EMULATOR::GetInst(pANTLR3_BASE_TREE block, int pc)
 {
 	assert(block->getType(block) == TREE_BLOCK);
     pANTLR3_BASE_TREE inst = (pANTLR3_BASE_TREE)block->getChild(block, pc);
     return inst;
 }
 
-bool EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
+bool CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 {
 	pANTLR3_BASE_TREE i = (pANTLR3_BASE_TREE)inst->getChild(inst,0);
     int inst_type = i->getType(i);
@@ -170,6 +177,7 @@ bool EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 		case KI_DIV: ;
 		case KI_EX2: ;
 		case KI_EXIT:
+			DoExit(inst);
 			return true;
 		case KI_FMA: ;
 		case KI_ISSPACEP: ;
@@ -239,14 +247,23 @@ bool EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
     return true;
 }
 
-void EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
+
+void CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
 {
+	std::cout << "EXIT\n";
 }
 
-void EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
+void CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
 {
+	std::cout << "MOV\n";
 }
 
-void EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
+void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
 {
+	std::cout << "LD\n";
+}
+
+void CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
+{
+	std::cout << "ST\n";
 }

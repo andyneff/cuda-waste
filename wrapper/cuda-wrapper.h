@@ -276,6 +276,8 @@ public:
 	static void CUDARTAPI RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize);
     static cudaError_t CUDARTAPI SetupArgument(const void *arg, size_t size, size_t offset);
     static cudaError_t CUDARTAPI ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0));
+	static cudaError_t CUDARTAPI ThreadSynchronize(void);
+	static void CUDARTAPI UnregisterFatBinary(void **fatCubinHandle);
 
     enum return_type {
         NOT_OK = 0,

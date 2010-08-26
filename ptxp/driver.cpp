@@ -9,7 +9,7 @@ static void print(pANTLR3_BASE_TREE node, int level)
 	for (int i = 0; i < level; ++i)
 	    printf("   ");
 	printf("%s\n", node->getText(node)->chars);
-	for (int i = 0; i < node->getChildCount(node); ++i)
+	for (int i = 0; i < (int)node->getChildCount(node); ++i)
 	{
 	    pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
 	    print(child, level+1);
