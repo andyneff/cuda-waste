@@ -42,116 +42,116 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Pointers to functions in the CUDA library, unaltered.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-CudaMemoryDebug::typePtrCudaMalloc3D CudaMemoryDebug::ptrCudaMalloc3D;
-CudaMemoryDebug::typePtrCudaMalloc3DArray CudaMemoryDebug::ptrCudaMalloc3DArray;
-CudaMemoryDebug::typePtrCudaMemset3D CudaMemoryDebug::ptrCudaMemset3D;
-CudaMemoryDebug::typePtrCudaMemcpy3D CudaMemoryDebug::ptrCudaMemcpy3D;
-CudaMemoryDebug::typePtrCudaMemcpy3DAsync CudaMemoryDebug::ptrCudaMemcpy3DAsync;
-CudaMemoryDebug::typePtrCudaMalloc CudaMemoryDebug::ptrCudaMalloc;
-CudaMemoryDebug::typePtrCudaMallocHost CudaMemoryDebug::ptrCudaMallocHost;
-CudaMemoryDebug::typePtrCudaMallocPitch CudaMemoryDebug::ptrCudaMallocPitch;
-CudaMemoryDebug::typePtrCudaMallocArray CudaMemoryDebug::ptrCudaMallocArray;
-CudaMemoryDebug::typePtrCudaFree CudaMemoryDebug::ptrCudaFree;
-CudaMemoryDebug::typePtrCudaFreeHost CudaMemoryDebug::ptrCudaFreeHost;
-CudaMemoryDebug::typePtrCudaFreeArray CudaMemoryDebug::ptrCudaFreeArray;
-CudaMemoryDebug::typePtrCudaHostAlloc CudaMemoryDebug::ptrCudaHostAlloc;
-CudaMemoryDebug::typePtrCudaHostGetDevicePointer CudaMemoryDebug::ptrCudaHostGetDevicePointer;
-CudaMemoryDebug::typePtrCudaHostGetFlags CudaMemoryDebug::ptrCudaHostGetFlags;
-CudaMemoryDebug::typePtrCudaMemGetInfo CudaMemoryDebug::ptrCudaMemGetInfo;
-CudaMemoryDebug::typePtrCudaMemcpy CudaMemoryDebug::ptrCudaMemcpy;
-CudaMemoryDebug::typePtrCudaMemcpyToArray CudaMemoryDebug::ptrCudaMemcpyToArray;
-CudaMemoryDebug::typePtrCudaMemcpyFromArray CudaMemoryDebug::ptrCudaMemcpyFromArray;
-CudaMemoryDebug::typePtrCudaMemcpyArrayToArray CudaMemoryDebug::ptrCudaMemcpyArrayToArray;
-CudaMemoryDebug::typePtrCudaMemcpy2D CudaMemoryDebug::ptrCudaMemcpy2D;
-CudaMemoryDebug::typePtrCudaMemcpy2DToArray CudaMemoryDebug::ptrCudaMemcpy2DToArray;
-CudaMemoryDebug::typePtrCudaMemcpy2DFromArray CudaMemoryDebug::ptrCudaMemcpy2DFromArray;
-CudaMemoryDebug::typePtrCudaMemcpy2DArrayToArray CudaMemoryDebug::ptrCudaMemcpy2DArrayToArray;
-CudaMemoryDebug::typePtrCudaMemcpyToSymbol CudaMemoryDebug::ptrCudaMemcpyToSymbol;
-CudaMemoryDebug::typePtrCudaMemcpyFromSymbol CudaMemoryDebug::ptrCudaMemcpyFromSymbol;
-CudaMemoryDebug::typePtrCudaMemcpyAsync CudaMemoryDebug::ptrCudaMemcpyAsync;
-CudaMemoryDebug::typePtrCudaMemcpyToArrayAsync CudaMemoryDebug::ptrCudaMemcpyToArrayAsync;
-CudaMemoryDebug::typePtrCudaMemcpyFromArrayAsync CudaMemoryDebug::ptrCudaMemcpyFromArrayAsync;
-CudaMemoryDebug::typePtrCudaMemcpy2DAsync CudaMemoryDebug::ptrCudaMemcpy2DAsync;
-CudaMemoryDebug::typePtrCudaMemcpy2DToArrayAsync CudaMemoryDebug::ptrCudaMemcpy2DToArrayAsync;
-CudaMemoryDebug::typePtrCudaMemcpy2DFromArrayAsync CudaMemoryDebug::ptrCudaMemcpy2DFromArrayAsync;
-CudaMemoryDebug::typePtrCudaMemcpyToSymbolAsync CudaMemoryDebug::ptrCudaMemcpyToSymbolAsync;
-CudaMemoryDebug::typePtrCudaMemcpyFromSymbolAsync CudaMemoryDebug::ptrCudaMemcpyFromSymbolAsync;
-CudaMemoryDebug::typePtrCudaMemset CudaMemoryDebug::ptrCudaMemset;
-CudaMemoryDebug::typePtrCudaMemset2D CudaMemoryDebug::ptrCudaMemset2D;
-CudaMemoryDebug::typePtrCudaGetSymbolAddress CudaMemoryDebug::ptrCudaGetSymbolAddress;
-CudaMemoryDebug::typePtrCudaGetSymbolSize CudaMemoryDebug::ptrCudaGetSymbolSize;
-CudaMemoryDebug::typePtrCudaGetDeviceCount CudaMemoryDebug::ptrCudaGetDeviceCount;
-CudaMemoryDebug::typePtrCudaGetDeviceProperties CudaMemoryDebug::ptrCudaGetDeviceProperties;
-CudaMemoryDebug::typePtrCudaChooseDevice CudaMemoryDebug::ptrCudaChooseDevice;
-CudaMemoryDebug::typePtrCudaSetDevice CudaMemoryDebug::ptrCudaSetDevice;
-CudaMemoryDebug::typePtrCudaGetDevice CudaMemoryDebug::ptrCudaGetDevice;
-CudaMemoryDebug::typePtrCudaSetValidDevices CudaMemoryDebug::ptrCudaSetValidDevices;
-CudaMemoryDebug::typePtrCudaSetDeviceFlags CudaMemoryDebug::ptrCudaSetDeviceFlags;
-CudaMemoryDebug::typePtrCudaBindTexture CudaMemoryDebug::ptrCudaBindTexture;
-CudaMemoryDebug::typePtrCudaBindTexture2D CudaMemoryDebug::ptrCudaBindTexture2D;
-CudaMemoryDebug::typePtrCudaBindTextureToArray CudaMemoryDebug::ptrCudaBindTextureToArray;
-CudaMemoryDebug::typePtrCudaUnbindTexture CudaMemoryDebug::ptrCudaUnbindTexture;
-CudaMemoryDebug::typePtrCudaGetTextureAlignmentOffset CudaMemoryDebug::ptrCudaGetTextureAlignmentOffset;
-CudaMemoryDebug::typePtrCudaGetTextureReference CudaMemoryDebug::ptrCudaGetTextureReference;
-CudaMemoryDebug::typePtrCudaBindSurfaceToArray CudaMemoryDebug::ptrCudaBindSurfaceToArray;
-CudaMemoryDebug::typePtrCudaGetSurfaceAlignmentOffset CudaMemoryDebug::ptrCudaGetSurfaceAlignmentOffset;
-CudaMemoryDebug::typePtrCudaGetSurfaceReference CudaMemoryDebug::ptrCudaGetSurfaceReference;
-CudaMemoryDebug::typePtrCudaGetChannelDesc CudaMemoryDebug::ptrCudaGetChannelDesc;
-CudaMemoryDebug::typePtrCudaCreateChannelDesc CudaMemoryDebug::ptrCudaCreateChannelDesc;
-CudaMemoryDebug::typePtrCudaGetLastError CudaMemoryDebug::ptrCudaGetLastError;
-CudaMemoryDebug::typePtrCudaPeekAtLastError CudaMemoryDebug::ptrCudaPeekAtLastError;
-CudaMemoryDebug::typePtrCudaGetErrorString CudaMemoryDebug::ptrCudaGetErrorString;
-CudaMemoryDebug::typePtrCudaConfigureCall CudaMemoryDebug::ptrCudaConfigureCall;
-CudaMemoryDebug::typePtrCudaSetupArgument CudaMemoryDebug::ptrCudaSetupArgument;
-CudaMemoryDebug::typePtrCudaFuncSetCacheConfig CudaMemoryDebug::ptrCudaFuncSetCacheConfig;
-CudaMemoryDebug::typePtrCudaLaunch CudaMemoryDebug::ptrCudaLaunch;
-CudaMemoryDebug::typePtrCudaFuncGetAttributes CudaMemoryDebug::ptrCudaFuncGetAttributes;
-CudaMemoryDebug::typePtrCudaStreamCreate CudaMemoryDebug::ptrCudaStreamCreate;
-CudaMemoryDebug::typePtrCudaStreamDestroy CudaMemoryDebug::ptrCudaStreamDestroy;
-CudaMemoryDebug::typePtrCudaStreamSynchronize CudaMemoryDebug::ptrCudaStreamSynchronize;
-CudaMemoryDebug::typePtrCudaStreamQuery CudaMemoryDebug::ptrCudaStreamQuery;
-CudaMemoryDebug::typePtrCudaEventCreate CudaMemoryDebug::ptrCudaEventCreate;
-CudaMemoryDebug::typePtrCudaEventCreateWithFlags CudaMemoryDebug::ptrCudaEventCreateWithFlags;
-CudaMemoryDebug::typePtrCudaEventRecord CudaMemoryDebug::ptrCudaEventRecord;
-CudaMemoryDebug::typePtrCudaEventQuery CudaMemoryDebug::ptrCudaEventQuery;
-CudaMemoryDebug::typePtrCudaEventSynchronize CudaMemoryDebug::ptrCudaEventSynchronize;
-CudaMemoryDebug::typePtrCudaEventDestroy CudaMemoryDebug::ptrCudaEventDestroy;
-CudaMemoryDebug::typePtrCudaEventElapsedTime CudaMemoryDebug::ptrCudaEventElapsedTime;
-CudaMemoryDebug::typePtrCudaSetDoubleForDevice CudaMemoryDebug::ptrCudaSetDoubleForDevice;
-CudaMemoryDebug::typePtrCudaSetDoubleForHost CudaMemoryDebug::ptrCudaSetDoubleForHost;
-CudaMemoryDebug::typePtrCudaThreadExit CudaMemoryDebug::ptrCudaThreadExit;
-CudaMemoryDebug::typePtrCudaThreadSynchronize CudaMemoryDebug::ptrCudaThreadSynchronize;
-CudaMemoryDebug::typePtrCudaThreadSetLimit CudaMemoryDebug::ptrCudaThreadSetLimit;
-CudaMemoryDebug::typePtrCudaThreadGetLimit CudaMemoryDebug::ptrCudaThreadGetLimit;
-CudaMemoryDebug::typePtrCudaDriverGetVersion CudaMemoryDebug::ptrCudaDriverGetVersion;
-CudaMemoryDebug::typePtrCudaRuntimeGetVersion CudaMemoryDebug::ptrCudaRuntimeGetVersion;
-CudaMemoryDebug::typePtrCudaGetExportTable CudaMemoryDebug::ptrCudaGetExportTable;
-CudaMemoryDebug::typePtrCudaGraphicsUnregisterResource CudaMemoryDebug::ptrCudaGraphicsUnregisterResource;
-CudaMemoryDebug::typePtrCudaGraphicsResourceSetMapFlags CudaMemoryDebug::ptrCudaGraphicsResourceSetMapFlags;
-CudaMemoryDebug::typePtrCudaGraphicsMapResources CudaMemoryDebug::ptrCudaGraphicsMapResources;
-CudaMemoryDebug::typePtrCudaGraphicsUnmapResources CudaMemoryDebug::ptrCudaGraphicsUnmapResources;
-CudaMemoryDebug::typePtrCudaGraphicsResourceGetMappedPointer CudaMemoryDebug::ptrCudaGraphicsResourceGetMappedPointer;
-CudaMemoryDebug::typePtrCudaGraphicsSubResourceGetMappedArray CudaMemoryDebug::ptrCudaGraphicsSubResourceGetMappedArray;
-CudaMemoryDebug::typePtrCudaRegisterFatBinary CudaMemoryDebug::ptrCudaRegisterFatBinary;
-CudaMemoryDebug::typePtrCudaUnregisterFatBinary CudaMemoryDebug::ptrCudaUnregisterFatBinary;
-CudaMemoryDebug::typePtrCudaRegisterVar CudaMemoryDebug::ptrCudaRegisterVar;
-CudaMemoryDebug::typePtrCudaRegisterTexture CudaMemoryDebug::ptrCudaRegisterTexture;
-CudaMemoryDebug::typePtrCudaRegisterSurface CudaMemoryDebug::ptrCudaRegisterSurface;
-CudaMemoryDebug::typePtrCudaRegisterFunction CudaMemoryDebug::ptrCudaRegisterFunction;
+CUDA_WRAPPER::typePtrCudaMalloc3D CUDA_WRAPPER::ptrCudaMalloc3D;
+CUDA_WRAPPER::typePtrCudaMalloc3DArray CUDA_WRAPPER::ptrCudaMalloc3DArray;
+CUDA_WRAPPER::typePtrCudaMemset3D CUDA_WRAPPER::ptrCudaMemset3D;
+CUDA_WRAPPER::typePtrCudaMemcpy3D CUDA_WRAPPER::ptrCudaMemcpy3D;
+CUDA_WRAPPER::typePtrCudaMemcpy3DAsync CUDA_WRAPPER::ptrCudaMemcpy3DAsync;
+CUDA_WRAPPER::typePtrCudaMalloc CUDA_WRAPPER::ptrCudaMalloc;
+CUDA_WRAPPER::typePtrCudaMallocHost CUDA_WRAPPER::ptrCudaMallocHost;
+CUDA_WRAPPER::typePtrCudaMallocPitch CUDA_WRAPPER::ptrCudaMallocPitch;
+CUDA_WRAPPER::typePtrCudaMallocArray CUDA_WRAPPER::ptrCudaMallocArray;
+CUDA_WRAPPER::typePtrCudaFree CUDA_WRAPPER::ptrCudaFree;
+CUDA_WRAPPER::typePtrCudaFreeHost CUDA_WRAPPER::ptrCudaFreeHost;
+CUDA_WRAPPER::typePtrCudaFreeArray CUDA_WRAPPER::ptrCudaFreeArray;
+CUDA_WRAPPER::typePtrCudaHostAlloc CUDA_WRAPPER::ptrCudaHostAlloc;
+CUDA_WRAPPER::typePtrCudaHostGetDevicePointer CUDA_WRAPPER::ptrCudaHostGetDevicePointer;
+CUDA_WRAPPER::typePtrCudaHostGetFlags CUDA_WRAPPER::ptrCudaHostGetFlags;
+CUDA_WRAPPER::typePtrCudaMemGetInfo CUDA_WRAPPER::ptrCudaMemGetInfo;
+CUDA_WRAPPER::typePtrCudaMemcpy CUDA_WRAPPER::ptrCudaMemcpy;
+CUDA_WRAPPER::typePtrCudaMemcpyToArray CUDA_WRAPPER::ptrCudaMemcpyToArray;
+CUDA_WRAPPER::typePtrCudaMemcpyFromArray CUDA_WRAPPER::ptrCudaMemcpyFromArray;
+CUDA_WRAPPER::typePtrCudaMemcpyArrayToArray CUDA_WRAPPER::ptrCudaMemcpyArrayToArray;
+CUDA_WRAPPER::typePtrCudaMemcpy2D CUDA_WRAPPER::ptrCudaMemcpy2D;
+CUDA_WRAPPER::typePtrCudaMemcpy2DToArray CUDA_WRAPPER::ptrCudaMemcpy2DToArray;
+CUDA_WRAPPER::typePtrCudaMemcpy2DFromArray CUDA_WRAPPER::ptrCudaMemcpy2DFromArray;
+CUDA_WRAPPER::typePtrCudaMemcpy2DArrayToArray CUDA_WRAPPER::ptrCudaMemcpy2DArrayToArray;
+CUDA_WRAPPER::typePtrCudaMemcpyToSymbol CUDA_WRAPPER::ptrCudaMemcpyToSymbol;
+CUDA_WRAPPER::typePtrCudaMemcpyFromSymbol CUDA_WRAPPER::ptrCudaMemcpyFromSymbol;
+CUDA_WRAPPER::typePtrCudaMemcpyAsync CUDA_WRAPPER::ptrCudaMemcpyAsync;
+CUDA_WRAPPER::typePtrCudaMemcpyToArrayAsync CUDA_WRAPPER::ptrCudaMemcpyToArrayAsync;
+CUDA_WRAPPER::typePtrCudaMemcpyFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpyFromArrayAsync;
+CUDA_WRAPPER::typePtrCudaMemcpy2DAsync CUDA_WRAPPER::ptrCudaMemcpy2DAsync;
+CUDA_WRAPPER::typePtrCudaMemcpy2DToArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DToArrayAsync;
+CUDA_WRAPPER::typePtrCudaMemcpy2DFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DFromArrayAsync;
+CUDA_WRAPPER::typePtrCudaMemcpyToSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyToSymbolAsync;
+CUDA_WRAPPER::typePtrCudaMemcpyFromSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyFromSymbolAsync;
+CUDA_WRAPPER::typePtrCudaMemset CUDA_WRAPPER::ptrCudaMemset;
+CUDA_WRAPPER::typePtrCudaMemset2D CUDA_WRAPPER::ptrCudaMemset2D;
+CUDA_WRAPPER::typePtrCudaGetSymbolAddress CUDA_WRAPPER::ptrCudaGetSymbolAddress;
+CUDA_WRAPPER::typePtrCudaGetSymbolSize CUDA_WRAPPER::ptrCudaGetSymbolSize;
+CUDA_WRAPPER::typePtrCudaGetDeviceCount CUDA_WRAPPER::ptrCudaGetDeviceCount;
+CUDA_WRAPPER::typePtrCudaGetDeviceProperties CUDA_WRAPPER::ptrCudaGetDeviceProperties;
+CUDA_WRAPPER::typePtrCudaChooseDevice CUDA_WRAPPER::ptrCudaChooseDevice;
+CUDA_WRAPPER::typePtrCudaSetDevice CUDA_WRAPPER::ptrCudaSetDevice;
+CUDA_WRAPPER::typePtrCudaGetDevice CUDA_WRAPPER::ptrCudaGetDevice;
+CUDA_WRAPPER::typePtrCudaSetValidDevices CUDA_WRAPPER::ptrCudaSetValidDevices;
+CUDA_WRAPPER::typePtrCudaSetDeviceFlags CUDA_WRAPPER::ptrCudaSetDeviceFlags;
+CUDA_WRAPPER::typePtrCudaBindTexture CUDA_WRAPPER::ptrCudaBindTexture;
+CUDA_WRAPPER::typePtrCudaBindTexture2D CUDA_WRAPPER::ptrCudaBindTexture2D;
+CUDA_WRAPPER::typePtrCudaBindTextureToArray CUDA_WRAPPER::ptrCudaBindTextureToArray;
+CUDA_WRAPPER::typePtrCudaUnbindTexture CUDA_WRAPPER::ptrCudaUnbindTexture;
+CUDA_WRAPPER::typePtrCudaGetTextureAlignmentOffset CUDA_WRAPPER::ptrCudaGetTextureAlignmentOffset;
+CUDA_WRAPPER::typePtrCudaGetTextureReference CUDA_WRAPPER::ptrCudaGetTextureReference;
+CUDA_WRAPPER::typePtrCudaBindSurfaceToArray CUDA_WRAPPER::ptrCudaBindSurfaceToArray;
+CUDA_WRAPPER::typePtrCudaGetSurfaceAlignmentOffset CUDA_WRAPPER::ptrCudaGetSurfaceAlignmentOffset;
+CUDA_WRAPPER::typePtrCudaGetSurfaceReference CUDA_WRAPPER::ptrCudaGetSurfaceReference;
+CUDA_WRAPPER::typePtrCudaGetChannelDesc CUDA_WRAPPER::ptrCudaGetChannelDesc;
+CUDA_WRAPPER::typePtrCudaCreateChannelDesc CUDA_WRAPPER::ptrCudaCreateChannelDesc;
+CUDA_WRAPPER::typePtrCudaGetLastError CUDA_WRAPPER::ptrCudaGetLastError;
+CUDA_WRAPPER::typePtrCudaPeekAtLastError CUDA_WRAPPER::ptrCudaPeekAtLastError;
+CUDA_WRAPPER::typePtrCudaGetErrorString CUDA_WRAPPER::ptrCudaGetErrorString;
+CUDA_WRAPPER::typePtrCudaConfigureCall CUDA_WRAPPER::ptrCudaConfigureCall;
+CUDA_WRAPPER::typePtrCudaSetupArgument CUDA_WRAPPER::ptrCudaSetupArgument;
+CUDA_WRAPPER::typePtrCudaFuncSetCacheConfig CUDA_WRAPPER::ptrCudaFuncSetCacheConfig;
+CUDA_WRAPPER::typePtrCudaLaunch CUDA_WRAPPER::ptrCudaLaunch;
+CUDA_WRAPPER::typePtrCudaFuncGetAttributes CUDA_WRAPPER::ptrCudaFuncGetAttributes;
+CUDA_WRAPPER::typePtrCudaStreamCreate CUDA_WRAPPER::ptrCudaStreamCreate;
+CUDA_WRAPPER::typePtrCudaStreamDestroy CUDA_WRAPPER::ptrCudaStreamDestroy;
+CUDA_WRAPPER::typePtrCudaStreamSynchronize CUDA_WRAPPER::ptrCudaStreamSynchronize;
+CUDA_WRAPPER::typePtrCudaStreamQuery CUDA_WRAPPER::ptrCudaStreamQuery;
+CUDA_WRAPPER::typePtrCudaEventCreate CUDA_WRAPPER::ptrCudaEventCreate;
+CUDA_WRAPPER::typePtrCudaEventCreateWithFlags CUDA_WRAPPER::ptrCudaEventCreateWithFlags;
+CUDA_WRAPPER::typePtrCudaEventRecord CUDA_WRAPPER::ptrCudaEventRecord;
+CUDA_WRAPPER::typePtrCudaEventQuery CUDA_WRAPPER::ptrCudaEventQuery;
+CUDA_WRAPPER::typePtrCudaEventSynchronize CUDA_WRAPPER::ptrCudaEventSynchronize;
+CUDA_WRAPPER::typePtrCudaEventDestroy CUDA_WRAPPER::ptrCudaEventDestroy;
+CUDA_WRAPPER::typePtrCudaEventElapsedTime CUDA_WRAPPER::ptrCudaEventElapsedTime;
+CUDA_WRAPPER::typePtrCudaSetDoubleForDevice CUDA_WRAPPER::ptrCudaSetDoubleForDevice;
+CUDA_WRAPPER::typePtrCudaSetDoubleForHost CUDA_WRAPPER::ptrCudaSetDoubleForHost;
+CUDA_WRAPPER::typePtrCudaThreadExit CUDA_WRAPPER::ptrCudaThreadExit;
+CUDA_WRAPPER::typePtrCudaThreadSynchronize CUDA_WRAPPER::ptrCudaThreadSynchronize;
+CUDA_WRAPPER::typePtrCudaThreadSetLimit CUDA_WRAPPER::ptrCudaThreadSetLimit;
+CUDA_WRAPPER::typePtrCudaThreadGetLimit CUDA_WRAPPER::ptrCudaThreadGetLimit;
+CUDA_WRAPPER::typePtrCudaDriverGetVersion CUDA_WRAPPER::ptrCudaDriverGetVersion;
+CUDA_WRAPPER::typePtrCudaRuntimeGetVersion CUDA_WRAPPER::ptrCudaRuntimeGetVersion;
+CUDA_WRAPPER::typePtrCudaGetExportTable CUDA_WRAPPER::ptrCudaGetExportTable;
+CUDA_WRAPPER::typePtrCudaGraphicsUnregisterResource CUDA_WRAPPER::ptrCudaGraphicsUnregisterResource;
+CUDA_WRAPPER::typePtrCudaGraphicsResourceSetMapFlags CUDA_WRAPPER::ptrCudaGraphicsResourceSetMapFlags;
+CUDA_WRAPPER::typePtrCudaGraphicsMapResources CUDA_WRAPPER::ptrCudaGraphicsMapResources;
+CUDA_WRAPPER::typePtrCudaGraphicsUnmapResources CUDA_WRAPPER::ptrCudaGraphicsUnmapResources;
+CUDA_WRAPPER::typePtrCudaGraphicsResourceGetMappedPointer CUDA_WRAPPER::ptrCudaGraphicsResourceGetMappedPointer;
+CUDA_WRAPPER::typePtrCudaGraphicsSubResourceGetMappedArray CUDA_WRAPPER::ptrCudaGraphicsSubResourceGetMappedArray;
+CUDA_WRAPPER::typePtrCudaRegisterFatBinary CUDA_WRAPPER::ptrCudaRegisterFatBinary;
+CUDA_WRAPPER::typePtrCudaUnregisterFatBinary CUDA_WRAPPER::ptrCudaUnregisterFatBinary;
+CUDA_WRAPPER::typePtrCudaRegisterVar CUDA_WRAPPER::ptrCudaRegisterVar;
+CUDA_WRAPPER::typePtrCudaRegisterTexture CUDA_WRAPPER::ptrCudaRegisterTexture;
+CUDA_WRAPPER::typePtrCudaRegisterSurface CUDA_WRAPPER::ptrCudaRegisterSurface;
+CUDA_WRAPPER::typePtrCudaRegisterFunction CUDA_WRAPPER::ptrCudaRegisterFunction;
 
 
 static char temp_buffer[50000];
 
-CudaMemoryDebug * CudaMemoryDebug::singleton;
+CUDA_WRAPPER * CUDA_WRAPPER::singleton;
 typedef cudaError_t (*cfunc)(void **devPtr, size_t size);
 cudaError_t (*ptrCudaMalloc)(void **devPtr, size_t size);
 
 
-CudaMemoryDebug * CudaMemoryDebug::Singleton()
+CUDA_WRAPPER * CUDA_WRAPPER::Singleton()
 {
     if (singleton)
         return singleton;
-    singleton = new CudaMemoryDebug();
+    singleton = new CUDA_WRAPPER();
     return singleton;
 }
 
@@ -173,9 +173,9 @@ char * file_name_tail(char * file_name)
 }
 
 
-CudaMemoryDebug::CudaMemoryDebug()
+CUDA_WRAPPER::CUDA_WRAPPER()
 {
-    CudaMemoryDebug * cu = this;
+    CUDA_WRAPPER * cu = this;
     cu->padding_size = 32;
     cu->padding_byte = 0xde;
     cu->device_pointer_to_first_byte_in_block = false;
@@ -190,18 +190,18 @@ CudaMemoryDebug::CudaMemoryDebug()
 }
 
 
-bool CudaMemoryDebug::DoInit(char * cuda_module_name, HookManager * hm)
+bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     CallStackInfo * csi = CallStackInfo::Singleton();
     csi->ClassifyAsPrefix("call-stack-info.cpp");
     csi->ClassifyAsPrefix("cuda-memory-debug.cpp");
     csi->ClassifyAsPrefix("ptr-cuda-runtime.cpp");
 
-    if (atexit(CudaMemoryDebug::ExitHandler))
+    if (atexit(CUDA_WRAPPER::ExitHandler))
     {
         char * context = cu->Context(3);
-        (*cu->output_stream) << "Cannot register CudaMemoryDebug exit handler during initialization.  Memory leaks will not be detected.\n";
+        (*cu->output_stream) << "Cannot register CUDA_WRAPPER exit handler during initialization.  Memory leaks will not be detected.\n";
         (*cu->output_stream) << " Call stack is:\n"
             << context << ".\n\n";
         if (cu->quit_on_error)
@@ -209,126 +209,126 @@ bool CudaMemoryDebug::DoInit(char * cuda_module_name, HookManager * hm)
     }
 
     cu->hook_manager = hm;
-    cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CudaMemoryDebug::Malloc);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CudaMemoryDebug::HostAlloc);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CudaMemoryDebug::Free);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CudaMemoryDebug::FreeHost);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CudaMemoryDebug::HostGetDevicePointer);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CudaMemoryDebug::Memcpy);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CudaMemoryDebug::Memset);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CudaMemoryDebug::ThreadExit);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CudaMemoryDebug::GetLastError);
-    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)CudaMemoryDebug::RegisterFatBinary);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)CudaMemoryDebug::RegisterFunction);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CudaMemoryDebug::Launch);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CudaMemoryDebug::SetupArgument);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CudaMemoryDebug::ConfigureCall);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CUDA_WRAPPER::Malloc);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CUDA_WRAPPER::HostAlloc);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CUDA_WRAPPER::Free);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::FreeHost);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CUDA_WRAPPER::HostGetDevicePointer);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CUDA_WRAPPER::Memcpy);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CUDA_WRAPPER::Memset);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CUDA_WRAPPER::ThreadExit);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CUDA_WRAPPER::GetLastError);
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::RegisterFatBinary);
+	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)CUDA_WRAPPER::RegisterFunction);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Launch);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::SetupArgument);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::ConfigureCall);
 	
 
 	// Unimplemented functions.
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)CudaMemoryDebug::Unimplemented);
-// not in library??????????	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceAlignmentOffset", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSynchronize", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFatBinary", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)CudaMemoryDebug::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)CudaMemoryDebug::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFunction", (PROC)CudaMemoryDebug::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+// not in library??????????	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)CUDA_WRAPPER::Unimplemented);
+//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFunction", (PROC)CUDA_WRAPPER::Unimplemented);
 
     return true;
 }
 
-void CudaMemoryDebug::ExitHandler()
+void CUDA_WRAPPER::ExitHandler()
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     // Check if there are no unfreed blocks.
     for (int i = 0; i < cu->alloc_list.size(); ++i)
     {
@@ -343,9 +343,9 @@ void CudaMemoryDebug::ExitHandler()
     }
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::CheckSinglePtrOverwrite(const data * d)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckSinglePtrOverwrite(const data * d)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     CallStackInfo * csi = CallStackInfo::Singleton();
     if (! d->is_host)
     {
@@ -356,7 +356,7 @@ CudaMemoryDebug::return_type CudaMemoryDebug::CheckSinglePtrOverwrite(const data
 		cudaError_t e1;
 		if (! cu->do_emulation)
 		{
-			typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CudaMemoryDebug::Memcpy);
+			typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
 			e1 = (*proc)(hostbuffer, d->ptr, d->size, cudaMemcpyDeviceToHost);
 		} else
 		{
@@ -433,9 +433,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::CheckSinglePtrOverwrite(const data
     return OK;      
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::CheckOverwrite()
+CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckOverwrite()
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     // Check if there are overwrites.
     for (int i = 0; i < cu->alloc_list.size(); ++i)
     {
@@ -445,9 +445,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::CheckOverwrite()
     return OK;      
 }
 
-int CudaMemoryDebug::FindAllocatedBlock(const void * pointer)
+int CUDA_WRAPPER::FindAllocatedBlock(const void * pointer)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     int i;
     for (i = 0; i < cu->alloc_list.size(); ++i)
     {
@@ -463,7 +463,7 @@ int CudaMemoryDebug::FindAllocatedBlock(const void * pointer)
     return i;
 }
 
-bool CudaMemoryDebug::IsBadPointer(const void * ptr)
+bool CUDA_WRAPPER::IsBadPointer(const void * ptr)
 {
     bool bad = false;
 
@@ -482,9 +482,9 @@ bool CudaMemoryDebug::IsBadPointer(const void * ptr)
 }
 
 
-char * CudaMemoryDebug::Context(int lines)
+char * CUDA_WRAPPER::Context(int lines)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->global_context && *cu->global_context)
         return cu->global_context;
 
@@ -493,9 +493,9 @@ char * CudaMemoryDebug::Context(int lines)
     return context;
 }
 
-void CudaMemoryDebug::MakeContext(char * file_name, int line)
+void CUDA_WRAPPER::MakeContext(char * file_name, int line)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->global_context)
         free(cu->global_context);
 #define BUFFERSIZE 50000
@@ -517,15 +517,15 @@ void CudaMemoryDebug::MakeContext(char * file_name, int line)
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 
-void CudaMemoryDebug::Unimplemented()
+void CUDA_WRAPPER::Unimplemented()
 {
 	std::cout << "FATAL ERROR: Unimplemented function!!!!\n";
 	exit(1);
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::Malloc(void ** ptr, size_t size)
+cudaError_t CUDARTAPI CUDA_WRAPPER::Malloc(void ** ptr, size_t size)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
     void * local = 0;
 
@@ -623,9 +623,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::Malloc(void ** ptr, size_t size)
     return cudaSuccess;     
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::Free(void * ptr)
+cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = Context();
 
     if (cu->trace_all_calls)
@@ -706,9 +706,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::Free(void * ptr)
 }
 
 
-cudaError_t CUDARTAPI CudaMemoryDebug::HostAlloc(void ** ptr, size_t size, unsigned int flags)
+cudaError_t CUDARTAPI CUDA_WRAPPER::HostAlloc(void ** ptr, size_t size, unsigned int flags)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     void * local = 0;
     char * context = Context();
 
@@ -785,9 +785,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::HostAlloc(void ** ptr, size_t size, unsig
     return cudaSuccess;     
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::FreeHost(void * ptr)
+cudaError_t CUDARTAPI CUDA_WRAPPER::FreeHost(void * ptr)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
 
@@ -852,9 +852,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::FreeHost(void * ptr)
     return err;
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::HostGetDevicePointer(void ** pDevice, void * pHost, unsigned int flags)
+cudaError_t CUDARTAPI CUDA_WRAPPER::HostGetDevicePointer(void ** pDevice, void * pHost, unsigned int flags)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
     char * context = Context();
@@ -907,9 +907,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::HostGetDevicePointer(void ** pDevice, voi
     return err;
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::Memcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind)
+cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
     char * context = cu->Context();
@@ -1113,9 +1113,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::Memcpy(void * dst, const void * src, size
     }
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::Memset(void * dst, int value, size_t count)
+cudaError_t CUDARTAPI CUDA_WRAPPER::Memset(void * dst, int value, size_t count)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     if (cu->trace_all_calls)
@@ -1186,9 +1186,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::Memset(void * dst, int value, size_t coun
 }
 
 
-cudaError_t CUDARTAPI CudaMemoryDebug::ThreadExit()
+cudaError_t CUDARTAPI CUDA_WRAPPER::ThreadExit()
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = Context();
 
     if (cu->trace_all_calls)
@@ -1208,18 +1208,18 @@ cudaError_t CUDARTAPI CudaMemoryDebug::ThreadExit()
 		return cudaSuccess;
 }
 
-cudaError_t CudaMemoryDebug::GetLastError()
+cudaError_t CUDA_WRAPPER::GetLastError()
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	if (! cu->do_emulation)
 		return (*ptrCudaGetLastError)();
 	else
 		return cudaSuccess;
 }
 
-void** CudaMemoryDebug::RegisterFatBinary(void *fatCubin)
+void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
 		printf("cu emul %s\n", cu->do_emulation? "yes":"no");
 	printf("HI HI HI\n");
@@ -1230,7 +1230,7 @@ void** CudaMemoryDebug::RegisterFatBinary(void *fatCubin)
 		// if this fails, try another...
 		int x = 0;
 		int y = 0;
-		cu = (CudaMemoryDebug*)(x/y);
+		cu = (CUDA_WRAPPER*)(x/y);
 		int z = x/y;
 		printf ("WHAT THE F!\n");
 	}
@@ -1271,9 +1271,9 @@ void** CudaMemoryDebug::RegisterFatBinary(void *fatCubin)
 		return 0;
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::Launch(const char *entry)
+cudaError_t CUDARTAPI CUDA_WRAPPER::Launch(const char *entry)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	if (! cu->do_emulation)
 	    return (*ptrCudaLaunch)(entry);
 	else
@@ -1284,9 +1284,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::Launch(const char *entry)
 	}
 }
 
-void CUDARTAPI CudaMemoryDebug::RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize)
+void CUDARTAPI CUDA_WRAPPER::RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	if (! cu->do_emulation)
 	    (*ptrCudaRegisterFunction)(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid, bid, bDim, gDim, wSize);
 	else
@@ -1296,10 +1296,10 @@ void CUDARTAPI CudaMemoryDebug::RegisterFunction(void **fatCubinHandle, const ch
 	}
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0))
+cudaError_t CUDARTAPI CUDA_WRAPPER::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0))
 {
 	// set up dimensions, shared memory, and stream for the kernel launch.
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	if (! cu->do_emulation)
 	    return (*ptrCudaConfigureCall)(gridDim, blockDim, sharedMem, stream);
 	else
@@ -1309,10 +1309,10 @@ cudaError_t CUDARTAPI CudaMemoryDebug::ConfigureCall(dim3 gridDim, dim3 blockDim
 	}
 }
 
-cudaError_t CUDARTAPI CudaMemoryDebug::SetupArgument(const void *arg, size_t size, size_t offset)
+cudaError_t CUDARTAPI CUDA_WRAPPER::SetupArgument(const void *arg, size_t size, size_t offset)
 {
 	// arg contains pointer to the argument for the function call.
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	if (! cu->do_emulation)
 	    return (*ptrCudaSetupArgument)(arg, size, offset);
 	else
@@ -1331,9 +1331,9 @@ cudaError_t CUDARTAPI CudaMemoryDebug::SetupArgument(const void *arg, size_t siz
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetPaddingSize(size_t s)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingSize(size_t s)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->padding_size = s;
@@ -1345,9 +1345,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetPaddingSize(size_t s)
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetPaddingByte(unsigned char b)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingByte(unsigned char b)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->padding_byte = b;
@@ -1359,9 +1359,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetPaddingByte(unsigned char b)
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetDevicePointerToFirstByteInBlock(bool b)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDevicePointerToFirstByteInBlock(bool b)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->device_pointer_to_first_byte_in_block = b;
@@ -1373,9 +1373,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetDevicePointerToFirstByteInBlock
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetOutputStream(std::ostream * fp)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetOutputStream(std::ostream * fp)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
     cu->output_stream = fp;
     if (cu->trace_all_calls)
@@ -1385,9 +1385,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetOutputStream(std::ostream * fp)
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetTraceAllCalls(bool b)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetTraceAllCalls(bool b)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->trace_all_calls = b;
@@ -1399,9 +1399,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetTraceAllCalls(bool b)
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetQuitOnError(bool b)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetQuitOnError(bool b)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->quit_on_error = b;
@@ -1414,9 +1414,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetQuitOnError(bool b)
 }
 
 
-CudaMemoryDebug::return_type CudaMemoryDebug::SetDoNotCallCudaAfterSanityCheckFail(bool b)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDoNotCallCudaAfterSanityCheckFail(bool b)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     cu->do_not_call_cuda_after_sanity_check_fail = b;
@@ -1428,9 +1428,9 @@ CudaMemoryDebug::return_type CudaMemoryDebug::SetDoNotCallCudaAfterSanityCheckFa
     return OK;
 }
 
-CudaMemoryDebug::return_type CudaMemoryDebug::CopyOptions(CudaMemoryDebug * ptr)
+CUDA_WRAPPER::return_type CUDA_WRAPPER::CopyOptions(CUDA_WRAPPER * ptr)
 {
-    CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
     (*cu->output_stream) << "CopyOptions called, " << context << ".\n\n";
     cu->padding_size = ptr->padding_size;

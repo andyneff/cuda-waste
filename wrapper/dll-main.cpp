@@ -23,7 +23,7 @@
 
 void AddWrapper(char * cuda_module_name, HookManager * p)
 {
-	CudaMemoryDebug * cu = CudaMemoryDebug::Singleton();
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 	cu->DoInit(cuda_module_name, p);
 }
 

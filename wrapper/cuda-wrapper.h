@@ -32,7 +32,7 @@ class HookManager;
 #endif
 
 
-class DLL_API CudaMemoryDebug
+class DLL_API CUDA_WRAPPER
 {
 private:
 	struct data
@@ -44,8 +44,8 @@ private:
     };
 	friend std::vector<data>;
 private:
-	CudaMemoryDebug();
-	static CudaMemoryDebug * singleton;
+	CUDA_WRAPPER();
+	static CUDA_WRAPPER * singleton;
 	HookManager * hook_manager;
     size_t padding_size;
     unsigned char padding_byte;
@@ -259,7 +259,7 @@ private:
 
 
 public:
-	static CudaMemoryDebug * Singleton();
+	static CUDA_WRAPPER * Singleton();
 	static bool DoInit(char * cuda_module_name, HookManager * hm);
     static void MakeContext(char * file_name, int line);
     static cudaError_t CUDARTAPI Malloc(void ** ptr, size_t size);
@@ -289,7 +289,7 @@ public:
     static return_type CUDARTAPI SetTraceAllCalls(bool b);
 	static return_type CUDARTAPI SetQuitOnError(bool b);
 	static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
-	static return_type CopyOptions(CudaMemoryDebug * ptr);
+	static return_type CopyOptions(CUDA_WRAPPER * ptr);
 private:
     static return_type CheckSinglePtrOverwrite(const data * d);
     static bool IsBadPointer(const void * ptr);

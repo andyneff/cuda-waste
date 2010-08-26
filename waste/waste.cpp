@@ -58,14 +58,14 @@ void AddBytes(byte * code, byte a, byte b, byte c, byte d, byte e)
     code[size++] = e;
 }
 
-typedef CudaMemoryDebug::return_type (CUDARTAPI *pSetTraceAllCalls)(bool b);
+typedef CUDA_WRAPPER::return_type (CUDARTAPI *pSetTraceAllCalls)(bool b);
 char * str_cuda_memory_debug = "wrapper.dll";
-char * str_trace_all_calls = "?SetTraceAllCalls@CudaMemoryDebug@@SG?AW4return_type@1@_N@Z";
-char * str_pading_byte = "?SetPaddingByte@CudaMemoryDebug@@SG?AW4return_type@1@E@Z";
-char * str_padding_size = "?SetPaddingSize@CudaMemoryDebug@@SG?AW4return_type@1@I@Z";
-char * str_quit_on_error = "?SetQuitOnError@CudaMemoryDebug@@SG?AW4return_type@1@_N@Z";
-char * str_do_not_call_cuda_after_sanity_check_fail = "?SetDoNotCallCudaAfterSanityCheckFail@CudaMemoryDebug@@SG?AW4return_type@1@_N@Z";
-char * str_device_pointer_to_first_byte_in_block = "?SetDevicePointerToFirstByteInBlock@CudaMemoryDebug@@SG?AW4return_type@1@_N@Z";
+char * str_trace_all_calls = "?SetTraceAllCalls@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
+char * str_pading_byte = "?SetPaddingByte@CUDA_WRAPPER@@SG?AW4return_type@1@E@Z";
+char * str_padding_size = "?SetPaddingSize@CUDA_WRAPPER@@SG?AW4return_type@1@I@Z";
+char * str_quit_on_error = "?SetQuitOnError@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
+char * str_do_not_call_cuda_after_sanity_check_fail = "?SetDoNotCallCudaAfterSanityCheckFail@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
+char * str_device_pointer_to_first_byte_in_block = "?SetDevicePointerToFirstByteInBlock@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 
 int main(int argc, char * argv[])
 {
@@ -230,7 +230,7 @@ int main(int argc, char * argv[])
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTraceAllCalls@CudaMemoryDebug@@SG?AW4return_type@1@_N@Z"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTraceAllCalls@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z"
         JmpAbsoluteAddress(code, size-4, pszSetFunc);
         AddBytes(code, 0x50); // push eax
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
