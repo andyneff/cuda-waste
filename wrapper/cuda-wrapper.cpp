@@ -186,7 +186,7 @@ CudaMemoryDebug::CudaMemoryDebug()
 	cu->do_emulation = true;
     cu->global_context = 0;
     cu->hook_manager = 0;
-	cu->do_crash = true;
+	cu->do_crash = false;
 }
 
 
