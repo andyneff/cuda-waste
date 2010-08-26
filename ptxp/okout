@@ -1,0 +1,187 @@
+Input file is testcases/BlackScholes.compute_10.ptx
+Input file is testcases/BlackScholes.compute_20.ptx
+Input file is testcases/FDTD3dGPU.compute_10.ptx
+Input file is testcases/FDTD3dGPU.compute_20.ptx
+Input file is testcases/FunctionPointers_kernels.ptx
+Input file is testcases/Mandelbrot_sm11.compute_11.ptx
+Input file is testcases/Mandelbrot_sm11.compute_20.ptx
+Input file is testcases/Mandelbrot_sm13.compute_13.ptx
+Input file is testcases/Mandelbrot_sm13.compute_20.ptx
+Input file is testcases/MersenneTwister.compute_10.ptx
+Input file is testcases/MersenneTwister.compute_20.ptx
+Input file is testcases/MonteCarlo_SM10.compute_10 (2).ptx
+Input file is testcases/MonteCarlo_SM10.compute_10.ptx
+Input file is testcases/MonteCarlo_SM10.compute_20 (2).ptx
+Input file is testcases/MonteCarlo_SM10.compute_20.ptx
+Input file is testcases/MonteCarlo_SM13.compute_13 (2).ptx
+Input file is testcases/MonteCarlo_SM13.compute_13.ptx
+Input file is testcases/MonteCarlo_SM13.compute_20 (2).ptx
+Input file is testcases/MonteCarlo_SM13.compute_20.ptx
+Input file is testcases/NV12ToARGB_drvapi (2).ptx
+Input file is testcases/NV12ToARGB_drvapi.ptx
+Input file is testcases/NV12ToARGB_drvapi_32 (2).ptx
+Input file is testcases/NV12ToARGB_drvapi_32.ptx
+Input file is testcases/ParticleSystem.compute_10 (2).ptx
+Input file is testcases/ParticleSystem.compute_20 (2).ptx
+Input file is testcases/SobelFilter_kernels.compute_10.ptx
+Input file is testcases/SobelFilter_kernels.compute_20.ptx
+Input file is testcases/alignedTypes.compute_10.ptx
+Input file is testcases/alignedTypes.compute_20.ptx
+Input file is testcases/asyncAPI.compute_10.ptx
+Input file is testcases/asyncAPI.compute_20.ptx
+Input file is testcases/b.ptx
+Input file is testcases/bandwidthTest.compute_10.ptx
+Input file is testcases/bandwidthTest.compute_20.ptx
+Input file is testcases/bicubicTexture.compute_10.ptx
+Input file is testcases/bicubicTexture.compute_20.ptx
+Input file is testcases/binomialOptions_SM10.compute_10.ptx
+Input file is testcases/binomialOptions_SM10.compute_20.ptx
+Input file is testcases/binomialOptions_SM13.compute_13.ptx
+Input file is testcases/binomialOptions_SM13.compute_20.ptx
+Input file is testcases/bisect_large.compute_10.ptx
+Input file is testcases/bisect_large.compute_20.ptx
+Input file is testcases/bisect_small.compute_10.ptx
+Input file is testcases/bisect_small.compute_20.ptx
+Input file is testcases/bitonicSort.compute_10.ptx
+Input file is testcases/bitonicSort.compute_20.ptx
+Input file is testcases/bodysystemcuda.compute_10.ptx
+Input file is testcases/bodysystemcuda.compute_13.ptx
+Input file is testcases/bodysystemcuda.compute_20.ptx
+Input file is testcases/boxFilter_kernel.compute_10.ptx
+Input file is testcases/boxFilter_kernel.compute_20.ptx
+Input file is testcases/chw.compute_10.ptx
+Input file is testcases/chw.compute_20.ptx
+Input file is testcases/clock.compute_10.ptx
+Input file is testcases/clock.compute_20.ptx
+Input file is testcases/concurrentKernels.compute_10.ptx
+Input file is testcases/concurrentKernels.compute_20.ptx
+Input file is testcases/convolutionFFT2D.compute_10.ptx
+Input file is testcases/convolutionFFT2D.compute_20.ptx
+Input file is testcases/convolutionSeparable.compute_10.ptx
+Input file is testcases/convolutionSeparable.compute_20.ptx
+Input file is testcases/convolutionTexture.compute_10.ptx
+Input file is testcases/convolutionTexture.compute_20.ptx
+Input file is testcases/cppIntegration.compute_10.ptx
+Input file is testcases/cppIntegration.compute_20.ptx
+Input file is testcases/dct8x8.compute_10.ptx
+Input file is testcases/dct8x8.compute_20.ptx
+Input file is testcases/dwtHaar1D.compute_10.ptx
+Input file is testcases/dwtHaar1D.compute_20.ptx
+Input file is testcases/dxtc.compute_10.ptx
+Input file is testcases/dxtc.compute_20.ptx
+Input file is testcases/f.ptx
+Input file is testcases/f2.ptx
+Input file is testcases/fastWalshTransform.compute_10.ptx
+Input file is testcases/fastWalshTransform.compute_20.ptx
+Input file is testcases/fluidsD3D9_kernels.compute_10.ptx
+Input file is testcases/fluidsD3D9_kernels.compute_20.ptx
+Input file is testcases/fluidsGL.compute_10.ptx
+Input file is testcases/fluidsGL.compute_20.ptx
+Input file is testcases/fun.compute_10.ptx
+Input file is testcases/fun.compute_20.ptx
+Input file is testcases/histogram256.compute_11.ptx
+Input file is testcases/histogram256.compute_20.ptx
+Input file is testcases/histogram64.compute_10.ptx
+Input file is testcases/histogram64.compute_20.ptx
+Input file is testcases/hw.compute_10.ptx
+Input file is testcases/hw.compute_20.ptx
+Input file is testcases/imageDenoising.compute_10.ptx
+Input file is testcases/imageDenoising.compute_20.ptx
+Input file is testcases/lineOfSight.compute_10.ptx
+Input file is testcases/lineOfSight.compute_20.ptx
+Input file is testcases/main.compute_10.ptx
+Input file is testcases/main.compute_20.ptx
+Input file is testcases/marchingCubes_kernel.compute_10.ptx
+Input file is testcases/marchingCubes_kernel.compute_20.ptx
+Input file is testcases/matrixMul.compute_10.ptx
+Input file is testcases/matrixMul.compute_20.ptx
+Input file is testcases/matrixMul_kernel.ptx
+Input file is testcases/o1.ptx
+Input file is testcases/o2.ptx
+Input file is testcases/oceanFFT_kernel.compute_10.ptx
+Input file is testcases/oceanFFT_kernel.compute_20.ptx
+Input file is testcases/oddEvenMergeSort.compute_10.ptx
+Input file is testcases/oddEvenMergeSort.compute_20.ptx
+Input file is testcases/particleSystem.compute_10.ptx
+Input file is testcases/particleSystem.compute_20.ptx
+Input file is testcases/postProcessGL.compute_10.ptx
+Input file is testcases/postProcessGL.compute_20.ptx
+Input file is testcases/quasirandomGenerator_SM10.compute_10.ptx
+Input file is testcases/quasirandomGenerator_SM10.compute_20.ptx
+Input file is testcases/quasirandomGenerator_SM13.compute_13.ptx
+Input file is testcases/quasirandomGenerator_SM13.compute_20.ptx
+Input file is testcases/radixsort.compute_10.ptx
+Input file is testcases/radixsort.compute_20.ptx
+Input file is testcases/recursiveGaussian.compute_10.ptx
+Input file is testcases/recursiveGaussian.compute_20.ptx
+Input file is testcases/reduction_kernel.compute_10.ptx
+Input file is testcases/reduction_kernel.compute_13.ptx
+Input file is testcases/reduction_kernel.compute_20.ptx
+Input file is testcases/scalarProd.compute_10.ptx
+Input file is testcases/scalarProd.compute_20.ptx
+Input file is testcases/scan.compute_10.ptx
+Input file is testcases/scan.compute_20.ptx
+Input file is testcases/simpleAtomicIntrinsics.compute_11.ptx
+Input file is testcases/simpleAtomicIntrinsics.compute_20.ptx
+Input file is testcases/simpleCUFFT.compute_10.ptx
+Input file is testcases/simpleCUFFT.compute_20.ptx
+Input file is testcases/simpleD3D10_kernel.compute_10.ptx
+Input file is testcases/simpleD3D10_kernel.compute_20.ptx
+Input file is testcases/simpleD3D9_kernel.compute_10.ptx
+Input file is testcases/simpleD3D9_kernel.compute_20.ptx
+Input file is testcases/simpleGL_kernel.compute_10.ptx
+Input file is testcases/simpleGL_kernel.compute_20.ptx
+Input file is testcases/simpleMultiCopy.compute_10.ptx
+Input file is testcases/simpleMultiCopy.compute_20.ptx
+Input file is testcases/simpleMultiGPU_kernel.compute_10.ptx
+Input file is testcases/simpleMultiGPU_kernel.compute_20.ptx
+Input file is testcases/simplePitchLinearTexture.compute_10.ptx
+Input file is testcases/simplePitchLinearTexture.compute_20.ptx
+Input file is testcases/simpleStreams.compute_10.ptx
+Input file is testcases/simpleStreams.compute_20.ptx
+Input file is testcases/simpleTemplates.compute_10.ptx
+Input file is testcases/simpleTemplates.compute_20.ptx
+Input file is testcases/simpleTexture.compute_10.ptx
+Input file is testcases/simpleTexture.compute_20.ptx
+Input file is testcases/simpleTexture3D_kernel.compute_10.ptx
+Input file is testcases/simpleTexture3D_kernel.compute_20.ptx
+Input file is testcases/simpleTexture_kernel.ptx
+Input file is testcases/simpleVoteIntrinsics.compute_12.ptx
+Input file is testcases/simpleVoteIntrinsics.compute_20.ptx
+Input file is testcases/simpleZeroCopy.compute_10.ptx
+Input file is testcases/simpleZeroCopy.compute_20.ptx
+Input file is testcases/sobol_gpu.compute_10.ptx
+Input file is testcases/sobol_gpu.compute_20.ptx
+Input file is testcases/template.compute_10.ptx
+Input file is testcases/template.compute_20.ptx
+Input file is testcases/template.ptx
+Input file is testcases/texture_2d.compute_10 (2).ptx
+Input file is testcases/texture_2d.compute_10 (3).ptx
+Input file is testcases/texture_2d.compute_10.ptx
+Input file is testcases/texture_2d.compute_20 (2).ptx
+Input file is testcases/texture_2d.compute_20 (3).ptx
+Input file is testcases/texture_2d.compute_20.ptx
+Input file is testcases/texture_3d.compute_10 (2).ptx
+Input file is testcases/texture_3d.compute_10.ptx
+Input file is testcases/texture_3d.compute_20 (2).ptx
+Input file is testcases/texture_3d.compute_20.ptx
+Input file is testcases/texture_cube.compute_10 (2).ptx
+Input file is testcases/texture_cube.compute_10 (3).ptx
+Input file is testcases/texture_cube.compute_10.ptx
+Input file is testcases/texture_cube.compute_20 (2).ptx
+Input file is testcases/texture_cube.compute_20 (3).ptx
+Input file is testcases/texture_cube.compute_20.ptx
+Input file is testcases/texture_volume.compute_10.ptx
+Input file is testcases/texture_volume.compute_20.ptx
+Input file is testcases/threadFenceReduction.compute_11.ptx
+Input file is testcases/threadFenceReduction.compute_20.ptx
+Input file is testcases/threadMigration.ptx
+Input file is testcases/transpose.compute_10.ptx
+Input file is testcases/transpose.compute_20.ptx
+Input file is testcases/transposeNew.compute_10.ptx
+Input file is testcases/transposeNew.compute_20.ptx
+Input file is testcases/vectorAdd.compute_10.ptx
+Input file is testcases/vectorAdd.compute_20.ptx
+Input file is testcases/vectorAdd.ptx
+Input file is testcases/volumeRender_kernel.compute_10.ptx
+Input file is testcases/volumeRender_kernel.compute_20.ptx
