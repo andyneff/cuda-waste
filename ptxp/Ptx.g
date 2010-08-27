@@ -432,7 +432,7 @@ kernel_name
     ;
 
 entry_param_list
-    : entry_param ( T_COMMA entry_param)*
+    : entry_param ( T_COMMA! entry_param)*
     ;
 
 entry_param
