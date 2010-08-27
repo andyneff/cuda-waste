@@ -23,59 +23,59 @@
 
 void AddWrapper(char * cuda_module_name, HookManager * p)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	cu->DoInit(cuda_module_name, p);
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    cu->DoInit(cuda_module_name, p);
 }
 
 BOOL LoadCuda()
 {
-	HookManager * p = new HookManager();
-	HANDLE  hProcess = GetCurrentProcess();
-	HMODULE hModuleArray[1024];
-	DWORD   nModules;
-	DWORD   cbNeeded;
-	BOOL rv_epm = ::EnumProcessModules(hProcess, hModuleArray, sizeof(hModuleArray), &cbNeeded);
-	if (! rv_epm)
-	{
-		CloseHandle(hProcess);
-		return FALSE;
-	}
-	nModules = cbNeeded / sizeof(hModuleArray[0]);
-	bool found = false;
-	for (DWORD j = 0; j < nModules; j++)
-	{
-		HMODULE hModule = hModuleArray[j];
-		char    szModuleName[MAX_PATH];
-		BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hModule, szModuleName, sizeof(szModuleName));
-		if (! rv_gmfn)
-		{
-			CloseHandle(hProcess);
-			return FALSE;
-		}
-		if (strstr(szModuleName, "cudart32_30_14") != 0 || strstr(szModuleName, "cudart32_31_9") != 0)
-		{
-			AddWrapper(szModuleName, p);
-			found = true;
-			break;
-		}
-	}
-	return TRUE;
+    HookManager * p = new HookManager();
+    HANDLE  hProcess = GetCurrentProcess();
+    HMODULE hModuleArray[1024];
+    DWORD   nModules;
+    DWORD   cbNeeded;
+    BOOL rv_epm = ::EnumProcessModules(hProcess, hModuleArray, sizeof(hModuleArray), &cbNeeded);
+    if (! rv_epm)
+    {
+        CloseHandle(hProcess);
+        return FALSE;
+    }
+    nModules = cbNeeded / sizeof(hModuleArray[0]);
+    bool found = false;
+    for (DWORD j = 0; j < nModules; j++)
+    {
+        HMODULE hModule = hModuleArray[j];
+        char    szModuleName[MAX_PATH];
+        BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hModule, szModuleName, sizeof(szModuleName));
+        if (! rv_gmfn)
+        {
+            CloseHandle(hProcess);
+            return FALSE;
+        }
+        if (strstr(szModuleName, "cudart32_30_14") != 0 || strstr(szModuleName, "cudart32_31_9") != 0)
+        {
+            AddWrapper(szModuleName, p);
+            found = true;
+            break;
+        }
+    }
+    return TRUE;
 }
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
-	BOOL bResult = TRUE;
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-		{
-			return LoadCuda();
-			break;
-		}
-	case DLL_PROCESS_DETACH:
-		{
-			break;
-		}
-	}
-	return TRUE;
+    BOOL bResult = TRUE;
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        {
+            return LoadCuda();
+            break;
+        }
+    case DLL_PROCESS_DETACH:
+        {
+            break;
+        }
+    }
+    return TRUE;
 }

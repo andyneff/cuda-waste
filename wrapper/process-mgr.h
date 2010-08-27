@@ -46,15 +46,15 @@ typedef DWORD (WINAPI * PFNGETMODULEFILENAMEEXA)(HANDLE hProcess, HMODULE hModul
 class ProcessManager  
 {
 public:
-	ProcessManager();
-	virtual ~ProcessManager();
-	BOOL Populate(BOOL bPopulateModules);
-	BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
-	DWORD GetProcessCount() const;
-	ExecutableModule* GetProcessById(DWORD dwProcessId);
+    ProcessManager();
+    virtual ~ProcessManager();
+    BOOL Populate(BOOL bPopulateModules);
+    BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
+    DWORD GetProcessCount() const;
+    ExecutableModule* GetProcessById(DWORD dwProcessId);
 private:
-	CLibHandler       *m_pLibHandler;
-	CRunningProcesses *m_pProcesses;
+    CLibHandler       *m_pLibHandler;
+    CRunningProcesses *m_pProcesses;
 };
 
 
@@ -63,62 +63,62 @@ private:
 class ModuleList: private std::vector<Module*>  
 {
 public:
-	ModuleList();
-	virtual ~ModuleList();
-	void Add(Module &moduleInstance);
-	void ReleaseAll();
-	Module* GetModule(DWORD dwIndex) const;
-	DWORD GetCount() const;
+    ModuleList();
+    virtual ~ModuleList();
+    void Add(Module &moduleInstance);
+    void ReleaseAll();
+    Module* GetModule(DWORD dwIndex) const;
+    DWORD GetCount() const;
 };
 
 class CElements: public ModuleList  
 {
 public:
-	CElements() : ModuleList() {}
-	virtual ~CElements() {};
+    CElements() : ModuleList() {}
+    virtual ~CElements() {};
 };
 
 class CLibHandler  
 {
 public:
-	CLibHandler(CRunningProcesses* pProcesses) : m_pProcesses(pProcesses) {};
-	virtual ~CLibHandler() {};
-	virtual BOOL PopulateModules(Module* pProcess) = 0;
-	virtual BOOL PopulateProcesses(BOOL bPopulateModules) = 0;
-	virtual BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules) = 0;
+    CLibHandler(CRunningProcesses* pProcesses) : m_pProcesses(pProcesses) {};
+    virtual ~CLibHandler() {};
+    virtual BOOL PopulateModules(Module* pProcess) = 0;
+    virtual BOOL PopulateProcesses(BOOL bPopulateModules) = 0;
+    virtual BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules) = 0;
 protected:
-	CRunningProcesses* m_pProcesses;
+    CRunningProcesses* m_pProcesses;
 };
 
 class CLoadedModules: public CElements
 {
 public:
-	CLoadedModules(DWORD dwProcessId);
-	virtual ~CLoadedModules();
+    CLoadedModules(DWORD dwProcessId);
+    virtual ~CLoadedModules();
 protected:
-	DWORD m_dwProcessId;
+    DWORD m_dwProcessId;
 };
 
 class CRunningProcesses: public CElements
 {
 public:
-	CRunningProcesses();
-	virtual ~CRunningProcesses();
-	ExecutableModule* GetProcessById(DWORD dwProcessId);
+    CRunningProcesses();
+    virtual ~CRunningProcesses();
+    ExecutableModule* GetProcessById(DWORD dwProcessId);
 };
 
 class CPsapiHandler: public CLibHandler
 {
 public:
-	CPsapiHandler(CRunningProcesses* pProcesses);
-	virtual ~CPsapiHandler();
-	BOOL Initialize();
-	void Finalize();
-	virtual BOOL PopulateModules(Module* pProcess);
-	virtual BOOL PopulateProcesses(BOOL bPopulateModules);
-	virtual BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
+    CPsapiHandler(CRunningProcesses* pProcesses);
+    virtual ~CPsapiHandler();
+    BOOL Initialize();
+    void Finalize();
+    virtual BOOL PopulateModules(Module* pProcess);
+    virtual BOOL PopulateProcesses(BOOL bPopulateModules);
+    virtual BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
 private:
-	HMODULE                 m_hModPSAPI;
+    HMODULE                 m_hModPSAPI;
     PFNENUMPROCESSES        m_pfnEnumProcesses;
     PFNENUMPROCESSMODULES   m_pfnEnumProcessModules;
     PFNGETMODULEFILENAMEEXA m_pfnGetModuleFileNameExA;
@@ -127,32 +127,32 @@ private:
 class Module  
 {
 public:
-	Module(char *pszName, HMODULE hModule);
-	virtual ~Module();
-	void AddModule(Module* pModuleInstance);
-	void ReleaseModules();
-	char*    Get_Name() const;
-	void     Set_Name(char *pszName);
-	HMODULE  Get_Module() const;
-	void     Set_Module(HMODULE module);
-	char*   GetBaseName() const;
+    Module(char *pszName, HMODULE hModule);
+    virtual ~Module();
+    void AddModule(Module* pModuleInstance);
+    void ReleaseModules();
+    char*    Get_Name() const;
+    void     Set_Name(char *pszName);
+    HMODULE  Get_Module() const;
+    void     Set_Module(HMODULE module);
+    char*   GetBaseName() const;
 private:
-	char        *m_pszName;
+    char        *m_pszName;
     HMODULE      m_hModule;
 protected:
-	ModuleList *m_pInternalList;
+    ModuleList *m_pInternalList;
 };
 
 class ExecutableModule: public Module
 {
 public:
-	ExecutableModule(CLibHandler* pLibHandler, char* pszName, HMODULE hModule, DWORD dwProcessId);
-	virtual ~ExecutableModule();
-	DWORD Get_ProcessId() const;
-	BOOL PopulateModules();
-	DWORD GetModuleCount();
-	Module* GetModuleByIndex(DWORD dwIndex);
+    ExecutableModule(CLibHandler* pLibHandler, char* pszName, HMODULE hModule, DWORD dwProcessId);
+    virtual ~ExecutableModule();
+    DWORD Get_ProcessId() const;
+    BOOL PopulateModules();
+    DWORD GetModuleCount();
+    Module* GetModuleByIndex(DWORD dwIndex);
 private:
-	DWORD        m_dwProcessId;
-	CLibHandler* m_pLibHandler;
+    DWORD        m_dwProcessId;
+    CLibHandler* m_pLibHandler;
 };

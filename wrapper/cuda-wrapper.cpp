@@ -183,17 +183,17 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     cu->output_stream = & std::cout;
     cu->trace_all_calls = false;
     cu->quit_on_error = false;
-	cu->do_emulation = true;
+    cu->do_emulation = true;
     cu->global_context = 0;
     cu->hook_manager = 0;
-	cu->do_crash = false;
+    cu->do_crash = false;
 }
 
 void CUDA_WRAPPER::Unimplemented()
 {
-	std::cout << "FATAL ERROR: Unimplemented function!!!!\n";
+    std::cout << "FATAL ERROR: Unimplemented function!!!!\n";
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	exit(1);
+    exit(1);
 }
 
 bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
@@ -218,116 +218,116 @@ bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
     cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CUDA_WRAPPER::Malloc);
     cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CUDA_WRAPPER::HostAlloc);
     cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CUDA_WRAPPER::Free);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::FreeHost);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::FreeHost);
     cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CUDA_WRAPPER::HostGetDevicePointer);
     cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CUDA_WRAPPER::Memcpy);
     cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CUDA_WRAPPER::Memset);
     cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CUDA_WRAPPER::ThreadExit);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CUDA_WRAPPER::GetLastError);
     cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::RegisterFatBinary);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)CUDA_WRAPPER::RegisterFunction);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Launch);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::SetupArgument);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::ConfigureCall);
-	
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)CUDA_WRAPPER::RegisterFunction);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Launch);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::SetupArgument);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::ConfigureCall);
+    
 
-	// Unimplemented functions.
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)CUDA_WRAPPER::Unimplemented);
-// not in library??????????	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSynchronize", (PROC)CUDA_WRAPPER::ThreadSynchronize);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CUDA_WRAPPER::UnregisterFatBinary);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)CUDA_WRAPPER::Unimplemented);
-	cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)CUDA_WRAPPER::Unimplemented);
-//	cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFunction", (PROC)CUDA_WRAPPER::Unimplemented);
+    // Unimplemented functions.
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)CUDA_WRAPPER::Unimplemented);
+// not in library?????????? cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceAlignmentOffset", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSynchronize", (PROC)CUDA_WRAPPER::ThreadSynchronize);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CUDA_WRAPPER::UnregisterFatBinary);
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)CUDA_WRAPPER::Unimplemented);
+//  cu->hook_manager->HookImport(cuda_module_name, "cudaRegisterFunction", (PROC)CUDA_WRAPPER::Unimplemented);
 
     return true;
 }
@@ -359,16 +359,16 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckSinglePtrOverwrite(const data * d)
         if (! hostbuffer)
             return NOT_OK;
 
-		cudaError_t e1;
-		if (! cu->do_emulation)
-		{
-			typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
-			e1 = (*proc)(hostbuffer, d->ptr, d->size, cudaMemcpyDeviceToHost);
-		} else
-		{
-			memcpy(hostbuffer, d->ptr, d->size);
-			e1 = cudaSuccess;
-		}
+        cudaError_t e1;
+        if (! cu->do_emulation)
+        {
+            typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+            e1 = (*proc)(hostbuffer, d->ptr, d->size, cudaMemcpyDeviceToHost);
+        } else
+        {
+            memcpy(hostbuffer, d->ptr, d->size);
+            e1 = cudaSuccess;
+        }
         if (e1 != 0)
         {
             free(hostbuffer);
@@ -551,26 +551,26 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Malloc(void ** ptr, size_t size)
     cudaError_t resetErrKernel = GetLastError();
 
     // Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
-	typePtrCudaMalloc proc;
-	if (! cu->do_emulation)
-	{
-		cudaError_t e1 = (*ptrCudaMalloc)((void**)&local, size + 2 * cu->padding_size);
-		if (e1 != 0)
-		{
-			(*cu->output_stream) << "cudaMalloc failed."
-				<< " Return value = "
-				<< e1 << ".\n";
-			(*cu->output_stream) << " This check was performed in " << Context() << ".\n\n";
-			if (cu->quit_on_error)
-				exit(1);
-			if (cu->do_not_call_cuda_after_sanity_check_fail)
-				return cudaErrorMemoryAllocation;
-			return e1;
-		}
-	} else
-	{
-		local = malloc(size+2*cu->padding_size);
-	}
+    typePtrCudaMalloc proc;
+    if (! cu->do_emulation)
+    {
+        cudaError_t e1 = (*ptrCudaMalloc)((void**)&local, size + 2 * cu->padding_size);
+        if (e1 != 0)
+        {
+            (*cu->output_stream) << "cudaMalloc failed."
+                << " Return value = "
+                << e1 << ".\n";
+            (*cu->output_stream) << " This check was performed in " << Context() << ".\n\n";
+            if (cu->quit_on_error)
+                exit(1);
+            if (cu->do_not_call_cuda_after_sanity_check_fail)
+                return cudaErrorMemoryAllocation;
+            return e1;
+        }
+    } else
+    {
+        local = malloc(size+2*cu->padding_size);
+    }
     char * hostbuffer = (char*)malloc(size + 2 * cu->padding_size);
     if (! hostbuffer)
     {
@@ -596,23 +596,23 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Malloc(void ** ptr, size_t size)
     {
         *init = 0;
     }
-	if (! cu->do_emulation)
-	{
-		cudaError_t e2 = (*ptrCudaMemcpy)(local, hostbuffer, size + 2 * cu->padding_size, cudaMemcpyHostToDevice);
-		if (e2 != 0)
-		{
-			(*cu->output_stream) << "cudaMemcpy failed, rc = " << e2 << ", in cudaMalloc. This call is used to initialize the device buffer.\n";
-			(*cu->output_stream) << " This check was performed in " << Context() << ".\n\n";
-			if (cu->quit_on_error)
-				exit(1);
-			if (cu->do_not_call_cuda_after_sanity_check_fail)
-				return cudaErrorMemoryAllocation;
-			return e2;
-		}
-	} else
-	{
-		memcpy(local, hostbuffer, size + 2 * cu->padding_size);
-	}
+    if (! cu->do_emulation)
+    {
+        cudaError_t e2 = (*ptrCudaMemcpy)(local, hostbuffer, size + 2 * cu->padding_size, cudaMemcpyHostToDevice);
+        if (e2 != 0)
+        {
+            (*cu->output_stream) << "cudaMemcpy failed, rc = " << e2 << ", in cudaMalloc. This call is used to initialize the device buffer.\n";
+            (*cu->output_stream) << " This check was performed in " << Context() << ".\n\n";
+            if (cu->quit_on_error)
+                exit(1);
+            if (cu->do_not_call_cuda_after_sanity_check_fail)
+                return cudaErrorMemoryAllocation;
+            return e2;
+        }
+    } else
+    {
+        memcpy(local, hostbuffer, size + 2 * cu->padding_size);
+    }
     free(hostbuffer);
     data d;
     d.ptr = local;
@@ -647,13 +647,13 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-		if (! cu->do_emulation)
-		{
-			// not sure what it does, send off to cuda api.
-	        cudaError_t err = (*ptrCudaFree)(ptr);
-	        return err;
-		}
-		return cudaErrorMemoryAllocation;
+        if (! cu->do_emulation)
+        {
+            // not sure what it does, send off to cuda api.
+            cudaError_t err = (*ptrCudaFree)(ptr);
+            return err;
+        }
+        return cudaErrorMemoryAllocation;
     }
 
     int di = cu->FindAllocatedBlock(ptr);
@@ -666,13 +666,13 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-		if (! cu->do_emulation)
-		{
-			// not sure what it does, send off to cuda api.
-	        cudaError_t err = (*ptrCudaFree)(ptr);
-	        return err;
-		}
-		return cudaErrorMemoryAllocation;
+        if (! cu->do_emulation)
+        {
+            // not sure what it does, send off to cuda api.
+            cudaError_t err = (*ptrCudaFree)(ptr);
+            return err;
+        }
+        return cudaErrorMemoryAllocation;
     }
     data * d = &cu->alloc_list[di];
     void * local = ((char*)ptr) - cu->padding_size;
@@ -685,25 +685,25 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-		if (! cu->do_emulation)
-		{
-			// not sure what it does, send off to cuda api.
-	        cudaError_t err = (*ptrCudaFree)(ptr);
-	        return err;
-		}
-		return cudaErrorMemoryAllocation;
+        if (! cu->do_emulation)
+        {
+            // not sure what it does, send off to cuda api.
+            cudaError_t err = (*ptrCudaFree)(ptr);
+            return err;
+        }
+        return cudaErrorMemoryAllocation;
     }
     cu->alloc_list.erase(cu->alloc_list.begin() + di);
     cu->CheckSinglePtrOverwrite(d);
-	if (! cu->do_emulation)
-	{
-		cudaError_t err = (*ptrCudaFree)(local);
-		return err;
-	} else
-	{
-		free(local);
-		return cudaSuccess;
-	}
+    if (! cu->do_emulation)
+    {
+        cudaError_t err = (*ptrCudaFree)(local);
+        return err;
+    } else
+    {
+        free(local);
+        return cudaSuccess;
+    }
 }
 
 
@@ -928,15 +928,15 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
             << ", ..., ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
-		if (! cu->do_emulation)
-		{
-			cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
-			return err;
-		} else
-		{
-			//memcpy(dst, src, count);
-			return cudaErrorMemoryAllocation;
-		}
+        if (! cu->do_emulation)
+        {
+            cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            return err;
+        } else
+        {
+            //memcpy(dst, src, count);
+            return cudaErrorMemoryAllocation;
+        }
     }
     if (src == 0)
     {
@@ -945,15 +945,15 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
-		if (! cu->do_emulation)
-		{
-			cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
-			return err;
-		} else
-		{
-			//memcpy(dst, src, count);
-			return cudaErrorMemoryAllocation;
-		}
+        if (! cu->do_emulation)
+        {
+            cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            return err;
+        } else
+        {
+            //memcpy(dst, src, count);
+            return cudaErrorMemoryAllocation;
+        }
     }
 
     // Four cases:
@@ -1017,15 +1017,15 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
         if (dsrc)
             cu->CheckSinglePtrOverwrite(dsrc);
         // Perform copy.
-		cudaError_t err;
-		if (! cu->do_emulation)
-		{
-			err = (*ptrCudaMemcpy)(dst, src, count, kind);
-		} else
-		{
-			memcpy(dst, src, count);
-			err = cudaSuccess;
-		}
+        cudaError_t err;
+        if (! cu->do_emulation)
+        {
+            err = (*ptrCudaMemcpy)(dst, src, count, kind);
+        } else
+        {
+            memcpy(dst, src, count);
+            err = cudaSuccess;
+        }
         // Perform overwrite check again.
         if (ddst)
             cu->CheckSinglePtrOverwrite(ddst);
@@ -1091,15 +1091,15 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
         if (dsrc)
             cu->CheckSinglePtrOverwrite(dsrc);
         // Perform copy.
-		cudaError_t err;
-		if (! cu->do_emulation)
-		{
-			err = (*ptrCudaMemcpy)(dst, src, count, kind);
-		} else
-		{
-			memcpy(dst, src, count);
-			err = cudaSuccess;
-		}
+        cudaError_t err;
+        if (! cu->do_emulation)
+        {
+            err = (*ptrCudaMemcpy)(dst, src, count, kind);
+        } else
+        {
+            memcpy(dst, src, count);
+            err = cudaSuccess;
+        }
         // Perform overwrite check again.
         if (ddst)
             cu->CheckSinglePtrOverwrite(ddst);
@@ -1203,38 +1203,38 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::ThreadExit()
     }
 
     cu->alloc_list.clear();
-	if (! cu->do_emulation)
-		return (*ptrCudaThreadExit)();
-	else
-		return cudaSuccess;
+    if (! cu->do_emulation)
+        return (*ptrCudaThreadExit)();
+    else
+        return cudaSuccess;
 }
 
 cudaError_t CUDA_WRAPPER::GetLastError()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-		return (*ptrCudaGetLastError)();
-	else
-		return cudaSuccess;
+    if (! cu->do_emulation)
+        return (*ptrCudaGetLastError)();
+    else
+        return cudaSuccess;
 }
 
 void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
-		printf("cu emul %s\n", cu->do_emulation? "yes":"no");
-	printf("HI HI HI\n");
-	if (cu->do_crash)
-	{
-		printf("here\n");
-		//assert(false);
-		// if this fails, try another...
-		int x = 0;
-		int y = 0;
-		cu = (CUDA_WRAPPER*)(x/y);
-		int z = x/y;
-		printf ("WHAT THE F!\n");
-	}
+        printf("cu emul %s\n", cu->do_emulation? "yes":"no");
+    printf("HI HI HI\n");
+    if (cu->do_crash)
+    {
+        printf("here\n");
+        //assert(false);
+        // if this fails, try another...
+        int x = 0;
+        int y = 0;
+        cu = (CUDA_WRAPPER*)(x/y);
+        int z = x/y;
+        printf ("WHAT THE F!\n");
+    }
 
     if (true) // for now, ignore (fatCubin)
     {
@@ -1253,8 +1253,8 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
                 std::cout << "CODE:\n";
                 std::cout << code << std::endl;
                 std::cout << "====================================================\n\n\n";
-				CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-				emulator->Extract_From_Source(code);
+                CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+                emulator->Extract_From_Source(code);
            }
 
             // ELF contains just in time code for every PTX.
@@ -1266,97 +1266,97 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
             }
         }
     }
-	if (! cu->do_emulation)
-	{
-		typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::RegisterFatBinary);
-	    return (*proc)(fatCubin);
-	} else
-		return 0;
+    if (! cu->do_emulation)
+    {
+        typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::RegisterFatBinary);
+        return (*proc)(fatCubin);
+    } else
+        return 0;
 }
 
 void CUDARTAPI CUDA_WRAPPER::UnregisterFatBinary(void **fatCubinHandle)
 {
-	// Should probably do something like free the ast...
+    // Should probably do something like free the ast...
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaUnregisterFatBinary proc = (typePtrCudaUnregisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::UnregisterFatBinary);
-	    (*proc)(fatCubinHandle);
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaUnregisterFatBinary proc = (typePtrCudaUnregisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::UnregisterFatBinary);
+        (*proc)(fatCubinHandle);
+    }
 }
 
 cudaError_t CUDARTAPI CUDA_WRAPPER::Launch(const char *entry)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaLaunch proc = (typePtrCudaLaunch)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Launch);
-	    return (*proc)(entry);
-	} else
-	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-		emulator->Execute((void*)entry);
-		return cudaSuccess;
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaLaunch proc = (typePtrCudaLaunch)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Launch);
+        return (*proc)(entry);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        emulator->Execute((void*)entry);
+        return cudaSuccess;
+    }
 }
 
 void CUDARTAPI CUDA_WRAPPER::RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaRegisterFunction proc = (typePtrCudaRegisterFunction)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::RegisterFunction);
-	    (*proc)(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid, bid, bDim, gDim, wSize);
-	} else
-	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-		emulator->RegisterFunction((void*)hostFun, deviceFun);
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaRegisterFunction proc = (typePtrCudaRegisterFunction)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::RegisterFunction);
+        (*proc)(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid, bid, bDim, gDim, wSize);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        emulator->RegisterFunction((void*)hostFun, deviceFun);
+    }
 }
 
 cudaError_t CUDARTAPI CUDA_WRAPPER::ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0))
 {
-	// set up dimensions, shared memory, and stream for the kernel launch.
+    // set up dimensions, shared memory, and stream for the kernel launch.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaConfigureCall proc = (typePtrCudaConfigureCall)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::ConfigureCall);
-	    return (*proc)(gridDim, blockDim, sharedMem, stream);
-	} else
-	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-		return emulator->ConfigureCall(gridDim, blockDim, sharedMem, stream);
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaConfigureCall proc = (typePtrCudaConfigureCall)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::ConfigureCall);
+        return (*proc)(gridDim, blockDim, sharedMem, stream);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        return emulator->ConfigureCall(gridDim, blockDim, sharedMem, stream);
+    }
 }
 
 cudaError_t CUDARTAPI CUDA_WRAPPER::SetupArgument(const void *arg, size_t size, size_t offset)
 {
-	// arg contains pointer to the argument for the function call.
+    // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaSetupArgument proc = (typePtrCudaSetupArgument)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::SetupArgument);
-	    return (*proc)(arg, size, offset);
-	} else
-	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-		return emulator->SetupArgument(arg, size, offset);
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaSetupArgument proc = (typePtrCudaSetupArgument)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::SetupArgument);
+        return (*proc)(arg, size, offset);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        return emulator->SetupArgument(arg, size, offset);
+    }
 }
 
 cudaError_t CUDARTAPI CUDA_WRAPPER::ThreadSynchronize(void)
 {
-	// arg contains pointer to the argument for the function call.
+    // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (! cu->do_emulation)
-	{
-		typePtrCudaThreadSynchronize proc = (typePtrCudaThreadSynchronize)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::ThreadSynchronize);
-	    return (*proc)();
-	} else
-	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-		return emulator->ThreadSynchronize();
-	}
+    if (! cu->do_emulation)
+    {
+        typePtrCudaThreadSynchronize proc = (typePtrCudaThreadSynchronize)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::ThreadSynchronize);
+        return (*proc)();
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        return emulator->ThreadSynchronize();
+    }
 }
 
 

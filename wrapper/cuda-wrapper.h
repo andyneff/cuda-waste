@@ -35,18 +35,18 @@ class HookManager;
 class DLL_API CUDA_WRAPPER
 {
 private:
-	struct data
+    struct data
     {
         void * ptr;
         bool is_host;
         int size;
         char * context;
     };
-	friend std::vector<data>;
+    friend std::vector<data>;
 private:
-	CUDA_WRAPPER();
-	static CUDA_WRAPPER * singleton;
-	HookManager * hook_manager;
+    CUDA_WRAPPER();
+    static CUDA_WRAPPER * singleton;
+    HookManager * hook_manager;
     size_t padding_size;
     unsigned char padding_byte;
     bool device_pointer_to_first_byte_in_block;
@@ -54,8 +54,8 @@ private:
     bool trace_all_calls;
     bool quit_on_error;
     bool do_not_call_cuda_after_sanity_check_fail;
-	bool do_emulation;
-	bool do_crash;
+    bool do_emulation;
+    bool do_crash;
     bool init;
     static void ExitHandler();
     std::vector<data> alloc_list;
@@ -259,8 +259,8 @@ private:
 
 
 public:
-	static CUDA_WRAPPER * Singleton();
-	static bool DoInit(char * cuda_module_name, HookManager * hm);
+    static CUDA_WRAPPER * Singleton();
+    static bool DoInit(char * cuda_module_name, HookManager * hm);
     static void MakeContext(char * file_name, int line);
     static cudaError_t CUDARTAPI Malloc(void ** ptr, size_t size);
     static cudaError_t CUDARTAPI Free(void *);
@@ -270,14 +270,14 @@ public:
     static cudaError_t CUDARTAPI Memcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind);    
     static cudaError_t CUDARTAPI Memset(void * devPtr, int value, size_t count);          
     static cudaError_t CUDARTAPI ThreadExit();
-	static cudaError_t CUDARTAPI GetLastError();
-	static void** CUDARTAPI RegisterFatBinary(void *fatCubin);
-	static cudaError_t CUDARTAPI Launch(const char *entry);
-	static void CUDARTAPI RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize);
+    static cudaError_t CUDARTAPI GetLastError();
+    static void** CUDARTAPI RegisterFatBinary(void *fatCubin);
+    static cudaError_t CUDARTAPI Launch(const char *entry);
+    static void CUDARTAPI RegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize);
     static cudaError_t CUDARTAPI SetupArgument(const void *arg, size_t size, size_t offset);
     static cudaError_t CUDARTAPI ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0));
-	static cudaError_t CUDARTAPI ThreadSynchronize(void);
-	static void CUDARTAPI UnregisterFatBinary(void **fatCubinHandle);
+    static cudaError_t CUDARTAPI ThreadSynchronize(void);
+    static void CUDARTAPI UnregisterFatBinary(void **fatCubinHandle);
 
     enum return_type {
         NOT_OK = 0,
@@ -289,13 +289,13 @@ public:
     static return_type CUDARTAPI SetDevicePointerToFirstByteInBlock(bool b);
     static return_type CUDARTAPI SetOutputStream(std::ostream * fp);
     static return_type CUDARTAPI SetTraceAllCalls(bool b);
-	static return_type CUDARTAPI SetQuitOnError(bool b);
-	static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
-	static return_type CopyOptions(CUDA_WRAPPER * ptr);
+    static return_type CUDARTAPI SetQuitOnError(bool b);
+    static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
+    static return_type CopyOptions(CUDA_WRAPPER * ptr);
 private:
     static return_type CheckSinglePtrOverwrite(const data * d);
     static bool IsBadPointer(const void * ptr);
     static int FindAllocatedBlock(const void * pointer);
-	static void Unimplemented();
+    static void Unimplemented();
 };
 

@@ -34,80 +34,80 @@ class HookedFunction;
 class HookManager  
 {
 public:
-	HookManager();
-	virtual ~HookManager();
+    HookManager();
+    virtual ~HookManager();
 public:
-	PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook);
-	HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
-	PROC FindOriginal(PROC wrapper_function);
-	BOOL UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName);
-	bool HookSystemFuncs();
-	void UnHookAllFuncs();
-	BOOL AreThereHookedFunctions();
+    PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook);
+    HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
+    PROC FindOriginal(PROC wrapper_function);
+    BOOL UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName);
+    bool HookSystemFuncs();
+    void UnHookAllFuncs();
+    BOOL AreThereHookedFunctions();
 private:
-	friend class HookedFunction;
-	static CriticalSection sm_CritSec;
-	HMODULE m_hmodThisInstance;
-	static HookedFunctions* sm_pHookedFunctions;
-	bool m_bSystemFuncsHooked;
-	static void WINAPI HackModuleOnLoad(HMODULE hmod, DWORD dwFlags);
-	static HMODULE WINAPI MyLoadLibraryA(PCSTR  pszModuleName);
-	static HMODULE WINAPI MyLoadLibraryW(PCWSTR pszModuleName);
-	static HMODULE WINAPI MyLoadLibraryExA(PCSTR  pszModuleName, HANDLE hFile, DWORD dwFlags);
-	static HMODULE WINAPI MyLoadLibraryExW(PCWSTR pszModuleName, HANDLE hFile, DWORD dwFlags);
-	static FARPROC WINAPI MyGetProcAddress(HMODULE hmod, PCSTR pszProcName);
-	static FARPROC WINAPI GetProcAddressWindows(HMODULE hmod, PCSTR pszProcName);
-	BOOL AddHook(PCSTR  pszCalleeModName, PCSTR pszFuncName, PROC pfnOrig, PROC pfnHook);
-	BOOL RemoveHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
+    friend class HookedFunction;
+    static CriticalSection sm_CritSec;
+    HMODULE m_hmodThisInstance;
+    static HookedFunctions* sm_pHookedFunctions;
+    bool m_bSystemFuncsHooked;
+    static void WINAPI HackModuleOnLoad(HMODULE hmod, DWORD dwFlags);
+    static HMODULE WINAPI MyLoadLibraryA(PCSTR  pszModuleName);
+    static HMODULE WINAPI MyLoadLibraryW(PCWSTR pszModuleName);
+    static HMODULE WINAPI MyLoadLibraryExA(PCSTR  pszModuleName, HANDLE hFile, DWORD dwFlags);
+    static HMODULE WINAPI MyLoadLibraryExW(PCWSTR pszModuleName, HANDLE hFile, DWORD dwFlags);
+    static FARPROC WINAPI MyGetProcAddress(HMODULE hmod, PCSTR pszProcName);
+    static FARPROC WINAPI GetProcAddressWindows(HMODULE hmod, PCSTR pszProcName);
+    BOOL AddHook(PCSTR  pszCalleeModName, PCSTR pszFuncName, PROC pfnOrig, PROC pfnHook);
+    BOOL RemoveHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
 };
 
 class HookedFunction  
 {
 public:
-	HookedFunction(HookedFunctions* pHookedFunctions, PCSTR pszCalleeModName, PCSTR pszFuncName, 
-		PROC pfnOrig, PROC pfnHook);
-	virtual ~HookedFunction();
+    HookedFunction(HookedFunctions* pHookedFunctions, PCSTR pszCalleeModName, PCSTR pszFuncName, 
+        PROC pfnOrig, PROC pfnHook);
+    virtual ~HookedFunction();
     PCSTR Get_CalleeModName() const;
-	PCSTR Get_FuncName() const;
-	PROC Get_pfnHook() const;
-	PROC Get_pfnOrig() const;
-	BOOL HookImport();
-	BOOL UnHookImport();
-	BOOL ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew, HMODULE hmodCaller);
+    PCSTR Get_FuncName() const;
+    PROC Get_pfnHook() const;
+    PROC Get_pfnOrig() const;
+    BOOL HookImport();
+    BOOL UnHookImport();
+    BOOL ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew, HMODULE hmodCaller);
 
 private:
-	HookedFunctions* m_pHookedFunctions;
-	BOOL m_bHooked;
-	char m_szCalleeModName[MAX_PATH];
-	char m_szFuncName[MAX_PATH];
-	PROC m_pfnOrig;
-	PROC m_pfnHook;
-	BOOL DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew);
-	BOOL ReplaceInAllModules(BOOL bHookOrRestore, PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew);
+    HookedFunctions* m_pHookedFunctions;
+    BOOL m_bHooked;
+    char m_szCalleeModName[MAX_PATH];
+    char m_szFuncName[MAX_PATH];
+    PROC m_pfnOrig;
+    PROC m_pfnHook;
+    BOOL DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew);
+    BOOL ReplaceInAllModules(BOOL bHookOrRestore, PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew);
 };
 
 
 class StringCompare
 {
 public:
-	bool operator()(const string& x, const string& y) const
-	{
-		return ( _stricmp(x.c_str(), y.c_str()) < 0 );
-	}
+    bool operator()(const string& x, const string& y) const
+    {
+        return ( _stricmp(x.c_str(), y.c_str()) < 0 );
+    }
 };
 
 class HookedFunctions: public map<string, HookedFunction*, StringCompare>
 {
 public:
-	HookedFunctions(HookManager* pApiHookMgr) : m_pApiHookMgr(pApiHookMgr) {};
-	virtual ~HookedFunctions() {};
+    HookedFunctions(HookManager* pApiHookMgr) : m_pApiHookMgr(pApiHookMgr) {};
+    virtual ~HookedFunctions() {};
 public:
-	HookedFunction* GetHookedFunction(PCSTR pszCalleeModName, PCSTR pszFuncName);
-	HookedFunction* GetHookedFunction(HMODULE hmod, PCSTR pszFuncName);
-	BOOL AddHook(HookedFunction* pHook);
-	BOOL RemoveHook(HookedFunction* pHook);
+    HookedFunction* GetHookedFunction(PCSTR pszCalleeModName, PCSTR pszFuncName);
+    HookedFunction* GetHookedFunction(HMODULE hmod, PCSTR pszFuncName);
+    BOOL AddHook(HookedFunction* pHook);
+    BOOL RemoveHook(HookedFunction* pHook);
 private:
-	BOOL GetFunctionNameFromExportSection(HMODULE hmodOriginal, DWORD dwFuncOrdinalNum, PSTR pszFuncName); 
-	void GetFunctionNameByOrdinal(PCSTR pszCalleeModName, DWORD dwFuncOrdinalNum, PSTR pszFuncName);
-	HookManager* m_pApiHookMgr;
+    BOOL GetFunctionNameFromExportSection(HMODULE hmodOriginal, DWORD dwFuncOrdinalNum, PSTR pszFuncName); 
+    void GetFunctionNameByOrdinal(PCSTR pszCalleeModName, DWORD dwFuncOrdinalNum, PSTR pszFuncName);
+    HookManager* m_pApiHookMgr;
 };

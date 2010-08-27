@@ -26,12 +26,12 @@
 class CriticalSection
 {
 public:
-	CriticalSection();
-	virtual ~CriticalSection();
-	void Enter();
-	void Leave();
+    CriticalSection();
+    virtual ~CriticalSection();
+    void Enter();
+    void Leave();
 private:
-	CRITICAL_SECTION m_cs;
+    CRITICAL_SECTION m_cs;
 };
 
 
@@ -39,19 +39,19 @@ template <class T>
 class LockManager  
 {
 public:
-	LockManager(T& lockObject, bool bEnabled):
-		m_rLockObject(lockObject),
-		m_bEnabled(bEnabled)
-	{
-		if (m_bEnabled)
-			m_rLockObject.Enter();
-	}
-	virtual ~LockManager()
-	{
-		if (m_bEnabled)
-			m_rLockObject.Leave();
-	}
+    LockManager(T& lockObject, bool bEnabled):
+        m_rLockObject(lockObject),
+        m_bEnabled(bEnabled)
+    {
+        if (m_bEnabled)
+            m_rLockObject.Enter();
+    }
+    virtual ~LockManager()
+    {
+        if (m_bEnabled)
+            m_rLockObject.Leave();
+    }
 private:
-	T & m_rLockObject;
-	bool m_bEnabled;
+    T & m_rLockObject;
+    bool m_bEnabled;
 };

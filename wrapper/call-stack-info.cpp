@@ -251,10 +251,10 @@ char * CallStackInfo::Context(int lines)
         }
     }
 
-	if (strcmp("", buffer) == 0)
-	{
-		strcat(buffer, "(no call stack available)");
-	}
+    if (strcmp("", buffer) == 0)
+    {
+        strcat(buffer, "(no call stack available)");
+    }
 
     return strdup(buffer);
 }

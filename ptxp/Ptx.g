@@ -32,7 +32,7 @@ grammar Ptx;
 options {
     backtrack=true;
     output=AST;
-    language=Java;
+    language=C;
 }
 
 tokens {
@@ -341,6 +341,7 @@ tokens {
     TREE_PERF;
     TREE_ARRAY;
     TREE_PAR_REGISTER;
+    TREE_ALIGN;
 }
 
 @members
@@ -445,7 +446,9 @@ entry_space
     ;
 
 align
-    : K_ALIGN byte_count
+    : K_ALIGN b=byte_count
+    ->
+    ^( TREE_ALIGN $b )
     ;
 
 byte_count
@@ -708,7 +711,14 @@ variable_declarator
     ;
 
 array_spec
-    : ( T_OB integer? T_CB )*
+    :
+    array_spec_aux
+    |
+    ;
+
+array_spec_aux
+    :
+    ( T_OB integer? T_CB )+
     ->
     ^( TREE_ARRAY ( T_OB integer? T_CB )* )
     ;
@@ -1028,7 +1038,7 @@ i_abs
     i=KI_ABS
     t=i_abs_type
     o=i_abs_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_abs_type
@@ -1060,7 +1070,7 @@ i_add
     i=KI_ADD
     t=i_add_type
     o=i_add_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_add_type:
@@ -1088,7 +1098,7 @@ i_addc
     i=KI_ADDC
     t=i_addc_type
     o=i_addc_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_addc_type:
@@ -1111,7 +1121,7 @@ i_and
     i=KI_AND
     t=i_and_type
     o=i_and_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_and_type:
@@ -1130,7 +1140,7 @@ i_atom
     i=KI_ATOM
     t=i_atom_type
     o=i_atom_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_atom_type
@@ -1161,7 +1171,7 @@ i_bar1
     i=KI_BAR
     t=i_bar1_type
     o=i_bar1_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bar1_type
@@ -1180,7 +1190,7 @@ i_bar2
     i=KI_BAR
     t=i_bar2_type
     o=i_bar2_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bar2_type
@@ -1198,7 +1208,7 @@ i_bar3
     i=KI_BAR
     t=i_bar3_type
     o=i_bar3_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bar3_type
@@ -1222,7 +1232,7 @@ i_bar4
     i=KI_BAR
     t=i_bar4_type
     o=i_bar4_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bar4_type
@@ -1246,7 +1256,7 @@ i_bfe
     i=KI_BFE
     t=i_bfe_type
     o=i_bfe_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bfe_type
@@ -1266,7 +1276,7 @@ i_bfi
     i=KI_BFI
     t=i_bfi_type
     o=i_bfi_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bfi_type
@@ -1286,7 +1296,7 @@ i_bfind
     i=KI_BFIND
     t=i_bfind_type
     o=i_bfind_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bfind_type
@@ -1306,7 +1316,7 @@ i_bra
     i=KI_BRA
     t=i_bra_type
     o=i_bra_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_bra_type
@@ -1329,7 +1339,7 @@ i_brev
     i=KI_BREV
     t=i_brev_type
     o=i_brev_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_brev_type
@@ -1347,7 +1357,7 @@ i_brev_opr
 i_brkpt
     :
     i=KI_BRKPT
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_call
@@ -1379,7 +1389,7 @@ i_clz
     i=KI_CLZ
     t=i_clz_type
     o=i_clz_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_clz_type
@@ -1399,7 +1409,7 @@ i_cnot
     i=KI_CNOT
     t=i_cnot_type
     o=i_cnot_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_cnot_type
@@ -1419,7 +1429,7 @@ i_copysign
     i=KI_COPYSIGN
     t=i_copysign_type
     o=i_copysign_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_copysign_type
@@ -1441,7 +1451,7 @@ i_cos
     i=KI_COS
     t=i_cos_type
     o=i_cos_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_cos_type
@@ -1459,7 +1469,7 @@ i_cvt
     i=KI_CVT
     t=i_cvt_type
     o=i_cvt_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_cvt_type
@@ -1492,7 +1502,7 @@ i_cvta
     i=KI_CVTA
     t=i_cvta_type
     o=i_cvta_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_cvta_type
@@ -1512,7 +1522,7 @@ i_div
     i=KI_DIV
     t=i_div_type
     o=i_div_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_div_type
@@ -1548,7 +1558,7 @@ i_ex2
     i=KI_EX2
     t=i_ex2_type
     o=i_ex2_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_ex2_type
@@ -1564,7 +1574,7 @@ i_ex2_opr
 i_exit
     :
     i=KI_EXIT
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_fma
@@ -1572,7 +1582,7 @@ i_fma
     i=KI_FMA
     t=i_fma_type
     o=i_fma_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_fma_type
@@ -1593,7 +1603,7 @@ i_isspacep
     i=KI_ISSPACEP
     t=i_isspacep_type
     o=i_isspacep_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_isspacep_type
@@ -1611,7 +1621,7 @@ i_ld
     i=KI_LD
     t=i_ld_type
     o=i_ld_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_ld_type
@@ -1643,7 +1653,7 @@ i_ld_type
     ;
 
 i_ld_opr
-    : opr T_COMMA T_OB! opr T_CB!
+    : opr T_COMMA! T_OB! opr T_CB!
     ;
 
 i_ldu
@@ -1651,7 +1661,7 @@ i_ldu
     i=KI_LDU
     t=i_ldu_type
     o=i_ldu_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_ldu_type
@@ -1671,7 +1681,7 @@ i_ldu_type
 
 i_ldu_opr
     :
-    opr T_COMMA T_OB! opr T_CB!
+    opr T_COMMA! T_OB! opr T_CB!
     ;
 
 i_lg2
@@ -1679,7 +1689,7 @@ i_lg2
     i=KI_LG2
     t=i_lg2_type
     o=i_lg2_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_lg2_type
@@ -1697,7 +1707,7 @@ i_mad
     i=KI_MAD
     t=i_mad_type
     o=i_mad_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_mad_type
@@ -1738,7 +1748,7 @@ i_mad24
     i=KI_MAD24
     t=i_mad24_type
     o=i_mad24_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_mad24_type
@@ -1766,7 +1776,7 @@ i_max
     i=KI_MAX
     t=i_max_type
     o=i_max_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_max_type
@@ -1795,7 +1805,7 @@ i_membar
     :
     i=KI_MEMBAR
     t=i_membar_type
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR)
+        -> $i ^(TREE_TYPE $t)
     ;
 
 i_membar_type
@@ -1808,7 +1818,7 @@ i_min
     i=KI_MIN
     t=i_min_type
     o=i_min_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_min_type
@@ -1838,7 +1848,7 @@ i_mov
     i=KI_MOV
     t=i_mov_type
     o=i_mov_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_mov_type
@@ -1858,7 +1868,7 @@ i_mul
     i=KI_MUL
     t=i_mul_type
     o=i_mul_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_mul_type
@@ -1888,7 +1898,7 @@ i_mul24
     i=KI_MUL24
     t=i_mul24_type
     o=i_mul24_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_mul24_type
@@ -1908,7 +1918,7 @@ i_neg
     i=KI_NEG
     t=i_neg_type
     o=i_neg_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_neg_type
@@ -1938,7 +1948,7 @@ i_not
     i=KI_NOT
     t=i_not_type
     o=i_not_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_not_type
@@ -1958,7 +1968,7 @@ i_or
     i=KI_OR
     t=i_or_type
     o=i_or_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_or_type
@@ -1977,7 +1987,7 @@ i_pmevent
     :
     i=KI_PMEVENT
     o=i_pmevent_opr
-        -> $i ^(TREE_TYPE) ^(TREE_OPR $o)
+        -> $i $o
     ;
 
 i_pmevent_opr
@@ -1990,7 +2000,7 @@ i_popc
     i=KI_POPC
     t=i_popc_type
     o=i_popc_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_popc_type
@@ -2010,7 +2020,7 @@ i_prefetch
     i=KI_PREFETCH
     t=i_prefetch_type
     o=i_prefetch_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_prefetch_type
@@ -2033,7 +2043,7 @@ i_prefetchu
     i=KI_PREFETCHU
     t=i_prefetchu_type
     o=i_prefetchu_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_prefetchu_type
@@ -2051,7 +2061,7 @@ i_prmt
     i=KI_PRMT
     t=i_prmt_type
     o=i_prmt_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_prmt_type
@@ -2076,7 +2086,7 @@ i_rcp
     i=KI_RCP
     t=i_rcp_type
     o=i_rcp_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_rcp_type
@@ -2110,7 +2120,7 @@ i_red
     i=KI_RED
     t=i_red_type
     o=i_red_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_red_type
@@ -2130,7 +2140,7 @@ i_rem
     i=KI_REM
     t=i_rem_type
     o=i_rem_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_rem_type
@@ -2149,7 +2159,7 @@ i_ret
     :
     i=KI_RET
     t=i_ret_type
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR)
+        -> $i ^(TREE_TYPE $t)
     ;
 
 i_ret_type
@@ -2162,7 +2172,7 @@ i_rsqrt
     i=KI_RSQRT
     t=i_rsqrt_type
     o=i_rsqrt_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_rsqrt_type
@@ -2187,7 +2197,7 @@ i_sad
     i=KI_SAD
     t=i_sad_type
     o=i_sad_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sad_type
@@ -2207,7 +2217,7 @@ i_selp
     i=KI_SELP
     t=i_selp_type
     o=i_selp_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_selp_type
@@ -2230,7 +2240,7 @@ i_set1
     i=KI_SET
     t=i_set1_type
     o=i_set1_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_set1_type
@@ -2256,7 +2266,7 @@ i_set2
     i=KI_SET
     t=i_set2_type
     o=i_set2_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_set2_type
@@ -2288,7 +2298,7 @@ i_setp1
     i=KI_SETP
     t=i_setp1_type
     o=i_setp1_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_setp1_type
@@ -2313,7 +2323,7 @@ i_setp2
     i=KI_SETP
     t=i_setp2_type
     o=i_setp2_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_setp2_type
@@ -2339,7 +2349,7 @@ i_shl
     i=KI_SHL
     t=i_shl_type
     o=i_shl_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_shl_type
@@ -2359,7 +2369,7 @@ i_shr
     i=KI_SHR
     t=i_shr_type
     o=i_shr_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_shr_type
@@ -2381,7 +2391,7 @@ i_sin
     i=KI_SIN
     t=i_sin_type
     o=i_sin_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sin_type
@@ -2399,7 +2409,7 @@ i_slct
     i=KI_SLCT
     t=i_slct_type
     o=i_slct_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_slct_type
@@ -2427,7 +2437,7 @@ i_sqrt
     i=KI_SQRT
     t=i_sqrt_type
     o=i_sqrt_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sqrt_type
@@ -2458,7 +2468,7 @@ i_st
     i=KI_ST
     t=i_st_type
     o=i_st_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_st_type
@@ -2486,7 +2496,7 @@ i_st_type
 
 i_st_opr
     :
-    T_OB opr T_CB T_COMMA opr
+    T_OB! opr T_CB! T_COMMA! opr
     ;
 
 i_sub
@@ -2494,7 +2504,7 @@ i_sub
     i=KI_SUB
     t=i_sub_type
     o=i_sub_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sub_type
@@ -2523,7 +2533,7 @@ i_subc
     i=KI_SUBC
     t=i_subc_type
     o=i_subc_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_subc_type
@@ -2546,7 +2556,7 @@ i_suld
     i=KI_SULD
     t=i_suld_type
     o=i_suld_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_suld_type
@@ -2581,7 +2591,7 @@ i_sured
     i=KI_SURED
     t=i_sured_type
     o=i_sured_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sured_type
@@ -2616,7 +2626,7 @@ i_sust
     i=KI_SUST
     t=i_sust_type
     o=i_sust_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_sust_type
@@ -2651,7 +2661,7 @@ i_suq
     i=KI_SUQ
     t=i_suq_type
     o=i_suq_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_suq_type
@@ -2670,7 +2680,7 @@ i_testp
     i=KI_TESTP
     t=i_testp_type
     o=i_testp_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_testp_type
@@ -2691,7 +2701,7 @@ i_tex
     i=KI_TEX
     t=i_tex_type
     o=i_tex_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_tex_type
@@ -2716,7 +2726,7 @@ i_txq
     i=KI_TXQ
     t=i_txq_type
     o=i_txq_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_txq_type
@@ -2740,61 +2750,61 @@ i_txq_opr
 i_trap
     :
     i=KI_TRAP
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vabsdiff
     :
     i=KI_VABSDIFF
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vadd
     :
     i=KI_VADD
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vmad
     :
     i=KI_VMAD
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vmax
     :
     i=KI_VMAX
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vmin
     :
     i=KI_VMIN
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vset
     :
     i=KI_VSET
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vshl
     :
     i=KI_VSHL
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vshr
     :
     i=KI_VSHR
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vsub
     :
     i=KI_VSUB
-        -> $i ^(TREE_TYPE) ^(TREE_OPR)
+        -> $i
     ;
 
 i_vote
@@ -2802,7 +2812,7 @@ i_vote
     i=KI_VOTE
     t=i_vote_type
     o=i_vote_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_vote_type
@@ -2829,7 +2839,7 @@ i_xor
     i=KI_XOR
     t=i_xor_type
     o=i_xor_opr
-        -> $i ^(TREE_TYPE $t) ^(TREE_OPR $o)
+        -> $i ^(TREE_TYPE $t) $o
     ;
 
 i_xor_type
@@ -2851,32 +2861,36 @@ i_xor_opr
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 opr_register
-    : id_or_opcode
+    : a=id_or_opcode
+    ->
+    ^( TREE_OPR $a )
     ;
 
 opr_register_or_constant
-    : id_or_opcode
-    | constant_expression
+    : a=id_or_opcode -> ^( TREE_OPR $a )
+    | b=constant_expression -> ^( TREE_OPR $b )
     ;
 
 opr_register_or_constant2
-    : opr_register_or_constant T_COMMA opr_register_or_constant
+    : opr_register_or_constant T_COMMA! opr_register_or_constant
     ;
 
 opr_register_or_constant3
-    : opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant
+    : opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant
     ;
 
 opr_register_or_constant4
-    : opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant
+    : opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant
     ;
 
 opr_register_or_constant5
-    : opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant T_COMMA opr_register_or_constant
+    : opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant T_COMMA! opr_register_or_constant
     ;
 
 opr_label
-    : T_WORD
+    : a=T_WORD
+    ->
+    ^( TREE_OPR $a )
     ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2886,6 +2900,13 @@ opr_label
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 opr
+    :
+    a=opr_aux
+    ->
+    ^( TREE_OPR $a )
+    ;
+
+opr_aux
     : (
         (
             ( id_or_opcode ( K_X | K_Y | K_Z | K_W | K_A | K_R | K_G | K_B )? | constant_expression )
@@ -2905,19 +2926,19 @@ opr
     ;
 
 opr2
-    : opr T_COMMA opr
+    : opr T_COMMA! opr
     ;
 
 opr3
-    : opr T_COMMA opr T_COMMA opr
+    : opr T_COMMA! opr T_COMMA! opr
     ;
 
 opr4
-    : opr T_COMMA opr T_COMMA opr T_COMMA opr
+    : opr T_COMMA! opr T_COMMA! opr T_COMMA! opr
     ;
 
 opr5
-    : opr T_COMMA opr T_COMMA opr T_COMMA opr T_COMMA opr
+    : opr T_COMMA! opr T_COMMA! opr T_COMMA! opr T_COMMA! opr
     ;
 
 
@@ -2928,7 +2949,7 @@ opr5
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-constant_expression 
+constant_expression
     :   conditional_expression
     ;
 
