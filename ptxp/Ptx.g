@@ -336,8 +336,11 @@ tokens {
     TREE_VAR;
     TREE_SPACE;
     TREE_VECTOR_TYPE;
-    TREE_PARAMS;
+    TREE_PARAM_LIST;
+    TREE_PARAM;
     TREE_PERF;
+    TREE_ARRAY;
+    TREE_PAR_REGISTER;
 }
 
 @members
@@ -420,7 +423,7 @@ entry_aux
     :
     K_ENTRY kernel_name ( T_OP entry_param_list T_CP )? performance_tuning_directives? entry_body
     ->
-    kernel_name ^( TREE_PARAMS entry_param_list? ) ^( TREE_PERF performance_tuning_directives? ) entry_body
+    kernel_name ^( TREE_PARAM_LIST entry_param_list? ) ^( TREE_PERF performance_tuning_directives? ) entry_body
     ;
 
 kernel_name
@@ -433,10 +436,12 @@ entry_param_list
 
 entry_param
     : entry_space align? entry_param_type T_WORD array_spec?
+    ->
+    ^( TREE_PARAM T_WORD entry_param_type align? array_spec? )
     ;
 
 entry_space
-    : K_PARAM
+    : K_PARAM!
     ;
 
 align
@@ -501,10 +506,6 @@ opaque_type_aux
     : K_TEXREF
     | K_SAMPLERREF
     | K_SURFREF
-    ;
-
-array_spec
-    : T_OB ( integer )? T_CB
     ;
 
 func
@@ -701,12 +702,22 @@ variable_declarator_list_with_initializer
 variable_declarator
     : id_or_opcode
     (
-    (
-        ( T_OB integer? T_CB )*
-    ) |
-    /// Parameterized register names 1.4 spec, page 28. Only a constant is allow.
-    ( T_GT integer T_LT )?
+        array_spec
+        | parameterized_register_spec
     )
+    ;
+
+array_spec
+    : ( T_OB integer? T_CB )*
+    ->
+    ^( TREE_ARRAY ( T_OB integer? T_CB )* )
+    ;
+
+parameterized_register_spec
+    :
+    /// Parameterized register names 1.4 spec, page 28. Only a constant is allow.
+    ( T_LT integer T_GT )?
+    -> ^( TREE_PAR_REGISTER integer )
     ;
 
 id_or_opcode
@@ -800,11 +811,11 @@ variable_declarator_with_initializer
     : id_or_opcode
     (
     (
-        ( T_OB integer? T_CB )*
+        array_spec
         ( T_EQ variable_initializer )?
     ) |
     /// Parameterized register names 1.4 spec, page 28. Only a constant is allow.
-    ( T_GT integer T_LT )
+    ( T_LT integer T_GT )
     )
     ;
 
@@ -2879,7 +2890,7 @@ opr
         (
             ( id_or_opcode ( K_X | K_Y | K_Z | K_W | K_A | K_R | K_G | K_B )? | constant_expression )
             ( T_PLUS opr )?
-            ( T_GT opr T_LT )?
+            ( T_LT opr T_GT )?
         ) |
         ( // aggregate
             T_OC
@@ -3180,8 +3191,8 @@ T_OB: '[';
 T_NOTEQ: '!=';
 T_NOT: '!';
 T_MINUS: '-';
-T_LT: '>';
-T_GT: '<';
+T_GT: '>';
+T_LT: '<';
 T_ELLIPSIS: '...';
 T_CP: ')';
 T_COMMA:',';
