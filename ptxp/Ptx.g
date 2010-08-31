@@ -530,7 +530,7 @@ func_name
     ;
 
 func_ret_list
-    : func_ret ( T_COMMA func_ret )*
+    : func_ret ( T_COMMA! func_ret )*
     ;
 
 func_ret
@@ -547,7 +547,7 @@ func_ret_type
     ;
 
 func_param_list
-    : func_param ( T_COMMA func_param )* ( T_ELLIPSIS )?
+    : func_param ( T_COMMA! func_param )* ( T_ELLIPSIS )?
     ;
 
 func_param
@@ -578,7 +578,7 @@ branch_targets
     ;
 
 list_of_labels
-    : opr ( T_COMMA opr )*
+    : opr ( T_COMMA! opr )*
     ;
 
 call_targets
@@ -590,7 +590,7 @@ call_prototype
     ;
 
 call_param_list
-    : call_param ( T_COMMA call_param )*
+    : call_param ( T_COMMA! call_param )*
     ;
 
 call_param
@@ -1060,7 +1060,7 @@ i_abs_opr
     :
     (
         opr_register
-        T_COMMA
+        T_COMMA!
         opr_register_or_constant
     )
     ;
@@ -1089,7 +1089,7 @@ i_add_type:
 i_add_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1112,7 +1112,7 @@ i_addc_type:
 i_addc_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1156,7 +1156,7 @@ i_atom_type
 
 i_atom_opr
     :
-    opr T_COMMA T_OB opr T_CB T_COMMA opr ( T_COMMA opr )?
+    opr T_COMMA! T_OB! opr T_CB! T_COMMA! opr ( T_COMMA! opr )?
     ;
 
 i_bar
@@ -1181,7 +1181,7 @@ i_bar1_type
 
 i_bar1_opr
     :
-    opr ( T_COMMA opr )?
+    opr ( T_COMMA! opr )?
     ;
 
 
@@ -1222,9 +1222,9 @@ i_bar3_type
 
 i_bar3_opr
     :
-    opr T_COMMA opr
-    ( T_COMMA opr )?
-    T_COMMA T_NOT? opr
+    opr T_COMMA! opr
+    ( T_COMMA! opr )?
+    T_COMMA! T_NOT? opr
     ;
 
 i_bar4
@@ -1246,9 +1246,9 @@ i_bar4_type
 
 i_bar4_opr
     :
-    opr T_COMMA opr
-    ( T_COMMA opr )?
-    T_COMMA T_NOT? opr
+    opr T_COMMA! opr
+    ( T_COMMA! opr )?
+    T_COMMA! T_NOT? opr
     ;
 
 i_bfe
@@ -1267,7 +1267,7 @@ i_bfe_type
 i_bfe_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant3
     ;
 
@@ -1287,7 +1287,7 @@ i_bfi_type
 i_bfi_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant4
     ;
 
@@ -1307,22 +1307,21 @@ i_bfind_type
 i_bfind_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant
     ;
 
 i_bra
     :
-    i=KI_BRA
-    t=i_bra_type
-    o=i_bra_opr
-        -> $i ^(TREE_TYPE $t) $o
+    KI_BRA
+    i_bra_type
+    i_bra_opr
     ;
 
 i_bra_type
     :
-    ( K_UNI -> K_UNI
-    | -> TREE_EMPTY
+    ( K_UNI -> ^(TREE_TYPE K_UNI)
+    |
     )
     ;
 
@@ -1330,7 +1329,7 @@ i_bra_opr
     :
     (
         opr_label
-        | opr_register T_COMMA opr_label
+        | opr_register T_COMMA! opr_label
     )
     ;
 
@@ -1350,7 +1349,7 @@ i_brev_type
 i_brev_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant
     ;
 
@@ -1400,7 +1399,7 @@ i_clz_type
 i_clz_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant
     ;
 
@@ -1440,9 +1439,9 @@ i_copysign_type
 i_copysign_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
     ;
 
@@ -1514,7 +1513,7 @@ i_cvta_type
 
 i_cvta_opr
     :
-    opr T_COMMA opr ( T_PLUS integer )?
+    opr T_COMMA! opr ( T_PLUS integer )?
     ;
 
 i_div
@@ -1549,7 +1548,7 @@ i_div_type
 i_div_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1739,7 +1738,7 @@ i_mad_type
 i_mad_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant3
     ;
 
@@ -1767,7 +1766,7 @@ i_mad24_type
 i_mad24_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant3
     ;
 
@@ -1797,7 +1796,7 @@ i_max_type
 i_max_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1839,7 +1838,7 @@ i_min_type
 i_min_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1889,7 +1888,7 @@ i_mul_type
 i_mul_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1909,7 +1908,7 @@ i_mul24_type
 i_mul24_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -1939,7 +1938,7 @@ i_neg_type
 i_neg_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant
     ;
 
@@ -2011,7 +2010,7 @@ i_popc_type
 i_popc_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant
     ;
 
@@ -2073,11 +2072,11 @@ i_prmt_type
 i_prmt_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
     ;
 
@@ -2132,7 +2131,7 @@ i_red_type
 
 i_red_opr
     :
-    T_OB opr T_CB T_COMMA opr
+    T_OB! opr T_CB! T_COMMA! opr
     ;
 
 i_rem
@@ -2151,7 +2150,7 @@ i_rem_type
 i_rem_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -2208,7 +2207,7 @@ i_sad_type
 i_sad_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant3
     ;
 
@@ -2341,7 +2340,7 @@ i_setp2_type
 
 i_setp2_opr
     :
-    opr T_COMMA opr T_COMMA opr T_COMMA T_NOT? opr
+    opr T_COMMA! opr T_COMMA! opr T_COMMA! T_NOT? opr
     ;
 
 i_shl
@@ -2524,7 +2523,7 @@ i_sub_type
 i_sub_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -2547,7 +2546,7 @@ i_subc_type
 i_subc_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register_or_constant2
     ;
 
@@ -2583,7 +2582,7 @@ i_suld_type
 
 i_suld_opr
     :
-    opr T_COMMA T_OB opr T_COMMA opr T_CB
+    opr T_COMMA! T_OB! opr T_COMMA! opr T_CB!
     ;
 
 i_sured
@@ -2618,7 +2617,7 @@ i_sured_type
 
 i_sured_opr
     :
-    T_OB opr T_COMMA opr T_CB T_COMMA opr
+    T_OB! opr T_COMMA! opr T_CB! T_COMMA! opr
     ;
 
 i_sust
@@ -2653,7 +2652,7 @@ i_sust_type
 
 i_sust_opr
     :
-    T_OB opr T_COMMA opr T_CB T_COMMA opr
+    T_OB! opr T_COMMA! opr T_CB! T_COMMA! opr
     ;
 
 i_suq
@@ -2672,7 +2671,7 @@ i_suq_type
 
 i_suq_opr
     :
-    opr T_COMMA T_OB opr T_CB
+    opr T_COMMA! T_OB! opr T_CB!
     ;
 
 i_testp
@@ -2692,7 +2691,7 @@ i_testp_type
 i_testp_opr
     :
     opr_register
-    T_COMMA
+    T_COMMA!
     opr_register
     ;
 
@@ -2718,7 +2717,7 @@ i_tex_type
 
 i_tex_opr
     :
-    opr T_COMMA T_OB opr T_COMMA opr ( T_COMMA opr )? T_CB
+    opr T_COMMA! T_OB! opr T_COMMA! opr ( T_COMMA! opr )? T_CB!
     ;
 
 i_txq
@@ -2744,7 +2743,7 @@ i_txq_type
 
 i_txq_opr
     :
-    opr T_COMMA T_OB opr T_CB
+    opr T_COMMA! T_OB! opr T_CB!
     ;
 
 i_trap
@@ -2831,7 +2830,7 @@ i_vote_type
 
 i_vote_opr
     :
-    opr T_COMMA T_NOT? opr
+    opr T_COMMA! T_NOT!? opr
     ;
 
 i_xor

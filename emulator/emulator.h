@@ -22,6 +22,7 @@ class CUDA_EMULATOR
         char * name;
         void * lvalue;
         size_t size;
+		char * type;
     };
 
     class SymbolTable
@@ -38,7 +39,7 @@ private:
     static CUDA_EMULATOR * singleton;
     pANTLR3_BASE_TREE FindBlock(pANTLR3_BASE_TREE node);
     pANTLR3_BASE_TREE GetInst(pANTLR3_BASE_TREE block, int pc);
-    bool Dispatch(pANTLR3_BASE_TREE inst);
+    int Dispatch(pANTLR3_BASE_TREE inst);
     void BindArguments(pANTLR3_BASE_TREE entry);
     void SetupLocals(pANTLR3_BASE_TREE block);
     size_t Sizeof(int type);
@@ -47,6 +48,12 @@ private:
     pANTLR3_BASE_TREE GetChild(pANTLR3_BASE_TREE node, int n);
     char * GetText(pANTLR3_BASE_TREE node);
     Symbol * FindSymbol(char * name);
+	void SetupDimensionLocals();
+	void SetupPredefined(dim3 tid, dim3 bid);
+	void CreateSymbol(char * name, char * type, void * value, size_t size);
+	void SetupGotos(pANTLR3_BASE_TREE block);
+	void Print(pANTLR3_BASE_TREE node, int level);
+	void Dump(char * comment, int pc, pANTLR3_BASE_TREE inst);
 
 public:
     static CUDA_EMULATOR * Singleton();
@@ -80,9 +87,13 @@ private:
     std::list<arg*> arguments;
     config conf;
 
+    void DoAdd(pANTLR3_BASE_TREE inst);
+    int DoBra(pANTLR3_BASE_TREE inst);
     void DoExit(pANTLR3_BASE_TREE inst);
     void DoMov(pANTLR3_BASE_TREE inst);
+    void DoMul(pANTLR3_BASE_TREE inst);
     void DoLd(pANTLR3_BASE_TREE inst);
+    void DoSetp(pANTLR3_BASE_TREE inst);
     void DoSt(pANTLR3_BASE_TREE inst);
     int FindFirstInst(pANTLR3_BASE_TREE block, int first);
 };
