@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="emulator.cpp" />
+    <ClCompile Include="instructions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="emulator.h" />
