@@ -91,6 +91,7 @@ private:
 
     void DoAdd(pANTLR3_BASE_TREE inst);
     int DoBra(pANTLR3_BASE_TREE inst);
+    void DoCvt(pANTLR3_BASE_TREE inst);
     void DoExit(pANTLR3_BASE_TREE inst);
     void DoMov(pANTLR3_BASE_TREE inst);
     void DoMul(pANTLR3_BASE_TREE inst);

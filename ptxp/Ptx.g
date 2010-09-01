@@ -342,6 +342,8 @@ tokens {
     TREE_ARRAY;
     TREE_PAR_REGISTER;
     TREE_ALIGN;
+    TREE_IRND;
+    TREE_FRND;
 }
 
 @members
@@ -1475,20 +1477,43 @@ i_cvt_type
     :
     (
         (
-            ( K_RNI | K_RZI | K_RMI | K_RPI )?
+            i_cvt_irnd
             K_FTZ?
             K_SAT?
             ( K_U8 | K_U16 | K_U32 | K_U64 | K_S8 | K_S16 | K_S32 | K_S64 | K_F16 | K_F32 | K_F64 )
             ( K_U8 | K_U16 | K_U32 | K_U64 | K_S8 | K_S16 | K_S32 | K_S64 | K_F16 | K_F32 | K_F64 )         
         ) |
         (
-            ( K_RN | K_RZ | K_RM | K_RP )?
+            i_cvt_frnd
             K_FTZ?
             K_SAT?
             ( K_U8 | K_U16 | K_U32 | K_U64 | K_S8 | K_S16 | K_S32 | K_S64 | K_F16 | K_F32 | K_F64 )
             ( K_U8 | K_U16 | K_U32 | K_U64 | K_S8 | K_S16 | K_S32 | K_S64 | K_F16 | K_F32 | K_F64 )         
         )
     )
+    ;
+
+
+i_cvt_irnd
+    :
+    i=i_cvt_irnd_aux -> ^( TREE_IRND $i )
+	|
+    ;
+
+i_cvt_irnd_aux
+    :
+    ( K_RNI | K_RZI | K_RMI | K_RPI )
+    ;
+
+i_cvt_frnd
+    :
+    i=i_cvt_frnd_aux -> ^( TREE_FRND $i )
+	|
+    ;
+
+i_cvt_frnd_aux
+    :
+    ( K_RN | K_RZ | K_RM | K_RP )
     ;
 
 i_cvt_opr

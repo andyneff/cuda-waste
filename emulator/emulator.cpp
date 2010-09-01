@@ -15,18 +15,18 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
-	this->device = "";
+    this->device = "";
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
 
 void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
 {
-	// Do once.
-	if (modules.size() > 0)
-		return;
-	if (strcmp(module_name, this->device) != 0)
-		return;
+    // Pick only one.
+    if (modules.size() > 0)
+        return;
+    if (strcmp(this->device, "") != 0 && strcmp(module_name, this->device) != 0)
+        return;
     pANTLR3_BASE_TREE mod = parse(source);
     if (! mod)
         return;
@@ -103,18 +103,18 @@ void CUDA_EMULATOR::BindArguments(pANTLR3_BASE_TREE e)
     {
         // Get to the parameter in the AST.
         pANTLR3_BASE_TREE param = GetChild(param_list, i);
-		pANTLR3_BASE_TREE name = GetChild(param, 0);
+        pANTLR3_BASE_TREE name = GetChild(param, 0);
         char * n = GetText(name);
-		pANTLR3_BASE_TREE type = GetChild(GetChild(param, 1), 0);
-		char * t = GetText(type);
+        pANTLR3_BASE_TREE type = GetChild(GetChild(param, 1), 0);
+        char * t = GetText(type);
         // Get to the argument in the set up list.
         arg * a = *ia;
         // Create a symbol table entry.
         Symbol * s = new Symbol();
         s->lvalue = (void*)a->argument;
         s->name = n;
-		s->size = a->size;
-		s->type = t;
+        s->size = a->size;
+        s->type = t;
         // Add the entry into the symbol table.
         std::pair<char*, Symbol*> sym;
         sym.first = n;
@@ -175,7 +175,7 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
             // Now extract info out of variable declaration.
             char * name = 0;
             int nreg = 0;
-			char * type = 0;
+            char * type = 0;
             int size = 0;
             for (int j = 0; j < (int)var->getChildCount(var); ++j)
             {
@@ -186,8 +186,8 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                     // Nothing to do.
                 } else if (c->getType(c) == TREE_TYPE) {
                     pANTLR3_BASE_TREE chi = GetChild(c, 0);
-					type = GetText(chi);
-					int t = GetType(chi);
+                    type = GetText(chi);
+                    int t = GetType(chi);
                     size = Sizeof(t);
                 } else if (c->getType(c) == T_WORD) {
                     name = GetText(c);
@@ -206,8 +206,8 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                     Symbol * s = new Symbol();
                     s->name = strdup(full_name);
                     s->size = size;
-					s->lvalue = (void*)malloc(size);
-					s->type = strdup(type);
+                    s->lvalue = (void*)malloc(size);
+                    s->type = strdup(type);
                     // Add the entry into the symbol table.
                     std::pair<char*, Symbol*> sym;
                     sym.first = s->name;
@@ -219,8 +219,8 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                 Symbol * s = new Symbol();
                 s->name = strdup(name);
                 s->size = size;
-				s->lvalue = (void*)malloc(size);
-				s->type = strdup(type);
+                s->lvalue = (void*)malloc(size);
+                s->type = strdup(type);
                 // Add the entry into the symbol table.
                 std::pair<char*, Symbol*> sym;
                 sym.first = s->name;
@@ -249,28 +249,28 @@ cudaError_t CUDA_EMULATOR::ThreadSynchronize()
 
 void CUDA_EMULATOR::SetupGotos(pANTLR3_BASE_TREE block)
 {
-	// Scan ahead and find all labels.  Enter them into the symbol
-	// table.
-	for (int i = 0; i < (int)block->getChildCount(block); ++i)
-	{
-		pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)block->getChild(block, i);
-		if (child->getType(child) == TREE_LABEL)
-		{
-			pANTLR3_BASE_TREE label = (pANTLR3_BASE_TREE)block->getChild(child, 0);
-			char * name = GetText(label);
-			Symbol * s = new Symbol();
-			s->name = strdup(name);
-			s->type = "label";
-			s->size = 0;
-			s->lvalue = (void*)i;
-			SymbolTable * symbol_table = this->root;
+    // Scan ahead and find all labels.  Enter them into the symbol
+    // table.
+    for (int i = 0; i < (int)block->getChildCount(block); ++i)
+    {
+        pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)block->getChild(block, i);
+        if (child->getType(child) == TREE_LABEL)
+        {
+            pANTLR3_BASE_TREE label = (pANTLR3_BASE_TREE)block->getChild(child, 0);
+            char * name = GetText(label);
+            Symbol * s = new Symbol();
+            s->name = strdup(name);
+            s->type = "label";
+            s->size = 0;
+            s->lvalue = (void*)i;
+            SymbolTable * symbol_table = this->root;
             // Add the entry into the symbol table.
             std::pair<char*, Symbol*> sym;
             sym.first = s->name;
             sym.second = s;
             symbol_table->symbols.insert(sym);
-		}
-	}
+        }
+    }
 }
 
 void CUDA_EMULATOR::Execute(void* hostfun)
@@ -294,11 +294,11 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     BindArguments(entry);
 
     // Set up local variables.
-	SetupLocals(block);
+    SetupLocals(block);
 
-	SetupGotos(block);
+    SetupGotos(block);
 
-	// Set up dim3 bounds.
+    // Set up dim3 bounds.
     SetupDimensionLocals();
 
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
@@ -316,7 +316,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                             dim3 tid(tidx, tidy, tidz);
                             dim3 bid(bidx, bidy, bidz);
 
-							// Set up dim3 indices.
+                            // Set up dim3 indices.
                             SetupPredefined(tid, bid);
 
                             // Execute.
@@ -327,18 +327,18 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                             {
                                 pANTLR3_BASE_TREE inst = GetInst(block, pc);
 
-								//Dump("before", pc, inst);
+                                //Dump("before", pc, inst);
 
                                 int next = Dispatch(inst);
                                 if (next > 0)
-									pc = next;
-								else if (next < 0)
-									break;
-								else
-									pc++;
+                                    pc = next;
+                                else if (next < 0)
+                                    break;
+                                else
+                                    pc++;
                                 pc = FindFirstInst(block, pc);
 
-								//Dump("after", pc, inst);
+                                Dump("after", pc, inst);
                             }
                         }
                     }
@@ -350,45 +350,60 @@ void CUDA_EMULATOR::Execute(void* hostfun)
 
 void CUDA_EMULATOR::Print(pANTLR3_BASE_TREE node, int level)
 {
-	for (int i = 0; i < level; ++i)
-	    std::cout << "   ";
-	std::cout << GetText(node) << "\n";
-	for (int i = 0; i < (int)node->getChildCount(node); ++i)
-	{
-	    pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
-	    Print(child, level+1);
-	}
+    for (int i = 0; i < level; ++i)
+        std::cout << "   ";
+    std::cout << GetText(node) << "\n";
+    for (int i = 0; i < (int)node->getChildCount(node); ++i)
+    {
+        pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
+        Print(child, level+1);
+    }
 } 
 
 void CUDA_EMULATOR::Dump(char * comment, int pc, pANTLR3_BASE_TREE inst)
 {
-	std::cout << "\n";
-	std::cout << comment << "\n";
-	std::cout << "PC = " << pc << "\n";
-	Print(inst, 0);
-	std::cout << "Symbol tables:\n";
-	for (SymbolTable * st = root; st != 0; st = st->parent_block_symbol_table)
-	{
-		std::map<char*, Symbol*, ltstr>::iterator it;
-		for (it = st->symbols.begin(); it != st->symbols.end(); ++it)
-		{
-			Symbol * s = (*it).second;
-			std::cout << "name: " << s->name << " ";
-			std::cout << "size: " << s->size << " ";
-			std::cout << "type: " << s->type << " ";
-			if (strcmp(s->type, "label") == 0)
-				std::cout << "val:  " << (int)s->lvalue << "\n";
-			else if (strcmp(s->type, "dim3") == 0)
-				std::cout << "val:  " << ((dim3*)s->lvalue)->x
-				<< " " << ((dim3*)s->lvalue)->y
-				<< " " << ((dim3*)s->lvalue)->z
-				<< "\n";
-			else if (strcmp(s->type, ".pred") == 0)
-				std::cout << "val:  " << *((bool*)s->lvalue) << "\n";
-			else
-				std::cout << "val:  " << *(int*)s->lvalue << "\n";
-		}
-	}
+    std::cout << "\n";
+    std::cout << comment << "\n";
+    std::cout << "PC = " << pc << "\n";
+    Print(inst, 0);
+    std::cout << "Symbol tables:\n";
+    for (SymbolTable * st = root; st != 0; st = st->parent_block_symbol_table)
+    {
+        std::map<char*, Symbol*, ltstr>::iterator it;
+        for (it = st->symbols.begin(); it != st->symbols.end(); ++it)
+        {
+            Symbol * s = (*it).second;
+            std::cout << "name: " << s->name << " ";
+            std::cout << "size: " << s->size << " ";
+            std::cout << "type: " << s->type << " ";
+            if (strcmp(s->type, "label") == 0)
+                std::cout << "val:  " << (int)s->lvalue << "\n";
+            else if (strcmp(s->type, "dim3") == 0)
+                std::cout << "val:  " << ((dim3*)s->lvalue)->x
+                << " " << ((dim3*)s->lvalue)->y
+                << " " << ((dim3*)s->lvalue)->z
+                << "\n";
+            else if (strcmp(s->type, ".pred") == 0)
+                std::cout << "val:  " << *((bool*)s->lvalue) << "\n";
+            else if (strcmp(s->type, ".u8") == 0)
+                std::cout << "val:  " << *(unsigned char*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".u16") == 0)
+                std::cout << "val:  " << *(unsigned short*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".u32") == 0)
+                std::cout << "val:  " << *(unsigned int*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".s8") == 0)
+                std::cout << "val:  " << *(signed char*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".s16") == 0)
+                std::cout << "val:  " << *(signed short*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".s32") == 0)
+                std::cout << "val:  " << *(signed int*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".f32") == 0)
+                std::cout << "val:  " << *(float*)s->lvalue << "\n";
+            else if (strcmp(s->type, ".f64") == 0)
+                std::cout << "val:  " << *(double*)s->lvalue << "\n";
+            else assert(false);
+        }
+    }
 }
 
 
@@ -505,14 +520,14 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         Symbol * s = FindSymbol(GetText(psym));
         assert(s != 0);
         if (! *((bool*)s->lvalue))
-			return 0; // continue.
+            return 0; // continue.
     }
     switch (inst_type)
     {
         case KI_ABS: ;
         case KI_ADD:
             DoAdd(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_ADDC: ;
         case KI_AND: ;
         case KI_ATOM: ;
@@ -521,7 +536,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_BFI: ;
         case KI_BFIND: ;
         case KI_BRA:
-			return DoBra(inst);
+            return DoBra(inst);
         case KI_BREV: ;
         case KI_BRKPT: ;
         case KI_CALL: ;
@@ -529,18 +544,20 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_CNOT: ;
         case KI_COPYSIGN: ;
         case KI_COS: ;
-        case KI_CVT: ;
+        case KI_CVT:
+            DoCvt(inst);
+            return 0;
         case KI_CVTA: ;
         case KI_DIV: ;
         case KI_EX2: ;
         case KI_EXIT:
             DoExit(inst);
-			return -1; // end.
+            return -1; // end.
         case KI_FMA: ;
         case KI_ISSPACEP: ;
         case KI_LD:
             DoLd(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_LDU: ;
         case KI_LG2: ;
         case KI_MAD24: ;
@@ -550,11 +567,11 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_MIN: ;
         case KI_MOV:
             DoMov(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_MUL24: ;
         case KI_MUL:
             DoMul(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_NEG: ;
         case KI_NOT: ;
         case KI_OR: ;
@@ -573,7 +590,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_SET: ;
         case KI_SETP:
             DoSetp(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_SHL: ;
         case KI_SHR: ;
         case KI_SIN: ;
@@ -581,7 +598,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_SQRT: ;
         case KI_ST:
             DoSt(inst);
-			return 0; // continue.
+            return 0; // continue.
         case KI_SUB: ;
         case KI_SUBC: ;
         case KI_SULD: ;
@@ -605,34 +622,34 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_XOR: ;
         default: ;
     }
-	return -1; // end.
+    return -1; // end.
 }
 
 void CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
 {
-	std::cout << "ADD\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
-	pANTLR3_BASE_TREE ttype = GetChild(GetChild(inst, start+1), 0);
-	pANTLR3_BASE_TREE ttype2 = 0;
-	if (GetType(ttype) == K_SAT)
-	{
-		ttype2 = ttype;
-		ttype = GetChild(GetChild(inst, start+1), 1);
-	}
-	int type = GetType(ttype);
-	pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
-	pANTLR3_BASE_TREE dst = GetChild(odst,0);
-	pANTLR3_BASE_TREE osrc1 = GetChild(inst, start+3);
-	pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-	pANTLR3_BASE_TREE osrc2 = GetChild(inst, start+4);
-	pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
-	Symbol * sdst = 0;
-	if (dst->getType(dst) == T_WORD)
-	{
-		sdst = FindSymbol(GetText(dst));
-	} else assert(false);
+    std::cout << "ADD\n";
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    pANTLR3_BASE_TREE ttype = GetChild(GetChild(inst, start+1), 0);
+    pANTLR3_BASE_TREE ttype2 = 0;
+    if (GetType(ttype) == K_SAT)
+    {
+        ttype2 = ttype;
+        ttype = GetChild(GetChild(inst, start+1), 1);
+    }
+    int type = GetType(ttype);
+    pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
+    pANTLR3_BASE_TREE dst = GetChild(odst,0);
+    pANTLR3_BASE_TREE osrc1 = GetChild(inst, start+3);
+    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+    pANTLR3_BASE_TREE osrc2 = GetChild(inst, start+4);
+    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    Symbol * sdst = 0;
+    if (dst->getType(dst) == T_WORD)
+    {
+        sdst = FindSymbol(GetText(dst));
+    } else assert(false);
     union {
         long ls;
         int is;
@@ -888,21 +905,364 @@ void CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
 int CUDA_EMULATOR::DoBra(pANTLR3_BASE_TREE inst)
 {
     std::cout << "BRA\n";
-	int start = 0;
-	for (;;)
-	{
-		pANTLR3_BASE_TREE t = GetChild(inst, start);
-		assert(t != 0);
-		if (GetType(t) == TREE_OPR)
-			break;
-		start++;
-	}
+    int start = 0;
+    for (;;)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        assert(t != 0);
+        if (GetType(t) == TREE_OPR)
+            break;
+        start++;
+    }
     pANTLR3_BASE_TREE opr = GetChild(inst, start);
     pANTLR3_BASE_TREE dst = GetChild(opr, 0);
-	assert(GetType(dst) == T_WORD);
+    assert(GetType(dst) == T_WORD);
     Symbol * sdst = FindSymbol(GetText(dst));
-	assert (sdst != 0);
-	return (int)sdst->lvalue;
+    assert (sdst != 0);
+    return (int)sdst->lvalue;
+}
+
+void CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
+{
+    std::cout << "CVT\n";
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_CVT);
+    start++;
+    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
+    pANTLR3_BASE_TREE type = GetChild(inst, start);
+    start++;
+    bool ftz = false;
+    bool sat = false;
+    int src_type = 0;
+    int dst_type = 0;
+    int i = 0;
+    for (;; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(type, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_IRND)
+            assert(false);
+        else if (gt == TREE_FRND)
+            assert(false);
+        else if (gt == K_FTZ)
+            ftz = true;
+        else if (gt == K_SAT)
+            sat = true;
+        else {
+            if (dst_type == 0)
+                dst_type = gt;
+            else
+                src_type = gt;
+        }
+    }
+    assert(ftz == false); // unimplemented.
+    assert(sat == false); // unimplemented.
+    typedef union TYPES {
+        long s64;
+        int s32;
+        short s16;
+        signed char s8;
+        unsigned long u64;
+        unsigned int u32;
+        unsigned short u16;
+        unsigned char u8;
+        float f32;
+        double f64;
+    } TYPES;
+    TYPES * dst_value;
+    TYPES * src_value;
+
+    pANTLR3_BASE_TREE o1 = GetChild(inst, start++);
+    assert(GetType(o1) == TREE_OPR);
+    assert(GetType(GetChild(o1, 0)) == T_WORD);
+    pANTLR3_BASE_TREE o2 = GetChild(inst, start++);
+    assert(GetType(o2) == TREE_OPR);
+    assert(GetType(GetChild(o2, 0)) == T_WORD);
+
+    Symbol * s1 = FindSymbol(GetText(GetChild(o1, 0)));
+    assert(s1 != 0);
+    Symbol * s2 = FindSymbol(GetText(GetChild(o2, 0)));
+    assert(s2 != 0);
+
+    dst_value = (TYPES*)s1->lvalue;
+
+    // handle .x, .y, .z stuff.
+    if (strcmp(s2->type, "dim3") == 0)
+    {
+        // Get qualifier of the structure.
+        pANTLR3_BASE_TREE tqual = GetChild(o2, 1);
+        assert(tqual != 0);
+        int qual = GetType(tqual);
+        if (qual == K_X)
+        {
+            src_value = (TYPES*) &(((dim3*)s2->lvalue)->x);
+        } else if (qual == K_Y)
+        {
+            src_value = (TYPES*) &(((dim3*)s2->lvalue)->y);
+        } else if (qual == K_Z)
+        {
+            src_value = (TYPES*) &(((dim3*)s2->lvalue)->z);
+        } else assert(false);
+	} else
+		src_value = (TYPES*)s2->lvalue;
+
+    switch (src_type)
+    {
+        case K_U8:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->u8;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->u8;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->u8;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->u8;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->u8;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->u8;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->u8;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->u8;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_U16:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->u16;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->u16;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->u16;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->u16;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->u16;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->u16;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->u16;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->u16;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_U32:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->u32;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->u32;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->u32;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->u32;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->u32;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->u32;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->u32;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->u32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_U64:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->u64;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->u64;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->u64;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->u64;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->u64;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->u64;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->u64;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->u64;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_S8:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->s8;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->s8;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->s8;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->s8;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->s8;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->s8;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->s8;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->s8;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_S16:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->s16;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->s16;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->s16;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->s16;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->s16;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->s16;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->s16;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->s16;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_S32:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->s32;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->s32;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->s32;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->s32;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->s32;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->s32;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->s32;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->s32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_S64:
+            switch (dst_type)
+            {
+                case K_U8:
+                    dst_value->u8 = src_value->s64;
+                    break;
+                case K_U16:
+                    dst_value->u16 = src_value->s64;
+                    break;
+                case K_U32:
+                    dst_value->u32 = src_value->s64;
+                    break;
+                case K_U64:
+                    dst_value->u64 = src_value->s64;
+                    break;
+                case K_S8:
+                    dst_value->s8 = src_value->s64;
+                    break;
+                case K_S16:
+                    dst_value->s16 = src_value->s64;
+                    break;
+                case K_S32:
+                    dst_value->s32 = src_value->s64;
+                    break;
+                case K_S64:
+                    dst_value->s64 = src_value->s64;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        default:
+            assert(false);
+    }
 }
 
 void CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
@@ -913,9 +1273,9 @@ void CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
 {
     std::cout << "LD\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
     // Get two operands, assign source to destination.
     pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
     pANTLR3_BASE_TREE dst = GetChild(odst, 0);
@@ -937,9 +1297,9 @@ void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
 {
     std::cout << "MOV\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
     // Get two operands, assign source to destination.
     int type = GetType(GetChild(GetChild(inst, start+1), 0));
     pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
@@ -1062,9 +1422,9 @@ void CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
 {
     std::cout << "MUL\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
     // Multiply register and/or constants, and store in a register.
     pANTLR3_BASE_TREE ttype = GetChild(GetChild(inst, start+1), 0);
     pANTLR3_BASE_TREE ttype2 = 0;
@@ -1249,16 +1609,21 @@ void CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         else if (ttype2 && GetType(ttype2) == K_HI)
         {
             *(unsigned int*)sdst->lvalue = (result_signed | result_unsigned) >> 16;
-        } else assert(false);
+        }
+        else if (ttype2 && GetType(ttype2) == K_WIDE)
+        {
+            *(unsigned int*)sdst->lvalue = (result_signed | result_unsigned);
+        }
+        else assert(false);
     } else assert(false);
 }
 
 void CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
 {
     std::cout << "SETP\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
     pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
     pANTLR3_BASE_TREE dst = GetChild(odst,0);
     pANTLR3_BASE_TREE osrc1 = GetChild(inst, start+3);
@@ -1304,9 +1669,9 @@ void CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
 {
     std::cout << "ST\n";
-	int start = 0;
-	if (GetType(GetChild(inst, start)) == TREE_PRED)
-		start++;
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
     pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
     pANTLR3_BASE_TREE dst = GetChild(odst,0);
     pANTLR3_BASE_TREE osrc = GetChild(inst, start+3);
@@ -1327,5 +1692,5 @@ void CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
 
 void CUDA_EMULATOR::SetDevice(char * device)
 {
-	this->device = strdup(device);
+    this->device = strdup(device);
 }
