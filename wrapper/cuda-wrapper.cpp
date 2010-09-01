@@ -336,7 +336,7 @@ void CUDA_WRAPPER::ExitHandler()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     // Check if there are no unfreed blocks.
-    for (int i = 0; i < cu->alloc_list.size(); ++i)
+    for (unsigned int i = 0; i < cu->alloc_list.size(); ++i)
     {
         data d = cu->alloc_list[i];
         (*cu->output_stream) << "Unfreed CUDA memory block.\n";
@@ -443,7 +443,7 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckOverwrite()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     // Check if there are overwrites.
-    for (int i = 0; i < cu->alloc_list.size(); ++i)
+    for (unsigned int i = 0; i < cu->alloc_list.size(); ++i)
     {
         data d = cu->alloc_list[i];
         cu->CheckSinglePtrOverwrite(&d);
@@ -454,7 +454,7 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckOverwrite()
 int CUDA_WRAPPER::FindAllocatedBlock(const void * pointer)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    int i;
+    unsigned int i;
     for (i = 0; i < cu->alloc_list.size(); ++i)
     {
         data * d = &cu->alloc_list[i];
@@ -880,7 +880,7 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::HostGetDevicePointer(void ** pDevice, void *
 
     void * local = ((char*)pHost) - cu->padding_size;
 
-    int i;
+   unsigned int i;
     for (i = 0; i < cu->alloc_list.size(); ++i)
     {
         if (cu->alloc_list[i].ptr == local)
@@ -1221,9 +1221,6 @@ cudaError_t CUDA_WRAPPER::GetLastError()
 void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-
-        printf("cu emul %s\n", cu->do_emulation? "yes":"no");
-    printf("HI HI HI\n");
     if (cu->do_crash)
     {
         printf("here\n");
@@ -1231,9 +1228,7 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
         // if this fails, try another...
         int x = 0;
         int y = 0;
-        cu = (CUDA_WRAPPER*)(x/y);
         int z = x/y;
-        printf ("WHAT THE F!\n");
     }
 
     if (true) // for now, ignore (fatCubin)
@@ -1254,7 +1249,7 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
                 std::cout << code << std::endl;
                 std::cout << "====================================================\n\n\n";
                 CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-                emulator->Extract_From_Source(code);
+                emulator->Extract_From_Source(profile, code);
            }
 
             // ELF contains just in time code for every PTX.
@@ -1479,3 +1474,21 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::CopyOptions(CUDA_WRAPPER * ptr)
     cu->quit_on_error = ptr->quit_on_error;
     return OK;
 }
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDevice(char * device)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->device = device;
+    CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+    emulator->SetDevice(device);
+
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetDevice called, " << context << ".\n";
+        (*cu->output_stream) << " Device now " << device << "\n\n";
+    }
+    return OK;
+}
+

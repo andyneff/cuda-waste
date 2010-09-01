@@ -37,7 +37,7 @@
 				Debug="true"
 				Arch1="20"
 				Arch2="10"
-				Keep="true"
+				Keep="false"
 				Optimization="0"
 				Runtime="1"
 			/>

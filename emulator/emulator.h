@@ -32,6 +32,7 @@ class CUDA_EMULATOR
         SymbolTable * parent_block_symbol_table;
     };
     SymbolTable * root;
+	char * device;
 
 private:
     CUDA_EMULATOR();
@@ -57,13 +58,14 @@ private:
 
 public:
     static CUDA_EMULATOR * Singleton();
-    void Extract_From_Source(char * source);
+    void Extract_From_Source(char * module_name, char * source);
     void Extract_From_Tree(pANTLR3_BASE_TREE node);
     void Execute(void * hostfun);
     void ** RegisterFunction(void * fun, char * name);
     cudaError_t SetupArgument(const void *arg, size_t size, size_t offset);
     cudaError_t ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
     cudaError_t ThreadSynchronize();
+	void SetDevice(char * device);
 
 private:
     struct arg

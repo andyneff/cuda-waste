@@ -66,7 +66,7 @@ char * str_padding_size = "?SetPaddingSize@CUDA_WRAPPER@@SG?AW4return_type@1@I@Z
 char * str_quit_on_error = "?SetQuitOnError@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_do_not_call_cuda_after_sanity_check_fail = "?SetDoNotCallCudaAfterSanityCheckFail@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_device_pointer_to_first_byte_in_block = "?SetDevicePointerToFirstByteInBlock@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
-
+char * str_set_device = "?SetDevice@CUDA_WRAPPER@@SG?AW4return_type@1@PAD@Z";
 int main(int argc, char * argv[])
 {
     // Perform debugging of CUDA memory calls.
@@ -90,6 +90,8 @@ int main(int argc, char * argv[])
     int do_not_call_cuda_after_sanity_check_fail;
     bool set_device_pointer_to_first_byte_in_block = false;
     int device_pointer_to_first_byte_in_block;
+	bool set_device = false;
+	char * device;
 
     // Create a structure containing options for debug.
     while (argc > 0)
@@ -136,6 +138,12 @@ int main(int argc, char * argv[])
                 set_device_pointer_to_first_byte_in_block = true;
                 device_pointer_to_first_byte_in_block = true;
             }
+			else if (strcmp("-d", *argv) == 0 || strcmp("--device", *argv) == 0)
+			{
+				set_device = true;
+				argc--; argv++;
+				device = *argv;
+			}
             else
                 Help();
             argc--; argv++;
@@ -319,6 +327,25 @@ int main(int argc, char * argv[])
         JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
         AddBytes(code, 0x68, 0, 0, 0, 0); // push padding_byte
         JmpAbsoluteAddress(code, size-4, padding_byte);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
+    if (set_device)
+    {
+	    LPVOID pszDevice = VirtualAllocEx(hProcess, NULL, strlen(device) + 1, MEM_COMMIT, PAGE_READWRITE);
+		BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
+		LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
+		BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetDevice"
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0x68, 0, 0, 0, 0); // push device
+        JmpAbsoluteAddress(code, size-4, pszDevice);
         AddBytes(code, 0xff, 0xd0); // call eax
     }
     // Restore registers and jump to original program entry.  Address

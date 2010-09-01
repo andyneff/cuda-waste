@@ -15,12 +15,18 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
+	this->device = "";
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
 
-void CUDA_EMULATOR::Extract_From_Source(char * source)
+void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
 {
+	// Do once.
+	if (modules.size() > 0)
+		return;
+	if (strcmp(module_name, this->device) != 0)
+		return;
     pANTLR3_BASE_TREE mod = parse(source);
     if (! mod)
         return;
@@ -321,7 +327,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                             {
                                 pANTLR3_BASE_TREE inst = GetInst(block, pc);
 
-								Dump("before", pc, inst);
+								//Dump("before", pc, inst);
 
                                 int next = Dispatch(inst);
                                 if (next > 0)
@@ -332,7 +338,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
 									pc++;
                                 pc = FindFirstInst(block, pc);
 
-								Dump("after", pc, inst);
+								//Dump("after", pc, inst);
                             }
                         }
                     }
@@ -1319,3 +1325,7 @@ void CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
 }
 
 
+void CUDA_EMULATOR::SetDevice(char * device)
+{
+	this->device = strdup(device);
+}
