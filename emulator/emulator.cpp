@@ -338,7 +338,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                                     pc++;
                                 pc = FindFirstInst(block, pc);
 
-                                Dump("after", pc, inst);
+                                // Dump("after", pc, inst);
                             }
                         }
                     }
@@ -1007,8 +1007,8 @@ void CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
         {
             src_value = (TYPES*) &(((dim3*)s2->lvalue)->z);
         } else assert(false);
-	} else
-		src_value = (TYPES*)s2->lvalue;
+    } else
+        src_value = (TYPES*)s2->lvalue;
 
     switch (src_type)
     {

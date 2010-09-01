@@ -22,7 +22,7 @@ class CUDA_EMULATOR
         char * name;
         void * lvalue;
         size_t size;
-		char * type;
+        char * type;
     };
 
     class SymbolTable
@@ -32,7 +32,7 @@ class CUDA_EMULATOR
         SymbolTable * parent_block_symbol_table;
     };
     SymbolTable * root;
-	char * device;
+    char * device;
 
 private:
     CUDA_EMULATOR();
@@ -49,12 +49,12 @@ private:
     pANTLR3_BASE_TREE GetChild(pANTLR3_BASE_TREE node, int n);
     char * GetText(pANTLR3_BASE_TREE node);
     Symbol * FindSymbol(char * name);
-	void SetupDimensionLocals();
-	void SetupPredefined(dim3 tid, dim3 bid);
-	void CreateSymbol(char * name, char * type, void * value, size_t size);
-	void SetupGotos(pANTLR3_BASE_TREE block);
-	void Print(pANTLR3_BASE_TREE node, int level);
-	void Dump(char * comment, int pc, pANTLR3_BASE_TREE inst);
+    void SetupDimensionLocals();
+    void SetupPredefined(dim3 tid, dim3 bid);
+    void CreateSymbol(char * name, char * type, void * value, size_t size);
+    void SetupGotos(pANTLR3_BASE_TREE block);
+    void Print(pANTLR3_BASE_TREE node, int level);
+    void Dump(char * comment, int pc, pANTLR3_BASE_TREE inst);
 
 public:
     static CUDA_EMULATOR * Singleton();
@@ -65,7 +65,7 @@ public:
     cudaError_t SetupArgument(const void *arg, size_t size, size_t offset);
     cudaError_t ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
     cudaError_t ThreadSynchronize();
-	void SetDevice(char * device);
+    void SetDevice(char * device);
 
 private:
     struct arg
