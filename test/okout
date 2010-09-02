@@ -1,0 +1,13834 @@
+NEW FATBIN
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-15_hw.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a06232)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-14_hw.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw/hw.cu"
+
+
+	.entry _Z3funPi (
+		.param .u32 __cudaparm__Z3funPi_mem)
+	{
+	.reg .u32 %r<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPi:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPi_mem];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	exit;
+$LDWend__Z3funPi:
+	} // _Z3funPi
+
+
+====================================================
+
+
+nil
+   .version
+      1.4
+   .target
+      sm_10
+      ,
+      map_f64_to_f32
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-14_hw.compute_10.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx1.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw/hw.cu"
+   TREE_ENTRY
+      _Z3funPi
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPi_mem
+            TREE_TYPE
+               .u32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               4
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPi
+         TREE_DEBUG
+            .loc
+            28
+            5
+            0
+         TREE_INST
+            mov
+            TREE_TYPE
+               .s32
+            TREE_OPR
+               %r1
+            TREE_OPR
+               1
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r2
+            TREE_OPR
+               __cudaparm__Z3funPi_mem
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r2
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r1
+         TREE_DEBUG
+            .loc
+            28
+            6
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPi
+   <EOF>
+entry _Z3funPi
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-11_hw.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a06428)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-10_hw.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw/hw.cu"
+
+
+	.entry _Z3funPi (
+		.param .u32 __cudaparm__Z3funPi_mem)
+	{
+	.reg .u32 %r<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPi:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPi_mem];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	exit;
+$LDWend__Z3funPi:
+	} // _Z3funPi
+
+
+Result = 1
+NEW FATBIN
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-15_hw.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a06232)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-14_hw.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw/hw.cu"
+
+
+	.entry _Z3funPi (
+		.param .u32 __cudaparm__Z3funPi_mem)
+	{
+	.reg .u32 %r<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPi:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPi_mem];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	exit;
+$LDWend__Z3funPi:
+	} // _Z3funPi
+
+
+====================================================
+
+
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-11_hw.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a06428)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001e04_00000000-10_hw.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw/hw.cu"
+
+
+	.entry _Z3funPi (
+		.param .u32 __cudaparm__Z3funPi_mem)
+	{
+	.reg .u32 %r<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPi:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPi_mem];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	exit;
+$LDWend__Z3funPi:
+	} // _Z3funPi
+
+
+Result = 1
+NEW FATBIN
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-15_hw2.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a10444)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-14_hw2.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+
+
+	.entry _Z3funPiS_ (
+		.param .u32 __cudaparm__Z3funPiS__d,
+		.param .u32 __cudaparm__Z3funPiS__e)
+	{
+	.reg .u32 %r<6>;
+	.loc	28	3	0
+$LDWbegin__Z3funPiS_:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPiS__d];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	mov.s32 	%r3, 2;
+	ld.param.u32 	%r4, [__cudaparm__Z3funPiS__e];
+	st.global.s32 	[%r4+0], %r3;
+	.loc	28	7	0
+	exit;
+$LDWend__Z3funPiS_:
+	} // _Z3funPiS_
+
+
+====================================================
+
+
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-11_hw2.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a10396)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-10_hw2.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+
+
+	.entry _Z3funPiS_ (
+		.param .u32 __cudaparm__Z3funPiS__d,
+		.param .u32 __cudaparm__Z3funPiS__e)
+	{
+	.reg .u32 %r<6>;
+	.loc	28	3	0
+$LDWbegin__Z3funPiS_:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPiS__d];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	mov.s32 	%r3, 2;
+	ld.param.u32 	%r4, [__cudaparm__Z3funPiS__e];
+	st.global.s32 	[%r4+0], %r3;
+	.loc	28	7	0
+	exit;
+$LDWend__Z3funPiS_:
+	} // _Z3funPiS_
+
+
+====================================================
+
+
+nil
+   .version
+      1.4
+   .target
+      sm_10
+      ,
+      map_f64_to_f32
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-10_hw2.compute_10.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx1.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+   TREE_ENTRY
+      _Z3funPiS_
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPiS__d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPiS__e
+            TREE_TYPE
+               .u32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               6
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPiS_
+         TREE_DEBUG
+            .loc
+            28
+            5
+            0
+         TREE_INST
+            mov
+            TREE_TYPE
+               .s32
+            TREE_OPR
+               %r1
+            TREE_OPR
+               1
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r2
+            TREE_OPR
+               __cudaparm__Z3funPiS__d
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r2
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r1
+         TREE_DEBUG
+            .loc
+            28
+            6
+            0
+         TREE_INST
+            mov
+            TREE_TYPE
+               .s32
+            TREE_OPR
+               %r3
+            TREE_OPR
+               2
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+         Result = 1
+Result = 2
+NEW FATBIN
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-15_hw2.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a10444)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-14_hw2.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+
+
+	.entry _Z3funPiS_ (
+		.param .u32 __cudaparm__Z3funPiS__d,
+		.param .u32 __cudaparm__Z3funPiS__e)
+	{
+	.reg .u32 %r<6>;
+	.loc	28	3	0
+$LDWbegin__Z3funPiS_:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPiS__d];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	mov.s32 	%r3, 2;
+	ld.param.u32 	%r4, [__cudaparm__Z3funPiS__e];
+	st.global.s32 	[%r4+0], %r3;
+	.loc	28	7	0
+	exit;
+$LDWend__Z3funPiS_:
+	} // _Z3funPiS_
+
+
+====================================================
+
+
+nil
+   .version
+      2.1
+   .target
+      sm_20
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-14_hw2.compute_20.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx3.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+   TREE_ENTRY
+      _Z3funPiS_
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPiS__d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPiS__e
+            TREE_TYPE
+               .u32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               6
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPiS_
+         TREE_DEBUG
+            .loc
+            28
+            5
+            0
+         TREE_INST
+            mov
+            TREE_TYPE
+               .s32
+            TREE_OPR
+               %r1
+            TREE_OPR
+               1
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r2
+            TREE_OPR
+               __cudaparm__Z3funPiS__d
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r2
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r1
+         TREE_DEBUG
+            .loc
+            28
+            6
+            0
+         TREE_INST
+            mov
+            TREE_TYPE
+               .s32
+            TREE_OPR
+               %r3
+            TREE_OPR
+               2
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+               __cudaparm__Z3funPiS__e
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r4
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r3
+         TREE_DEBUG
+            .loc
+            28
+            7
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPiS_
+   <EOF>
+entry _Z3funPiS_
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-11_hw2.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a10396)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00002510_00000000-10_hw2.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw2/hw2.cu"
+
+
+	.entry _Z3funPiS_ (
+		.param .u32 __cudaparm__Z3funPiS__d,
+		.param .u32 __cudaparm__Z3funPiS__e)
+	{
+	.reg .u32 %r<6>;
+	.loc	28	3	0
+$LDWbegin__Z3funPiS_:
+	.loc	28	5	0
+	mov.s32 	%r1, 1;
+	ld.param.u32 	%r2, [__cudaparm__Z3funPiS__d];
+	st.global.s32 	[%r2+0], %r1;
+	.loc	28	6	0
+	mov.s32 	%r3, 2;
+	ld.param.u32 	%r4, [__cudaparm__Z3funPiS__e];
+	st.global.s32 	[%r4+0], %r3;
+	.loc	28	7	0
+	exit;
+$LDWend__Z3funPiS_:
+	} // _Z3funPiS_
+
+
+Result = 1
+Result = 2
+NEW FATBIN
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-15_hw3.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a07632)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-14_hw3.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+
+
+	.entry _Z3funPii (
+		.param .u32 __cudaparm__Z3funPii_d,
+		.param .s32 __cudaparm__Z3funPii_size)
+	{
+	.reg .u32 %r<22>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPii:
+	mov.u32 	%r1, %ntid.x;
+	mov.u32 	%r2, %ctaid.x;
+	mul.lo.u32 	%r3, %r2, %r1;
+	mov.u32 	%r4, %nctaid.x;
+	mul.lo.u32 	%r5, %r4, %r1;
+	mov.u32 	%r6, %ntid.y;
+	mul.lo.u32 	%r7, %r6, %r5;
+	mov.u32 	%r8, %tid.y;
+	mul.lo.u32 	%r9, %r8, %r5;
+	mov.u32 	%r10, %ctaid.y;
+	mul.lo.u32 	%r11, %r10, %r7;
+	add.u32 	%r12, %r3, %r11;
+	mov.u32 	%r13, %tid.x;
+	add.u32 	%r14, %r13, %r12;
+	add.u32 	%r15, %r9, %r14;
+	mov.u32 	%r16, 0;
+	setp.ge.s32 	%p1, %r15, %r16;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r17, [__cudaparm__Z3funPii_size];
+	setp.gt.s32 	%p2, %r17, %r15;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_2306:
+	.loc	28	13	0
+	ld.param.u32 	%r18, [__cudaparm__Z3funPii_d];
+	mul.lo.u32 	%r19, %r15, 4;
+	add.u32 	%r20, %r18, %r19;
+	st.global.s32 	[%r20+0], %r15;
+$LBB6__Z3funPii:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPii:
+	} // _Z3funPii
+
+
+====================================================
+
+
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-11_hw3.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a08384)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-10_hw3.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+
+
+	.entry _Z3funPii (
+		.param .u32 __cudaparm__Z3funPii_d,
+		.param .s32 __cudaparm__Z3funPii_size)
+	{
+	.reg .u16 %rh<5>;
+	.reg .u32 %r<19>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPii:
+	mov.u16 	%rh1, %ntid.x;
+	mov.u16 	%rh2, %ctaid.x;
+	mul.wide.u16 	%r1, %rh2, %rh1;
+	mov.u16 	%rh3, %nctaid.x;
+	mul.wide.u16 	%r2, %rh3, %rh1;
+	cvt.u32.u16 	%r3, %ntid.y;
+	mul.lo.u32 	%r4, %r3, %r2;
+	cvt.u32.u16 	%r5, %tid.y;
+	mul.lo.u32 	%r6, %r5, %r2;
+	cvt.u32.u16 	%r7, %ctaid.y;
+	mul.lo.u32 	%r8, %r7, %r4;
+	add.u32 	%r9, %r1, %r8;
+	cvt.u32.u16 	%r10, %tid.x;
+	add.u32 	%r11, %r10, %r9;
+	add.u32 	%r12, %r6, %r11;
+	mov.u32 	%r13, 0;
+	setp.ge.s32 	%p1, %r12, %r13;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r14, [__cudaparm__Z3funPii_size];
+	setp.gt.s32 	%p2, %r14, %r12;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_2306:
+	.loc	28	13	0
+	ld.param.u32 	%r15, [__cudaparm__Z3funPii_d];
+	mul.lo.u32 	%r16, %r12, 4;
+	add.u32 	%r17, %r15, %r16;
+	st.global.s32 	[%r17+0], %r12;
+$LBB6__Z3funPii:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPii:
+	} // _Z3funPii
+
+
+====================================================
+
+
+nil
+   .version
+      1.4
+   .target
+      sm_10
+      ,
+      map_f64_to_f32
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-10_hw3.compute_10.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx1.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+   TREE_ENTRY
+      _Z3funPii
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPii_d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPii_size
+            TREE_TYPE
+               .s32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u16
+            %rh
+            TREE_PAR_REGISTER
+               5
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               19
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .pred
+            %p
+            TREE_PAR_REGISTER
+               4
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPii
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh1
+            TREE_OPR
+               %ntid
+               .x
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh2
+            TREE_OPR
+               %ctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .wide
+               .u16
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %rh2
+            TREE_OPR
+               %rh1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh3
+            TREE_OPR
+               %nctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .wide
+               .u16
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %rh3
+            TREE_OPR
+               %rh1
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %ntid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r2
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %tid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %r2
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %ctaid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %r4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %r8
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %tid
+               .x
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r11
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %r9
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r11
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r13
+            TREE_OPR
+               0
+         TREE_INST
+            setp
+            TREE_TYPE
+               .ge
+               .s32
+            TREE_OPR
+               %p1
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r13
+         TREE_INST
+            TREE_PRED
+               %p1
+            bra
+            TREE_OPR
+               $Lt_0_1794
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPii
+         TREE_LABEL
+            $Lt_0_1794
+         TREE_DEBUG
+            .loc
+            28
+            10
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .s32
+            TREE_OPR
+               %r14
+            TREE_OPR
+               __cudaparm__Z3funPii_size
+         TREE_INST
+            setp
+            TREE_TYPE
+               .gt
+               .s32
+            TREE_OPR
+               %p2
+            TREE_OPR
+               %r14
+            TREE_OPR
+               %r12
+         TREE_INST
+            TREE_PRED
+               %p2
+            bra
+            TREE_OPR
+               $Lt_0_2306
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPii
+         TREE_LABEL
+            $Lt_0_2306
+         TREE_DEBUG
+            .loc
+            28
+            13
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r15
+            TREE_OPR
+               __cudaparm__Z3funPii_d
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r16
+            TREE_OPR
+               %r12
+            TREE_OPR
+               4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r17
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r16
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r17
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r12
+         TREE_LABEL
+            $LBB6__Z3funPii
+         TREE_DEBUG
+            .loc
+            28
+            14
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPii
+   <EOF>
+entry _Z3funPii
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXResult = 0
+Result = 1
+Result = 2
+Result = 3
+Result = 4
+Result = 5
+Result = 6
+Result = 7
+Result = 8
+Result = 9
+Result = 10
+Result = 11
+Result = 12
+Result = 13
+Result = 14
+Result = 15
+Result = 16
+Result = 17
+Result = 18
+Result = 19
+Result = 20
+Result = 21
+Result = 22
+Result = 23
+Result = 24
+Result = 25
+Result = 26
+Result = 27
+Result = 28
+Result = 29
+Result = 30
+Result = 31
+Result = 32
+Result = 33
+Result = 34
+Result = 35
+Result = 36
+Result = 37
+Result = 38
+Result = 39
+Result = 40
+Result = 41
+Result = 42
+Result = 43
+Result = 44
+Result = 45
+Result = 46
+Result = 47
+Result = 48
+Result = 49
+Result = 50
+Result = 51
+Result = 52
+Result = 53
+Result = 54
+Result = 55
+Result = 56
+Result = 57
+Result = 58
+Result = 59
+Result = 60
+Result = 61
+Result = 62
+Result = 63
+Result = 64
+Result = 65
+Result = 66
+Result = 67
+Result = 68
+Result = 69
+Result = 70
+Result = 71
+Result = 72
+Result = 73
+Result = 74
+Result = 75
+Result = 76
+Result = 77
+Result = 78
+Result = 79
+Result = 80
+Result = 81
+Result = 82
+Result = 83
+Result = 84
+Result = 85
+Result = 86
+Result = 87
+Result = 88
+Result = 89
+Result = 90
+Result = 91
+Result = 92
+Result = 93
+Result = 94
+Result = 95
+Result = 96
+Result = 97
+Result = 98
+Result = 99
+NEW FATBIN
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-15_hw3.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a07632)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-14_hw3.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+
+
+	.entry _Z3funPii (
+		.param .u32 __cudaparm__Z3funPii_d,
+		.param .s32 __cudaparm__Z3funPii_size)
+	{
+	.reg .u32 %r<22>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPii:
+	mov.u32 	%r1, %ntid.x;
+	mov.u32 	%r2, %ctaid.x;
+	mul.lo.u32 	%r3, %r2, %r1;
+	mov.u32 	%r4, %nctaid.x;
+	mul.lo.u32 	%r5, %r4, %r1;
+	mov.u32 	%r6, %ntid.y;
+	mul.lo.u32 	%r7, %r6, %r5;
+	mov.u32 	%r8, %tid.y;
+	mul.lo.u32 	%r9, %r8, %r5;
+	mov.u32 	%r10, %ctaid.y;
+	mul.lo.u32 	%r11, %r10, %r7;
+	add.u32 	%r12, %r3, %r11;
+	mov.u32 	%r13, %tid.x;
+	add.u32 	%r14, %r13, %r12;
+	add.u32 	%r15, %r9, %r14;
+	mov.u32 	%r16, 0;
+	setp.ge.s32 	%p1, %r15, %r16;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r17, [__cudaparm__Z3funPii_size];
+	setp.gt.s32 	%p2, %r17, %r15;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_2306:
+	.loc	28	13	0
+	ld.param.u32 	%r18, [__cudaparm__Z3funPii_d];
+	mul.lo.u32 	%r19, %r15, 4;
+	add.u32 	%r20, %r18, %r19;
+	st.global.s32 	[%r20+0], %r15;
+$LBB6__Z3funPii:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPii:
+	} // _Z3funPii
+
+
+====================================================
+
+
+nil
+   .version
+      2.1
+   .target
+      sm_20
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-14_hw3.compute_20.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx3.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+   TREE_ENTRY
+      _Z3funPii
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPii_d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPii_size
+            TREE_TYPE
+               .s32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               22
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .pred
+            %p
+            TREE_PAR_REGISTER
+               4
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPii
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %ntid
+               .x
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %ctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %r1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %nctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %r1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %ntid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r5
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %tid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %r5
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %ctaid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r11
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %r7
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r11
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r13
+            TREE_OPR
+               %tid
+               .x
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r14
+            TREE_OPR
+               %r13
+            TREE_OPR
+               %r12
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r14
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r16
+            TREE_OPR
+               0
+         TREE_INST
+            setp
+            TREE_TYPE
+               .ge
+               .s32
+            TREE_OPR
+               %p1
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r16
+         TREE_INST
+            TREE_PRED
+               %p1
+            bra
+            TREE_OPR
+               $Lt_0_1794
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPii
+         TREE_LABEL
+            $Lt_0_1794
+         TREE_DEBUG
+            .loc
+            28
+            10
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .s32
+            TREE_OPR
+               %r17
+            TREE_OPR
+               __cudaparm__Z3funPii_size
+         TREE_INST
+            setp
+            TREE_TYPE
+               .gt
+               .s32
+            TREE_OPR
+               %p2
+            TREE_OPR
+               %r17
+            TREE_OPR
+               %r15
+         TREE_INST
+            TREE_PRED
+               %p2
+            bra
+            TREE_OPR
+               $Lt_0_2306
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPii
+         TREE_LABEL
+            $Lt_0_2306
+         TREE_DEBUG
+            .loc
+            28
+            13
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r18
+            TREE_OPR
+               __cudaparm__Z3funPii_d
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r19
+            TREE_OPR
+               %r15
+            TREE_OPR
+               4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r20
+            TREE_OPR
+               %r18
+            TREE_OPR
+               %r19
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .s32
+            TREE_OPR
+               %r20
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %r15
+         TREE_LABEL
+            $LBB6__Z3funPii
+         TREE_DEBUG
+            .loc
+            28
+            14
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPii
+   <EOF>
+entry _Z3funPii
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-11_hw3.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a08384)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_000013f0_00000000-10_hw3.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw3/hw3.cu"
+
+
+	.entry _Z3funPii (
+		.param .u32 __cudaparm__Z3funPii_d,
+		.param .s32 __cudaparm__Z3funPii_size)
+	{
+	.reg .u16 %rh<5>;
+	.reg .u32 %r<19>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPii:
+	mov.u16 	%rh1, %ntid.x;
+	mov.u16 	%rh2, %ctaid.x;
+	mul.wide.u16 	%r1, %rh2, %rh1;
+	mov.u16 	%rh3, %nctaid.x;
+	mul.wide.u16 	%r2, %rh3, %rh1;
+	cvt.u32.u16 	%r3, %ntid.y;
+	mul.lo.u32 	%r4, %r3, %r2;
+	cvt.u32.u16 	%r5, %tid.y;
+	mul.lo.u32 	%r6, %r5, %r2;
+	cvt.u32.u16 	%r7, %ctaid.y;
+	mul.lo.u32 	%r8, %r7, %r4;
+	add.u32 	%r9, %r1, %r8;
+	cvt.u32.u16 	%r10, %tid.x;
+	add.u32 	%r11, %r10, %r9;
+	add.u32 	%r12, %r6, %r11;
+	mov.u32 	%r13, 0;
+	setp.ge.s32 	%p1, %r12, %r13;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r14, [__cudaparm__Z3funPii_size];
+	setp.gt.s32 	%p2, %r14, %r12;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPii;
+$Lt_0_2306:
+	.loc	28	13	0
+	ld.param.u32 	%r15, [__cudaparm__Z3funPii_d];
+	mul.lo.u32 	%r16, %r12, 4;
+	add.u32 	%r17, %r15, %r16;
+	st.global.s32 	[%r17+0], %r12;
+$LBB6__Z3funPii:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPii:
+	} // _Z3funPii
+
+
+====================================================
+
+
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MResult = 0
+Result = 1
+Result = 2
+Result = 3
+Result = 4
+Result = 5
+Result = 6
+Result = 7
+Result = 8
+Result = 9
+Result = 10
+Result = 11
+Result = 12
+Result = 13
+Result = 14
+Result = 15
+Result = 16
+Result = 17
+Result = 18
+Result = 19
+Result = 20
+Result = 21
+Result = 22
+Result = 23
+Result = 24
+Result = 25
+Result = 26
+Result = 27
+Result = 28
+Result = 29
+Result = 30
+Result = 31
+Result = 32
+Result = 33
+Result = 34
+Result = 35
+Result = 36
+Result = 37
+Result = 38
+Result = 39
+Result = 40
+Result = 41
+Result = 42
+Result = 43
+Result = 44
+Result = 45
+Result = 46
+Result = 47
+Result = 48
+Result = 49
+Result = 50
+Result = 51
+Result = 52
+Result = 53
+Result = 54
+Result = 55
+Result = 56
+Result = 57
+Result = 58
+Result = 59
+Result = 60
+Result = 61
+Result = 62
+Result = 63
+Result = 64
+Result = 65
+Result = 66
+Result = 67
+Result = 68
+Result = 69
+Result = 70
+Result = 71
+Result = 72
+Result = 73
+Result = 74
+Result = 75
+Result = 76
+Result = 77
+Result = 78
+Result = 79
+Result = 80
+Result = 81
+Result = 82
+Result = 83
+Result = 84
+Result = 85
+Result = 86
+Result = 87
+Result = 88
+Result = 89
+Result = 90
+Result = 91
+Result = 92
+Result = 93
+Result = 94
+Result = 95
+Result = 96
+Result = 97
+Result = 98
+Result = 99
+NEW FATBIN
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-15_hw4.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a07188)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-14_hw4.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+
+
+	.entry _Z3funPfi (
+		.param .u32 __cudaparm__Z3funPfi_d,
+		.param .s32 __cudaparm__Z3funPfi_size)
+	{
+	.reg .u16 %rh<5>;
+	.reg .u32 %r<19>;
+	.reg .f32 %f<5>;
+	.reg .f64 %fd<5>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPfi:
+	mov.u16 	%rh1, %ntid.x;
+	mov.u16 	%rh2, %ctaid.x;
+	mul.wide.u16 	%r1, %rh2, %rh1;
+	mov.u16 	%rh3, %nctaid.x;
+	mul.wide.u16 	%r2, %rh3, %rh1;
+	cvt.u32.u16 	%r3, %ntid.y;
+	mul.lo.u32 	%r4, %r3, %r2;
+	cvt.u32.u16 	%r5, %tid.y;
+	mul.lo.u32 	%r6, %r5, %r2;
+	cvt.u32.u16 	%r7, %ctaid.y;
+	mul.lo.u32 	%r8, %r7, %r4;
+	add.u32 	%r9, %r1, %r8;
+	cvt.u32.u16 	%r10, %tid.x;
+	add.u32 	%r11, %r10, %r9;
+	add.u32 	%r12, %r6, %r11;
+	mov.u32 	%r13, 0;
+	setp.ge.s32 	%p1, %r12, %r13;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r14, [__cudaparm__Z3funPfi_size];
+	setp.gt.s32 	%p2, %r14, %r12;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_2306:
+	.loc	28	13	0
+	cvt.rn.f64.s32 	%fd1, %r12;
+	mov.f64 	%fd2, 0d4024000000000000;	// 10
+	mul.f64 	%fd3, %fd1, %fd2;
+	cvt.rn.f32.f64 	%f1, %fd3;
+	mov.f32 	%f2, 0f3dcccccd;     	// 0.1
+	div.full.f32 	%f3, %f1, %f2;
+	ld.param.u32 	%r15, [__cudaparm__Z3funPfi_d];
+	mul.lo.u32 	%r16, %r12, 4;
+	add.u32 	%r17, %r15, %r16;
+	st.global.f32 	[%r17+0], %f3;
+$LBB6__Z3funPfi:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPfi:
+	} // _Z3funPfi
+
+
+====================================================
+
+
+nil
+   .version
+      1.4
+   .target
+      sm_10
+      ,
+      map_f64_to_f32
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-14_hw4.compute_10.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx1.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+   TREE_ENTRY
+      _Z3funPfi
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPfi_d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPfi_size
+            TREE_TYPE
+               .s32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u16
+            %rh
+            TREE_PAR_REGISTER
+               5
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               19
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .f32
+            %f
+            TREE_PAR_REGISTER
+               5
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .f64
+            %fd
+            TREE_PAR_REGISTER
+               5
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .pred
+            %p
+            TREE_PAR_REGISTER
+               4
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPfi
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh1
+            TREE_OPR
+               %ntid
+               .x
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh2
+            TREE_OPR
+               %ctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .wide
+               .u16
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %rh2
+            TREE_OPR
+               %rh1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u16
+            TREE_OPR
+               %rh3
+            TREE_OPR
+               %nctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .wide
+               .u16
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %rh3
+            TREE_OPR
+               %rh1
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %ntid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r2
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %tid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %r2
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %ctaid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %r4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %r8
+         TREE_INST
+            cvt
+            TREE_TYPE
+               .u32
+               .u16
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %tid
+               .x
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r11
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %r9
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r11
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r13
+            TREE_OPR
+               0
+         TREE_INST
+            setp
+            TREE_TYPE
+               .ge
+               .s32
+            TREE_OPR
+               %p1
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r13
+         TREE_INST
+            TREE_PRED
+               %p1
+            bra
+            TREE_OPR
+               $Lt_0_1794
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPfi
+         TREE_LABEL
+            $Lt_0_1794
+         TREE_DEBUG
+            .loc
+            28
+            10
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .s32
+            TREE_OPR
+               %r14
+            TREE_OPR
+               __cudaparm__Z3funPfi_size
+         TREE_INST
+            setp
+            TREE_TYPE
+               .gt
+               .s32
+            TREE_OPR
+               %p2
+            TREE_OPR
+               %r14
+            TREE_OPR
+               %r12
+         TREE_INST
+            TREE_PRED
+               %p2
+            bra
+            TREE_OPR
+               $Lt_0_2306
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPfi
+         TREE_LABEL
+            $Lt_0_2306
+         TREE_DEBUG
+            .loc
+            28
+            13
+            0
+         TREE_INST
+            cvt
+            TREE_TYPE
+               TREE_FRND
+                  .rn
+               .f64
+               .s32
+            TREE_OPR
+               %fd1
+            TREE_OPR
+               %r12
+         TREE_INST
+            mov
+            TREE_TYPE
+               .f64
+            TREE_OPR
+               %fd2
+            TREE_OPR
+               0d4024000000000000
+         TREE_INST
+            mul
+            TREE_TYPE
+               .f64
+            TREE_OPR
+               %fd3
+            TREE_OPR
+               %fd1
+            TREE_OPR
+               %fd2
+         TREE_INST
+            cvt
+            TREE_TYPE
+               TREE_FRND
+                  .rn
+               .f32
+               .f64
+            TREE_OPR
+               %f1
+            TREE_OPR
+               %fd3
+         TREE_INST
+            mov
+            TREE_TYPE
+               .f32
+            TREE_OPR
+               %f2
+            TREE_OPR
+               0f3dcccccd
+         TREE_INST
+            div
+            TREE_TYPE
+               .full
+               .f32
+            TREE_OPR
+               %f3
+            TREE_OPR
+               %f1
+            TREE_OPR
+               %f2
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r15
+            TREE_OPR
+               __cudaparm__Z3funPfi_d
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r16
+            TREE_OPR
+               %r12
+            TREE_OPR
+               4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r17
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r16
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .f32
+            TREE_OPR
+               %r17
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %f3
+         TREE_LABEL
+            $LBB6__Z3funPfi
+         TREE_DEBUG
+            .loc
+            28
+            14
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPfi
+   <EOF>
+entry _Z3funPfi
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-11_hw4.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a05200)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-10_hw4.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+
+
+	.entry _Z3funPfi (
+		.param .u32 __cudaparm__Z3funPfi_d,
+		.param .s32 __cudaparm__Z3funPfi_size)
+	{
+	.reg .u32 %r<22>;
+	.reg .f32 %f<3>;
+	.reg .f64 %fd<7>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPfi:
+	mov.u32 	%r1, %ntid.x;
+	mov.u32 	%r2, %ctaid.x;
+	mul.lo.u32 	%r3, %r2, %r1;
+	mov.u32 	%r4, %nctaid.x;
+	mul.lo.u32 	%r5, %r4, %r1;
+	mov.u32 	%r6, %ntid.y;
+	mul.lo.u32 	%r7, %r6, %r5;
+	mov.u32 	%r8, %tid.y;
+	mul.lo.u32 	%r9, %r8, %r5;
+	mov.u32 	%r10, %ctaid.y;
+	mul.lo.u32 	%r11, %r10, %r7;
+	add.u32 	%r12, %r3, %r11;
+	mov.u32 	%r13, %tid.x;
+	add.u32 	%r14, %r13, %r12;
+	add.u32 	%r15, %r9, %r14;
+	mov.u32 	%r16, 0;
+	setp.ge.s32 	%p1, %r15, %r16;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r17, [__cudaparm__Z3funPfi_size];
+	setp.gt.s32 	%p2, %r17, %r15;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_2306:
+	.loc	28	13	0
+	cvt.rn.f64.s32 	%fd1, %r15;
+	mov.f64 	%fd2, 0d4024000000000000;	// 10
+	mul.f64 	%fd3, %fd1, %fd2;
+	mov.f64 	%fd4, 0d3fb999999999999a;	// 0.1
+	div.rn.f64 	%fd5, %fd3, %fd4;
+	cvt.rn.f32.f64 	%f1, %fd5;
+	ld.param.u32 	%r18, [__cudaparm__Z3funPfi_d];
+	mul.lo.u32 	%r19, %r15, 4;
+	add.u32 	%r20, %r18, %r19;
+	st.global.f32 	[%r20+0], %f1;
+$LBB6__Z3funPfi:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPfi:
+	} // _Z3funPfi
+
+
+====================================================
+
+
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+CVT
+MOV
+DIV
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+CVT
+MUL
+CVT
+MUL
+CVT
+MUL
+ADD
+CVT
+ADD
+ADD
+MOV
+SETP
+BRA
+Result = 0
+Result = 100
+Result = 200
+Result = 300
+Result = 400
+Result = 500
+Result = 600
+Result = 700
+Result = 800
+Result = 900
+Result = 1000
+Result = 1100
+Result = 1200
+Result = 1300
+Result = 1400
+Result = 1500
+Result = 1600
+Result = 1700
+Result = 1800
+Result = 1900
+Result = 2000
+Result = 2100
+Result = 2200
+Result = 2300
+Result = 2400
+Result = 2500
+Result = 2600
+Result = 2700
+Result = 2800
+Result = 2900
+Result = 3000
+Result = 3100
+Result = 3200
+Result = 3300
+Result = 3400
+Result = 3500
+Result = 3600
+Result = 3700
+Result = 3800
+Result = 3900
+Result = 4000
+Result = 4100
+Result = 4200
+Result = 4300
+Result = 4400
+Result = 4500
+Result = 4600
+Result = 4700
+Result = 4800
+Result = 4900
+Result = 5000
+Result = 5100
+Result = 5200
+Result = 5300
+Result = 5400
+Result = 5500
+Result = 5600
+Result = 5700
+Result = 5800
+Result = 5900
+Result = 6000
+Result = 6100
+Result = 6200
+Result = 6300
+Result = 6400
+Result = 6500
+Result = 6600
+Result = 6700
+Result = 6800
+Result = 6900
+Result = 7000
+Result = 7100
+Result = 7200
+Result = 7300
+Result = 7400
+Result = 7500
+Result = 7600
+Result = 7700
+Result = 7800
+Result = 7900
+Result = 8000
+Result = 8100
+Result = 8200
+Result = 8300
+Result = 8400
+Result = 8500
+Result = 8600
+Result = 8700
+Result = 8800
+Result = 8900
+Result = 9000
+Result = 9100
+Result = 9200
+Result = 9300
+Result = 9400
+Result = 9500
+Result = 9600
+Result = 9700
+Result = 9800
+Result = 9900
+NEW FATBIN
+====================================================
+PROFILE = compute_10
+CODE:
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-15_hw4.compute_10.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a07188)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_10, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-14_hw4.compute_10.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx1.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+
+
+	.entry _Z3funPfi (
+		.param .u32 __cudaparm__Z3funPfi_d,
+		.param .s32 __cudaparm__Z3funPfi_size)
+	{
+	.reg .u16 %rh<5>;
+	.reg .u32 %r<19>;
+	.reg .f32 %f<5>;
+	.reg .f64 %fd<5>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPfi:
+	mov.u16 	%rh1, %ntid.x;
+	mov.u16 	%rh2, %ctaid.x;
+	mul.wide.u16 	%r1, %rh2, %rh1;
+	mov.u16 	%rh3, %nctaid.x;
+	mul.wide.u16 	%r2, %rh3, %rh1;
+	cvt.u32.u16 	%r3, %ntid.y;
+	mul.lo.u32 	%r4, %r3, %r2;
+	cvt.u32.u16 	%r5, %tid.y;
+	mul.lo.u32 	%r6, %r5, %r2;
+	cvt.u32.u16 	%r7, %ctaid.y;
+	mul.lo.u32 	%r8, %r7, %r4;
+	add.u32 	%r9, %r1, %r8;
+	cvt.u32.u16 	%r10, %tid.x;
+	add.u32 	%r11, %r10, %r9;
+	add.u32 	%r12, %r6, %r11;
+	mov.u32 	%r13, 0;
+	setp.ge.s32 	%p1, %r12, %r13;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r14, [__cudaparm__Z3funPfi_size];
+	setp.gt.s32 	%p2, %r14, %r12;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_2306:
+	.loc	28	13	0
+	cvt.rn.f64.s32 	%fd1, %r12;
+	mov.f64 	%fd2, 0d4024000000000000;	// 10
+	mul.f64 	%fd3, %fd1, %fd2;
+	cvt.rn.f32.f64 	%f1, %fd3;
+	mov.f32 	%f2, 0f3dcccccd;     	// 0.1
+	div.full.f32 	%f3, %f1, %f2;
+	ld.param.u32 	%r15, [__cudaparm__Z3funPfi_d];
+	mul.lo.u32 	%r16, %r12, 4;
+	add.u32 	%r17, %r15, %r16;
+	st.global.f32 	[%r17+0], %f3;
+$LBB6__Z3funPfi:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPfi:
+	} // _Z3funPfi
+
+
+====================================================
+
+
+====================================================
+PROFILE = compute_20
+CODE:
+	.version 2.1
+	.target sm_20
+	// compiled with C:\CUDA\bin/../open64/lib//be.exe
+	// nvopencc 3.1 built on 2010-06-08
+
+	//-----------------------------------------------------------
+	// Compiling C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-11_hw4.compute_20.cpp3.i (C:/Users/Ken/AppData/Local/Temp/ccBI#.a05200)
+	//-----------------------------------------------------------
+
+	//-----------------------------------------------------------
+	// Options:
+	//-----------------------------------------------------------
+	//  Target:ptx, ISA:sm_20, Endian:little, Pointer Size:32
+	//  -O3	(Optimization level)
+	//  -g0	(Debug level)
+	//  -m2	(Report advisories)
+	//-----------------------------------------------------------
+
+	.file	1	"C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-10_hw4.compute_20.cudafe2.gpu"
+	.file	2	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+	.file	3	"C:\CUDA\include\crt/device_runtime.h"
+	.file	4	"C:\CUDA\include\host_defines.h"
+	.file	5	"C:\CUDA\include\builtin_types.h"
+	.file	6	"c:\cuda\include\device_types.h"
+	.file	7	"c:\cuda\include\driver_types.h"
+	.file	8	"c:\cuda\include\surface_types.h"
+	.file	9	"c:\cuda\include\texture_types.h"
+	.file	10	"c:\cuda\include\vector_types.h"
+	.file	11	"c:\cuda\include\builtin_types.h"
+	.file	12	"c:\cuda\include\host_defines.h"
+	.file	13	"C:\CUDA\include\device_launch_parameters.h"
+	.file	14	"c:\cuda\include\crt\storage_class.h"
+	.file	15	"C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+	.file	16	"c:\cuda\include\texture_fetch_functions.h"
+	.file	17	"C:\CUDA\include\common_functions.h"
+	.file	18	"c:\cuda\include\math_functions.h"
+	.file	19	"c:\cuda\include\math_constants.h"
+	.file	20	"c:\cuda\include\device_functions.h"
+	.file	21	"c:\cuda\include\sm_11_atomic_functions.h"
+	.file	22	"c:\cuda\include\sm_12_atomic_functions.h"
+	.file	23	"c:\cuda\include\sm_13_double_functions.h"
+	.file	24	"c:\cuda\include\sm_20_atomic_functions.h"
+	.file	25	"c:\cuda\include\sm_20_intrinsics.h"
+	.file	26	"c:\cuda\include\surface_functions.h"
+	.file	27	"c:\cuda\include\math_functions_dbl_ptx3.h"
+	.file	28	"c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+
+
+	.entry _Z3funPfi (
+		.param .u32 __cudaparm__Z3funPfi_d,
+		.param .s32 __cudaparm__Z3funPfi_size)
+	{
+	.reg .u32 %r<22>;
+	.reg .f32 %f<3>;
+	.reg .f64 %fd<7>;
+	.reg .pred %p<4>;
+	.loc	28	3	0
+$LDWbegin__Z3funPfi:
+	mov.u32 	%r1, %ntid.x;
+	mov.u32 	%r2, %ctaid.x;
+	mul.lo.u32 	%r3, %r2, %r1;
+	mov.u32 	%r4, %nctaid.x;
+	mul.lo.u32 	%r5, %r4, %r1;
+	mov.u32 	%r6, %ntid.y;
+	mul.lo.u32 	%r7, %r6, %r5;
+	mov.u32 	%r8, %tid.y;
+	mul.lo.u32 	%r9, %r8, %r5;
+	mov.u32 	%r10, %ctaid.y;
+	mul.lo.u32 	%r11, %r10, %r7;
+	add.u32 	%r12, %r3, %r11;
+	mov.u32 	%r13, %tid.x;
+	add.u32 	%r14, %r13, %r12;
+	add.u32 	%r15, %r9, %r14;
+	mov.u32 	%r16, 0;
+	setp.ge.s32 	%p1, %r15, %r16;
+	@%p1 bra 	$Lt_0_1794;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_1794:
+	.loc	28	10	0
+	ld.param.s32 	%r17, [__cudaparm__Z3funPfi_size];
+	setp.gt.s32 	%p2, %r17, %r15;
+	@%p2 bra 	$Lt_0_2306;
+	bra.uni 	$LBB6__Z3funPfi;
+$Lt_0_2306:
+	.loc	28	13	0
+	cvt.rn.f64.s32 	%fd1, %r15;
+	mov.f64 	%fd2, 0d4024000000000000;	// 10
+	mul.f64 	%fd3, %fd1, %fd2;
+	mov.f64 	%fd4, 0d3fb999999999999a;	// 0.1
+	div.rn.f64 	%fd5, %fd3, %fd4;
+	cvt.rn.f32.f64 	%f1, %fd5;
+	ld.param.u32 	%r18, [__cudaparm__Z3funPfi_d];
+	mul.lo.u32 	%r19, %r15, 4;
+	add.u32 	%r20, %r18, %r19;
+	st.global.f32 	[%r20+0], %f1;
+$LBB6__Z3funPfi:
+	.loc	28	14	0
+	exit;
+$LDWend__Z3funPfi:
+	} // _Z3funPfi
+
+
+====================================================
+
+
+nil
+   .version
+      2.1
+   .target
+      sm_20
+   TREE_DEBUG
+      .file
+      1
+      "C:/Users/Ken/AppData/Local/Temp/tmpxft_00001bbc_00000000-10_hw4.compute_20.cudafe2.gpu"
+   TREE_DEBUG
+      .file
+      2
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\crtdefs.h"
+   TREE_DEBUG
+      .file
+      3
+      "C:\CUDA\include\crt/device_runtime.h"
+   TREE_DEBUG
+      .file
+      4
+      "C:\CUDA\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      5
+      "C:\CUDA\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      6
+      "c:\cuda\include\device_types.h"
+   TREE_DEBUG
+      .file
+      7
+      "c:\cuda\include\driver_types.h"
+   TREE_DEBUG
+      .file
+      8
+      "c:\cuda\include\surface_types.h"
+   TREE_DEBUG
+      .file
+      9
+      "c:\cuda\include\texture_types.h"
+   TREE_DEBUG
+      .file
+      10
+      "c:\cuda\include\vector_types.h"
+   TREE_DEBUG
+      .file
+      11
+      "c:\cuda\include\builtin_types.h"
+   TREE_DEBUG
+      .file
+      12
+      "c:\cuda\include\host_defines.h"
+   TREE_DEBUG
+      .file
+      13
+      "C:\CUDA\include\device_launch_parameters.h"
+   TREE_DEBUG
+      .file
+      14
+      "c:\cuda\include\crt\storage_class.h"
+   TREE_DEBUG
+      .file
+      15
+      "C:\Program Files\Microsoft Visual Studio 9.0\VC\INCLUDE\time.h"
+   TREE_DEBUG
+      .file
+      16
+      "c:\cuda\include\texture_fetch_functions.h"
+   TREE_DEBUG
+      .file
+      17
+      "C:\CUDA\include\common_functions.h"
+   TREE_DEBUG
+      .file
+      18
+      "c:\cuda\include\math_functions.h"
+   TREE_DEBUG
+      .file
+      19
+      "c:\cuda\include\math_constants.h"
+   TREE_DEBUG
+      .file
+      20
+      "c:\cuda\include\device_functions.h"
+   TREE_DEBUG
+      .file
+      21
+      "c:\cuda\include\sm_11_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      22
+      "c:\cuda\include\sm_12_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      23
+      "c:\cuda\include\sm_13_double_functions.h"
+   TREE_DEBUG
+      .file
+      24
+      "c:\cuda\include\sm_20_atomic_functions.h"
+   TREE_DEBUG
+      .file
+      25
+      "c:\cuda\include\sm_20_intrinsics.h"
+   TREE_DEBUG
+      .file
+      26
+      "c:\cuda\include\surface_functions.h"
+   TREE_DEBUG
+      .file
+      27
+      "c:\cuda\include\math_functions_dbl_ptx3.h"
+   TREE_DEBUG
+      .file
+      28
+      "c:/Personal/tem/foo/cuda-waste/hw4/hw4.cu"
+   TREE_ENTRY
+      _Z3funPfi
+      TREE_PARAM_LIST
+         TREE_PARAM
+            __cudaparm__Z3funPfi_d
+            TREE_TYPE
+               .u32
+         TREE_PARAM
+            __cudaparm__Z3funPfi_size
+            TREE_TYPE
+               .s32
+      TREE_PERF
+      TREE_BLOCK
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .u32
+            %r
+            TREE_PAR_REGISTER
+               22
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .f32
+            %f
+            TREE_PAR_REGISTER
+               3
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .f64
+            %fd
+            TREE_PAR_REGISTER
+               7
+         TREE_VAR
+            TREE_SPACE
+               .reg
+            TREE_TYPE
+               .pred
+            %p
+            TREE_PAR_REGISTER
+               4
+         TREE_DEBUG
+            .loc
+            28
+            3
+            0
+         TREE_LABEL
+            $LDWbegin__Z3funPfi
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r1
+            TREE_OPR
+               %ntid
+               .x
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %ctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r2
+            TREE_OPR
+               %r1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %nctaid
+               .x
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r5
+            TREE_OPR
+               %r4
+            TREE_OPR
+               %r1
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %ntid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r7
+            TREE_OPR
+               %r6
+            TREE_OPR
+               %r5
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %tid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r8
+            TREE_OPR
+               %r5
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %ctaid
+               .y
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r11
+            TREE_OPR
+               %r10
+            TREE_OPR
+               %r7
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r12
+            TREE_OPR
+               %r3
+            TREE_OPR
+               %r11
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r13
+            TREE_OPR
+               %tid
+               .x
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r14
+            TREE_OPR
+               %r13
+            TREE_OPR
+               %r12
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r9
+            TREE_OPR
+               %r14
+         TREE_INST
+            mov
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r16
+            TREE_OPR
+               0
+         TREE_INST
+            setp
+            TREE_TYPE
+               .ge
+               .s32
+            TREE_OPR
+               %p1
+            TREE_OPR
+               %r15
+            TREE_OPR
+               %r16
+         TREE_INST
+            TREE_PRED
+               %p1
+            bra
+            TREE_OPR
+               $Lt_0_1794
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPfi
+         TREE_LABEL
+            $Lt_0_1794
+         TREE_DEBUG
+            .loc
+            28
+            10
+            0
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .s32
+            TREE_OPR
+               %r17
+            TREE_OPR
+               __cudaparm__Z3funPfi_size
+         TREE_INST
+            setp
+            TREE_TYPE
+               .gt
+               .s32
+            TREE_OPR
+               %p2
+            TREE_OPR
+               %r17
+            TREE_OPR
+               %r15
+         TREE_INST
+            TREE_PRED
+               %p2
+            bra
+            TREE_OPR
+               $Lt_0_2306
+         TREE_INST
+            bra
+            TREE_TYPE
+               .uni
+            TREE_OPR
+               $LBB6__Z3funPfi
+         TREE_LABEL
+            $Lt_0_2306
+         TREE_DEBUG
+            .loc
+            28
+            13
+            0
+         TREE_INST
+            cvt
+            TREE_TYPE
+               TREE_FRND
+                  .rn
+               .f64
+               .s32
+            TREE_OPR
+               %fd1
+            TREE_OPR
+               %r15
+         TREE_INST
+            mov
+            TREE_TYPE
+               .f64
+            TREE_OPR
+               %fd2
+            TREE_OPR
+               0d4024000000000000
+         TREE_INST
+            mul
+            TREE_TYPE
+               .f64
+            TREE_OPR
+               %fd3
+            TREE_OPR
+               %fd1
+            TREE_OPR
+               %fd2
+         TREE_INST
+            mov
+            TREE_TYPE
+               .f64
+            TREE_OPR
+               %fd4
+            TREE_OPR
+               0d3fb999999999999a
+         TREE_INST
+            div
+            TREE_TYPE
+               .rn
+               .f64
+            TREE_OPR
+               %fd5
+            TREE_OPR
+               %fd3
+            TREE_OPR
+               %fd4
+         TREE_INST
+            cvt
+            TREE_TYPE
+               TREE_FRND
+                  .rn
+               .f32
+               .f64
+            TREE_OPR
+               %f1
+            TREE_OPR
+               %fd5
+         TREE_INST
+            ld
+            TREE_TYPE
+               .param
+               .u32
+            TREE_OPR
+               %r18
+            TREE_OPR
+               __cudaparm__Z3funPfi_d
+         TREE_INST
+            mul
+            TREE_TYPE
+               .lo
+               .u32
+            TREE_OPR
+               %r19
+            TREE_OPR
+               %r15
+            TREE_OPR
+               4
+         TREE_INST
+            add
+            TREE_TYPE
+               .u32
+            TREE_OPR
+               %r20
+            TREE_OPR
+               %r18
+            TREE_OPR
+               %r19
+         TREE_INST
+            st
+            TREE_TYPE
+               .global
+               .f32
+            TREE_OPR
+               %r20
+               +
+               TREE_OPR
+                  0
+            TREE_OPR
+               %f1
+         TREE_LABEL
+            $LBB6__Z3funPfi
+         TREE_DEBUG
+            .loc
+            28
+            14
+            0
+         TREE_INST
+            exit
+         TREE_LABEL
+            $LDWend__Z3funPfi
+   <EOF>
+entry _Z3funPfi
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOV
+DIV
+CVT
+LD
+MUL
+ADD
+ST
+EXIT
+MOV
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+MOV
+MUL
+ADD
+MOV
+ADD
+ADD
+MOV
+SETP
+BRA
+LD
+SETP
+BRA
+CVT
+MOV
+MUL
+MOResult = 0
+Result = 100
+Result = 200
+Result = 300
+Result = 400
+Result = 500
+Result = 600
+Result = 700
+Result = 800
+Result = 900
+Result = 1000
+Result = 1100
+Result = 1200
+Result = 1300
+Result = 1400
+Result = 1500
+Result = 1600
+Result = 1700
+Result = 1800
+Result = 1900
+Result = 2000
+Result = 2100
+Result = 2200
+Result = 2300
+Result = 2400
+Result = 2500
+Result = 2600
+Result = 2700
+Result = 2800
+Result = 2900
+Result = 3000
+Result = 3100
+Result = 3200
+Result = 3300
+Result = 3400
+Result = 3500
+Result = 3600
+Result = 3700
+Result = 3800
+Result = 3900
+Result = 4000
+Result = 4100
+Result = 4200
+Result = 4300
+Result = 4400
+Result = 4500
+Result = 4600
+Result = 4700
+Result = 4800
+Result = 4900
+Result = 5000
+Result = 5100
+Result = 5200
+Result = 5300
+Result = 5400
+Result = 5500
+Result = 5600
+Result = 5700
+Result = 5800
+Result = 5900
+Result = 6000
+Result = 6100
+Result = 6200
+Result = 6300
+Result = 6400
+Result = 6500
+Result = 6600
+Result = 6700
+Result = 6800
+Result = 6900
+Result = 7000
+Result = 7100
+Result = 7200
+Result = 7300
+Result = 7400
+Result = 7500
+Result = 7600
+Result = 7700
+Result = 7800
+Result = 7900
+Result = 8000
+Result = 8100
+Result = 8200
+Result = 8300
+Result = 8400
+Result = 8500
+Result = 8600
+Result = 8700
+Result = 8800
+Result = 8900
+Result = 9000
+Result = 9100
+Result = 9200
+Result = 9300
+Result = 9400
+Result = 9500
+Result = 9600
+Result = 9700
+Result = 9800
+Result = 9900
