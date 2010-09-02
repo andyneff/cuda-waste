@@ -98,5 +98,6 @@ private:
     void DoLd(pANTLR3_BASE_TREE inst);
     void DoSetp(pANTLR3_BASE_TREE inst);
     void DoSt(pANTLR3_BASE_TREE inst);
+    void DoDiv(pANTLR3_BASE_TREE inst);
     int FindFirstInst(pANTLR3_BASE_TREE block, int first);
 };

@@ -338,7 +338,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                                     pc++;
                                 pc = FindFirstInst(block, pc);
 
-                                // Dump("after", pc, inst);
+                                //Dump("after", pc, inst);
                             }
                         }
                     }
@@ -548,7 +548,9 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
             DoCvt(inst);
             return 0;
         case KI_CVTA: ;
-        case KI_DIV: ;
+        case KI_DIV:
+            DoDiv(inst);
+            return 0;
         case KI_EX2: ;
         case KI_EXIT:
             DoExit(inst);
@@ -622,6 +624,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_XOR: ;
         default: ;
     }
+    assert(false); // unimplemented instruction.
     return -1; // end.
 }
 
