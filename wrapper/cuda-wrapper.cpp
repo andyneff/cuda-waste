@@ -42,102 +42,102 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Pointers to functions in the CUDA library, unaltered.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-CUDA_WRAPPER::typePtrCudaMalloc3D CUDA_WRAPPER::ptrCudaMalloc3D;
-CUDA_WRAPPER::typePtrCudaMalloc3DArray CUDA_WRAPPER::ptrCudaMalloc3DArray;
-CUDA_WRAPPER::typePtrCudaMemset3D CUDA_WRAPPER::ptrCudaMemset3D;
-CUDA_WRAPPER::typePtrCudaMemcpy3D CUDA_WRAPPER::ptrCudaMemcpy3D;
-CUDA_WRAPPER::typePtrCudaMemcpy3DAsync CUDA_WRAPPER::ptrCudaMemcpy3DAsync;
-CUDA_WRAPPER::typePtrCudaMalloc CUDA_WRAPPER::ptrCudaMalloc;
-CUDA_WRAPPER::typePtrCudaMallocHost CUDA_WRAPPER::ptrCudaMallocHost;
-CUDA_WRAPPER::typePtrCudaMallocPitch CUDA_WRAPPER::ptrCudaMallocPitch;
-CUDA_WRAPPER::typePtrCudaMallocArray CUDA_WRAPPER::ptrCudaMallocArray;
-CUDA_WRAPPER::typePtrCudaFree CUDA_WRAPPER::ptrCudaFree;
-CUDA_WRAPPER::typePtrCudaFreeHost CUDA_WRAPPER::ptrCudaFreeHost;
-CUDA_WRAPPER::typePtrCudaFreeArray CUDA_WRAPPER::ptrCudaFreeArray;
-CUDA_WRAPPER::typePtrCudaHostAlloc CUDA_WRAPPER::ptrCudaHostAlloc;
-CUDA_WRAPPER::typePtrCudaHostGetDevicePointer CUDA_WRAPPER::ptrCudaHostGetDevicePointer;
-CUDA_WRAPPER::typePtrCudaHostGetFlags CUDA_WRAPPER::ptrCudaHostGetFlags;
-CUDA_WRAPPER::typePtrCudaMemGetInfo CUDA_WRAPPER::ptrCudaMemGetInfo;
-CUDA_WRAPPER::typePtrCudaMemcpy CUDA_WRAPPER::ptrCudaMemcpy;
-CUDA_WRAPPER::typePtrCudaMemcpyToArray CUDA_WRAPPER::ptrCudaMemcpyToArray;
-CUDA_WRAPPER::typePtrCudaMemcpyFromArray CUDA_WRAPPER::ptrCudaMemcpyFromArray;
-CUDA_WRAPPER::typePtrCudaMemcpyArrayToArray CUDA_WRAPPER::ptrCudaMemcpyArrayToArray;
-CUDA_WRAPPER::typePtrCudaMemcpy2D CUDA_WRAPPER::ptrCudaMemcpy2D;
-CUDA_WRAPPER::typePtrCudaMemcpy2DToArray CUDA_WRAPPER::ptrCudaMemcpy2DToArray;
-CUDA_WRAPPER::typePtrCudaMemcpy2DFromArray CUDA_WRAPPER::ptrCudaMemcpy2DFromArray;
-CUDA_WRAPPER::typePtrCudaMemcpy2DArrayToArray CUDA_WRAPPER::ptrCudaMemcpy2DArrayToArray;
-CUDA_WRAPPER::typePtrCudaMemcpyToSymbol CUDA_WRAPPER::ptrCudaMemcpyToSymbol;
-CUDA_WRAPPER::typePtrCudaMemcpyFromSymbol CUDA_WRAPPER::ptrCudaMemcpyFromSymbol;
-CUDA_WRAPPER::typePtrCudaMemcpyAsync CUDA_WRAPPER::ptrCudaMemcpyAsync;
-CUDA_WRAPPER::typePtrCudaMemcpyToArrayAsync CUDA_WRAPPER::ptrCudaMemcpyToArrayAsync;
-CUDA_WRAPPER::typePtrCudaMemcpyFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpyFromArrayAsync;
-CUDA_WRAPPER::typePtrCudaMemcpy2DAsync CUDA_WRAPPER::ptrCudaMemcpy2DAsync;
-CUDA_WRAPPER::typePtrCudaMemcpy2DToArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DToArrayAsync;
-CUDA_WRAPPER::typePtrCudaMemcpy2DFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DFromArrayAsync;
-CUDA_WRAPPER::typePtrCudaMemcpyToSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyToSymbolAsync;
-CUDA_WRAPPER::typePtrCudaMemcpyFromSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyFromSymbolAsync;
-CUDA_WRAPPER::typePtrCudaMemset CUDA_WRAPPER::ptrCudaMemset;
-CUDA_WRAPPER::typePtrCudaMemset2D CUDA_WRAPPER::ptrCudaMemset2D;
-CUDA_WRAPPER::typePtrCudaGetSymbolAddress CUDA_WRAPPER::ptrCudaGetSymbolAddress;
-CUDA_WRAPPER::typePtrCudaGetSymbolSize CUDA_WRAPPER::ptrCudaGetSymbolSize;
-CUDA_WRAPPER::typePtrCudaGetDeviceCount CUDA_WRAPPER::ptrCudaGetDeviceCount;
-CUDA_WRAPPER::typePtrCudaGetDeviceProperties CUDA_WRAPPER::ptrCudaGetDeviceProperties;
-CUDA_WRAPPER::typePtrCudaChooseDevice CUDA_WRAPPER::ptrCudaChooseDevice;
-CUDA_WRAPPER::typePtrCudaSetDevice CUDA_WRAPPER::ptrCudaSetDevice;
-CUDA_WRAPPER::typePtrCudaGetDevice CUDA_WRAPPER::ptrCudaGetDevice;
-CUDA_WRAPPER::typePtrCudaSetValidDevices CUDA_WRAPPER::ptrCudaSetValidDevices;
-CUDA_WRAPPER::typePtrCudaSetDeviceFlags CUDA_WRAPPER::ptrCudaSetDeviceFlags;
-CUDA_WRAPPER::typePtrCudaBindTexture CUDA_WRAPPER::ptrCudaBindTexture;
-CUDA_WRAPPER::typePtrCudaBindTexture2D CUDA_WRAPPER::ptrCudaBindTexture2D;
-CUDA_WRAPPER::typePtrCudaBindTextureToArray CUDA_WRAPPER::ptrCudaBindTextureToArray;
-CUDA_WRAPPER::typePtrCudaUnbindTexture CUDA_WRAPPER::ptrCudaUnbindTexture;
-CUDA_WRAPPER::typePtrCudaGetTextureAlignmentOffset CUDA_WRAPPER::ptrCudaGetTextureAlignmentOffset;
-CUDA_WRAPPER::typePtrCudaGetTextureReference CUDA_WRAPPER::ptrCudaGetTextureReference;
-CUDA_WRAPPER::typePtrCudaBindSurfaceToArray CUDA_WRAPPER::ptrCudaBindSurfaceToArray;
-CUDA_WRAPPER::typePtrCudaGetSurfaceAlignmentOffset CUDA_WRAPPER::ptrCudaGetSurfaceAlignmentOffset;
-CUDA_WRAPPER::typePtrCudaGetSurfaceReference CUDA_WRAPPER::ptrCudaGetSurfaceReference;
-CUDA_WRAPPER::typePtrCudaGetChannelDesc CUDA_WRAPPER::ptrCudaGetChannelDesc;
-CUDA_WRAPPER::typePtrCudaCreateChannelDesc CUDA_WRAPPER::ptrCudaCreateChannelDesc;
-CUDA_WRAPPER::typePtrCudaGetLastError CUDA_WRAPPER::ptrCudaGetLastError;
-CUDA_WRAPPER::typePtrCudaPeekAtLastError CUDA_WRAPPER::ptrCudaPeekAtLastError;
-CUDA_WRAPPER::typePtrCudaGetErrorString CUDA_WRAPPER::ptrCudaGetErrorString;
-CUDA_WRAPPER::typePtrCudaConfigureCall CUDA_WRAPPER::ptrCudaConfigureCall;
-CUDA_WRAPPER::typePtrCudaSetupArgument CUDA_WRAPPER::ptrCudaSetupArgument;
-CUDA_WRAPPER::typePtrCudaFuncSetCacheConfig CUDA_WRAPPER::ptrCudaFuncSetCacheConfig;
-CUDA_WRAPPER::typePtrCudaLaunch CUDA_WRAPPER::ptrCudaLaunch;
-CUDA_WRAPPER::typePtrCudaFuncGetAttributes CUDA_WRAPPER::ptrCudaFuncGetAttributes;
-CUDA_WRAPPER::typePtrCudaStreamCreate CUDA_WRAPPER::ptrCudaStreamCreate;
-CUDA_WRAPPER::typePtrCudaStreamDestroy CUDA_WRAPPER::ptrCudaStreamDestroy;
-CUDA_WRAPPER::typePtrCudaStreamSynchronize CUDA_WRAPPER::ptrCudaStreamSynchronize;
-CUDA_WRAPPER::typePtrCudaStreamQuery CUDA_WRAPPER::ptrCudaStreamQuery;
-CUDA_WRAPPER::typePtrCudaEventCreate CUDA_WRAPPER::ptrCudaEventCreate;
-CUDA_WRAPPER::typePtrCudaEventCreateWithFlags CUDA_WRAPPER::ptrCudaEventCreateWithFlags;
-CUDA_WRAPPER::typePtrCudaEventRecord CUDA_WRAPPER::ptrCudaEventRecord;
-CUDA_WRAPPER::typePtrCudaEventQuery CUDA_WRAPPER::ptrCudaEventQuery;
-CUDA_WRAPPER::typePtrCudaEventSynchronize CUDA_WRAPPER::ptrCudaEventSynchronize;
-CUDA_WRAPPER::typePtrCudaEventDestroy CUDA_WRAPPER::ptrCudaEventDestroy;
-CUDA_WRAPPER::typePtrCudaEventElapsedTime CUDA_WRAPPER::ptrCudaEventElapsedTime;
-CUDA_WRAPPER::typePtrCudaSetDoubleForDevice CUDA_WRAPPER::ptrCudaSetDoubleForDevice;
-CUDA_WRAPPER::typePtrCudaSetDoubleForHost CUDA_WRAPPER::ptrCudaSetDoubleForHost;
-CUDA_WRAPPER::typePtrCudaThreadExit CUDA_WRAPPER::ptrCudaThreadExit;
-CUDA_WRAPPER::typePtrCudaThreadSynchronize CUDA_WRAPPER::ptrCudaThreadSynchronize;
-CUDA_WRAPPER::typePtrCudaThreadSetLimit CUDA_WRAPPER::ptrCudaThreadSetLimit;
-CUDA_WRAPPER::typePtrCudaThreadGetLimit CUDA_WRAPPER::ptrCudaThreadGetLimit;
-CUDA_WRAPPER::typePtrCudaDriverGetVersion CUDA_WRAPPER::ptrCudaDriverGetVersion;
-CUDA_WRAPPER::typePtrCudaRuntimeGetVersion CUDA_WRAPPER::ptrCudaRuntimeGetVersion;
-CUDA_WRAPPER::typePtrCudaGetExportTable CUDA_WRAPPER::ptrCudaGetExportTable;
-CUDA_WRAPPER::typePtrCudaGraphicsUnregisterResource CUDA_WRAPPER::ptrCudaGraphicsUnregisterResource;
-CUDA_WRAPPER::typePtrCudaGraphicsResourceSetMapFlags CUDA_WRAPPER::ptrCudaGraphicsResourceSetMapFlags;
-CUDA_WRAPPER::typePtrCudaGraphicsMapResources CUDA_WRAPPER::ptrCudaGraphicsMapResources;
-CUDA_WRAPPER::typePtrCudaGraphicsUnmapResources CUDA_WRAPPER::ptrCudaGraphicsUnmapResources;
-CUDA_WRAPPER::typePtrCudaGraphicsResourceGetMappedPointer CUDA_WRAPPER::ptrCudaGraphicsResourceGetMappedPointer;
-CUDA_WRAPPER::typePtrCudaGraphicsSubResourceGetMappedArray CUDA_WRAPPER::ptrCudaGraphicsSubResourceGetMappedArray;
-CUDA_WRAPPER::typePtrCudaRegisterFatBinary CUDA_WRAPPER::ptrCudaRegisterFatBinary;
-CUDA_WRAPPER::typePtrCudaUnregisterFatBinary CUDA_WRAPPER::ptrCudaUnregisterFatBinary;
-CUDA_WRAPPER::typePtrCudaRegisterVar CUDA_WRAPPER::ptrCudaRegisterVar;
-CUDA_WRAPPER::typePtrCudaRegisterTexture CUDA_WRAPPER::ptrCudaRegisterTexture;
-CUDA_WRAPPER::typePtrCudaRegisterSurface CUDA_WRAPPER::ptrCudaRegisterSurface;
-CUDA_WRAPPER::typePtrCudaRegisterFunction CUDA_WRAPPER::ptrCudaRegisterFunction;
+//CUDA_WRAPPER::typePtrCudaMalloc3D CUDA_WRAPPER::ptrCudaMalloc3D;
+//CUDA_WRAPPER::typePtrCudaMalloc3DArray CUDA_WRAPPER::ptrCudaMalloc3DArray;
+//CUDA_WRAPPER::typePtrCudaMemset3D CUDA_WRAPPER::ptrCudaMemset3D;
+//CUDA_WRAPPER::typePtrCudaMemcpy3D CUDA_WRAPPER::ptrCudaMemcpy3D;
+//CUDA_WRAPPER::typePtrCudaMemcpy3DAsync CUDA_WRAPPER::ptrCudaMemcpy3DAsync;
+//CUDA_WRAPPER::typePtrCudaMalloc CUDA_WRAPPER::ptrCudaMalloc;
+//CUDA_WRAPPER::typePtrCudaMallocHost CUDA_WRAPPER::ptrCudaMallocHost;
+//CUDA_WRAPPER::typePtrCudaMallocPitch CUDA_WRAPPER::ptrCudaMallocPitch;
+//CUDA_WRAPPER::typePtrCudaMallocArray CUDA_WRAPPER::ptrCudaMallocArray;
+//CUDA_WRAPPER::typePtrCudaFree CUDA_WRAPPER::ptrCudaFree;
+//CUDA_WRAPPER::typePtrCudaFreeHost CUDA_WRAPPER::ptrCudaFreeHost;
+//CUDA_WRAPPER::typePtrCudaFreeArray CUDA_WRAPPER::ptrCudaFreeArray;
+//CUDA_WRAPPER::typePtrCudaHostAlloc CUDA_WRAPPER::ptrCudaHostAlloc;
+//CUDA_WRAPPER::typePtrCudaHostGetDevicePointer CUDA_WRAPPER::ptrCudaHostGetDevicePointer;
+//CUDA_WRAPPER::typePtrCudaHostGetFlags CUDA_WRAPPER::ptrCudaHostGetFlags;
+//CUDA_WRAPPER::typePtrCudaMemGetInfo CUDA_WRAPPER::ptrCudaMemGetInfo;
+//CUDA_WRAPPER::typePtrCudaMemcpy CUDA_WRAPPER::ptrCudaMemcpy;
+//CUDA_WRAPPER::typePtrCudaMemcpyToArray CUDA_WRAPPER::ptrCudaMemcpyToArray;
+//CUDA_WRAPPER::typePtrCudaMemcpyFromArray CUDA_WRAPPER::ptrCudaMemcpyFromArray;
+//CUDA_WRAPPER::typePtrCudaMemcpyArrayToArray CUDA_WRAPPER::ptrCudaMemcpyArrayToArray;
+//CUDA_WRAPPER::typePtrCudaMemcpy2D CUDA_WRAPPER::ptrCudaMemcpy2D;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DToArray CUDA_WRAPPER::ptrCudaMemcpy2DToArray;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DFromArray CUDA_WRAPPER::ptrCudaMemcpy2DFromArray;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DArrayToArray CUDA_WRAPPER::ptrCudaMemcpy2DArrayToArray;
+//CUDA_WRAPPER::typePtrCudaMemcpyToSymbol CUDA_WRAPPER::ptrCudaMemcpyToSymbol;
+//CUDA_WRAPPER::typePtrCudaMemcpyFromSymbol CUDA_WRAPPER::ptrCudaMemcpyFromSymbol;
+//CUDA_WRAPPER::typePtrCudaMemcpyAsync CUDA_WRAPPER::ptrCudaMemcpyAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpyToArrayAsync CUDA_WRAPPER::ptrCudaMemcpyToArrayAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpyFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpyFromArrayAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DAsync CUDA_WRAPPER::ptrCudaMemcpy2DAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DToArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DToArrayAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpy2DFromArrayAsync CUDA_WRAPPER::ptrCudaMemcpy2DFromArrayAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpyToSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyToSymbolAsync;
+//CUDA_WRAPPER::typePtrCudaMemcpyFromSymbolAsync CUDA_WRAPPER::ptrCudaMemcpyFromSymbolAsync;
+//CUDA_WRAPPER::typePtrCudaMemset CUDA_WRAPPER::ptrCudaMemset;
+//CUDA_WRAPPER::typePtrCudaMemset2D CUDA_WRAPPER::ptrCudaMemset2D;
+//CUDA_WRAPPER::typePtrCudaGetSymbolAddress CUDA_WRAPPER::ptrCudaGetSymbolAddress;
+//CUDA_WRAPPER::typePtrCudaGetSymbolSize CUDA_WRAPPER::ptrCudaGetSymbolSize;
+//CUDA_WRAPPER::typePtrCudaGetDeviceCount CUDA_WRAPPER::ptrCudaGetDeviceCount;
+//CUDA_WRAPPER::typePtrCudaGetDeviceProperties CUDA_WRAPPER::ptrCudaGetDeviceProperties;
+//CUDA_WRAPPER::typePtrCudaChooseDevice CUDA_WRAPPER::ptrCudaChooseDevice;
+//CUDA_WRAPPER::typePtrCudaSetDevice CUDA_WRAPPER::ptrCudaSetDevice;
+//CUDA_WRAPPER::typePtrCudaGetDevice CUDA_WRAPPER::ptrCudaGetDevice;
+//CUDA_WRAPPER::typePtrCudaSetValidDevices CUDA_WRAPPER::ptrCudaSetValidDevices;
+//CUDA_WRAPPER::typePtrCudaSetDeviceFlags CUDA_WRAPPER::ptrCudaSetDeviceFlags;
+//CUDA_WRAPPER::typePtrCudaBindTexture CUDA_WRAPPER::ptrCudaBindTexture;
+//CUDA_WRAPPER::typePtrCudaBindTexture2D CUDA_WRAPPER::ptrCudaBindTexture2D;
+//CUDA_WRAPPER::typePtrCudaBindTextureToArray CUDA_WRAPPER::ptrCudaBindTextureToArray;
+//CUDA_WRAPPER::typePtrCudaUnbindTexture CUDA_WRAPPER::ptrCudaUnbindTexture;
+//CUDA_WRAPPER::typePtrCudaGetTextureAlignmentOffset CUDA_WRAPPER::ptrCudaGetTextureAlignmentOffset;
+//CUDA_WRAPPER::typePtrCudaGetTextureReference CUDA_WRAPPER::ptrCudaGetTextureReference;
+//CUDA_WRAPPER::typePtrCudaBindSurfaceToArray CUDA_WRAPPER::ptrCudaBindSurfaceToArray;
+//CUDA_WRAPPER::typePtrCudaGetSurfaceAlignmentOffset CUDA_WRAPPER::ptrCudaGetSurfaceAlignmentOffset;
+//CUDA_WRAPPER::typePtrCudaGetSurfaceReference CUDA_WRAPPER::ptrCudaGetSurfaceReference;
+//CUDA_WRAPPER::typePtrCudaGetChannelDesc CUDA_WRAPPER::ptrCudaGetChannelDesc;
+//CUDA_WRAPPER::typePtrCudaCreateChannelDesc CUDA_WRAPPER::ptrCudaCreateChannelDesc;
+//CUDA_WRAPPER::typePtrCudaGetLastError CUDA_WRAPPER::ptrCudaGetLastError;
+//CUDA_WRAPPER::typePtrCudaPeekAtLastError CUDA_WRAPPER::ptrCudaPeekAtLastError;
+//CUDA_WRAPPER::typePtrCudaGetErrorString CUDA_WRAPPER::ptrCudaGetErrorString;
+//CUDA_WRAPPER::typePtrCudaConfigureCall CUDA_WRAPPER::ptrCudaConfigureCall;
+//CUDA_WRAPPER::typePtrCudaSetupArgument CUDA_WRAPPER::ptrCudaSetupArgument;
+//CUDA_WRAPPER::typePtrCudaFuncSetCacheConfig CUDA_WRAPPER::ptrCudaFuncSetCacheConfig;
+//CUDA_WRAPPER::typePtrCudaLaunch CUDA_WRAPPER::ptrCudaLaunch;
+//CUDA_WRAPPER::typePtrCudaFuncGetAttributes CUDA_WRAPPER::ptrCudaFuncGetAttributes;
+//CUDA_WRAPPER::typePtrCudaStreamCreate CUDA_WRAPPER::ptrCudaStreamCreate;
+//CUDA_WRAPPER::typePtrCudaStreamDestroy CUDA_WRAPPER::ptrCudaStreamDestroy;
+//CUDA_WRAPPER::typePtrCudaStreamSynchronize CUDA_WRAPPER::ptrCudaStreamSynchronize;
+//CUDA_WRAPPER::typePtrCudaStreamQuery CUDA_WRAPPER::ptrCudaStreamQuery;
+//CUDA_WRAPPER::typePtrCudaEventCreate CUDA_WRAPPER::ptrCudaEventCreate;
+//CUDA_WRAPPER::typePtrCudaEventCreateWithFlags CUDA_WRAPPER::ptrCudaEventCreateWithFlags;
+//CUDA_WRAPPER::typePtrCudaEventRecord CUDA_WRAPPER::ptrCudaEventRecord;
+//CUDA_WRAPPER::typePtrCudaEventQuery CUDA_WRAPPER::ptrCudaEventQuery;
+//CUDA_WRAPPER::typePtrCudaEventSynchronize CUDA_WRAPPER::ptrCudaEventSynchronize;
+//CUDA_WRAPPER::typePtrCudaEventDestroy CUDA_WRAPPER::ptrCudaEventDestroy;
+//CUDA_WRAPPER::typePtrCudaEventElapsedTime CUDA_WRAPPER::ptrCudaEventElapsedTime;
+//CUDA_WRAPPER::typePtrCudaSetDoubleForDevice CUDA_WRAPPER::ptrCudaSetDoubleForDevice;
+//CUDA_WRAPPER::typePtrCudaSetDoubleForHost CUDA_WRAPPER::ptrCudaSetDoubleForHost;
+//CUDA_WRAPPER::typePtrCudaThreadExit CUDA_WRAPPER::ptrCudaThreadExit;
+//CUDA_WRAPPER::typePtrCudaThreadSynchronize CUDA_WRAPPER::ptrCudaThreadSynchronize;
+//CUDA_WRAPPER::typePtrCudaThreadSetLimit CUDA_WRAPPER::ptrCudaThreadSetLimit;
+//CUDA_WRAPPER::typePtrCudaThreadGetLimit CUDA_WRAPPER::ptrCudaThreadGetLimit;
+//CUDA_WRAPPER::typePtrCudaDriverGetVersion CUDA_WRAPPER::ptrCudaDriverGetVersion;
+//CUDA_WRAPPER::typePtrCudaRuntimeGetVersion CUDA_WRAPPER::ptrCudaRuntimeGetVersion;
+//CUDA_WRAPPER::typePtrCudaGetExportTable CUDA_WRAPPER::ptrCudaGetExportTable;
+//CUDA_WRAPPER::typePtrCudaGraphicsUnregisterResource CUDA_WRAPPER::ptrCudaGraphicsUnregisterResource;
+//CUDA_WRAPPER::typePtrCudaGraphicsResourceSetMapFlags CUDA_WRAPPER::ptrCudaGraphicsResourceSetMapFlags;
+//CUDA_WRAPPER::typePtrCudaGraphicsMapResources CUDA_WRAPPER::ptrCudaGraphicsMapResources;
+//CUDA_WRAPPER::typePtrCudaGraphicsUnmapResources CUDA_WRAPPER::ptrCudaGraphicsUnmapResources;
+//CUDA_WRAPPER::typePtrCudaGraphicsResourceGetMappedPointer CUDA_WRAPPER::ptrCudaGraphicsResourceGetMappedPointer;
+//CUDA_WRAPPER::typePtrCudaGraphicsSubResourceGetMappedArray CUDA_WRAPPER::ptrCudaGraphicsSubResourceGetMappedArray;
+//CUDA_WRAPPER::typePtrCudaRegisterFatBinary CUDA_WRAPPER::ptrCudaRegisterFatBinary;
+//CUDA_WRAPPER::typePtrCudaUnregisterFatBinary CUDA_WRAPPER::ptrCudaUnregisterFatBinary;
+//CUDA_WRAPPER::typePtrCudaRegisterVar CUDA_WRAPPER::ptrCudaRegisterVar;
+//CUDA_WRAPPER::typePtrCudaRegisterTexture CUDA_WRAPPER::ptrCudaRegisterTexture;
+//CUDA_WRAPPER::typePtrCudaRegisterSurface CUDA_WRAPPER::ptrCudaRegisterSurface;
+//CUDA_WRAPPER::typePtrCudaRegisterFunction CUDA_WRAPPER::ptrCudaRegisterFunction;
 
 
 static char temp_buffer[50000];
@@ -297,10 +297,10 @@ bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::Unimplemented);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::GetDeviceProperties);
     cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::GetDevice);
     cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)CUDA_WRAPPER::Unimplemented);
@@ -624,7 +624,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Malloc(void ** ptr, size_t size)
     }
     if (! cu->do_emulation)
     {
-        cudaError_t e2 = (*ptrCudaMemcpy)(local, hostbuffer, size + 2 * cu->padding_size, cudaMemcpyHostToDevice);
+        typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+        cudaError_t e2 = (*proc)(local, hostbuffer, size + 2 * cu->padding_size, cudaMemcpyHostToDevice);
         if (e2 != 0)
         {
             (*cu->output_stream) << "cudaMemcpy failed, rc = " << e2 << ", in cudaMalloc. This call is used to initialize the device buffer.\n";
@@ -676,7 +677,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
         if (! cu->do_emulation)
         {
             // not sure what it does, send off to cuda api.
-            cudaError_t err = (*ptrCudaFree)(ptr);
+            typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+            cudaError_t err = (*proc)(ptr);
             return err;
         }
         return cudaErrorMemoryAllocation;
@@ -695,7 +697,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
         if (! cu->do_emulation)
         {
             // not sure what it does, send off to cuda api.
-            cudaError_t err = (*ptrCudaFree)(ptr);
+            typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+            cudaError_t err = (*proc)(ptr);
             return err;
         }
         return cudaErrorMemoryAllocation;
@@ -714,7 +717,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
         if (! cu->do_emulation)
         {
             // not sure what it does, send off to cuda api.
-            cudaError_t err = (*ptrCudaFree)(ptr);
+            typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+            cudaError_t err = (*proc)(ptr);
             return err;
         }
         return cudaErrorMemoryAllocation;
@@ -723,7 +727,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Free(void * ptr)
     cu->CheckSinglePtrOverwrite(d);
     if (! cu->do_emulation)
     {
-        cudaError_t err = (*ptrCudaFree)(local);
+        typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+        cudaError_t err = (*proc)(local);
         return err;
     } else
     {
@@ -759,7 +764,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::HostAlloc(void ** ptr, size_t size, unsigned
     *ptr = 0;
 
     // Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
-    cudaError_t e1 = (*ptrCudaHostAlloc)((void**)&local, size + 2 * cu->padding_size, flags);
+    typePtrCudaHostAlloc proc = (typePtrCudaHostAlloc)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::HostAlloc);
+    cudaError_t e1 = (*proc)((void**)&local, size + 2 * cu->padding_size, flags);
     if (e1 != 0)
     {
         (*cu->output_stream) << "cudaHostAlloc failed."
@@ -837,7 +843,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::FreeHost(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-        cudaError_t err = (*ptrCudaFree)(ptr);
+        typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+        cudaError_t err = (*proc)(ptr);
         return err;
     }
 
@@ -851,7 +858,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::FreeHost(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-        cudaError_t err = (*ptrCudaFree)(ptr);
+        typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+        cudaError_t err = (*proc)(ptr);
         return err;
     }
     data * d = &cu->alloc_list[di];
@@ -865,12 +873,14 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::FreeHost(void * ptr)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorInvalidDevicePointer;
-        cudaError_t err = (*ptrCudaFree)(ptr);
+        typePtrCudaFree proc = (typePtrCudaFree)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Free);
+        cudaError_t err = (*proc)(ptr);
         return err;
     }
     cu->alloc_list.erase(cu->alloc_list.begin() + di);
     cu->CheckSinglePtrOverwrite(d);
-    cudaError_t err = (*ptrCudaFreeHost)(ptr);
+    typePtrCudaFreeHost proc = (typePtrCudaFreeHost)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::FreeHost);
+    cudaError_t err = (*proc)(ptr);
     if (err)
     {
         if (cu->quit_on_error)
@@ -924,7 +934,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::HostGetDevicePointer(void ** pDevice, void *
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
     }
-    cudaError_t err = (*ptrCudaHostGetDevicePointer)(pDevice, local, flags);
+    typePtrCudaHostGetDevicePointer proc = (typePtrCudaHostGetDevicePointer)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::HostGetDevicePointer);
+    cudaError_t err = (*proc)(pDevice, local, flags);
     if (err)
     {
         return err;
@@ -956,7 +967,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
         if (! cu->do_emulation)
         {
-            cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+            cudaError_t err = (*proc)(dst, src, count, kind);
             return err;
         } else
         {
@@ -973,7 +985,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
         if (! cu->do_emulation)
         {
-            cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+            cudaError_t err = (*proc)(dst, src, count, kind);
             return err;
         } else
         {
@@ -1046,7 +1059,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
         cudaError_t err;
         if (! cu->do_emulation)
         {
-            err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+            err = (*proc)(dst, src, count, kind);
         } else
         {
             memcpy(dst, src, count);
@@ -1120,7 +1134,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
         cudaError_t err;
         if (! cu->do_emulation)
         {
-            err = (*ptrCudaMemcpy)(dst, src, count, kind);
+            typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+            err = (*proc)(dst, src, count, kind);
         } else
         {
             memcpy(dst, src, count);
@@ -1135,7 +1150,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memcpy(void * dst, const void * src, size_t 
     }
     else
     {
-        cudaError_t err = (*ptrCudaMemcpy)(dst, src, count, kind);
+        typePtrCudaMemcpy proc = (typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memcpy);
+        cudaError_t err = (*proc)(dst, src, count, kind);
         return err;
     }
 }
@@ -1158,7 +1174,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memset(void * dst, int value, size_t count)
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in "
             << context << ".\n\n";
-        cudaError_t err = (*ptrCudaMemset)(dst, value, count);
+        typePtrCudaMemset proc = (typePtrCudaMemset)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memset);
+        cudaError_t err = (*proc)(dst, value, count);
         return err;
     }
 
@@ -1170,7 +1187,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memset(void * dst, int value, size_t count)
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in "
             << context << ".\n\n";
-        cudaError_t err = (*ptrCudaMemset)(dst, value, count);
+        typePtrCudaMemset proc = (typePtrCudaMemset)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memset);
+        cudaError_t err = (*proc)(dst, value, count);
         return err;
     }
     data * ddst = 0;
@@ -1200,7 +1218,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Memset(void * dst, int value, size_t count)
             return cudaErrorMemoryAllocation;
     }
     // Perform copy.
-    cudaError_t err = (*ptrCudaMemset)(dst, value, count);
+    typePtrCudaMemset proc = (typePtrCudaMemset)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Memset);
+    cudaError_t err = (*proc)(dst, value, count);
     // Perform overwrite check again.
     if (cu->CheckSinglePtrOverwrite(ddst) != OK)
     {
@@ -1230,7 +1249,10 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::ThreadExit()
 
     cu->alloc_list.clear();
     if (! cu->do_emulation)
-        return (*ptrCudaThreadExit)();
+    {
+        typePtrCudaThreadExit proc = (typePtrCudaThreadExit)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::ThreadExit);
+        return (*proc)();
+    }
     else
         return cudaSuccess;
 }
@@ -1239,7 +1261,10 @@ cudaError_t CUDA_WRAPPER::GetLastError()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (! cu->do_emulation)
-        return (*ptrCudaGetLastError)();
+    {
+        typePtrCudaGetLastError proc = (typePtrCudaGetLastError)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::GetLastError);
+        return (*proc)();
+    }
     else
         return cudaSuccess;
 }
@@ -1380,6 +1405,36 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::ThreadSynchronize(void)
     }
 }
 
+cudaError_t CUDARTAPI CUDA_WRAPPER::GetDevice(int *device)
+{
+    // arg contains pointer to the argument for the function call.
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (! cu->do_emulation)
+    {
+        typePtrCudaGetDevice proc = (typePtrCudaGetDevice)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::GetDevice);
+        return (*proc)(device);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        return emulator->GetDevice(device);
+    }
+}
+
+
+cudaError_t CUDARTAPI CUDA_WRAPPER::GetDeviceProperties(struct cudaDeviceProp *prop, int device)
+{
+    // arg contains pointer to the argument for the function call.
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (! cu->do_emulation)
+    {
+        typePtrCudaGetDeviceProperties proc = (typePtrCudaGetDeviceProperties)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::GetDeviceProperties);
+        return (*proc)(prop, device);
+    } else
+    {
+        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        return emulator->GetDeviceProperties(prop, device);
+    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////

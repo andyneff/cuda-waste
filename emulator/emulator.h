@@ -66,6 +66,8 @@ public:
     cudaError_t ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
     cudaError_t ThreadSynchronize();
     void SetDevice(char * device);
+    cudaError_t GetDevice(int * device);
+    cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
 
 private:
     struct arg
