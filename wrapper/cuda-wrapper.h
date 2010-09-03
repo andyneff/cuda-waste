@@ -61,7 +61,7 @@ private:
     std::vector<data> alloc_list;
     static char * Context(int lines = 1);
     char * global_context;
-	char * device; // device to run.
+    char * device; // device to run.
 
     typedef cudaError_t (CUDARTAPI *typePtrCudaMalloc3D)(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent);
     typedef cudaError_t (CUDARTAPI *typePtrCudaMalloc3DArray)(struct cudaArray** arrayPtr, const struct cudaChannelFormatDesc* desc, struct cudaExtent extent, unsigned int flags __dv(0));
@@ -293,7 +293,7 @@ public:
     static return_type CUDARTAPI SetQuitOnError(bool b);
     static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
-	static return_type CUDARTAPI SetDevice(char * device);
+    static return_type CUDARTAPI SetDevice(char * device);
 
 private:
     static return_type CheckSinglePtrOverwrite(const data * d);

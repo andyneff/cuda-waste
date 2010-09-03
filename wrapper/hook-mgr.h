@@ -24,6 +24,7 @@
 
 #include <map>
 #include <string>
+#include <list>
 using namespace std;
 #include "process-mgr.h"
 #include "lock-mgr.h"
@@ -39,6 +40,7 @@ public:
 public:
     PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook);
     HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
+    HookedFunction * FindHook(void * iat);
     PROC FindOriginal(PROC wrapper_function);
     BOOL UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName);
     bool HookSystemFuncs();
@@ -74,6 +76,7 @@ public:
     BOOL HookImport();
     BOOL UnHookImport();
     BOOL ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew, HMODULE hmodCaller);
+    bool Contains(void * iat);
 
 private:
     HookedFunctions* m_pHookedFunctions;
@@ -82,6 +85,7 @@ private:
     char m_szFuncName[MAX_PATH];
     PROC m_pfnOrig;
     PROC m_pfnHook;
+    std::list<void*> m_iatList;
     BOOL DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew);
     BOOL ReplaceInAllModules(BOOL bHookOrRestore, PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew);
 };
@@ -104,6 +108,7 @@ public:
 public:
     HookedFunction* GetHookedFunction(PCSTR pszCalleeModName, PCSTR pszFuncName);
     HookedFunction* GetHookedFunction(HMODULE hmod, PCSTR pszFuncName);
+    HookedFunction* GetHookedFunction(void * iat);
     BOOL AddHook(HookedFunction* pHook);
     BOOL RemoveHook(HookedFunction* pHook);
 private:

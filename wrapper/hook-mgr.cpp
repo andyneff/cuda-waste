@@ -162,6 +162,20 @@ HookedFunction* HookManager::FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
     return result;
 }
 
+HookedFunction * HookManager::FindHook(void * iat)
+{
+    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    HookedFunction * result = 0;
+    try
+    {
+        result = sm_pHookedFunctions->GetHookedFunction(iat);
+    }
+    catch(...) {}
+    return result;
+}
+
+
+
 PROC HookManager::FindOriginal(PROC wrapper_function)
 {
     HookedFunction* pHook;
@@ -409,7 +423,7 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
         ULONG ulSize;
         PIMAGE_IMPORT_DESCRIPTOR pImportDesc = 
             (PIMAGE_IMPORT_DESCRIPTOR)ImageDirectoryEntryToData(
-            hmodCaller, 
+            hmodCaller,
             TRUE, 
             IMAGE_DIRECTORY_ENTRY_IMPORT, 
             &ulSize
@@ -445,6 +459,7 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
                     &mbi.Protect)
                     )
                     __leave;
+                this->m_iatList.push_back(ppfn);
                 *ppfn = *pfnNew;
                 bResult = TRUE;
                 DWORD dwOldProtect;
@@ -465,6 +480,18 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
     return bResult;
 }
 
+bool HookedFunction::Contains(void * iat)
+{
+    std::list<void*>::iterator it = this->m_iatList.begin();
+    while (it != this->m_iatList.end())
+    {
+        if (*it == iat)
+            return true;
+        ++it;
+    }
+    return false;
+}
+
 BOOL HookedFunction::DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew)
 {
     return ReplaceInAllModules(bHookOrRestore, m_szCalleeModName, pfnCurrent, pfnNew);
@@ -477,6 +504,21 @@ HookedFunction* HookedFunctions::GetHookedFunction(HMODULE hmodOriginal, PCSTR p
     ExtractModuleFileName(szFileName);
     return GetHookedFunction(szFileName, pszFuncName);
 }
+
+HookedFunction* HookedFunctions::GetHookedFunction(void * iat)
+{
+    // For each hooked function find iat.
+    HookedFunctions::iterator itr = begin();
+    while (itr != end())
+    {
+        HookedFunction * hf = itr->second;
+        if (hf->Contains(iat))
+            return hf;
+        itr++;
+    }
+    return 0;
+}
+
 
 BOOL HookedFunctions::GetFunctionNameFromExportSection(HMODULE hmodOriginal, DWORD dwFuncOrdinalNum, PSTR pszFuncName) 
 {

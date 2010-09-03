@@ -13,4 +13,5 @@ public:
     bool GetSourceInfoFromAddress( void * address, char * lpszSourceInfo, char * full_file_name );
     char * Context(int lines = 1);
     void ClassifyAsPrefix(char * file);
+    std::list<void*> * CallTree();
 };

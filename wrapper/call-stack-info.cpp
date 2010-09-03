@@ -265,3 +265,17 @@ void CallStackInfo::ClassifyAsPrefix(char * file)
     ignore_files.push_back(file);
 }
 
+std::list<void*> * CallStackInfo::CallTree()
+{
+    std::list<void*> * result = new std::list<void*>();
+    typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
+    CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
+    const int kMaxCallers = 62; 
+    void* callers[kMaxCallers];
+    int count = (func)(0, kMaxCallers, callers, NULL);
+    for(int i = 0; i < count; i++)
+    {
+        result->push_back(callers[i]);
+    }
+    return result;
+}

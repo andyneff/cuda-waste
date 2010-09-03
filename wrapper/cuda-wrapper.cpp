@@ -192,7 +192,34 @@ CUDA_WRAPPER::CUDA_WRAPPER()
 void CUDA_WRAPPER::Unimplemented()
 {
     std::cout << "FATAL ERROR: Unimplemented function!!!!\n";
+    // get call back and get hooked name to know what function is
+    // unimplemented.
+
+    // Figure out the name of the function that is bound to CUDA_WRAPPER::Unimplemented.
+    // Not especially portable, but it is general.
+    // 1) Go up call stack to caller of this function.  Call stack includes
+    // CallTree, Unimplemented, then the caller.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CallStackInfo * csi = CallStackInfo::Singleton();
+    std::list<void*> * call_stack = csi->CallTree();
+    std::list<void*>::iterator it = call_stack->begin();
+    ++it;
+    ++it;
+    // 2) The instruction at *it will be the instruction just after the call.
+    // Assuming that the call function is relative, step back 4 bytes,
+    // get the value to add to *it.  This is a jmp instruction.  Step forward
+    // 2 bytes to get the address of the iat, which contains another jump
+    // instruction.
+    unsigned char * p = (unsigned char *)*it;
+    void ** piat = (void**)(p + 2 + *(int*)(p - 4));
+    void * iat = *piat;
+    HookManager * hm = cu->hook_manager;
+    HookedFunction * hf = hm->FindHook(iat);
+    if (hf)
+    {
+        std::cout << "Function " << hf->Get_FuncName() << " needs to be implemented to debug this program.\n";
+    }
+    delete call_stack;
     exit(1);
 }
 
@@ -203,7 +230,6 @@ bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
     csi->ClassifyAsPrefix("call-stack-info.cpp");
     csi->ClassifyAsPrefix("cuda-memory-debug.cpp");
     csi->ClassifyAsPrefix("ptr-cuda-runtime.cpp");
-
     if (atexit(CUDA_WRAPPER::ExitHandler))
     {
         char * context = cu->Context(3);
