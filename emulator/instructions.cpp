@@ -78,194 +78,143 @@ void CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
     TYPES value1;
     TYPES value2;
     char * dummy;
-    TYPES * psrc1_value;
-    TYPES * psrc2_value;
+	TYPES * d = (TYPES*)sdst->lvalue;
+	TYPES * s1 = &value1;
+    TYPES * s2 = &value2;
 
-    if (GetType(src1) == T_DEC_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                value1.u16 = atoi(GetText(src1));
-                break;
-            case K_S16:
-                value1.s16 = atoi(GetText(src1));
-                break;
-            case K_U32:
-                value1.u32 = atoi(GetText(src1));
-                break;
-            case K_S32:
-                value1.s32 = atoi(GetText(src1));
-                break;
-            case K_S64:
-                value1.s64 = _atoi64(GetText(src1));
-                break;
-            case K_U64:
-                value1.u64 = _atoi64(GetText(src1));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src1) == T_HEX_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                value1.u16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S16:
-                value1.s16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_U32:
-                value1.u32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S32:
-                value1.s32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_U64:
-                value1.u64 = _strtoi64(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S64:
-                value1.s64 = _strtoi64(GetText(src1)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+	if (GetType(src1) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src1, 0));
+		switch (type)
+		{
+			case K_U16:
+				s1->u16 = c.value.u16;
+				break;
+			case K_S16:
+				s1->s16 = c.value.s16;
+				break;
+			case K_U32:
+				s1->u32 = c.value.u32;
+				break;
+			case K_S32:
+				s1->s32 = c.value.s32;
+				break;
+			case K_U64:
+				s1->u64 = c.value.u64;
+				break;
+			case K_S64:
+				s1->s64 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src1) == T_WORD)
     {
         Symbol * ssrc1 = FindSymbol(GetText(src1));
         assert(ssrc1 != 0);
         assert(ssrc1->size == Sizeof(type));
-        psrc1_value = (TYPES*)ssrc1->lvalue;
+		TYPES * psrc1_value = (TYPES*)ssrc1->lvalue;
         switch (type)
         {
             case K_U16:
-                value1.u16 = psrc1_value->u16;
+				s1->u16 = psrc1_value->u16;
                 break;
             case K_S16:
-                value1.s16 = psrc1_value->s16;
+				s1->s16 = psrc1_value->s16;
                 break;
             case K_U32:
-                value1.u32 = psrc1_value->u32;
+				s1->u32 = psrc1_value->u32;
                 break;
             case K_S32:
-                value1.s32 = psrc1_value->s32;
+                s1->s32 = psrc1_value->s32;
                 break;
             case K_U64:
-                value1.u64 = psrc1_value->u64;
+				s1->u64 = psrc1_value->u64;
                 break;
             case K_S64:
-                value1.s64 = psrc1_value->s64;
+				s1->s64 = psrc1_value->s64;
                 break;
             default:
                 assert(false);
         }
     } else assert(false);
 
-    if (GetType(src2) == T_DEC_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                value2.u16 = atoi(GetText(src2));
-                break;
-            case K_S16:
-                value2.s16 = atoi(GetText(src2));
-                break;
-            case K_U32:
-                value2.u32 = atoi(GetText(src2));
-                break;
-            case K_S32:
-                value2.s32 = atoi(GetText(src2));
-                break;
-            case K_S64:
-                value2.s64 = _atoi64(GetText(src2));
-                break;
-            case K_U64:
-                value2.u64 = _atoi64(GetText(src2));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src2) == T_HEX_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                value2.u16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S16:
-                value2.s16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_U32:
-                value2.u32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S32:
-                value2.s32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_U64:
-                value2.u64 = _strtoi64(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S64:
-                value2.s64 = _strtoi64(GetText(src2)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+	if (GetType(src2) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src1, 0));
+		switch (type)
+		{
+			case K_U16:
+				s2->u16 = c.value.u16;
+				break;
+			case K_S16:
+				s2->s16 = c.value.s16;
+				break;
+			case K_U32:
+				s2->u32 = c.value.u32;
+				break;
+			case K_S32:
+				s2->s32 = c.value.s32;
+				break;
+			case K_U64:
+				s2->u64 = c.value.u64;
+				break;
+			case K_S64:
+				s2->s64 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src2) == T_WORD)
     {
         Symbol * ssrc2 = FindSymbol(GetText(src2));
         assert(ssrc2 != 0);
         assert(ssrc2->size == Sizeof(type));
-        psrc2_value = (TYPES*)ssrc2->lvalue;
+		TYPES * psrc2_value = (TYPES*)ssrc2->lvalue;
         switch (type)
         {
             case K_U16:
-                value2.u16 = psrc2_value->u16;
+				s2->u16 = psrc2_value->u16;
                 break;
             case K_S16:
-                value2.s16 = psrc2_value->s16;
+                s2->s16 = psrc2_value->s16;
                 break;
             case K_U32:
-                value2.u32 = psrc2_value->u32;
+                s2->u32 = psrc2_value->u32;
                 break;
             case K_S32:
-                value2.s32 = psrc2_value->s32;
+                s2->s32 = psrc2_value->s32;
                 break;
             case K_U64:
-                value2.u64 = psrc2_value->u64;
+				s2->u64 = psrc2_value->u64;
                 break;
             case K_S64:
-                value2.s64 = psrc2_value->s64;
+				s2->s64 = psrc2_value->s64;
                 break;
             default:
                 assert(false);
         }
     } else assert(false);
 
-    psrc1_value = &value1;
-    psrc2_value = &value2;
-    TYPES * pdst_value = (TYPES*)sdst->lvalue;
-
     switch (type)
     {
         case K_U16:
-            pdst_value->u16 = psrc1_value->u16 + psrc2_value->u16;
+            d->u16 = s1->u16 + s2->u16;
             break;
         case K_S16:
-            pdst_value->s16 = psrc1_value->s16 + psrc2_value->s16;
+            d->s16 = s1->s16 + s2->s16;
             break;
         case K_U32:
-            pdst_value->u32 = psrc1_value->u32 + psrc2_value->u32;
+            d->u32 = s1->u32 + s2->u32;
             break;
         case K_S32:
-            pdst_value->s32 = psrc1_value->s32 + psrc2_value->s32;
+            d->s32 = s1->s32 + s2->s32;
             break;
         case K_S64:
-            pdst_value->s64 = psrc1_value->s64 + psrc2_value->s64;
+            d->s64 = s1->s64 + s2->s64;
             break;
         case K_U64:
-            pdst_value->u64 = psrc1_value->u64 + psrc2_value->u64;
+            d->u64 = s1->u64 + s2->u64;
             break;
         default:
             assert(false);
@@ -844,8 +793,8 @@ void CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
             ttype = t;
         else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
             tfrnd = t;
-		else if (gt == K_FULL || gt == K_APPROX)
-			;
+        else if (gt == K_FULL || gt == K_APPROX)
+            ;
         else assert(false);
     }
     assert(ttype != 0);
@@ -878,129 +827,94 @@ void CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     Symbol * ssrc2 = 0;
     assert(GetType(dst) == T_WORD);
     sdst = FindSymbol(GetText(dst));
-    pdst_value = (TYPES*)sdst->lvalue;
-	char * dummy;
+    char * dummy;
 
-    if (GetType(src1) == T_DEC_LITERAL)
-    {
-        psrc1_value = &src1_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc1_value->u16 = atoi(GetText(src1));
-                break;
-            case K_S16:
-                psrc1_value->s16 = atoi(GetText(src1));
-                break;
-            case K_U32:
-                psrc1_value->u32 = atoi(GetText(src1));
-                break;
-            case K_S32:
-                psrc1_value->s32 = atoi(GetText(src1));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src1) == T_HEX_LITERAL)
-    {
-        psrc1_value = &src1_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc1_value->u16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S16:
-                psrc1_value->s16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_U32:
-                psrc1_value->u32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S32:
-                psrc1_value->s32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+	TYPES value1; // used if literal
+	TYPES value2; // used if literal
+	TYPES * d = (TYPES*)sdst->lvalue;
+	TYPES * s1 = &value1;
+	TYPES * s2 = &value2;
+
+	if (GetType(src1) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src1, 0));
+		switch (type)
+		{
+			case K_U16:
+				s1->u16 = c.value.u64;
+				break;
+			case K_S16:
+				s1->s16 = c.value.s64;
+				break;
+			case K_U32:
+				s1->u32 = c.value.u64;
+				break;
+			case K_S32:
+				s1->s32 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src1) == T_WORD)
     {
         ssrc1 = FindSymbol(GetText(src1));
         assert(ssrc1 != 0);
-        psrc1_value = (TYPES*)ssrc1->lvalue;
+		s1 = (TYPES*)ssrc1->lvalue;
     } else assert(false);
 
-    if (GetType(src2) == T_DEC_LITERAL)
-    {
-        psrc2_value = &src2_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc2_value->u16 = atoi(GetText(src2));
-                break;
-            case K_S16:
-                psrc2_value->s16 = atoi(GetText(src2));
-                break;
-            case K_U32:
-                psrc2_value->u32 = atoi(GetText(src2));
-                break;
-            case K_S32:
-                psrc2_value->s32 = atoi(GetText(src2));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src2) == T_HEX_LITERAL)
-    {
-        psrc2_value = &src2_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc2_value->u16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S16:
-                psrc2_value->s16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_U32:
-                psrc2_value->u32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S32:
-                psrc2_value->s32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src2) == T_WORD)
-    {
-        ssrc2 = FindSymbol(GetText(src2));
-        assert(ssrc2 != 0);
-        psrc2_value = (TYPES*)ssrc2->lvalue;
-    } else assert(false);
+	if (GetType(src2) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src2, 0));
+		switch (type)
+		{
+			case K_U16:
+				s2->u16 = c.value.u64;
+				break;
+			case K_S16:
+				s2->s16 = c.value.s64;
+				break;
+			case K_U32:
+				s2->u32 = c.value.u64;
+				break;
+			case K_S32:
+				s2->s32 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
+	} else if (GetType(src2) == T_WORD)
+	{
+		ssrc2 = FindSymbol(GetText(src2));
+		assert(ssrc2 != 0);
+		s2 = (TYPES*)ssrc2->lvalue;
+	} else assert(false);
 
     switch (type)
     {
-	case K_U16:
-	    pdst_value->u16 = psrc1_value->u16 / psrc2_value->u16;
-	    break;
-	case K_S16:
-	    pdst_value->s16 = psrc1_value->s16 / psrc2_value->s16;
-	    break;
-	case K_U32:
-	    pdst_value->u32 = psrc1_value->u32 / psrc2_value->u32;
-	    break;
-	case K_S32:
-	    pdst_value->s32 = psrc1_value->s32 / psrc2_value->s32;
-	    break;
-	case K_U64:
-	    pdst_value->u64 = psrc1_value->u64 / psrc2_value->u64;
-	    break;
-	case K_S64:
-	    pdst_value->s64 = psrc1_value->s64 / psrc2_value->s64;
-	    break;
-	case K_F32:
-	    pdst_value->f32 = psrc1_value->f32 / psrc2_value->f32;
-	    break;
-	case K_F64:
-	    pdst_value->f64 = psrc1_value->f64 / psrc2_value->f64;
-	    break;
+        case K_U16:
+            d->u16 = s1->u16 / s2->u16;
+            break;
+        case K_S16:
+            d->s16 = s1->s16 / s2->s16;
+            break;
+        case K_U32:
+            d->u32 = s1->u32 / s2->u32;
+            break;
+        case K_S32:
+            d->s32 = s1->s32 / s2->s32;
+            break;
+        case K_U64:
+            d->u64 = s1->u64 / s2->u64;
+            break;
+        case K_S64:
+            d->s64 = s1->s64 / s2->s64;
+            break;
+        case K_F32:
+            d->f32 = s1->f32 / s2->f32;
+            break;
+        case K_F64:
+            d->f64 = s1->f64 / s2->f64;
+            break;
         default:
             assert(false);
     }
@@ -1069,7 +983,6 @@ void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
     assert(ttype != 0);
     assert(vec == 0);
     assert(cop == 0);
-    assert(ss != 0);
     int type = GetType(ttype);
 
     // Get two operands, assign source to destination.
@@ -1077,14 +990,19 @@ void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
     pANTLR3_BASE_TREE src = GetChild(osrc, 0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    if (dst->getType(dst) == T_WORD)
-    {
-        sdst = FindSymbol(GetText(dst));
-    } else assert(false);
-    if (src->getType(src) == T_WORD)
-    {
-        ssrc = FindSymbol(GetText(src));
-    } else assert(false);
+    assert(dst->getType(dst) == T_WORD);
+    sdst = FindSymbol(GetText(dst));
+	
+    assert(src->getType(src) == T_WORD);
+	ssrc = FindSymbol(GetText(src));
+	pANTLR3_BASE_TREE plus = GetChild(osrc, 1);
+	Constant value(0);
+	if (plus != 0)
+	{
+		pANTLR3_BASE_TREE const_expr = GetChild(osrc, 2);
+		assert(const_expr != 0);
+		value = Eval(K_S32, const_expr);
+	}
 
     typedef union TYPES {
         __int64 s64;
@@ -1099,7 +1017,7 @@ void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
         double f64;
     } TYPES;
     TYPES * d = (TYPES*)sdst->lvalue;
-    TYPES * s = (TYPES*)ssrc->lvalue;
+    TYPES * s = (TYPES*)((unsigned char *)ssrc->lvalue) + value.value.u64;
     switch (type)
     {
         case K_U8:
@@ -1214,70 +1132,39 @@ void CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
 
     d = (TYPES*)sdst->lvalue;
     s = &value;
-    
-    if (GetType(src) == T_DEC_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                s->u16 = atoi(GetText(src));
-                break;
-            case K_S16:
-                s->s16 = atoi(GetText(src));
-                break;
-            case K_U32:
-                s->u32 = atoi(GetText(src));
-                break;
-            case K_S32:
-                s->s32 = atoi(GetText(src));
-                break;
-            case K_S64:
-                s->s64 = _atoi64(GetText(src));
-                break;
-            case K_U64:
-                s->u64 = _atoi64(GetText(src));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src) == T_HEX_LITERAL)
-    {
-        switch (type)
-        {
-            case K_U16:
-                s->u16 = strtol(GetText(src)+2, &dummy, 16);
-                break;
-            case K_S16:
-                s->s16 = strtol(GetText(src)+2, &dummy, 16);
-                break;
-            case K_U32:
-                s->u32 = strtol(GetText(src)+2, &dummy, 16);
-                break;
-            case K_S32:
-                s->s32 = strtol(GetText(src)+2, &dummy, 16);
-                break;
-            case K_U64:
-                s->u64 = _strtoi64(GetText(src)+2, &dummy, 16);
-                break;
-            case K_S64:
-                s->s64 = _strtoi64(GetText(src)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src) == T_FLT_LITERAL)
-    {
-        switch (type)
-        {
-            case K_F32:
-                s->u32 = strtol(GetText(src)+2, &dummy, 16);
-                break;
-            case K_F64:
-                s->u64 = _strtoi64(GetText(src)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+
+	if (GetType(src) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src, 0));
+		switch (type)
+		{
+			case K_U16:
+				s->u16 = c.value.u16;
+				break;
+			case K_S16:
+				s->s16 = c.value.s16;
+				break;
+			case K_U32:
+				s->u32 = c.value.u32;
+				break;
+			case K_S32:
+				s->s32 = c.value.s32;
+				break;
+			case K_U64:
+				s->u64 = c.value.u64;
+				break;
+			case K_S64:
+				s->s64 = c.value.s64;
+				break;
+			case K_F32:
+				s->f32 = c.value.f32;
+				break;
+			case K_F64:
+				s->f64 = c.value.f64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src) == T_WORD)
     {
         ssrc = FindSymbol(GetText(src));
@@ -1475,6 +1362,7 @@ void CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
     pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
 
+	// Supported types of MUL.
     typedef union TYPES {
         long s64;
         int s32;
@@ -1486,171 +1374,130 @@ void CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         double f64;
     } TYPES;
 
-    TYPES * pdst_value;
-    TYPES * psrc1_value;
-    TYPES * psrc2_value;
-    TYPES src1_value;// used if literal
-    TYPES src2_value;// used if literal
-    
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     assert(GetType(dst) == T_WORD);
     sdst = FindSymbol(GetText(dst));
-    pdst_value = (TYPES*)sdst->lvalue;
 	char * dummy;
 
-    if (GetType(src1) == T_DEC_LITERAL)
-    {
-        psrc1_value = &src1_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc1_value->u16 = atoi(GetText(src1));
-                break;
-            case K_S16:
-                psrc1_value->s16 = atoi(GetText(src1));
-                break;
-            case K_U32:
-                psrc1_value->u32 = atoi(GetText(src1));
-                break;
-            case K_S32:
-                psrc1_value->s32 = atoi(GetText(src1));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src1) == T_HEX_LITERAL)
-    {
-        psrc1_value = &src1_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc1_value->u16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S16:
-                psrc1_value->s16 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_U32:
-                psrc1_value->u32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            case K_S32:
-                psrc1_value->s32 = strtol(GetText(src1)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+	TYPES value1; // used if literal
+	TYPES value2; // used if literal
+	TYPES * d = (TYPES*)sdst->lvalue;
+	TYPES * s1 = &value1;
+	TYPES * s2 = &value2;
+
+	if (GetType(src1) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src1, 0));
+		switch (type)
+		{
+			case K_U16:
+				s1->u16 = c.value.u64;
+				break;
+			case K_S16:
+				s1->s16 = c.value.s64;
+				break;
+			case K_U32:
+				s1->u32 = c.value.u64;
+				break;
+			case K_S32:
+				s1->s32 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src1) == T_WORD)
     {
         ssrc1 = FindSymbol(GetText(src1));
         assert(ssrc1 != 0);
-        psrc1_value = (TYPES*)ssrc1->lvalue;
+		s1 = (TYPES*)ssrc1->lvalue;
     } else assert(false);
 
-    if (GetType(src2) == T_DEC_LITERAL)
-    {
-        psrc2_value = &src2_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc2_value->u16 = atoi(GetText(src2));
-                break;
-            case K_S16:
-                psrc2_value->s16 = atoi(GetText(src2));
-                break;
-            case K_U32:
-                psrc2_value->u32 = atoi(GetText(src2));
-                break;
-            case K_S32:
-                psrc2_value->s32 = atoi(GetText(src2));
-                break;
-            default:
-                assert(false);
-        }
-    } else if (GetType(src2) == T_HEX_LITERAL)
-    {
-        psrc2_value = &src2_value;
-        switch (type)
-        {
-            case K_U16:
-                psrc2_value->u16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S16:
-                psrc2_value->s16 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_U32:
-                psrc2_value->u32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            case K_S32:
-                psrc2_value->s32 = strtol(GetText(src2)+2, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+	if (GetType(src2) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src2, 0));
+		switch (type)
+		{
+			case K_U16:
+				s2->u16 = c.value.u64;
+				break;
+			case K_S16:
+				s2->s16 = c.value.s64;
+				break;
+			case K_U32:
+				s2->u32 = c.value.u64;
+				break;
+			case K_S32:
+				s2->s32 = c.value.s64;
+				break;
+			default:
+				assert(false);
+		}
     } else if (GetType(src2) == T_WORD)
     {
         ssrc2 = FindSymbol(GetText(src2));
         assert(ssrc2 != 0);
-        psrc2_value = (TYPES*)ssrc2->lvalue;
+		s2 = (TYPES*)ssrc2->lvalue;
     } else assert(false);
-    
+
     switch (type)
     {
         case K_U16:
             if (width == K_LO)
-                pdst_value->u16 = psrc1_value->u16 * psrc2_value->u16;
+                d->u16 = s1->u16 * s2->u16;
             else if (width == K_HI)
-                pdst_value->u16 = (psrc1_value->u16 * psrc2_value->u16 ) >> 16;
+                d->u16 = (s1->u16 * s2->u16 ) >> 16;
             else if (width == K_WIDE)
-                pdst_value->u32 = psrc1_value->u16 * psrc2_value->u16;
+                d->u32 = s1->u16 * s2->u16;
             else assert(false);
             break;
         case K_S16:
             if (width == K_LO)
-                pdst_value->s16 = psrc1_value->s16 * psrc2_value->s16;
+                d->s16 = s1->s16 * s2->s16;
             else if (width == K_HI)
-                pdst_value->s16 = (psrc1_value->s16 * psrc2_value->s16 ) >> 16;
+                d->s16 = (s1->s16 * s2->s16 ) >> 16;
             else if (width == K_WIDE)
-                pdst_value->s32 = psrc1_value->s16 * psrc2_value->s16;
+                d->s32 = s1->s16 * s2->s16;
             else assert(false);
             break;
         case K_U32:
             if (width == K_LO)
-                pdst_value->u32 = psrc1_value->u32 * psrc2_value->u32;
+                d->u32 = s1->u32 * s2->u32;
             else if (width == K_HI)
-                pdst_value->u32 = (psrc1_value->u32 * psrc2_value->u32 ) >> 16;
+                d->u32 = (s1->u32 * s2->u32 ) >> 16;
             else if (width == K_WIDE)
-                pdst_value->u64 = psrc1_value->u32 * psrc2_value->u32;
+                d->u64 = s1->u32 * s2->u32;
             else assert(false);
             break;
         case K_S32:
             if (width == K_LO)
-                pdst_value->s32 = psrc1_value->s32 * psrc2_value->s32;
+                d->s32 = s1->s32 * s2->s32;
             else if (width == K_HI)
-                pdst_value->s32 = (psrc1_value->s32 * psrc2_value->s32 ) >> 16;
+                d->s32 = (s1->s32 * s2->s32 ) >> 16;
             else if (width == K_WIDE)
-                pdst_value->s64 = psrc1_value->s32 * psrc2_value->s32;
+                d->s64 = s1->s32 * s2->s32;
             else assert(false);
             break;
         case K_U64:
             if (width == K_LO)
-                pdst_value->u64 = psrc1_value->u64 * psrc2_value->u64;
+                d->u64 = s1->u64 * s2->u64;
             else if (width == K_HI)
-                pdst_value->u64 = (psrc1_value->u64 * psrc2_value->u64 ) >> 16;
+                d->u64 = (s1->u64 * s2->u64 ) >> 16;
             else assert(false);
             break;
         case K_S64:
             if (width == K_LO)
-                pdst_value->s64 = psrc1_value->s64 * psrc2_value->s64;
+                d->s64 = s1->s64 * s2->s64;
             else if (width == K_HI)
-                pdst_value->s64 = (psrc1_value->s64 * psrc2_value->s64 ) >> 16;
+                d->s64 = (s1->s64 * s2->s64 ) >> 16;
             else assert(false);
             break;
         case K_F32:
-            pdst_value->f32 = psrc1_value->f32 * psrc2_value->f32;
+            d->f32 = s1->f32 * s2->f32;
             break;
         case K_F64:
-            pdst_value->f64 = psrc1_value->f64 * psrc2_value->f64;
+            d->f64 = s1->f64 * s2->f64;
             break;
         default:
             assert(false);

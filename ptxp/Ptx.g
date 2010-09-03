@@ -344,6 +344,8 @@ tokens {
     TREE_ALIGN;
     TREE_IRND;
     TREE_FRND;
+    TREE_CAST;
+    TREE_CONSTANT_EXPR;
 }
 
 @members
@@ -1497,7 +1499,7 @@ i_cvt_type
 i_cvt_irnd
     :
     i=i_cvt_irnd_aux -> ^( TREE_IRND $i )
-	|
+    |
     ;
 
 i_cvt_irnd_aux
@@ -1508,7 +1510,7 @@ i_cvt_irnd_aux
 i_cvt_frnd
     :
     i=i_cvt_frnd_aux -> ^( TREE_FRND $i )
-	|
+    |
     ;
 
 i_cvt_frnd_aux
@@ -2966,7 +2968,6 @@ opr5
     ;
 
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Constant literal expressions.
@@ -2974,50 +2975,58 @@ opr5
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 constant_expression
-    :   conditional_expression
+    :
+    e=constant_expression_aux
+    ->
+    ^( TREE_CONSTANT_EXPR $e )
+    ;
+
+constant_expression_aux
+    :
+    conditional_expression
     ;
 
 conditional_expression
     :   conditional_or_expression
-        ( T_QUESTION constant_expression T_COLON conditional_expression
+        ( T_QUESTION^ constant_expression_aux T_COLON conditional_expression
         )?
     ;
 
 conditional_or_expression
     :   conditional_and_expression
-        ( T_OROR conditional_and_expression
+        ( T_OROR^ conditional_and_expression
         )*
     ;
 
 conditional_and_expression
     :   inclusive_or_expression
-        ( T_ANDAND inclusive_or_expression
+        ( T_ANDAND^ inclusive_or_expression
         )*
     ;
 
 inclusive_or_expression
     :   exclusive_or_expression
-        ( T_OR exclusive_or_expression
+        ( T_OR^ exclusive_or_expression
         )*
     ;
 
 exclusive_or_expression
     :   and_expression
-        ( T_XOR and_expression
+        ( T_XOR^ and_expression
         )*
     ;
 
 and_expression
     :   equality_expression
-        ( T_AND equality_expression
+        ( T_AND^ equality_expression
         )*
     ;
 
 equality_expression
     :   relational_expression
         (
-            (   T_EQEQ
-            |   T_NOTEQ
+            (   T_EQEQ^
+            |   T_NOTEQ^
             )
             relational_expression
         )*
@@ -3025,7 +3034,7 @@ equality_expression
 
 relational_expression
     :   shift_expression
-        (relational_op shift_expression
+        (relational_op^ shift_expression
         )*
     ;
 
@@ -3038,7 +3047,7 @@ relational_op
 
 shift_expression
     :   additive_expression
-        (shift_op additive_expression
+        (shift_op^ additive_expression
         )*
     ;
 
@@ -3050,8 +3059,8 @@ shift_op
 additive_expression
     :   multiplicative_expression
         (   
-            ( T_PLUS
-            | T_MINUS
+            ( T_PLUS^
+            | T_MINUS^
             )
             multiplicative_expression
          )*
@@ -3061,29 +3070,37 @@ multiplicative_expression
     :
         unary_expression
         (   
-            ( T_STAR
-            | T_SLASH
-            | T_PERCENT
+            ( T_STAR^
+            | T_SLASH^
+            | T_PERCENT^
             )
             unary_expression
         )*
     ;
 
 unary_expression
-    :   T_PLUS unary_expression
-    |   T_MINUS unary_expression
+    :   T_PLUS^ unary_expression
+    |   T_MINUS^ unary_expression
     |   unary_expression_not_plus_minus
     ;
 
 unary_expression_not_plus_minus
-    :   T_TILDE unary_expression
-    |   T_NOT unary_expression
+    :   T_TILDE^ unary_expression
+    |   T_NOT^ unary_expression
     |   cast_expression
     |   primary
     ;
 
-cast_expression 
-    :   T_OP (K_S64 | K_U64) T_CP unary_expression
+cast_expression
+    :
+    e=cast_expression_aux
+    ->
+    ^( TREE_CAST $e )
+    ;
+
+cast_expression_aux
+    :
+    T_OP (K_S64 | K_U64) T_CP unary_expression
     ;
 
 primary
@@ -3093,7 +3110,7 @@ primary
     ;
 
 par_expression
-    :   T_OP constant_expression T_CP
+    :   T_OP^ constant_expression_aux T_CP
     ;
 
 integer

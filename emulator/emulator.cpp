@@ -15,21 +15,22 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
-    this->device = "";
+    this->device = "compute_20";
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
 
 void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
 {
-    // Pick only one.
-    if (modules.size() > 0)
-        return;
-    if (strcmp(this->device, "") != 0 && strcmp(module_name, this->device) != 0)
+    // Pick modules of only one type.
+    if (strstr(module_name, this->device) == 0)
         return;
     pANTLR3_BASE_TREE mod = parse(source);
     if (! mod)
-        return;
+    {
+        std::cout << "Error: cannot parse PTX!\n";
+        assert(false);
+    }
     modules.push_back(mod);
     Extract_From_Tree(mod);
 }
@@ -313,13 +314,14 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     // Given the address of the kernel function in the host, determine the name of the kernel
     // it is calling in PTX, using information provided by RegisterFatBinary and RegisterFunction.
     std::map<void*, char*>::iterator i = this->fun_to_name.find(hostfun);
-    if (i == this->fun_to_name.end())
-        return;
+    assert(i != this->fun_to_name.end());
     char * name = i->second;
-    // Now, given the name of the kernel function being called, find the entry for it.
+
+    // Now, given the name of the kernel function being called, find
+    // the entry for it.
     std::map<char*, pANTLR3_BASE_TREE, ltstr>::iterator j = this->entry.find(name);
-    if (j == this->entry.end())
-        return;
+    assert(j != this->entry.end());
+
     pANTLR3_BASE_TREE entry = j->second;
 
     // Get function block.
@@ -555,109 +557,182 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         Symbol * s = FindSymbol(GetText(psym));
         assert(s != 0);
         if (! *((bool*)s->lvalue))
+        {
+            std::cout << "Skipping " << GetText(i) << " because guard predicate is false\n";
             return 0; // continue.
+        }
     }
     switch (inst_type)
     {
-        case KI_ABS: ;
+        case KI_ABS:
+            break;
         case KI_ADD:
             DoAdd(inst);
             return 0; // continue.
-        case KI_ADDC: ;
-        case KI_AND: ;
-        case KI_ATOM: ;
-        case KI_BAR: ;
-        case KI_BFE: ;
-        case KI_BFI: ;
-        case KI_BFIND: ;
+        case KI_ADDC:
+            break;
+        case KI_AND:
+            break;
+        case KI_ATOM:
+            break;
+        case KI_BAR:
+            break;
+        case KI_BFE:
+            break;
+        case KI_BFI:
+            break;
+        case KI_BFIND:
+            break;
         case KI_BRA:
             return DoBra(inst);
-        case KI_BREV: ;
-        case KI_BRKPT: ;
-        case KI_CALL: ;
-        case KI_CLZ: ;
-        case KI_CNOT: ;
-        case KI_COPYSIGN: ;
-        case KI_COS: ;
+        case KI_BREV:
+            break;
+        case KI_BRKPT:
+            break;
+        case KI_CALL:
+            break;
+        case KI_CLZ:
+            break;
+        case KI_CNOT:
+            break;
+        case KI_COPYSIGN:
+            break;
+        case KI_COS:
+            break;
         case KI_CVT:
             DoCvt(inst);
             return 0;
-        case KI_CVTA: ;
+        case KI_CVTA:
+            break;
         case KI_DIV:
             DoDiv(inst);
             return 0;
-        case KI_EX2: ;
+        case KI_EX2:
+            break;
         case KI_EXIT:
             DoExit(inst);
             return -1; // end.
-        case KI_FMA: ;
-        case KI_ISSPACEP: ;
+        case KI_FMA:
+            break;
+        case KI_ISSPACEP:
+            break;
         case KI_LD:
             DoLd(inst);
             return 0; // continue.
-        case KI_LDU: ;
-        case KI_LG2: ;
-        case KI_MAD24: ;
-        case KI_MAD: ;
-        case KI_MAX: ;
-        case KI_MEMBAR: ;
-        case KI_MIN: ;
+        case KI_LDU:
+            break;
+        case KI_LG2:
+            break;
+        case KI_MAD24:
+            break;
+        case KI_MAD:
+            break;
+        case KI_MAX:
+            break;
+        case KI_MEMBAR:
+            break;
+        case KI_MIN:
+            break;
         case KI_MOV:
             DoMov(inst);
             return 0; // continue.
-        case KI_MUL24: ;
+        case KI_MUL24:
+            break;
         case KI_MUL:
             DoMul(inst);
             return 0; // continue.
-        case KI_NEG: ;
-        case KI_NOT: ;
-        case KI_OR: ;
-        case KI_PMEVENT: ;
-        case KI_POPC: ;
-        case KI_PREFETCH: ;
-        case KI_PREFETCHU: ;
-        case KI_PRMT: ;
-        case KI_RCP: ;
-        case KI_RED: ;
-        case KI_REM: ;
-        case KI_RET: ;
-        case KI_RSQRT: ;
-        case KI_SAD: ;
-        case KI_SELP: ;
-        case KI_SET: ;
+        case KI_NEG:
+            break;
+        case KI_NOT:
+            break;
+        case KI_OR:
+            break;
+        case KI_PMEVENT:
+            break;
+        case KI_POPC:
+            break;
+        case KI_PREFETCH:
+            break;
+        case KI_PREFETCHU:
+            break;
+        case KI_PRMT:
+            break;
+        case KI_RCP:
+            break;
+        case KI_RED:
+            break;
+        case KI_REM:
+            break;
+        case KI_RET:
+            break;
+        case KI_RSQRT:
+            break;
+        case KI_SAD:
+            break;
+        case KI_SELP:
+            break;
+        case KI_SET:
+            break;
         case KI_SETP:
             DoSetp(inst);
             return 0; // continue.
-        case KI_SHL: ;
-        case KI_SHR: ;
-        case KI_SIN: ;
-        case KI_SLCT: ;
-        case KI_SQRT: ;
+        case KI_SHL:
+            break;
+        case KI_SHR:
+            break;
+        case KI_SIN:
+            break;
+        case KI_SLCT:
+            break;
+        case KI_SQRT:
+            break;
         case KI_ST:
             DoSt(inst);
             return 0; // continue.
-        case KI_SUB: ;
-        case KI_SUBC: ;
-        case KI_SULD: ;
-        case KI_SUQ: ;
-        case KI_SURED: ;
-        case KI_SUST: ;
-        case KI_TESTP: ;
-        case KI_TEX: ;
-        case KI_TRAP: ;
-        case KI_TXQ: ;
-        case KI_VABSDIFF: ;
-        case KI_VADD: ;
-        case KI_VMAD: ;
-        case KI_VMAX: ;
-        case KI_VMIN: ;
-        case KI_VOTE: ;
-        case KI_VSET: ;
-        case KI_VSHL: ;
-        case KI_VSHR: ;
-        case KI_VSUB: ;
-        case KI_XOR: ;
-        default: ;
+        case KI_SUB:
+            break;
+        case KI_SUBC:
+            break;
+        case KI_SULD:
+            break;
+        case KI_SUQ:
+            break;
+        case KI_SURED:
+            break;
+        case KI_SUST:
+            break;
+        case KI_TESTP:
+            break;
+        case KI_TEX:
+            break;
+        case KI_TRAP:
+            break;
+        case KI_TXQ:
+            break;
+        case KI_VABSDIFF:
+            break;
+        case KI_VADD:
+            break;
+        case KI_VMAD:
+            break;
+        case KI_VMAX:
+            break;
+        case KI_VMIN:
+            break;
+        case KI_VOTE:
+            break;
+        case KI_VSET:
+            break;
+        case KI_VSHL:
+            break;
+        case KI_VSHR:
+            break;
+        case KI_VSUB:
+            break;
+        case KI_XOR:
+            break;
+        default:
+            break;
     }
     assert(false); // unimplemented instruction.
     return -1; // end.
@@ -666,4 +741,115 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::SetDevice(char * device)
 {
     this->device = strdup(device);
+}
+
+CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, pANTLR3_BASE_TREE const_expr)
+{
+    Constant result;
+	result.type = expected_type;
+	char * dummy;
+	char * text = GetText(const_expr);
+    if (GetType(const_expr) == T_DEC_LITERAL)
+    {
+		switch (expected_type)
+		{
+			case K_U8:
+				result.value.u8 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_U16:
+				result.value.u16 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_U32:
+				result.value.u32 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_U64:
+				result.value.u64 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_S8:
+				result.value.u8 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_S16:
+				result.value.s16 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_S32:
+				result.value.s32 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_S64:
+				result.value.s64 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_B8:
+				result.value.b8 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_B16:
+				result.value.b16 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_B32:
+				result.value.b32 = _strtoi64(text, &dummy, 10);
+				break;
+			case K_B64:
+				result.value.b64 = _strtoi64(text, &dummy, 10);
+				break;
+			default:
+				assert(false);
+		}
+    } else if (GetType(const_expr) == T_HEX_LITERAL)
+    {
+		text += 2;
+		switch (expected_type)
+		{
+			case K_U8:
+				result.value.u8 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_U16:
+				result.value.u16 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_U32:
+				result.value.u32 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_U64:
+				result.value.u64 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_S8:
+				result.value.u8 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_S16:
+				result.value.s16 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_S32:
+				result.value.s32 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_S64:
+				result.value.s64 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_B8:
+				result.value.b8 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_B16:
+				result.value.b16 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_B32:
+				result.value.b32 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_B64:
+				result.value.b64 = _strtoi64(text, &dummy, 16);
+				break;
+			default:
+				assert(false);
+		}
+    } else if (GetType(const_expr) == T_FLT_LITERAL)
+    {
+		text += 2;
+		switch (expected_type)
+		{
+			case K_F32:
+				result.value.u32 = _strtoi64(text, &dummy, 16);
+				break;
+			case K_F64:
+				result.value.u64 = _strtoi64(text, &dummy, 16);
+				break;
+			default:
+				assert(false);
+		}
+    } else assert(false);
+    return result;
 }

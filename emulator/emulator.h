@@ -10,10 +10,10 @@ class CUDA_EMULATOR
 {
     struct ltstr
     {
-      bool operator()(const char* s1, const char* s2) const
-      {
-        return strcmp(s1, s2) < 0;
-      }
+        bool operator()(const char* s1, const char* s2) const
+        {
+            return strcmp(s1, s2) < 0;
+        }
     };
 
     class Symbol
@@ -33,6 +33,40 @@ class CUDA_EMULATOR
     };
     SymbolTable * root;
     char * device;
+
+public:
+    class Constant
+    {
+        public:
+           typedef union TYPES {
+				signed __int64 s64;
+				signed __int32 s32;
+				signed __int16 s16;;
+				signed __int8 s8;
+				unsigned __int64 u64;
+				unsigned __int32 u32;
+				unsigned __int16 u16;
+				unsigned __int8 u8;
+				unsigned __int64 b64;
+				unsigned __int32 b32;
+				unsigned __int16 b16;
+				unsigned __int8 b8;
+				float f16;	// not really supported.
+				float f32;
+				double f64;
+				bool pred;
+			} TYPES;
+			int type;
+			TYPES value;
+            Constant(int i)
+            {
+                value.s64 = i;
+            }
+			Constant()
+			{
+				memset(&this->value, 0, sizeof(value));
+			}
+    };
 
 private:
     CUDA_EMULATOR();
@@ -102,4 +136,5 @@ private:
     void DoSt(pANTLR3_BASE_TREE inst);
     void DoDiv(pANTLR3_BASE_TREE inst);
     int FindFirstInst(pANTLR3_BASE_TREE block, int first);
+    Constant Eval(int expected_type, pANTLR3_BASE_TREE const_expr);
 };
