@@ -15,7 +15,8 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
-    this->device = "compute_20";
+	this->device = "compute_20";
+	this->trace = false;
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
@@ -402,7 +403,7 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, pANTLR3_BASE_TREE inst)
     std::cout << "\n";
     std::cout << comment << "\n";
     std::cout << "PC = " << pc << "\n";
-    Print(inst, 0);
+	Print(inst, 0);
     std::cout << "Symbol tables:\n";
     for (SymbolTable * st = root; st != 0; st = st->parent_block_symbol_table)
     {
@@ -543,6 +544,11 @@ char * CUDA_EMULATOR::GetText(pANTLR3_BASE_TREE node)
 
 int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 {
+	if (this->trace)
+	{
+		Print(inst, 0);
+	}
+	
     pANTLR3_BASE_TREE i = (pANTLR3_BASE_TREE)inst->getChild(inst, 0);
     int inst_type = i->getType(i);
     if (inst_type == TREE_PRED)
@@ -613,7 +619,8 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
             DoExit(inst);
             return -1; // end.
         case KI_FMA:
-            break;
+			DoFma(inst);
+			return 0;
         case KI_ISSPACEP:
             break;
         case KI_LD:

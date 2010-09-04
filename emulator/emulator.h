@@ -33,6 +33,7 @@ class CUDA_EMULATOR
     };
     SymbolTable * root;
     char * device;
+	bool trace;
 
 public:
     class Constant
@@ -129,6 +130,7 @@ private:
     int DoBra(pANTLR3_BASE_TREE inst);
     void DoCvt(pANTLR3_BASE_TREE inst);
     void DoExit(pANTLR3_BASE_TREE inst);
+    void DoFma(pANTLR3_BASE_TREE inst);
     void DoMov(pANTLR3_BASE_TREE inst);
     void DoMul(pANTLR3_BASE_TREE inst);
     void DoLd(pANTLR3_BASE_TREE inst);

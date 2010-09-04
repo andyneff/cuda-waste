@@ -141,7 +141,7 @@ void CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
 
 	if (GetType(src2) == TREE_CONSTANT_EXPR)
 	{
-		Constant c = Eval(type, GetChild(src1, 0));
+		Constant c = Eval(type, GetChild(src2, 0));
 		switch (type)
 		{
 			case K_U16:
@@ -777,7 +777,7 @@ void CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     assert(osrc1 != 0);
     assert(osrc2 != 0);
     bool ftz = false;
-    pANTLR3_BASE_TREE tfrnd = 0;
+	pANTLR3_BASE_TREE tfrnd = 0;
     for (int i = 0; ; ++i)
     {
         pANTLR3_BASE_TREE t = GetChild(ttype, i);
@@ -791,8 +791,8 @@ void CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
             ttype = t;
         else if (gt == K_F32 || gt == K_F64)
             ttype = t;
-        else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
-            tfrnd = t;
+		else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
+			tfrnd = t;
         else if (gt == K_FULL || gt == K_APPROX)
             ;
         else assert(false);
@@ -923,6 +923,178 @@ void CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
 void CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
 {
     std::cout << "EXIT\n";
+}
+
+
+void CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
+{
+	std::cout << "FMA\n";
+	// Multiply register and/or constants, and store in a register.
+	int start = 0;
+	if (GetType(GetChild(inst, start)) == TREE_PRED)
+		start++;
+	assert(GetType(GetChild(inst, start)) == KI_FMA);
+	start++;
+	assert(GetType(GetChild(inst, start)) == TREE_TYPE);
+	pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+	start++;
+	pANTLR3_BASE_TREE odst = 0;
+	pANTLR3_BASE_TREE osrc1 = 0;
+	pANTLR3_BASE_TREE osrc2 = 0;
+	pANTLR3_BASE_TREE osrc3 = 0;
+	for (;; ++start)
+	{
+		pANTLR3_BASE_TREE t = GetChild(inst, start);
+		if (t == 0)
+			break;
+		int gt = GetType(t);
+		if (gt == TREE_OPR)
+		{
+			if (odst == 0)
+			{
+				odst = t;
+			} else if (osrc1 == 0)
+			{
+				osrc1 = t;
+			} else if (osrc2 == 0)
+			{
+				osrc2 = t;
+			} else if (osrc3 == 0)
+			{
+				osrc3 = t;
+			} else assert(false);
+		} else assert(false);
+	}
+	assert(ttype != 0);
+	assert(odst != 0);
+	assert(osrc1 != 0);
+	assert(osrc2 != 0);
+	assert(osrc3 != 0);
+	bool sat = false;
+	bool ftz = false;
+	pANTLR3_BASE_TREE tfrnd = 0;
+	for (int i = 0; ; ++i)
+	{
+		pANTLR3_BASE_TREE t = GetChild(ttype, i);
+		if (t == 0)
+			break;
+		int gt = GetType(t);
+		if (gt == K_SAT)
+			sat = true;
+		else if (gt == K_FTZ)
+			ftz = true;
+		else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
+			tfrnd = t;
+		else if (gt == K_F32 || gt == K_F64)
+			ttype = t;
+		else assert(false);
+	}
+	assert(ttype != 0);
+	assert(sat == 0); // unimplemented
+	assert(ftz == 0);  // unimplemented.
+	int type = GetType(ttype);
+
+	pANTLR3_BASE_TREE dst = GetChild(odst,0);
+	pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+	pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+	pANTLR3_BASE_TREE src3 = GetChild(osrc3,0);
+
+	// Supported types of MUL.
+	typedef union TYPES {
+		float f32;
+		double f64;
+	} TYPES;
+
+	Symbol * sdst = 0;
+	Symbol * ssrc1 = 0;
+	Symbol * ssrc2 = 0;
+	Symbol * ssrc3 = 0;
+	assert(GetType(dst) == T_WORD);
+	sdst = FindSymbol(GetText(dst));
+	char * dummy;
+
+	TYPES value1; // used if literal
+	TYPES value2; // used if literal
+	TYPES value3; // used if literal
+	TYPES * d = (TYPES*)sdst->lvalue;
+	TYPES * s1 = &value1;
+	TYPES * s2 = &value2;
+	TYPES * s3 = &value2;
+
+	if (GetType(src1) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src1, 0));
+		switch (type)
+		{
+			case K_F32:
+				s1->f32 = c.value.f32;
+				break;
+			case K_F64:
+				s1->f64 = c.value.f64;
+				break;
+			default:
+				assert(false);
+		}
+	} else if (GetType(src1) == T_WORD)
+	{
+		ssrc1 = FindSymbol(GetText(src1));
+		assert(ssrc1 != 0);
+		s1 = (TYPES*)ssrc1->lvalue;
+	} else assert(false);
+
+	if (GetType(src2) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src2, 0));
+		switch (type)
+		{
+			case K_F32:
+				s2->f32 = c.value.f32;
+				break;
+			case K_F64:
+				s2->f64 = c.value.f64;
+				break;
+			default:
+				assert(false);
+		}
+	} else if (GetType(src2) == T_WORD)
+	{
+		ssrc2 = FindSymbol(GetText(src2));
+		assert(ssrc2 != 0);
+		s2 = (TYPES*)ssrc2->lvalue;
+	} else assert(false);
+
+	if (GetType(src3) == TREE_CONSTANT_EXPR)
+	{
+		Constant c = Eval(type, GetChild(src3, 0));
+		switch (type)
+		{
+			case K_F32:
+				s3->f32 = c.value.f32;
+				break;
+			case K_F64:
+				s3->f64 = c.value.f64;
+				break;
+			default:
+				assert(false);
+		}
+	} else if (GetType(src3) == T_WORD)
+	{
+		ssrc3 = FindSymbol(GetText(src3));
+		assert(ssrc3 != 0);
+		s3 = (TYPES*)ssrc3->lvalue;
+	} else assert(false);
+
+	switch (type)
+	{
+		case K_F32:
+			d->f32 = s1->f32 * s2->f32 + s3->f32;
+			break;
+		case K_F64:
+			d->f64 = s1->f64 * s2->f64 + s3->f64;
+			break;
+		default:
+			assert(false);
+	}
 }
 
 void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
