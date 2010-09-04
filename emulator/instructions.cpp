@@ -999,7 +999,10 @@ void CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
 	Constant value(0);
 	if (plus != 0)
 	{
-		pANTLR3_BASE_TREE const_expr = GetChild(osrc, 2);
+		pANTLR3_BASE_TREE const_expr_tree = GetChild(osrc, 2);
+		assert(const_expr_tree != 0);
+		assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
+		pANTLR3_BASE_TREE const_expr = GetChild(const_expr_tree, 0);
 		assert(const_expr != 0);
 		value = Eval(K_S32, const_expr);
 	}

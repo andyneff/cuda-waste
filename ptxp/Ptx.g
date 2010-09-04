@@ -2936,7 +2936,7 @@ opr_aux
     : (
         (
             ( id_or_opcode ( K_X | K_Y | K_Z | K_W | K_A | K_R | K_G | K_B )? | constant_expression )
-            ( T_PLUS opr )?
+            ( T_PLUS constant_expression )?
             ( T_LT opr T_GT )?
         ) |
         ( // aggregate
