@@ -15,8 +15,8 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
-	this->device = "compute_20";
-	this->trace = false;
+    this->device = "compute_20";
+    this->trace = false;
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
@@ -148,10 +148,11 @@ void CUDA_EMULATOR::BindArguments(pANTLR3_BASE_TREE e)
         arg * a = *ia;
         // Create a symbol table entry.
         Symbol * s = new Symbol();
-        s->lvalue = (void*)a->argument;
+        s->pvalue = (void*)a->argument;
         s->name = n;
         s->size = a->size;
         s->type = t;
+        s->storage_class = K_PARAM;
         // Add the entry into the symbol table.
         std::pair<char*, Symbol*> sym;
         sym.first = n;
@@ -214,11 +215,13 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
             int nreg = 0;
             char * type = 0;
             int size = 0;
+            int storage_class = 0;
             for (int j = 0; j < (int)var->getChildCount(var); ++j)
             {
                 pANTLR3_BASE_TREE c = (pANTLR3_BASE_TREE)var->getChild(var, j);
                 if (c->getType(c) == TREE_SPACE) {
-                    // Nothing to do.
+                    pANTLR3_BASE_TREE chi = GetChild(c, 0);
+                    storage_class = GetType(chi);
                 } else if (c->getType(c) == TREE_ALIGN) {
                     // Nothing to do.
                 } else if (c->getType(c) == TREE_TYPE) {
@@ -243,8 +246,9 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                     Symbol * s = new Symbol();
                     s->name = strdup(full_name);
                     s->size = size;
-                    s->lvalue = (void*)malloc(size);
+                    s->pvalue = (void*)malloc(size);
                     s->type = strdup(type);
+                    s->storage_class = storage_class;
                     // Add the entry into the symbol table.
                     std::pair<char*, Symbol*> sym;
                     sym.first = s->name;
@@ -256,8 +260,9 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                 Symbol * s = new Symbol();
                 s->name = strdup(name);
                 s->size = size;
-                s->lvalue = (void*)malloc(size);
+                s->pvalue = (void*)malloc(size);
                 s->type = strdup(type);
+                s->storage_class = storage_class;
                 // Add the entry into the symbol table.
                 std::pair<char*, Symbol*> sym;
                 sym.first = s->name;
@@ -299,7 +304,8 @@ void CUDA_EMULATOR::SetupGotos(pANTLR3_BASE_TREE block)
             s->name = strdup(name);
             s->type = "label";
             s->size = 0;
-            s->lvalue = (void*)i;
+            s->pvalue = (void*)i;
+            s->storage_class = 0;
             SymbolTable * symbol_table = this->root;
             // Add the entry into the symbol table.
             std::pair<char*, Symbol*> sym;
@@ -365,7 +371,8 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                             {
                                 pANTLR3_BASE_TREE inst = GetInst(block, pc);
 
-                                //Dump("before", pc, inst);
+                                if (this->trace)
+                                    Dump("before", pc, inst);
 
                                 int next = Dispatch(inst);
                                 if (next > 0)
@@ -376,7 +383,8 @@ void CUDA_EMULATOR::Execute(void* hostfun)
                                     pc++;
                                 pc = FindFirstInst(block, pc);
 
-                                //Dump("after", pc, inst);
+                                if (this->trace)
+                                    Dump("after", pc, inst);
                             }
                         }
                     }
@@ -403,7 +411,7 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, pANTLR3_BASE_TREE inst)
     std::cout << "\n";
     std::cout << comment << "\n";
     std::cout << "PC = " << pc << "\n";
-	Print(inst, 0);
+    Print(inst, 0);
     std::cout << "Symbol tables:\n";
     for (SymbolTable * st = root; st != 0; st = st->parent_block_symbol_table)
     {
@@ -413,32 +421,53 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, pANTLR3_BASE_TREE inst)
             Symbol * s = (*it).second;
             std::cout << "name: " << s->name << " ";
             std::cout << "size: " << s->size << " ";
+            std::cout << "stor: " << s->storage_class << " ";
             std::cout << "type: " << s->type << " ";
             if (strcmp(s->type, "label") == 0)
-                std::cout << "val:  " << (int)s->lvalue << "\n";
+                std::cout << "val:  " << (int)s->pvalue << "\n";
             else if (strcmp(s->type, "dim3") == 0)
-                std::cout << "val:  " << ((dim3*)s->lvalue)->x
-                << " " << ((dim3*)s->lvalue)->y
-                << " " << ((dim3*)s->lvalue)->z
+                std::cout << "val:  " << ((dim3*)s->pvalue)->x
+                << " " << ((dim3*)s->pvalue)->y
+                << " " << ((dim3*)s->pvalue)->z
                 << "\n";
             else if (strcmp(s->type, ".pred") == 0)
-                std::cout << "val:  " << *((bool*)s->lvalue) << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->pred << "\n";
             else if (strcmp(s->type, ".u8") == 0)
-                std::cout << "val:  " << *(unsigned char*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
             else if (strcmp(s->type, ".u16") == 0)
-                std::cout << "val:  " << *(unsigned short*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
             else if (strcmp(s->type, ".u32") == 0)
-                std::cout << "val:  " << *(unsigned int*)s->lvalue << "\n";
+            {
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
+                std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
+                std::cout << std::dec << "\n";
+            }
+            else if (strcmp(s->type, ".u64") == 0)
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
             else if (strcmp(s->type, ".s8") == 0)
-                std::cout << "val:  " << *(signed char*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->s8 << "\n";
             else if (strcmp(s->type, ".s16") == 0)
-                std::cout << "val:  " << *(signed short*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->s16 << "\n";
             else if (strcmp(s->type, ".s32") == 0)
-                std::cout << "val:  " << *(signed int*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->s32 << "\n";
+            else if (strcmp(s->type, ".s64") == 0)
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->s64 << "\n";
+            else if (strcmp(s->type, ".b8") == 0)
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
+            else if (strcmp(s->type, ".b16") == 0)
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
+            else if (strcmp(s->type, ".b32") == 0)
+            {
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
+                std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
+                std::cout << std::dec << "\n";
+            }
+            else if (strcmp(s->type, ".b64") == 0)
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
             else if (strcmp(s->type, ".f32") == 0)
-                std::cout << "val:  " << *(float*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->f32 << "\n";
             else if (strcmp(s->type, ".f64") == 0)
-                std::cout << "val:  " << *(double*)s->lvalue << "\n";
+                std::cout << "val:  " << ((TYPES*)s->pvalue)->f64 << "\n";
             else assert(false);
         }
     }
@@ -460,14 +489,14 @@ CUDA_EMULATOR::Symbol * CUDA_EMULATOR::FindSymbol(char * name)
     return 0;
 }
 
-void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t size)
+void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t size, int storage_class)
 {
     // First find it.
     Symbol * s = FindSymbol(name);
     if (s)
     {
         // Update value.
-        memcpy(s->lvalue, value, size);
+        memcpy(s->pvalue, value, size);
         return;
     }
     // Create a symbol table entry.
@@ -475,8 +504,9 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
     s->name = strdup(name);
     s->type = strdup(type);
     s->size = size;
-    s->lvalue = (void*)malloc(size);
-    memcpy(s->lvalue, value, size);
+    s->pvalue = (void*)malloc(size);
+    s->storage_class = storage_class;
+    memcpy(s->pvalue, value, size);
     // Add the entry into the symbol table.
     std::pair<char*, Symbol*> sym;
     sym.first = s->name;
@@ -488,16 +518,16 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
 void CUDA_EMULATOR::SetupDimensionLocals()
 {
     // Create gridDim = %nctaid, and blockDim = %ntid
-    CreateSymbol("%nctaid", "dim3", &conf.gridDim, sizeof(conf.gridDim));
-    CreateSymbol("%ntid", "dim3", &conf.blockDim, sizeof(conf.blockDim));
+    CreateSymbol("%nctaid", "dim3", &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
+    CreateSymbol("%ntid", "dim3", &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 }
 
 
 void CUDA_EMULATOR::SetupPredefined(dim3 tid, dim3 bid)
 {
     // Create threadIdx
-    CreateSymbol("%tid", "dim3", &tid, sizeof(tid));
-    CreateSymbol("%ctaid", "dim3", &bid, sizeof(tid));
+    CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
+    CreateSymbol("%ctaid", "dim3", &bid, sizeof(tid), K_LOCAL);
 }
 
 
@@ -544,11 +574,11 @@ char * CUDA_EMULATOR::GetText(pANTLR3_BASE_TREE node)
 
 int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 {
-	if (this->trace)
-	{
-		Print(inst, 0);
-	}
-	
+    if (this->trace)
+    {
+        Print(inst, 0);
+    }
+    
     pANTLR3_BASE_TREE i = (pANTLR3_BASE_TREE)inst->getChild(inst, 0);
     int inst_type = i->getType(i);
     if (inst_type == TREE_PRED)
@@ -562,7 +592,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         assert(GetType(psym) == T_WORD);
         Symbol * s = FindSymbol(GetText(psym));
         assert(s != 0);
-        if (! *((bool*)s->lvalue))
+        if (! *((bool*)s->pvalue))
         {
             std::cout << "Skipping " << GetText(i) << " because guard predicate is false\n";
             return 0; // continue.
@@ -619,8 +649,8 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
             DoExit(inst);
             return -1; // end.
         case KI_FMA:
-			DoFma(inst);
-			return 0;
+            DoFma(inst);
+            return 0;
         case KI_ISSPACEP:
             break;
         case KI_LD:
@@ -753,110 +783,110 @@ void CUDA_EMULATOR::SetDevice(char * device)
 CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, pANTLR3_BASE_TREE const_expr)
 {
     Constant result;
-	result.type = expected_type;
-	char * dummy;
-	char * text = GetText(const_expr);
+    result.type = expected_type;
+    char * dummy;
+    char * text = GetText(const_expr);
     if (GetType(const_expr) == T_DEC_LITERAL)
     {
-		switch (expected_type)
-		{
-			case K_U8:
-				result.value.u8 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_U16:
-				result.value.u16 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_U32:
-				result.value.u32 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_U64:
-				result.value.u64 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_S8:
-				result.value.u8 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_S16:
-				result.value.s16 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_S32:
-				result.value.s32 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_S64:
-				result.value.s64 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_B8:
-				result.value.b8 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_B16:
-				result.value.b16 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_B32:
-				result.value.b32 = _strtoi64(text, &dummy, 10);
-				break;
-			case K_B64:
-				result.value.b64 = _strtoi64(text, &dummy, 10);
-				break;
-			default:
-				assert(false);
-		}
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_U16:
+                result.value.u16 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_U32:
+                result.value.u32 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_U64:
+                result.value.u64 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_S8:
+                result.value.u8 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_S16:
+                result.value.s16 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_S32:
+                result.value.s32 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_S64:
+                result.value.s64 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_B8:
+                result.value.b8 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_B16:
+                result.value.b16 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_B32:
+                result.value.b32 = _strtoi64(text, &dummy, 10);
+                break;
+            case K_B64:
+                result.value.b64 = _strtoi64(text, &dummy, 10);
+                break;
+            default:
+                assert(false);
+        }
     } else if (GetType(const_expr) == T_HEX_LITERAL)
     {
-		text += 2;
-		switch (expected_type)
-		{
-			case K_U8:
-				result.value.u8 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_U16:
-				result.value.u16 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_U32:
-				result.value.u32 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_U64:
-				result.value.u64 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_S8:
-				result.value.u8 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_S16:
-				result.value.s16 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_S32:
-				result.value.s32 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_S64:
-				result.value.s64 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_B8:
-				result.value.b8 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_B16:
-				result.value.b16 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_B32:
-				result.value.b32 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_B64:
-				result.value.b64 = _strtoi64(text, &dummy, 16);
-				break;
-			default:
-				assert(false);
-		}
+        text += 2;
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_U16:
+                result.value.u16 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_U32:
+                result.value.u32 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_U64:
+                result.value.u64 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_S8:
+                result.value.u8 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_S16:
+                result.value.s16 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_S32:
+                result.value.s32 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_S64:
+                result.value.s64 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_B8:
+                result.value.b8 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_B16:
+                result.value.b16 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_B32:
+                result.value.b32 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_B64:
+                result.value.b64 = _strtoi64(text, &dummy, 16);
+                break;
+            default:
+                assert(false);
+        }
     } else if (GetType(const_expr) == T_FLT_LITERAL)
     {
-		text += 2;
-		switch (expected_type)
-		{
-			case K_F32:
-				result.value.u32 = _strtoi64(text, &dummy, 16);
-				break;
-			case K_F64:
-				result.value.u64 = _strtoi64(text, &dummy, 16);
-				break;
-			default:
-				assert(false);
-		}
+        text += 2;
+        switch (expected_type)
+        {
+            case K_F32:
+                result.value.u32 = _strtoi64(text, &dummy, 16);
+                break;
+            case K_F64:
+                result.value.u64 = _strtoi64(text, &dummy, 16);
+                break;
+            default:
+                assert(false);
+        }
     } else assert(false);
     return result;
 }

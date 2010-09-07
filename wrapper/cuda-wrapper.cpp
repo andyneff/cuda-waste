@@ -1282,35 +1282,32 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
         int z = x/y;
     }
 
-    if (true) // for now, ignore (fatCubin)
+    std::cout << "NEW FATBIN\n";
+    // Get PTX code from the record.
+    __cudaFatCudaBinary * fcb = (__cudaFatCudaBinary *)fatCubin;
+    if (fcb)
     {
-        std::cout << "NEW FATBIN\n";
-        // Get PTX code from the record.
-        __cudaFatCudaBinary * fcb = (__cudaFatCudaBinary *)fatCubin;
-        if (fcb)
+        __cudaFatPtxEntry * ptx = fcb->ptx;
+        for ( ; ptx && ptx->gpuProfileName; ptx++)
         {
-            __cudaFatPtxEntry * ptx = fcb->ptx;
-            for ( ; ptx && ptx->gpuProfileName; ptx++)
-            {
-                char * profile = ptx->gpuProfileName;
-                char * code = ptx->ptx;
-                std::cout << "====================================================\n";
-                std::cout << "PROFILE = " << profile << std::endl;
-                std::cout << "CODE:\n";
-                std::cout << code << std::endl;
-                std::cout << "====================================================\n\n\n";
-                CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-                emulator->Extract_From_Source(profile, code);
-           }
-
-            // ELF contains just in time code for every PTX.
-            // Execution will depend on picking which one for the device.
-            __cudaFatElfEntry * elf = fcb->elf;
-            for ( ; elf; elf = elf->next)
-            {
-                char * code = elf->elf;
-            }
+            char * profile = ptx->gpuProfileName;
+            char * code = ptx->ptx;
+            std::cout << "====================================================\n";
+            std::cout << "PROFILE = " << profile << std::endl;
+            std::cout << "CODE:\n";
+            std::cout << code << std::endl;
+            std::cout << "====================================================\n\n\n";
+            CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+            emulator->Extract_From_Source(profile, code);
         }
+
+        // ELF contains just in time code for every PTX.
+        // Execution will depend on picking which one for the device.
+        //__cudaFatElfEntry * elf = fcb->elf;
+        //for ( ; elf; elf = elf->next)
+        //{
+        //char * code = elf->elf;
+        //}
     }
     if (! cu->do_emulation)
     {
