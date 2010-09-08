@@ -1,6 +1,7 @@
 #include "emulator.h"
 #include <assert.h>
 #include <iostream>
+#include <queue>
 
 CUDA_EMULATOR * CUDA_EMULATOR::singleton;
 
@@ -16,6 +17,7 @@ CUDA_EMULATOR::CUDA_EMULATOR()
 {
     this->root = 0;
     this->device = "compute_20";
+    this->string_table = new StringTable();
     this->trace = false;
 }
 
@@ -42,8 +44,8 @@ void CUDA_EMULATOR::Extract_From_Tree(pANTLR3_BASE_TREE node)
     if (node->getType(node) == TREE_ENTRY)
     {
         // First child will be name node.
-        pANTLR3_BASE_TREE word = (pANTLR3_BASE_TREE)node->getChild(node, 0);
-        char * name = (char*)word->getText(word)->chars;
+        pANTLR3_BASE_TREE word = GetChild(node, 0);
+        char * name = GetText(word);
         printf("entry %s\n", name);
         std::pair<char*, pANTLR3_BASE_TREE> i;
         i.first = (char*)name;
@@ -52,8 +54,8 @@ void CUDA_EMULATOR::Extract_From_Tree(pANTLR3_BASE_TREE node)
     }
     else if (node->getType(node) == TREE_FUNC)
     {
-        pANTLR3_BASE_TREE word = (pANTLR3_BASE_TREE)node->getChild(node, 0);
-        char * name = (char*)word->getText(word)->chars;
+        pANTLR3_BASE_TREE word = GetChild(node, 0);
+        char * name = GetText(word);
         printf("func %s\n", name);
         std::pair<char*, pANTLR3_BASE_TREE> i;
         i.first = (char*)name;
@@ -124,41 +126,48 @@ cudaError_t CUDA_EMULATOR::GetDeviceProperties(struct cudaDeviceProp *prop, int 
 }
 
 
-void CUDA_EMULATOR::BindArguments(pANTLR3_BASE_TREE e)
+void CUDA_EMULATOR::SetupParams(pANTLR3_BASE_TREE e)
 {
     // Create a new symbol table block for the parameters.
-    SymbolTable * symbol_table = new SymbolTable();
-    symbol_table->parent_block_symbol_table = this->root;
-    this->root = symbol_table;
+    SymbolTable * symbol_table = this->root;
     // For each parameter, create a symbol table entry, bind the arguments.
     // To do this, walk down both the AST and the setup argument list, and
     // associate each entry with the other in a symbol table entry.
-    int argc = this->arguments.size();
-    pANTLR3_BASE_TREE param_list = (pANTLR3_BASE_TREE)e->getChild(e, 1);
-    std::list<arg*>::iterator ia = this->arguments.begin();
-    for (int i = 0; i < argc; ++i, ++ia)
     {
-        // Get to the parameter in the AST.
-        pANTLR3_BASE_TREE param = GetChild(param_list, i);
-        pANTLR3_BASE_TREE name = GetChild(param, 0);
-        char * n = GetText(name);
-        pANTLR3_BASE_TREE type = GetChild(GetChild(param, 1), 0);
-        char * t = GetText(type);
-        // Get to the argument in the set up list.
-        arg * a = *ia;
-        // Create a symbol table entry.
-        Symbol * s = new Symbol();
-        s->pvalue = (void*)a->argument;
-        s->name = n;
-        s->size = a->size;
-        s->type = t;
-        s->storage_class = K_PARAM;
-        // Add the entry into the symbol table.
-        std::pair<char*, Symbol*> sym;
-        sym.first = n;
-        sym.second = s;
-        symbol_table->symbols.insert(sym);
+        int argc = this->arguments.size();
+        pANTLR3_BASE_TREE param_list = (pANTLR3_BASE_TREE)e->getChild(e, 1);
+        std::list<arg*>::iterator ia = this->arguments.begin();
+        for (int i = 0; i < argc; ++i, ++ia)
+        {
+            // Get to the parameter in the AST.
+            pANTLR3_BASE_TREE param = GetChild(param_list, i);
+            pANTLR3_BASE_TREE name = GetChild(param, 0);
+            char * n = GetText(name);
+            pANTLR3_BASE_TREE type = GetChild(GetChild(param, 1), 0);
+            char * t = GetText(type);
+            // Get to the argument in the set up list.
+            arg * a = *ia;
+            // Create a symbol table entry.
+            Symbol * s = new Symbol();
+            s->pvalue = (void*)a->argument;
+            s->name = n;
+            s->size = a->size;
+            s->type = t;
+            s->storage_class = K_PARAM;
+            // Add the entry into the symbol table.
+            std::pair<char*, Symbol*> sym;
+            sym.first = n;
+            sym.second = s;
+            symbol_table->symbols.insert(sym);
+        }
     }
+    // erase arg list for next launch.
+    {
+        std::list<arg*>::iterator ia = this->arguments.begin();
+        arg * a = *ia;
+        delete a;
+    }
+    this->arguments.clear();
 }
 
 size_t CUDA_EMULATOR::Sizeof(int type)
@@ -194,15 +203,26 @@ int CUDA_EMULATOR::GetType(pANTLR3_BASE_TREE c)
 int CUDA_EMULATOR::GetSize(pANTLR3_BASE_TREE tree_par_register)
 {
     pANTLR3_BASE_TREE c = (pANTLR3_BASE_TREE)tree_par_register->getChild(tree_par_register,0);
-    return (int)atoi((char*)c->getText(c)->chars);
+    return (int)atoi(GetText(c));
 }
 
-void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
+void CUDA_EMULATOR::PushSymbolTable()
 {
-    // Create a new symbol table block for the locals.
     SymbolTable * symbol_table = new SymbolTable();
     symbol_table->parent_block_symbol_table = this->root;
     this->root = symbol_table;
+}
+
+void CUDA_EMULATOR::PopSymbolTable()
+{
+    SymbolTable * symbol_table = this->root;
+    this->root = symbol_table->parent_block_symbol_table;
+}
+
+void CUDA_EMULATOR::SetupVariables(pANTLR3_BASE_TREE block, int * desired_storage_classes)
+{
+    // Create a new symbol table block for the globals.
+    SymbolTable * symbol_table = this->root;
     // Go through the block and create entries in the symbol table for each variable declared.
     for (int i = 0; i < (int)block->getChildCount(block); ++i)
     {
@@ -216,25 +236,47 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
             char * type = 0;
             int size = 0;
             int storage_class = 0;
+            bool wrong_class = true;
+            pANTLR3_BASE_TREE tarray = 0;
             for (int j = 0; j < (int)var->getChildCount(var); ++j)
             {
                 pANTLR3_BASE_TREE c = (pANTLR3_BASE_TREE)var->getChild(var, j);
-                if (c->getType(c) == TREE_SPACE) {
+                int ct = GetType(c);
+                if (ct == TREE_SPACE)
+                {
                     pANTLR3_BASE_TREE chi = GetChild(c, 0);
                     storage_class = GetType(chi);
-                } else if (c->getType(c) == TREE_ALIGN) {
+                    // no need to continue if wrong storage class.
+                    for (int k = 0; desired_storage_classes[k] != 0; ++k)
+                    {
+                        if (storage_class == desired_storage_classes[k])
+                        {
+                            wrong_class = false;
+                        }
+                    }
+                } else if (ct == TREE_ALIGN)
+                {
                     // Nothing to do.
-                } else if (c->getType(c) == TREE_TYPE) {
+                } else if (ct == TREE_TYPE)
+                {
                     pANTLR3_BASE_TREE chi = GetChild(c, 0);
                     type = GetText(chi);
                     int t = GetType(chi);
                     size = Sizeof(t);
-                } else if (c->getType(c) == T_WORD) {
+                } else if (ct == T_WORD)
+                {
                     name = GetText(c);
-                } else if (c->getType(c) == TREE_PAR_REGISTER) {
+                } else if (ct == TREE_PAR_REGISTER)
+                {
                     nreg = GetSize(c);
+                } else if (ct == TREE_ARRAY)
+                {
+                    // declare var as an array.
+                    tarray = c;
                 } else assert(false);
             }
+            if (wrong_class)
+                continue;
             // Convert raw info into symbol declarations and sizes.
             if (nreg > 0)
             {
@@ -260,7 +302,40 @@ void CUDA_EMULATOR::SetupLocals(pANTLR3_BASE_TREE block)
                 Symbol * s = new Symbol();
                 s->name = strdup(name);
                 s->size = size;
-                s->pvalue = (void*)malloc(size);
+                // Allocate array if declared as one.
+                if (tarray != 0)
+                {
+                    int total = 1;
+                    for (int a = 0; ; ++a)
+                    {
+                        pANTLR3_BASE_TREE t = GetChild(tarray, a);
+                        if (t == 0)
+                            break;
+                        int gt = GetType(t);
+                        if (gt == T_OB)
+                        {
+                            ++a;
+                            pANTLR3_BASE_TREE n = GetChild(tarray, a);
+                            assert(n != 0);
+                            if (GetType(n) == T_DEC_LITERAL)
+                            {
+                                int sz = atoi(GetText(n));
+                                total = total * sz;
+                            }
+                            ++a;
+                            pANTLR3_BASE_TREE t2 = GetChild(tarray, a);
+                            assert(t2 != 0);
+                            assert(GetType(t2) == T_CB);
+                            ++a;
+                        }
+                        else assert(false);
+                    }
+                    s->pvalue = (void*)malloc(size * total);
+                }
+                else
+                {
+                    s->pvalue = (void*)malloc(size);
+                }
                 s->type = strdup(type);
                 s->storage_class = storage_class;
                 // Add the entry into the symbol table.
@@ -291,6 +366,7 @@ cudaError_t CUDA_EMULATOR::ThreadSynchronize()
 
 void CUDA_EMULATOR::SetupGotos(pANTLR3_BASE_TREE block)
 {
+    SymbolTable * symbol_table = this->root;
     // Scan ahead and find all labels.  Enter them into the symbol
     // table.
     for (int i = 0; i < (int)block->getChildCount(block); ++i)
@@ -306,7 +382,6 @@ void CUDA_EMULATOR::SetupGotos(pANTLR3_BASE_TREE block)
             s->size = 0;
             s->pvalue = (void*)i;
             s->storage_class = 0;
-            SymbolTable * symbol_table = this->root;
             // Add the entry into the symbol table.
             std::pair<char*, Symbol*> sym;
             sym.first = s->name;
@@ -334,64 +409,131 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     // Get function block.
     pANTLR3_BASE_TREE block = FindBlock(entry);
 
-    // Set up the symbol table for the function, and bind the arguments to the parameters declared.
-    BindArguments(entry);
-
-    // Set up local variables.
-    SetupLocals(block);
-
+    // Create symbol table for this block.
+    PushSymbolTable();
+    int sc[] = { K_GLOBAL, K_CONST, K_TEX, 0};
+    SetupVariables(block, sc);
     SetupGotos(block);
+    SetupParams(entry);
+    CreateSymbol("%nctaid", "dim3", &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
+    CreateSymbol("%ntid", "dim3", &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
-    // Set up dim3 bounds.
-    SetupDimensionLocals();
+    ExecuteBlocks(block);
+}
 
+void CUDA_EMULATOR::ExecuteBlocks(pANTLR3_BASE_TREE block)
+{
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
     {
         for (int bidy = 0; bidy < conf.gridDim.y; ++bidy)
         {
             for (int bidz = 0; bidz < conf.gridDim.z; ++bidz)
             {
-                for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
-                {
-                    for (int tidy = 0; tidy < conf.blockDim.y; ++tidy)
-                    {
-                        for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
-                        {
-                            dim3 tid(tidx, tidy, tidz);
-                            dim3 bid(bidx, bidy, bidz);
-
-                            // Set up dim3 indices.
-                            SetupPredefined(tid, bid);
-
-                            // Execute.
-                            int pc = FindFirstInst(block, 0);
-                            if (pc < 0)
-                                return;
-                            for (;;)
-                            {
-                                pANTLR3_BASE_TREE inst = GetInst(block, pc);
-
-                                if (this->trace)
-                                    Dump("before", pc, inst);
-
-                                int next = Dispatch(inst);
-                                if (next > 0)
-                                    pc = next;
-                                else if (next < 0)
-                                    break;
-                                else
-                                    pc++;
-                                pc = FindFirstInst(block, pc);
-
-                                if (this->trace)
-                                    Dump("after", pc, inst);
-                            }
-                        }
-                    }
-                }
+                ExecuteSingleBlock(block, bidx, bidy, bidz);
             }
         }
     }
+}
+
+void CUDA_EMULATOR::ExecuteSingleBlock(pANTLR3_BASE_TREE block, int bidx, int bidy, int bidz)
+{
+    PushSymbolTable();
+    dim3 bid(bidx, bidy, bidz);
+    CreateSymbol("%ctaid", "dim3", &bid, sizeof(bid), K_LOCAL);
+    int sc[] = { K_SHARED, 0 };
+    SetupVariables(block, sc);
+
+    std::queue<Thread*> queue;
+
+    for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
+    {
+        for (int tidy = 0; tidy < conf.blockDim.y; ++tidy)
+        {
+            for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
+            {
+                PushSymbolTable();
+                dim3 tid(tidx, tidy, tidz);
+                CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
+                int sc[] = { K_REG, K_LOCAL, K_ALIGN, 0};
+                SetupVariables(block, sc);
+                Thread * thread = new Thread(this, block, 0, this->root);
+                queue.push(thread);
+                PopSymbolTable();
+            }
+        }
+    }
+
+    while (! queue.empty())
+    {
+        Thread * thread = queue.front();
+        queue.pop();
+        thread->Execute();
+        if (! thread->Finished())
+            queue.push(thread);
+        else
+            delete thread;
+    }
+    PopSymbolTable();
+}
+
+CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, pANTLR3_BASE_TREE block, int pc, CUDA_EMULATOR::SymbolTable * root)
+{
+    this->emulator = emulator;
+    this->block = block;
+    this->pc = pc;
+    this->root = root;
+    this->finished = false;
+}
+
+CUDA_EMULATOR::Thread::~Thread()
+{
+    delete root;
+}
+
+bool CUDA_EMULATOR::Thread::Execute()
+{
+    // set up symbol table environment.
+    this->emulator->root = this->root;
+    int pc = this->pc;
+
+    // Execute.
+    pc = emulator->FindFirstInst(block, pc);
+    if (pc < 0)
+    {
+        this->finished = true;
+        return this->finished;
+    }
+    for (;;)
+    {
+        pANTLR3_BASE_TREE inst = this->emulator->GetInst(block, pc);
+        if (this->emulator->trace)
+            this->emulator->Dump("before", pc, inst);
+
+        int next = this->emulator->Dispatch(inst);
+        if (next > 0)
+            pc = next;
+        else if (next == -KI_EXIT)
+        {
+            this->finished = true;
+            return this->finished;
+        }
+        else if (next == -KI_BAR)
+        {
+            return this->finished;
+        }
+        else
+            pc++;
+
+        pc = this->emulator->FindFirstInst(block, pc);
+
+        if (this->emulator->trace)
+            this->emulator->Dump("after", pc, inst);
+    }
+}
+
+bool CUDA_EMULATOR::Thread::Finished()
+{
+    return this->finished;
 }
 
 void CUDA_EMULATOR::Print(pANTLR3_BASE_TREE node, int level)
@@ -413,8 +555,10 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, pANTLR3_BASE_TREE inst)
     std::cout << "PC = " << pc << "\n";
     Print(inst, 0);
     std::cout << "Symbol tables:\n";
-    for (SymbolTable * st = root; st != 0; st = st->parent_block_symbol_table)
+    int level = 0;
+    for (SymbolTable * st = this->root; st != 0; st = st->parent_block_symbol_table, level++)
     {
+        std::cout << "---- Level " << level << " ----\n";
         std::map<char*, Symbol*, ltstr>::iterator it;
         for (it = st->symbols.begin(); it != st->symbols.end(); ++it)
         {
@@ -495,6 +639,7 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
     Symbol * s = FindSymbol(name);
     if (s)
     {
+        assert(s->size == size);
         // Update value.
         memcpy(s->pvalue, value, size);
         return;
@@ -514,22 +659,6 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
     SymbolTable * symbol_table = root;
     symbol_table->symbols.insert(sym);
 }
-
-void CUDA_EMULATOR::SetupDimensionLocals()
-{
-    // Create gridDim = %nctaid, and blockDim = %ntid
-    CreateSymbol("%nctaid", "dim3", &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
-    CreateSymbol("%ntid", "dim3", &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
-}
-
-
-void CUDA_EMULATOR::SetupPredefined(dim3 tid, dim3 bid)
-{
-    // Create threadIdx
-    CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
-    CreateSymbol("%ctaid", "dim3", &bid, sizeof(tid), K_LOCAL);
-}
-
 
 pANTLR3_BASE_TREE CUDA_EMULATOR::FindBlock(pANTLR3_BASE_TREE node)
 {
@@ -567,9 +696,31 @@ pANTLR3_BASE_TREE CUDA_EMULATOR::GetChild(pANTLR3_BASE_TREE node, int n)
     return c;
 }
 
+
+char * CUDA_EMULATOR::StringTable::Entry(pANTLR3_BASE_TREE node)
+{
+    char * result = 0;
+    std::map<pANTLR3_BASE_TREE, char*>::iterator it = this->table.find(node);
+    if (it == this->table.end())
+    {
+        char * text = (char*)node->getText(node)->chars;
+        std::pair<pANTLR3_BASE_TREE, char*> p;
+        p.first = node;
+        p.second = text;
+        this->table.insert(p);
+        result = text;
+    }
+    else
+    {
+        result = it->second;
+    }
+    return result;
+}
+
 char * CUDA_EMULATOR::GetText(pANTLR3_BASE_TREE node)
 {
-    return (char*)node->getText(node)->chars;
+    char * result = this->string_table->Entry(node);
+    return result;
 }
 
 int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
@@ -594,7 +745,8 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         assert(s != 0);
         if (! *((bool*)s->pvalue))
         {
-            std::cout << "Skipping " << GetText(i) << " because guard predicate is false\n";
+            if (this->trace)
+                std::cout << "Skipping " << GetText(i) << " because guard predicate is false\n";
             return 0; // continue.
         }
     }
@@ -603,8 +755,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_ABS:
             break;
         case KI_ADD:
-            DoAdd(inst);
-            return 0; // continue.
+            return DoAdd(inst);
         case KI_ADDC:
             break;
         case KI_AND:
@@ -641,23 +792,19 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_CVTA:
             break;
         case KI_DIV:
-            DoDiv(inst);
-            return 0;
+            return DoDiv(inst);
         case KI_EX2:
             break;
         case KI_EXIT:
-            DoExit(inst);
-            return -1; // end.
+            return DoExit(inst);
         case KI_FMA:
-            DoFma(inst);
-            return 0;
+            return DoFma(inst);
         case KI_ISSPACEP:
             break;
         case KI_LD:
-            DoLd(inst);
-            return 0; // continue.
+            return DoLd(inst);
         case KI_LDU:
-            break;
+            return DoLdu(inst);
         case KI_LG2:
             break;
         case KI_MAD24:
@@ -671,13 +818,11 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_MIN:
             break;
         case KI_MOV:
-            DoMov(inst);
-            return 0; // continue.
+            return DoMov(inst);
         case KI_MUL24:
             break;
         case KI_MUL:
-            DoMul(inst);
-            return 0; // continue.
+            return DoMul(inst);
         case KI_NEG:
             break;
         case KI_NOT:
@@ -711,8 +856,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_SET:
             break;
         case KI_SETP:
-            DoSetp(inst);
-            return 0; // continue.
+            return DoSetp(inst);
         case KI_SHL:
             break;
         case KI_SHR:
@@ -724,8 +868,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_SQRT:
             break;
         case KI_ST:
-            DoSt(inst);
-            return 0; // continue.
+            return DoSt(inst);
         case KI_SUB:
             break;
         case KI_SUBC:

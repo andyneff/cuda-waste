@@ -43,7 +43,23 @@ class CUDA_EMULATOR
         size_t size;
         char * type;
         int storage_class;
+        ~Symbol()
+        {
+            free(pvalue);
+            free(name);
+            free(type);
+        }
     };
+
+    class StringTable
+    {
+    public:
+        char * Entry(pANTLR3_BASE_TREE node);
+    private:
+        std::map<pANTLR3_BASE_TREE, char*> table;
+    };
+
+    StringTable * string_table;
 
     class SymbolTable
     {
@@ -78,8 +94,8 @@ private:
     pANTLR3_BASE_TREE FindBlock(pANTLR3_BASE_TREE node);
     pANTLR3_BASE_TREE GetInst(pANTLR3_BASE_TREE block, int pc);
     int Dispatch(pANTLR3_BASE_TREE inst);
-    void BindArguments(pANTLR3_BASE_TREE entry);
-    void SetupLocals(pANTLR3_BASE_TREE block);
+    void SetupParams(pANTLR3_BASE_TREE entry);
+    void SetupVariables(pANTLR3_BASE_TREE block, int * desired_storage_classes);
     size_t Sizeof(int type);
     int GetType(pANTLR3_BASE_TREE tree_type);
     int GetSize(pANTLR3_BASE_TREE tree_par_register);
@@ -128,17 +144,47 @@ private:
     std::list<arg*> arguments;
     config conf;
 
-    void DoAdd(pANTLR3_BASE_TREE inst);
+    class ThreadQueue
+    {
+        // context information for location of thread in code.
+        int pc;
+        SymbolTable * root;
+    };
+            
+    void SetupThreadQueue();
+    void ProcessThreadQueue();
+    int DoAdd(pANTLR3_BASE_TREE inst);
     int DoBra(pANTLR3_BASE_TREE inst);
-    void DoCvt(pANTLR3_BASE_TREE inst);
-    void DoExit(pANTLR3_BASE_TREE inst);
-    void DoFma(pANTLR3_BASE_TREE inst);
-    void DoMov(pANTLR3_BASE_TREE inst);
-    void DoMul(pANTLR3_BASE_TREE inst);
-    void DoLd(pANTLR3_BASE_TREE inst);
-    void DoSetp(pANTLR3_BASE_TREE inst);
-    void DoSt(pANTLR3_BASE_TREE inst);
-    void DoDiv(pANTLR3_BASE_TREE inst);
+    int DoCvt(pANTLR3_BASE_TREE inst);
+    int DoExit(pANTLR3_BASE_TREE inst);
+    int DoFma(pANTLR3_BASE_TREE inst);
+    int DoMov(pANTLR3_BASE_TREE inst);
+    int DoMul(pANTLR3_BASE_TREE inst);
+    int DoLd(pANTLR3_BASE_TREE inst);
+    int DoLdu(pANTLR3_BASE_TREE inst);
+    int DoSetp(pANTLR3_BASE_TREE inst);
+    int DoSt(pANTLR3_BASE_TREE inst);
+    int DoDiv(pANTLR3_BASE_TREE inst);
     int FindFirstInst(pANTLR3_BASE_TREE block, int first);
     Constant Eval(int expected_type, pANTLR3_BASE_TREE const_expr);
+
+    void PushSymbolTable();
+    void PopSymbolTable();
+    void ExecuteBlocks(pANTLR3_BASE_TREE block);
+    void ExecuteSingleBlock(pANTLR3_BASE_TREE block, int bidx, int bidy, int bidz);
+
+    class Thread
+    {
+    public:
+        Thread(CUDA_EMULATOR * emulator, pANTLR3_BASE_TREE block, int pc, SymbolTable * root);
+        ~Thread();
+        bool Execute();
+        bool Finished();
+    private:
+        pANTLR3_BASE_TREE block;
+        int pc;
+        bool finished;
+        SymbolTable * root;
+        CUDA_EMULATOR * emulator;
+    };
 };

@@ -716,15 +716,13 @@ variable_declarator
 
 array_spec
     :
-    array_spec_aux
+    i=array_spec_aux -> ^( TREE_ARRAY $i )
     |
     ;
 
 array_spec_aux
     :
     ( T_OB integer? T_CB )+
-    ->
-    ^( TREE_ARRAY ( T_OB integer? T_CB )* )
     ;
 
 parameterized_register_spec
@@ -873,11 +871,11 @@ state_space_specifier_aux
     ;
 
 global_space_specifier
-    : global
+    : a=global -> ^( TREE_SPACE $a )
     ;
 
 const_space_specifier
-    : const_
+    : a=const_ -> ^( TREE_SPACE $a )
     ;
 
 const_
@@ -2937,7 +2935,7 @@ opr_aux
     : (
         (
             ( id_or_opcode ( K_X | K_Y | K_Z | K_W | K_A | K_R | K_G | K_B )?
-				| constant_expression )
+                                | constant_expression )
             ( T_PLUS constant_expression )?
             ( T_LT opr T_GT )?
         ) |
