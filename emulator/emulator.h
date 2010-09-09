@@ -69,7 +69,7 @@ class CUDA_EMULATOR
     };
     SymbolTable * root;
     char * device;
-    bool trace;
+    int trace_level;
 
 public:
     class Constant
@@ -107,6 +107,7 @@ private:
     void CreateSymbol(char * name, char * type, void * value, size_t size, int storage_class);
     void SetupGotos(pANTLR3_BASE_TREE block);
     void Print(pANTLR3_BASE_TREE node, int level);
+    void PrintName(pANTLR3_BASE_TREE node);
     void Dump(char * comment, int pc, pANTLR3_BASE_TREE inst);
 
 public:
@@ -154,8 +155,10 @@ private:
     void SetupThreadQueue();
     void ProcessThreadQueue();
     int DoAdd(pANTLR3_BASE_TREE inst);
+    int DoBar(pANTLR3_BASE_TREE inst);
     int DoBra(pANTLR3_BASE_TREE inst);
     int DoCvt(pANTLR3_BASE_TREE inst);
+    int DoCvta(pANTLR3_BASE_TREE inst);
     int DoExit(pANTLR3_BASE_TREE inst);
     int DoFma(pANTLR3_BASE_TREE inst);
     int DoMov(pANTLR3_BASE_TREE inst);
@@ -164,6 +167,7 @@ private:
     int DoLdu(pANTLR3_BASE_TREE inst);
     int DoSetp(pANTLR3_BASE_TREE inst);
     int DoSt(pANTLR3_BASE_TREE inst);
+    int DoSub(pANTLR3_BASE_TREE inst);
     int DoDiv(pANTLR3_BASE_TREE inst);
     int FindFirstInst(pANTLR3_BASE_TREE block, int first);
     Constant Eval(int expected_type, pANTLR3_BASE_TREE const_expr);
@@ -180,10 +184,13 @@ private:
         ~Thread();
         bool Execute();
         bool Finished();
+        void Reset();
+        bool Waiting();
     private:
         pANTLR3_BASE_TREE block;
         int pc;
         bool finished;
+        bool wait;
         SymbolTable * root;
         CUDA_EMULATOR * emulator;
     };

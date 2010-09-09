@@ -18,7 +18,7 @@ CUDA_EMULATOR::CUDA_EMULATOR()
     this->root = 0;
     this->device = "compute_20";
     this->string_table = new StringTable();
-    this->trace = false;
+    this->trace_level = 0;
 }
 
 extern pANTLR3_BASE_TREE parse(char * source);
@@ -305,6 +305,9 @@ void CUDA_EMULATOR::SetupVariables(pANTLR3_BASE_TREE block, int * desired_storag
                 // Allocate array if declared as one.
                 if (tarray != 0)
                 {
+                    // Using the symbol in ptx is essentially a pointer.
+                    // So, mov and cvta loads a pointer to a buffer.
+                    // So, there are two malloc's.
                     int total = 1;
                     for (int a = 0; ; ++a)
                     {
@@ -330,7 +333,12 @@ void CUDA_EMULATOR::SetupVariables(pANTLR3_BASE_TREE block, int * desired_storag
                         }
                         else assert(false);
                     }
-                    s->pvalue = (void*)malloc(size * total);
+                    void * ptr = (void*)malloc(size * total);
+                    s->pvalue = (void*)malloc(sizeof(void*));
+                    if (sizeof(void*) == 4)
+                        ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
+                    else
+                        ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
                 }
                 else
                 {
@@ -462,18 +470,46 @@ void CUDA_EMULATOR::ExecuteSingleBlock(pANTLR3_BASE_TREE block, int bidx, int bi
             }
         }
     }
+    PopSymbolTable();
+    // Keep track of symbol table root to restore later.  This is because of the awful
+    // use of root on a per-thread basis.
+    SymbolTable * save = this->root;
 
+    int num_waiting_threads = 0;
     while (! queue.empty())
     {
         Thread * thread = queue.front();
         queue.pop();
-        thread->Execute();
+        if (! thread->Waiting())
+        {
+            thread->Execute();
+        }
         if (! thread->Finished())
+        {
             queue.push(thread);
+            num_waiting_threads++;
+        }
         else
             delete thread;
+
+        // thread synchronization assumes all threads wait.
+        if (num_waiting_threads != 0 && num_waiting_threads == queue.size())
+        {
+            if (this->trace_level > 0)
+                std::cout << "All " << num_waiting_threads << " threads synchronized!\n";
+            // all threads waiting.  Reset all threads to not wait.
+            for (int i = 0; i < num_waiting_threads; ++i)
+            {
+                Thread * t = queue.front();
+                queue.pop();
+                t->Reset();
+                queue.push(t);
+            }
+            num_waiting_threads = 0;
+        }
     }
-    PopSymbolTable();
+    // Restore...
+    this->root = save;
 }
 
 CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, pANTLR3_BASE_TREE block, int pc, CUDA_EMULATOR::SymbolTable * root)
@@ -483,6 +519,7 @@ CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, pANTLR3_BASE_TREE block,
     this->pc = pc;
     this->root = root;
     this->finished = false;
+    this->wait = false;
 }
 
 CUDA_EMULATOR::Thread::~Thread()
@@ -506,7 +543,7 @@ bool CUDA_EMULATOR::Thread::Execute()
     for (;;)
     {
         pANTLR3_BASE_TREE inst = this->emulator->GetInst(block, pc);
-        if (this->emulator->trace)
+        if (this->emulator->trace_level > 3)
             this->emulator->Dump("before", pc, inst);
 
         int next = this->emulator->Dispatch(inst);
@@ -519,6 +556,9 @@ bool CUDA_EMULATOR::Thread::Execute()
         }
         else if (next == -KI_BAR)
         {
+            // Set state of this thread to wait, and pack up current program counter.
+            this->wait = true;
+            this->pc = pc + 1;
             return this->finished;
         }
         else
@@ -526,7 +566,7 @@ bool CUDA_EMULATOR::Thread::Execute()
 
         pc = this->emulator->FindFirstInst(block, pc);
 
-        if (this->emulator->trace)
+        if (this->emulator->trace_level > 2)
             this->emulator->Dump("after", pc, inst);
     }
 }
@@ -536,15 +576,36 @@ bool CUDA_EMULATOR::Thread::Finished()
     return this->finished;
 }
 
+void CUDA_EMULATOR::Thread::Reset()
+{
+    this->wait = false;
+}
+
+bool CUDA_EMULATOR::Thread::Waiting()
+{
+    return this->wait;
+}
+
+void CUDA_EMULATOR::PrintName(pANTLR3_BASE_TREE inst)
+{
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    std::cout << GetText(GetChild(inst, start)) << "\n";
+} 
+
 void CUDA_EMULATOR::Print(pANTLR3_BASE_TREE node, int level)
 {
     for (int i = 0; i < level; ++i)
         std::cout << "   ";
     std::cout << GetText(node) << "\n";
-    for (int i = 0; i < (int)node->getChildCount(node); ++i)
+    if (this->trace_level > 1)
     {
-        pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
-        Print(child, level+1);
+        for (int i = 0; i < (int)node->getChildCount(node); ++i)
+        {
+            pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
+            Print(child, level+1);
+        }
     }
 } 
 
@@ -725,9 +786,11 @@ char * CUDA_EMULATOR::GetText(pANTLR3_BASE_TREE node)
 
 int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
 {
-    if (this->trace)
+    if (this->trace_level > 0)
     {
-        Print(inst, 0);
+        PrintName(inst);
+        if (this->trace_level > 1)
+            Print(inst, 0);
     }
     
     pANTLR3_BASE_TREE i = (pANTLR3_BASE_TREE)inst->getChild(inst, 0);
@@ -738,15 +801,35 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         pANTLR3_BASE_TREE pred = i;
         i = (pANTLR3_BASE_TREE)inst->getChild(inst, 1);
         inst_type = i->getType(i);
+
         // Check if pred is true.  If false, ignore instruction with this predicate.
-        pANTLR3_BASE_TREE psym = (pANTLR3_BASE_TREE)inst->getChild(pred, 0);
-        assert(GetType(psym) == T_WORD);
-        Symbol * s = FindSymbol(GetText(psym));
-        assert(s != 0);
-        if (! *((bool*)s->pvalue))
+        int i = 0;
+        bool not = false;
+        pANTLR3_BASE_TREE tsym = 0;
+        for (;; ++i)
         {
-            if (this->trace)
-                std::cout << "Skipping " << GetText(i) << " because guard predicate is false\n";
+            pANTLR3_BASE_TREE t = GetChild(pred, i);
+            if (t == 0)
+                break;
+            int gt = GetType(t);
+            if (gt == T_NOT)
+                not = true;
+            else if (gt == T_WORD)
+                tsym = t;
+            else assert(false);
+        }
+        assert(tsym != 0);
+        Symbol * sym = FindSymbol(GetText(tsym));
+        assert(sym != 0);
+        TYPES * s = (TYPES*)sym->pvalue;
+
+        bool test = s->pred;
+        if (not)
+            test = ! test;
+        if (! test)
+        {
+            if (this->trace_level > 1)
+                std::cout << "Skipping instruction because guard predicate is false\n";
             return 0; // continue.
         }
     }
@@ -763,7 +846,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_ATOM:
             break;
         case KI_BAR:
-            break;
+            return DoBar(inst);
         case KI_BFE:
             break;
         case KI_BFI:
@@ -787,10 +870,9 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_COS:
             break;
         case KI_CVT:
-            DoCvt(inst);
-            return 0;
+            return DoCvt(inst);
         case KI_CVTA:
-            break;
+            return DoCvta(inst);
         case KI_DIV:
             return DoDiv(inst);
         case KI_EX2:
@@ -870,7 +952,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_ST:
             return DoSt(inst);
         case KI_SUB:
-            break;
+            return DoSub(inst);
         case KI_SUBC:
             break;
         case KI_SULD:

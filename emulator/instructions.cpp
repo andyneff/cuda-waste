@@ -221,6 +221,84 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
+int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
+{
+    // ONLY VERY SIMPLE SYNCHRONIZATION IMPLEMENTED!!!
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_BAR);
+    start++;
+    pANTLR3_BASE_TREE ttype = 0;
+    pANTLR3_BASE_TREE osrc1 = 0;
+    for (;; ++start)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(osrc1 != 0);
+    for (int i = 0; ; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt != K_SYNC)
+            assert(false);
+    }
+    int type = K_U32;
+    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+
+    TYPES value1;
+    char * dummy;
+    TYPES * s1 = &value1;
+
+    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src1, 0));
+        switch (type)
+        {
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src1) == T_WORD)
+    {
+        Symbol * ssrc1 = FindSymbol(GetText(src1));
+        assert(ssrc1 != 0);
+        assert(ssrc1->size == Sizeof(type));
+        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        switch (type)
+        {
+            case K_U32:
+                s1->u32 = psrc1_value->u32;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    assert(s1->u32 == 0);
+
+    // pack up the thread context.  Synchronize all assumed.
+
+    return -KI_BAR;
+}
+
 int CUDA_EMULATOR::DoBra(pANTLR3_BASE_TREE inst)
 {
     int start = 0;
@@ -737,6 +815,96 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
+
+int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
+{
+    // Assign source to destination.
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_CVTA);
+    start++;
+    pANTLR3_BASE_TREE ttype = 0;
+    pANTLR3_BASE_TREE odst = 0;
+    pANTLR3_BASE_TREE osrc = 0;
+    for (;; ++start)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc == 0)
+            {
+                osrc = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc != 0);
+    int storage_class = 0;
+    for (int i = 0; ; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == K_U32 || gt == K_U64)
+            ttype = t;
+        else if (gt == K_SHARED || gt == K_GLOBAL || gt == K_LOCAL)
+            storage_class = gt;
+        else assert(false);
+    }
+    assert(ttype);
+    int type = GetType(ttype);
+    pANTLR3_BASE_TREE dst = GetChild(odst, 0);
+    pANTLR3_BASE_TREE src = GetChild(osrc,0);
+    Symbol * sdst = 0;
+    Symbol * ssrc = 0;
+    if (dst->getType(dst) == T_WORD)
+    {
+        sdst = FindSymbol(GetText(dst));
+    } else assert(false);
+
+    typedef union TYPES {
+        unsigned __int64 u64;
+        unsigned __int32 u32;
+    } TYPES;
+    TYPES * d;
+    TYPES * s;
+    TYPES value;
+    char * dummy;
+
+    d = (TYPES*)sdst->pvalue;
+    if (GetType(src) == T_WORD)
+    {
+        ssrc = FindSymbol(GetText(src));
+        // Various types of id's to handle:
+        assert(ssrc != 0);
+        s = (TYPES*)ssrc->pvalue;
+    }
+
+    switch (type)
+    {
+        case K_U32:
+            d->u32 = s->u32;
+            break;
+        case K_U64:
+            d->u64 = s->u64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
+}
+
 int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
 {
     int start = 0;
@@ -921,7 +1089,7 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
 
 int CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
 {
-    if (this->trace)
+    if (this->trace_level > 1)
         std::cout << "EXIT\n";
     return -KI_EXIT;
 }
@@ -2254,5 +2422,224 @@ int CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
         ssrc = FindSymbol(GetText(src));
     } else assert(false);
     *(int*) (((TYPES*)sdst->pvalue)->u32) = ((TYPES*)ssrc->pvalue)->u32;
+    return 0;
+}
+
+int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
+{
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_SUB);
+    start++;
+    pANTLR3_BASE_TREE ttype = 0;
+    pANTLR3_BASE_TREE odst = 0;
+    pANTLR3_BASE_TREE osrc1 = 0;
+    pANTLR3_BASE_TREE osrc2 = 0;
+    for (;; ++start)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    bool sat = false;
+    for (int i = 0; ; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == K_SAT)
+            sat = true;
+        else if (gt == K_U16 || gt == K_U32 || gt == K_U64
+                 || gt == K_S16 || gt == K_S32 || gt == K_S64)
+            ttype = t;
+        else assert(false);
+    }
+    assert(ttype != 0);
+    assert(sat == 0);
+    int type = GetType(ttype);
+    pANTLR3_BASE_TREE dst = GetChild(odst,0);
+    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+
+    Symbol * sdst = 0;
+    if (dst->getType(dst) == T_WORD)
+    {
+        sdst = FindSymbol(GetText(dst));
+    } else assert(false);
+    typedef union TYPES {
+        __int64 s64;
+        __int32 s32;
+        __int16 s16;;
+        unsigned __int64 u64;
+        unsigned __int32 u32;
+        unsigned __int16 u16;
+    } TYPES;
+
+    TYPES value1;
+    TYPES value2;
+    char * dummy;
+    TYPES * d = (TYPES*)sdst->pvalue;
+    TYPES * s1 = &value1;
+    TYPES * s2 = &value2;
+
+    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src1, 0));
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s1->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src1) == T_WORD)
+    {
+        Symbol * ssrc1 = FindSymbol(GetText(src1));
+        assert(ssrc1 != 0);
+        assert(ssrc1->size == Sizeof(type));
+        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = psrc1_value->u16;
+                break;
+            case K_S16:
+                s1->s16 = psrc1_value->s16;
+                break;
+            case K_U32:
+                s1->u32 = psrc1_value->u32;
+                break;
+            case K_S32:
+                s1->s32 = psrc1_value->s32;
+                break;
+            case K_U64:
+                s1->u64 = psrc1_value->u64;
+                break;
+            case K_S64:
+                s1->s64 = psrc1_value->s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src2, 0));
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s2->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src2) == T_WORD)
+    {
+        Symbol * ssrc2 = FindSymbol(GetText(src2));
+        assert(ssrc2 != 0);
+        assert(ssrc2->size == Sizeof(type));
+        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = psrc2_value->u16;
+                break;
+            case K_S16:
+                s2->s16 = psrc2_value->s16;
+                break;
+            case K_U32:
+                s2->u32 = psrc2_value->u32;
+                break;
+            case K_S32:
+                s2->s32 = psrc2_value->s32;
+                break;
+            case K_U64:
+                s2->u64 = psrc2_value->u64;
+                break;
+            case K_S64:
+                s2->s64 = psrc2_value->s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U16:
+            d->u16 = s1->u16 - s2->u16;
+            break;
+        case K_S16:
+            d->s16 = s1->s16 - s2->s16;
+            break;
+        case K_U32:
+            d->u32 = s1->u32 - s2->u32;
+            break;
+        case K_S32:
+            d->s32 = s1->s32 - s2->s32;
+            break;
+        case K_S64:
+            d->s64 = s1->s64 - s2->s64;
+            break;
+        case K_U64:
+            d->u64 = s1->u64 - s2->u64;
+            break;
+        default:
+            assert(false);
+    }
     return 0;
 }
