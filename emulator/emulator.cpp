@@ -99,29 +99,57 @@ cudaError_t CUDA_EMULATOR::GetDevice(int * device)
 
 cudaError_t CUDA_EMULATOR::GetDeviceProperties(struct cudaDeviceProp *prop, int device)
 {
-    static cudaDeviceProp p = {
-        "emulator",                     // char name[256];
-        3000000000,                     // size_t totalGlobalMem;
-        3000000,                        // size_t sharedMemPerBlock;
-        500,                            // int regsPerBlock;
-        500,                            // int warpSize;
-        10,                             // size_t memPitch;
-        16000,                          // int maxThreadsPerBlock;
-        {1000,1,1},                     // int maxThreadsDim[3];
-        {1000,1,1},                     // int maxGridSize[3];
-        100000000,                      // size_t totalConstMem;
-        1,                              // int major;
-        4,                              // int minor;
-        111,                            // int clockRate;
-        11,                             // size_t textureAlignment;
-        11,                             // int deviceOverlap;
-        11,                             // int multiProcessorCount;
-        1,                              // int kernelExecTimeoutEnabled;
-        1,                              // int integrated;
-        1,                              // int canMapHostMemory;
-        1                               // int computeMode;
-    };
-    *prop = p;
+    if (strcmp(this->device, "compute_20") == 0)
+    {
+        static cudaDeviceProp p = {
+            "emulator",                     // char name[256];
+            3000000000,                     // size_t totalGlobalMem;
+            3000000,                        // size_t sharedMemPerBlock;
+            500,                            // int regsPerBlock;
+            500,                            // int warpSize;
+            10,                             // size_t memPitch;
+            16000,                          // int maxThreadsPerBlock;
+            {1000,1,1},                     // int maxThreadsDim[3];
+            {1000,1,1},                     // int maxGridSize[3];
+            111,                            // int clockRate;
+            100000000,                      // size_t totalConstMem;
+            2,                              // int major;
+            0,                              // int minor;
+            11,                             // size_t textureAlignment;
+            11,                             // int deviceOverlap;
+            11,                             // int multiProcessorCount;
+            1,                              // int kernelExecTimeoutEnabled;
+            1,                              // int integrated;
+            1,                              // int canMapHostMemory;
+            1                               // int computeMode;
+        };
+        *prop = p;
+    } else
+    {
+        static cudaDeviceProp p = {
+            "emulator",                     // char name[256];
+            3000000000,                     // size_t totalGlobalMem;
+            3000000,                        // size_t sharedMemPerBlock;
+            500,                            // int regsPerBlock;
+            500,                            // int warpSize;
+            10,                             // size_t memPitch;
+            16000,                          // int maxThreadsPerBlock;
+            {1000,1,1},                     // int maxThreadsDim[3];
+            {1000,1,1},                     // int maxGridSize[3];
+            111,                            // int clockRate;
+            100000000,                      // size_t totalConstMem;
+            1,                              // int major;
+            4,                              // int minor;
+            11,                             // size_t textureAlignment;
+            11,                             // int deviceOverlap;
+            11,                             // int multiProcessorCount;
+            1,                              // int kernelExecTimeoutEnabled;
+            1,                              // int integrated;
+            1,                              // int canMapHostMemory;
+            1                               // int computeMode;
+        };
+        *prop = p;
+    }
     return cudaSuccess;
 }
 
