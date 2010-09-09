@@ -162,7 +162,9 @@ private:
     int DoExit(pANTLR3_BASE_TREE inst);
     int DoFma(pANTLR3_BASE_TREE inst);
     int DoMov(pANTLR3_BASE_TREE inst);
-    int DoMul(pANTLR3_BASE_TREE inst);
+	int DoMad(pANTLR3_BASE_TREE inst);
+	int DoMul(pANTLR3_BASE_TREE inst);
+	int DoMul24(pANTLR3_BASE_TREE inst);
     int DoLd(pANTLR3_BASE_TREE inst);
     int DoLdu(pANTLR3_BASE_TREE inst);
     int DoSetp(pANTLR3_BASE_TREE inst);

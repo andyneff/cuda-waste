@@ -1007,16 +1007,16 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
         switch (type)
         {
             case K_U16:
-                s1->u16 = c.value.u64;
+                s1->u16 = c.value.u16;
                 break;
             case K_S16:
-                s1->s16 = c.value.s64;
+                s1->s16 = c.value.s16;
                 break;
             case K_U32:
-                s1->u32 = c.value.u64;
+                s1->u32 = c.value.u32;
                 break;
             case K_S32:
-                s1->s32 = c.value.s64;
+                s1->s32 = c.value.s32;
                 break;
             default:
                 assert(false);
@@ -1034,16 +1034,16 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
         switch (type)
         {
             case K_U16:
-                s2->u16 = c.value.u64;
+                s2->u16 = c.value.u16;
                 break;
             case K_S16:
-                s2->s16 = c.value.s64;
+                s2->s16 = c.value.s16;
                 break;
             case K_U32:
-                s2->u32 = c.value.u64;
+                s2->u32 = c.value.u32;
                 break;
             case K_S32:
-                s2->s32 = c.value.s64;
+                s2->s32 = c.value.s32;
                 break;
             default:
                 assert(false);
@@ -1610,6 +1610,264 @@ int CUDA_EMULATOR::DoLdu(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
+int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
+{
+    // Multiply+add register and/or constants, and store in a register.
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    start++;
+    assert(GetType(GetChild(inst, start)) == KI_MAD);
+    start++;
+    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
+    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    start++;
+    pANTLR3_BASE_TREE odst = 0;
+    pANTLR3_BASE_TREE osrc1 = 0;
+    pANTLR3_BASE_TREE osrc2 = 0;
+    pANTLR3_BASE_TREE osrc3 = 0;
+    for (;; ++start)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else if (osrc3 == 0)
+            {
+                osrc3 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    assert(osrc3 != 0);
+    bool sat = false;
+    bool ftz = false;
+	pANTLR3_BASE_TREE twidth = 0;
+    pANTLR3_BASE_TREE tfrnd = 0;
+    for (int i = 0; ; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == K_SAT)
+            sat = true;
+        else if (gt == K_FTZ)
+            ftz = true;
+        else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
+            tfrnd = t;
+        else if (gt == K_F32 || gt == K_F64)
+            ttype = t;
+        else if (gt== K_LO || gt == K_HI || gt == K_WIDE)
+            twidth = t;
+        else if (gt == K_U16 || gt == K_U32 || gt == K_U64
+                 || gt == K_S16 || gt == K_S32 || gt == K_S64)
+            ttype = t;
+        else assert(false);
+    }
+    assert(ttype != 0);
+    assert(sat == 0); // unimplemented
+    assert(ftz == 0);  // unimplemented.
+    int type = GetType(ttype);
+	int width = 0;
+	if (twidth != 0)
+		width = GetType(twidth);
+
+    pANTLR3_BASE_TREE dst = GetChild(odst,0);
+    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    pANTLR3_BASE_TREE src3 = GetChild(osrc3,0);
+
+    // Supported types of MAD.
+    typedef union TYPES {
+		__int64 s64;
+		__int32 s32;
+		__int16 s16;;
+		unsigned __int64 u64;
+		unsigned __int32 u32;
+		unsigned __int16 u16;
+        float f32;
+        double f64;
+    } TYPES;
+
+    Symbol * sdst = 0;
+    Symbol * ssrc1 = 0;
+    Symbol * ssrc2 = 0;
+    Symbol * ssrc3 = 0;
+    assert(GetType(dst) == T_WORD);
+    sdst = FindSymbol(GetText(dst));
+    char * dummy;
+
+    TYPES value1; // used if literal
+    TYPES value2; // used if literal
+    TYPES value3; // used if literal
+    TYPES * d = (TYPES*)sdst->pvalue;
+    TYPES * s1 = &value1;
+    TYPES * s2 = &value2;
+    TYPES * s3 = &value2;
+
+    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src1, 0));
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s1->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src1) == T_WORD)
+    {
+        ssrc1 = FindSymbol(GetText(src1));
+        assert(ssrc1 != 0);
+        s1 = (TYPES*)ssrc1->pvalue;
+    } else assert(false);
+
+    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src2, 0));
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s2->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_F32:
+                s2->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s2->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src2) == T_WORD)
+    {
+        ssrc2 = FindSymbol(GetText(src2));
+        assert(ssrc2 != 0);
+        s2 = (TYPES*)ssrc2->pvalue;
+    } else assert(false);
+
+    if (GetType(src3) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src3, 0));
+        switch (type)
+        {
+            case K_U16:
+                s3->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s3->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s3->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s3->s32 = c.value.s32;
+                break;
+            case K_F32:
+                s3->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s3->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src3) == T_WORD)
+    {
+        ssrc3 = FindSymbol(GetText(src3));
+        assert(ssrc3 != 0);
+        s3 = (TYPES*)ssrc3->pvalue;
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U16:
+            if (width == K_LO)
+                d->u16 = s1->u16 * s2->u16 + s3->u16;
+            else if (width == K_HI)
+                d->u16 = (s1->u16 * s2->u16 + s3->u16) >> 16;
+            else if (width == K_WIDE)
+                d->u32 = s1->u16 * s2->u16 + s3->u32;
+            else assert(false);
+            break;
+        case K_S16:
+            if (width == K_LO)
+                d->s16 = s1->s16 * s2->s16 + s3->s16;
+            else if (width == K_HI)
+                d->s16 = (s1->s16 * s2->s16 + s3->s16) >> 16;
+            else if (width == K_WIDE)
+                d->s32 = s1->s16 * s2->s16 + s3->s32;
+            else assert(false);
+            break;
+        case K_U32:
+            if (width == K_LO)
+                d->u32 = s1->u32 * s2->u32 + s3->u32;
+            else if (width == K_HI)
+                d->u32 = (s1->u32 * s2->u32 + s3->u32) >> 32;
+            else if (width == K_WIDE)
+                d->u64 = s1->u32 * s2->u32 + s3->u64;
+            else assert(false);
+            break;
+        case K_S32:
+            if (width == K_LO)
+                d->s32 = s1->s32 * s2->s32 + s3->s32;
+            else if (width == K_HI)
+                d->s32 = (s1->s32 * s2->s32 + s3->s32) >> 32;
+            else if (width == K_WIDE)
+                d->s64 = s1->s32 * s2->s32 + s3->s64;
+            else assert(false);
+            break;
+        case K_F32:
+            d->f32 = s1->f32 * s2->f32 + s3->f32;
+            break;
+        case K_F64:
+            d->f64 = s1->f64 * s2->f64 + s3->f64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
+}
+
 int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
 {
     // Assign source to destination.
@@ -1947,16 +2205,16 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         switch (type)
         {
             case K_U16:
-                s1->u16 = c.value.u64;
+                s1->u16 = c.value.u16;
                 break;
             case K_S16:
-                s1->s16 = c.value.s64;
+                s1->s16 = c.value.s16;
                 break;
             case K_U32:
-                s1->u32 = c.value.u64;
+                s1->u32 = c.value.u32;
                 break;
             case K_S32:
-                s1->s32 = c.value.s64;
+                s1->s32 = c.value.s32;
                 break;
             default:
                 assert(false);
@@ -1974,16 +2232,16 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         switch (type)
         {
             case K_U16:
-                s2->u16 = c.value.u64;
+                s2->u16 = c.value.u16;
                 break;
             case K_S16:
-                s2->s16 = c.value.s64;
+                s2->s16 = c.value.s16;
                 break;
             case K_U32:
-                s2->u32 = c.value.u64;
+                s2->u32 = c.value.u32;
                 break;
             case K_S32:
-                s2->s32 = c.value.s64;
+                s2->s32 = c.value.s32;
                 break;
             default:
                 assert(false);
@@ -2052,6 +2310,151 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
             break;
         case K_F64:
             d->f64 = s1->f64 * s2->f64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
+}
+
+int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
+{
+    // Multiply 24-bit integer numbers, in register and/or constants,
+    // and store in a register.
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_MUL24);
+    start++;
+    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
+    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    start++;
+    pANTLR3_BASE_TREE odst = 0;
+    pANTLR3_BASE_TREE osrc1 = 0;
+    pANTLR3_BASE_TREE osrc2 = 0;
+    for (;; ++start)
+    {
+        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    pANTLR3_BASE_TREE twidth = 0;
+    for (int i = 0; ; ++i)
+    {
+        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == K_U32 || gt == K_S32)
+            ttype = t;
+        else if (gt== K_LO || gt == K_HI)
+            twidth = t;
+        else assert(false);
+    }
+    assert(ttype != 0);
+    int type = GetType(ttype);
+    int width = 0;
+    if (twidth != 0)
+        width = GetType(twidth);
+
+    pANTLR3_BASE_TREE dst = GetChild(odst,0);
+    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+
+    // Supported types of MUL24.
+    typedef union TYPES {
+        int s32;
+        unsigned int u32;
+    } TYPES;
+
+    Symbol * sdst = 0;
+    Symbol * ssrc1 = 0;
+    Symbol * ssrc2 = 0;
+    assert(GetType(dst) == T_WORD);
+    sdst = FindSymbol(GetText(dst));
+    char * dummy;
+
+    TYPES value1; // used if literal
+    TYPES value2; // used if literal
+    TYPES * d = (TYPES*)sdst->pvalue;
+    TYPES * s1 = &value1;
+    TYPES * s2 = &value2;
+
+    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src1, 0));
+        switch (type)
+        {
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src1) == T_WORD)
+    {
+        ssrc1 = FindSymbol(GetText(src1));
+        assert(ssrc1 != 0);
+        s1 = (TYPES*)ssrc1->pvalue;
+    } else assert(false);
+
+    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src2, 0));
+        switch (type)
+        {
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src2) == T_WORD)
+    {
+        ssrc2 = FindSymbol(GetText(src2));
+        assert(ssrc2 != 0);
+        s2 = (TYPES*)ssrc2->pvalue;
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U32:
+            if (width == K_LO)
+                d->u32 = (s1->u32 * s2->u32) & 0xffffffff;
+            else if (width == K_HI)
+                d->u32 = (s1->u32 * s2->u32 ) >> 16;
+            else assert(false);
+            break;
+        case K_S32:
+            if (width == K_LO)
+                d->s32 = (s1->s32 * s2->s32) & 0xffffffff;
+            else if (width == K_HI)
+                d->s32 = (s1->s32 * s2->s32 ) >> 16;
+            else assert(false);
             break;
         default:
             assert(false);

@@ -892,7 +892,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_MAD24:
             break;
         case KI_MAD:
-            break;
+			return DoMad(inst);
         case KI_MAX:
             break;
         case KI_MEMBAR:
@@ -902,7 +902,7 @@ int CUDA_EMULATOR::Dispatch(pANTLR3_BASE_TREE inst)
         case KI_MOV:
             return DoMov(inst);
         case KI_MUL24:
-            break;
+			return DoMul24(inst);
         case KI_MUL:
             return DoMul(inst);
         case KI_NEG:
