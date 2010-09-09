@@ -490,7 +490,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(pANTLR3_BASE_TREE block, int bidx, int bi
                 PushSymbolTable();
                 dim3 tid(tidx, tidy, tidz);
                 CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
-                int sc[] = { K_REG, K_LOCAL, K_ALIGN, 0};
+                int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
                 SetupVariables(block, sc);
                 Thread * thread = new Thread(this, block, 0, this->root);
                 queue.push(thread);
