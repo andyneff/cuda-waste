@@ -452,7 +452,7 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckSinglePtrOverwrite(const data * d)
             {
                 if (*c != cu->padding_byte)
                 {
-                    (*cu->output_stream) << "Overwrite of cuda memory block header.\n";
+                    (*cu->output_stream) << "Overwrite of cuda memory block footer.\n";
                     (*cu->output_stream) << " Pointer " << d->ptr << " was allocated in file "
                         << d->context << ".\n";
                     (*cu->output_stream) << " This check was performed during a CUDA call in "
