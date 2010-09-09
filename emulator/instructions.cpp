@@ -1655,7 +1655,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     assert(osrc3 != 0);
     bool sat = false;
     bool ftz = false;
-	pANTLR3_BASE_TREE twidth = 0;
+    pANTLR3_BASE_TREE twidth = 0;
     pANTLR3_BASE_TREE tfrnd = 0;
     for (int i = 0; ; ++i)
     {
@@ -1682,9 +1682,9 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     assert(sat == 0); // unimplemented
     assert(ftz == 0);  // unimplemented.
     int type = GetType(ttype);
-	int width = 0;
-	if (twidth != 0)
-		width = GetType(twidth);
+    int width = 0;
+    if (twidth != 0)
+        width = GetType(twidth);
 
     pANTLR3_BASE_TREE dst = GetChild(odst,0);
     pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
@@ -1693,12 +1693,12 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
 
     // Supported types of MAD.
     typedef union TYPES {
-		__int64 s64;
-		__int32 s32;
-		__int16 s16;;
-		unsigned __int64 u64;
-		unsigned __int32 u32;
-		unsigned __int16 u16;
+        __int64 s64;
+        __int32 s32;
+        __int16 s16;;
+        unsigned __int64 u64;
+        unsigned __int32 u32;
+        unsigned __int16 u16;
         float f32;
         double f64;
     } TYPES;
