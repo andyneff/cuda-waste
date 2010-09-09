@@ -16,7 +16,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     srand(2006);
 
-    if (0) {
+    {
         // Start with simple matrix multiply.  The matrices involved with this must
         // be small because the simple gpu implementation cannot handle large sizes.
         int scale = 1;
@@ -114,8 +114,8 @@ int _tmain(int argc, _TCHAR* argv[])
             _ftime(&t2);
             std::cout << (double)(t2.time - t1.time + ((double)(t2.millitm - t1.millitm))/1000) << " s.\n";
         }
-
-        if (0) {
+        
+        {
             struct _timeb  t3;
             struct _timeb  t4;
             _ftime_s(&t3);
