@@ -2,20 +2,20 @@
 #include <assert.h>
 #include <iostream>
 
-int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoAdd(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_ADD);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -42,7 +42,7 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
     bool sat = false;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -56,14 +56,14 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
     assert(ttype != 0);
     assert(sat == 0);
     int type = GetType(ttype);
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     Symbol * sdst = 0;
-    if (dst->getType(dst) == T_WORD)
+    if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(GetText(dst));
+        sdst = FindSymbol(dst->GetText());
     } else assert(false);
     typedef union TYPES {
         __int64 s64;
@@ -109,7 +109,7 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(GetText(src1));
+        Symbol * ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
@@ -166,7 +166,7 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(GetText(src2));
+        Symbol * ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
@@ -221,7 +221,7 @@ int CUDA_EMULATOR::DoAdd(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoBar(TREE * inst)
 {
     // ONLY VERY SIMPLE SYNCHRONIZATION IMPLEMENTED!!!
     int start = 0;
@@ -229,11 +229,11 @@ int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_BAR);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
+    TREE * ttype = 0;
+    TREE * osrc1 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -251,7 +251,7 @@ int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
     assert(osrc1 != 0);
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -259,7 +259,7 @@ int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
             assert(false);
     }
     int type = K_U32;
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
+    TREE * src1 = GetChild(osrc1,0);
 
     TYPES value1;
     char * dummy;
@@ -278,7 +278,7 @@ int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(GetText(src1));
+        Symbol * ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
@@ -299,26 +299,26 @@ int CUDA_EMULATOR::DoBar(pANTLR3_BASE_TREE inst)
     return -KI_BAR;
 }
 
-int CUDA_EMULATOR::DoBra(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoBra(TREE * inst)
 {
     int start = 0;
     for (;;)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         assert(t != 0);
         if (GetType(t) == TREE_OPR)
             break;
         start++;
     }
-    pANTLR3_BASE_TREE opr = GetChild(inst, start);
-    pANTLR3_BASE_TREE dst = GetChild(opr, 0);
+    TREE * opr = GetChild(inst, start);
+    TREE * dst = GetChild(opr, 0);
     assert(GetType(dst) == T_WORD);
-    Symbol * sdst = FindSymbol(GetText(dst));
+    Symbol * sdst = FindSymbol(dst->GetText());
     assert (sdst != 0);
     return (int)sdst->pvalue;
 }
 
-int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoCvt(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
@@ -326,12 +326,12 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_CVT);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE type = GetChild(inst, start);
+    TREE * type = GetChild(inst, start);
     start++;
     bool ftz = false;
     bool sat = false;
-    pANTLR3_BASE_TREE tirnd = 0;
-    pANTLR3_BASE_TREE tfrnd = 0;
+    TREE * tirnd = 0;
+    TREE * tfrnd = 0;
     int irnd = 0;
     int frnd = 0;
     int src_type = 0;
@@ -339,7 +339,7 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     int i = 0;
     for (;; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(type, i);
+        TREE * t = GetChild(type, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -364,7 +364,7 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     {
         for (int i = 0; ; ++i)
         {
-            pANTLR3_BASE_TREE t = GetChild(tirnd, i);
+            TREE * t = GetChild(tirnd, i);
             if (t == 0)
                 break;
             int gt = GetType(t);
@@ -377,7 +377,7 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     {
         for (int i = 0; ; ++i)
         {
-            pANTLR3_BASE_TREE t = GetChild(tfrnd, i);
+            TREE * t = GetChild(tfrnd, i);
             if (t == 0)
                 break;
             int gt = GetType(t);
@@ -402,16 +402,16 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     TYPES * dst_value;
     TYPES * src_value;
 
-    pANTLR3_BASE_TREE o1 = GetChild(inst, start++);
+    TREE * o1 = GetChild(inst, start++);
     assert(GetType(o1) == TREE_OPR);
     assert(GetType(GetChild(o1, 0)) == T_WORD);
-    pANTLR3_BASE_TREE o2 = GetChild(inst, start++);
+    TREE * o2 = GetChild(inst, start++);
     assert(GetType(o2) == TREE_OPR);
     assert(GetType(GetChild(o2, 0)) == T_WORD);
 
-    Symbol * s1 = FindSymbol(GetText(GetChild(o1, 0)));
+    Symbol * s1 = FindSymbol(GetChild(o1, 0)->GetText());
     assert(s1 != 0);
-    Symbol * s2 = FindSymbol(GetText(GetChild(o2, 0)));
+    Symbol * s2 = FindSymbol(GetChild(o2, 0)->GetText());
     assert(s2 != 0);
 
     dst_value = (TYPES*)s1->pvalue;
@@ -420,7 +420,7 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
     if (strcmp(s2->type, "dim3") == 0)
     {
         // Get qualifier of the structure.
-        pANTLR3_BASE_TREE tqual = GetChild(o2, 1);
+        TREE * tqual = GetChild(o2, 1);
         assert(tqual != 0);
         int qual = GetType(tqual);
         if (qual == K_X)
@@ -816,7 +816,7 @@ int CUDA_EMULATOR::DoCvt(pANTLR3_BASE_TREE inst)
 }
 
 
-int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoCvta(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -824,12 +824,12 @@ int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_CVTA);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -852,7 +852,7 @@ int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
     int storage_class = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -864,13 +864,13 @@ int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
     }
     assert(ttype);
     int type = GetType(ttype);
-    pANTLR3_BASE_TREE dst = GetChild(odst, 0);
-    pANTLR3_BASE_TREE src = GetChild(osrc,0);
+    TREE * dst = GetChild(odst, 0);
+    TREE * src = GetChild(osrc,0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    if (dst->getType(dst) == T_WORD)
+    if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(GetText(dst));
+        sdst = FindSymbol(dst->GetText());
     } else assert(false);
 
     typedef union TYPES {
@@ -885,7 +885,7 @@ int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
     d = (TYPES*)sdst->pvalue;
     if (GetType(src) == T_WORD)
     {
-        ssrc = FindSymbol(GetText(src));
+        ssrc = FindSymbol(src->GetText());
         // Various types of id's to handle:
         assert(ssrc != 0);
         s = (TYPES*)ssrc->pvalue;
@@ -905,7 +905,7 @@ int CUDA_EMULATOR::DoCvta(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoDiv(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
@@ -913,14 +913,14 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_DIV);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    TREE * ttype = GetChild(inst, start);
     start++;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -943,10 +943,10 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     assert(osrc1 != 0);
     assert(osrc2 != 0);
     bool ftz = false;
-    pANTLR3_BASE_TREE tfrnd = 0;
+    TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -967,9 +967,9 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     assert(ftz == 0);  // unimplemented.
     int type = GetType(ttype);
 
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     typedef union TYPES {
         long s64;
@@ -992,7 +992,7 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    sdst = FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -1023,7 +1023,7 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -1050,7 +1050,7 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -1087,7 +1087,7 @@ int CUDA_EMULATOR::DoDiv(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoExit(TREE * inst)
 {
     if (this->trace_level > 1)
         std::cout << "EXIT\n";
@@ -1095,7 +1095,7 @@ int CUDA_EMULATOR::DoExit(pANTLR3_BASE_TREE inst)
 }
 
 
-int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoFma(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -1104,15 +1104,15 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_FMA);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    TREE * ttype = GetChild(inst, start);
     start++;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
-    pANTLR3_BASE_TREE osrc3 = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1140,10 +1140,10 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
     assert(osrc3 != 0);
     bool sat = false;
     bool ftz = false;
-    pANTLR3_BASE_TREE tfrnd = 0;
+    TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1162,10 +1162,10 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
     assert(ftz == 0);  // unimplemented.
     int type = GetType(ttype);
 
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
-    pANTLR3_BASE_TREE src3 = GetChild(osrc3,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
+    TREE * src3 = GetChild(osrc3,0);
 
     // Supported types of MUL.
     typedef union TYPES {
@@ -1178,7 +1178,7 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
     Symbol * ssrc2 = 0;
     Symbol * ssrc3 = 0;
     assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    sdst = FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -1205,7 +1205,7 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -1226,7 +1226,7 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -1247,7 +1247,7 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src3) == T_WORD)
     {
-        ssrc3 = FindSymbol(GetText(src3));
+        ssrc3 = FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES*)ssrc3->pvalue;
     } else assert(false);
@@ -1266,19 +1266,19 @@ int CUDA_EMULATOR::DoFma(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoLd(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_LD);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1303,7 +1303,7 @@ int CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
     int vec = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1326,23 +1326,25 @@ int CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
     int type = GetType(ttype);
 
     // Get two operands, assign source to destination.
-    pANTLR3_BASE_TREE dst = GetChild(odst, 0);
-    pANTLR3_BASE_TREE src = GetChild(osrc, 0);
+    TREE * dst = GetChild(odst, 0);
+    TREE * src = GetChild(osrc, 0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    assert(dst->getType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    assert(dst->GetType() == T_WORD);
+    sdst = FindSymbol(dst->GetText());
+	assert(sdst != 0);
     
-    assert(src->getType(src) == T_WORD);
-    ssrc = FindSymbol(GetText(src));
-    pANTLR3_BASE_TREE plus = GetChild(osrc, 1);
+    assert(src->GetType() == T_WORD);
+    ssrc = FindSymbol(src->GetText());
+	assert(ssrc != 0);
+    TREE * plus = GetChild(osrc, 1);
     Constant value(0);
     if (plus != 0)
     {
-        pANTLR3_BASE_TREE const_expr_tree = GetChild(osrc, 2);
+        TREE * const_expr_tree = GetChild(osrc, 2);
         assert(const_expr_tree != 0);
         assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        pANTLR3_BASE_TREE const_expr = GetChild(const_expr_tree, 0);
+        TREE * const_expr = GetChild(const_expr_tree, 0);
         assert(const_expr != 0);
         value = Eval(K_S32, const_expr);
     }
@@ -1438,19 +1440,19 @@ int CUDA_EMULATOR::DoLd(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoLdu(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoLdu(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_LDU);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1475,7 +1477,7 @@ int CUDA_EMULATOR::DoLdu(pANTLR3_BASE_TREE inst)
     int vec = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1498,23 +1500,23 @@ int CUDA_EMULATOR::DoLdu(pANTLR3_BASE_TREE inst)
     int type = GetType(ttype);
 
     // Get two operands, assign source to destination.
-    pANTLR3_BASE_TREE dst = GetChild(odst, 0);
-    pANTLR3_BASE_TREE src = GetChild(osrc, 0);
+    TREE * dst = GetChild(odst, 0);
+    TREE * src = GetChild(osrc, 0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    assert(dst->getType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    assert(dst->GetType() == T_WORD);
+    sdst = FindSymbol(dst->GetText());
     
-    assert(src->getType(src) == T_WORD);
-    ssrc = FindSymbol(GetText(src));
-    pANTLR3_BASE_TREE plus = GetChild(osrc, 1);
+    assert(src->GetType() == T_WORD);
+    ssrc = FindSymbol(src->GetText());
+    TREE * plus = GetChild(osrc, 1);
     Constant value(0);
     if (plus != 0)
     {
-        pANTLR3_BASE_TREE const_expr_tree = GetChild(osrc, 2);
+        TREE * const_expr_tree = GetChild(osrc, 2);
         assert(const_expr_tree != 0);
         assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        pANTLR3_BASE_TREE const_expr = GetChild(const_expr_tree, 0);
+        TREE * const_expr = GetChild(const_expr_tree, 0);
         assert(const_expr != 0);
         value = Eval(K_S32, const_expr);
     }
@@ -1610,7 +1612,7 @@ int CUDA_EMULATOR::DoLdu(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoMad(TREE * inst)
 {
     // Multiply+add register and/or constants, and store in a register.
     int start = 0;
@@ -1619,15 +1621,15 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_MAD);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    TREE * ttype = GetChild(inst, start);
     start++;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
-    pANTLR3_BASE_TREE osrc3 = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1655,11 +1657,11 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     assert(osrc3 != 0);
     bool sat = false;
     bool ftz = false;
-    pANTLR3_BASE_TREE twidth = 0;
-    pANTLR3_BASE_TREE tfrnd = 0;
+    TREE * twidth = 0;
+    TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1686,10 +1688,10 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     if (twidth != 0)
         width = GetType(twidth);
 
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
-    pANTLR3_BASE_TREE src3 = GetChild(osrc3,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
+    TREE * src3 = GetChild(osrc3,0);
 
     // Supported types of MAD.
     typedef union TYPES {
@@ -1708,7 +1710,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     Symbol * ssrc2 = 0;
     Symbol * ssrc3 = 0;
     assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    sdst = FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -1747,7 +1749,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -1780,7 +1782,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -1813,7 +1815,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src3) == T_WORD)
     {
-        ssrc3 = FindSymbol(GetText(src3));
+        ssrc3 = FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES*)ssrc3->pvalue;
     } else assert(false);
@@ -1868,7 +1870,7 @@ int CUDA_EMULATOR::DoMad(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoMov(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -1876,12 +1878,12 @@ int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_MOV);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1903,7 +1905,7 @@ int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
     assert(osrc != 0);
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -1916,13 +1918,13 @@ int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
     }
     assert(ttype);
     int type = GetType(ttype);
-    pANTLR3_BASE_TREE dst = GetChild(odst, 0);
-    pANTLR3_BASE_TREE src = GetChild(osrc,0);
+    TREE * dst = GetChild(odst, 0);
+    TREE * src = GetChild(osrc,0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    if (dst->getType(dst) == T_WORD)
+    if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(GetText(dst));
+        sdst = FindSymbol(dst->GetText());
     } else assert(false);
 
     typedef union TYPES {
@@ -1979,13 +1981,13 @@ int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src) == T_WORD)
     {
-        ssrc = FindSymbol(GetText(src));
+        ssrc = FindSymbol(src->GetText());
         // Various types of id's to handle:
         assert(ssrc != 0);
         if (strcmp(ssrc->type, "dim3") == 0)
         {
             // Get qualifier of the structure.
-            pANTLR3_BASE_TREE tqual = (pANTLR3_BASE_TREE)osrc->getChild(osrc, 1);
+            TREE * tqual = (TREE *)osrc->GetChild(1);
             assert(tqual != 0);
             int qual = GetType(tqual);
             if (qual == K_X)
@@ -2102,7 +2104,7 @@ int CUDA_EMULATOR::DoMov(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoMul(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -2111,14 +2113,14 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_MUL);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    TREE * ttype = GetChild(inst, start);
     start++;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2142,10 +2144,10 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     assert(osrc2 != 0);
     bool sat = false;
     bool ftz = false;
-    pANTLR3_BASE_TREE twidth = 0;
+    TREE * twidth = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2170,9 +2172,9 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     if (twidth != 0)
         width = GetType(twidth);
 
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     // Supported types of MUL.
     typedef union TYPES {
@@ -2190,7 +2192,7 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    sdst = FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -2221,7 +2223,7 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -2248,7 +2250,7 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -2317,7 +2319,7 @@ int CUDA_EMULATOR::DoMul(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoMul24(TREE * inst)
 {
     // Multiply 24-bit integer numbers, in register and/or constants,
     // and store in a register.
@@ -2327,14 +2329,14 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
     assert(GetType(GetChild(inst, start)) == KI_MUL24);
     start++;
     assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    pANTLR3_BASE_TREE ttype = GetChild(inst, start);
+    TREE * ttype = GetChild(inst, start);
     start++;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2356,10 +2358,10 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
     assert(odst != 0);
     assert(osrc1 != 0);
     assert(osrc2 != 0);
-    pANTLR3_BASE_TREE twidth = 0;
+    TREE * twidth = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2375,9 +2377,9 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
     if (twidth != 0)
         width = GetType(twidth);
 
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     // Supported types of MUL24.
     typedef union TYPES {
@@ -2389,7 +2391,7 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(GetText(dst));
+    sdst = FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -2414,7 +2416,7 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -2435,7 +2437,7 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -2462,22 +2464,22 @@ int CUDA_EMULATOR::DoMul24(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoSetp(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_SETP);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst1 = 0;
-    pANTLR3_BASE_TREE odst2 = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
-    pANTLR3_BASE_TREE osrc3 = 0;
+    TREE * ttype = 0;
+    TREE * odst1 = 0;
+    TREE * odst2 = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2516,7 +2518,7 @@ int CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
     int op = 0;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2540,24 +2542,24 @@ int CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
     assert(ftz == false);
 
     int type = GetType(ttype);
-    pANTLR3_BASE_TREE dst1 = GetChild(odst1,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst1 = GetChild(odst1,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     Symbol * sdst1 = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    if (dst1->getType(dst1) == T_WORD)
+    if (dst1->GetType() == T_WORD)
     {
-        sdst1 = FindSymbol(GetText(dst1));
+        sdst1 = FindSymbol(dst1->GetText());
     } else assert(false);
-    if (src1->getType(src1) == T_WORD)
+    if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(GetText(src1));
+        ssrc1 = FindSymbol(src1->GetText());
     } else assert(false);
-    if (src2->getType(src2) == T_WORD)
+    if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(GetText(src2));
+        ssrc2 = FindSymbol(src2->GetText());
     } else assert(false);
 
     TYPES * d = (TYPES*)sdst1->pvalue;
@@ -2805,43 +2807,43 @@ int CUDA_EMULATOR::DoSetp(pANTLR3_BASE_TREE inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSt(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoSt(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
-    pANTLR3_BASE_TREE odst = GetChild(inst, start+2);
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE osrc = GetChild(inst, start+3);
-    pANTLR3_BASE_TREE src = GetChild(osrc,0);
+    TREE * odst = GetChild(inst, start+2);
+    TREE * dst = GetChild(odst,0);
+    TREE * osrc = GetChild(inst, start+3);
+    TREE * src = GetChild(osrc,0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    if (dst->getType(dst) == T_WORD)
+    if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(GetText(dst));
+        sdst = FindSymbol(dst->GetText());
     } else assert(false);
-    if (src->getType(src) == T_WORD)
+    if (src->GetType() == T_WORD)
     {
-        ssrc = FindSymbol(GetText(src));
+        ssrc = FindSymbol(src->GetText());
     } else assert(false);
     *(int*) (((TYPES*)sdst->pvalue)->u32) = ((TYPES*)ssrc->pvalue)->u32;
     return 0;
 }
 
-int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
+int CUDA_EMULATOR::DoSub(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
     assert(GetType(GetChild(inst, start)) == KI_SUB);
     start++;
-    pANTLR3_BASE_TREE ttype = 0;
-    pANTLR3_BASE_TREE odst = 0;
-    pANTLR3_BASE_TREE osrc1 = 0;
-    pANTLR3_BASE_TREE osrc2 = 0;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
     for (;; ++start)
     {
-        pANTLR3_BASE_TREE t = GetChild(inst, start);
+        TREE * t = GetChild(inst, start);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2868,7 +2870,7 @@ int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
     bool sat = false;
     for (int i = 0; ; ++i)
     {
-        pANTLR3_BASE_TREE t = GetChild(ttype, i);
+        TREE * t = GetChild(ttype, i);
         if (t == 0)
             break;
         int gt = GetType(t);
@@ -2882,14 +2884,14 @@ int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
     assert(ttype != 0);
     assert(sat == 0);
     int type = GetType(ttype);
-    pANTLR3_BASE_TREE dst = GetChild(odst,0);
-    pANTLR3_BASE_TREE src1 = GetChild(osrc1,0);
-    pANTLR3_BASE_TREE src2 = GetChild(osrc2,0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
 
     Symbol * sdst = 0;
-    if (dst->getType(dst) == T_WORD)
+    if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(GetText(dst));
+        sdst = FindSymbol(dst->GetText());
     } else assert(false);
     typedef union TYPES {
         __int64 s64;
@@ -2935,7 +2937,7 @@ int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src1) == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(GetText(src1));
+        Symbol * ssrc1 = FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
@@ -2992,7 +2994,7 @@ int CUDA_EMULATOR::DoSub(pANTLR3_BASE_TREE inst)
         }
     } else if (GetType(src2) == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(GetText(src2));
+        Symbol * ssrc2 = FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;

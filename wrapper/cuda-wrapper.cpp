@@ -228,8 +228,7 @@ bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     CallStackInfo * csi = CallStackInfo::Singleton();
     csi->ClassifyAsPrefix("call-stack-info.cpp");
-    csi->ClassifyAsPrefix("cuda-memory-debug.cpp");
-    csi->ClassifyAsPrefix("ptr-cuda-runtime.cpp");
+    csi->ClassifyAsPrefix("cuda-wrapper.cpp");
     if (atexit(CUDA_WRAPPER::ExitHandler))
     {
         char * context = cu->Context(3);

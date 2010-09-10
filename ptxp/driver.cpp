@@ -3,6 +3,8 @@
 #include <iostream>
 #include "PtxLexer.h"
 #include "PtxParser.h"
+#include "../emulator/tree.h"
+#include "../emulator/emulator.h"
 
 static void print(pANTLR3_BASE_TREE node, int level)
 {
@@ -14,9 +16,25 @@ static void print(pANTLR3_BASE_TREE node, int level)
 	    pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
 	    print(child, level+1);
 	}
-} 
+}
 
-pANTLR3_BASE_TREE parse(char * ptx_module)
+static TREE * convert(pANTLR3_BASE_TREE node)
+{
+	TREE * result = new TREE();
+	char * text = CUDA_EMULATOR::Singleton()->StringTableEntry((char*)node->getText(node)->chars);
+	result->SetText(text);
+	int type = node->getType(node);
+	result->SetType(type);
+	for (int i = 0; i < (int)node->getChildCount(node); ++i)
+	{
+	    pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
+	    TREE * c = convert(child);
+		result->AddChild(c);
+	}
+	return result;
+}
+
+TREE * parse(char * ptx_module)
 {
 	pANTLR3_INPUT_STREAM       input;
 	pPtxLexer             lxr;
@@ -62,15 +80,9 @@ pANTLR3_BASE_TREE parse(char * ptx_module)
 		pANTLR3_BASE_TREE tree = langAST.tree;
 		print(tree, 0);
 
-//		nodes   = antlr3CommonTreeNodeStreamNewTree(langAST.tree, ANTLR3_SIZE_HINT); // sIZE HINT WILL SOON BE DEPRECATED!!
-
-		// Tree parsers are given a common tree node stream (or your override)
-		//
-//		treePsr = LangDumpDeclNew(nodes);
-//		treePsr->decl(treePsr);
-//		nodes   ->free  (nodes);        nodes   = NULL;
-		// treePsr ->free  (treePsr);      treePsr = NULL;
-		return tree;
+		// Convert Antlr tree into emulator tree for more efficient representation.
+		TREE * result = convert(tree);
+		return result;
 	}
  
 		//psr     ->free  (psr);      psr     = NULL;

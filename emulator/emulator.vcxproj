@@ -82,9 +82,11 @@
   <ItemGroup>
     <ClCompile Include="emulator.cpp" />
     <ClCompile Include="instructions.cpp" />
+    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="emulator.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
