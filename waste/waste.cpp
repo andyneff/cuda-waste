@@ -10,7 +10,7 @@ USAGE: waste [OPTION] ... FILE\n\
 Emulation of CUDA program FILE.\n\
 \n\
 Options:\n\
-  -t, --trace                       Trace all CUDA memory API calls.\n\
+  -t=NUMBER                         Trace CUDA memory API calls, emulator, etc, at a certain level of noisiness.\n\
   -s=NUMBER, --padding-size=NUMBER  Set size of padding for buffer allocations.\n\
   -b=CHAR, --padding-byte=CHAR      Set byte of padding.\n\
   -q, --quit-on-error               Quit program on error detection.\n\
@@ -59,14 +59,16 @@ void AddBytes(byte * code, byte a, byte b, byte c, byte d, byte e)
 }
 
 typedef CUDA_WRAPPER::return_type (CUDARTAPI *pSetTraceAllCalls)(bool b);
-char * str_cuda_memory_debug = "wrapper.dll";
+char * str_cuda_wrapper = "wrapper.dll";
 char * str_trace_all_calls = "?SetTraceAllCalls@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_pading_byte = "?SetPaddingByte@CUDA_WRAPPER@@SG?AW4return_type@1@E@Z";
 char * str_padding_size = "?SetPaddingSize@CUDA_WRAPPER@@SG?AW4return_type@1@I@Z";
 char * str_quit_on_error = "?SetQuitOnError@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_do_not_call_cuda_after_sanity_check_fail = "?SetDoNotCallCudaAfterSanityCheckFail@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_device_pointer_to_first_byte_in_block = "?SetDevicePointerToFirstByteInBlock@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
-char * str_set_device = "?SetDevice@CUDA_WRAPPER@@SG?AW4return_type@1@PAD@Z";
+char * str_set_device = "?RunDevice@CUDA_WRAPPER@@SG?AW4return_type@1@PAD@Z";
+char * str_set_trace = "?SetTrace@CUDA_WRAPPER@@SGXH@Z";
+
 int main(int argc, char * argv[])
 {
     // Perform debugging of CUDA memory calls.
@@ -92,16 +94,18 @@ int main(int argc, char * argv[])
     int device_pointer_to_first_byte_in_block;
 	bool set_device = false;
 	char * device;
+	int level = 0;
 
     // Create a structure containing options for debug.
     while (argc > 0)
     {
         if (**argv == '-')
         {
-            if (strcmp("-t", *argv) == 0 || strcmp("--trace", *argv) == 0)
+            if (strncmp("-t=", *argv, 3) == 0)
             {
                 set_trace_all_calls = true;
                 trace_all_calls = true;
+				level = atoi(3+*argv);
             }
             else if (strncmp("-s=", *argv, 3) == 0)
             {
@@ -200,8 +204,8 @@ int main(int argc, char * argv[])
     LPVOID pszCMD;
     SIZE_T written;
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process);
-    pszCMD = VirtualAllocEx(hProcess, NULL, strlen(str_cuda_memory_debug) + 1, MEM_COMMIT, PAGE_READWRITE);
-    BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszCMD, (LPVOID) str_cuda_memory_debug, strlen(str_cuda_memory_debug) + 1, &written);
+    pszCMD = VirtualAllocEx(hProcess, NULL, strlen(str_cuda_wrapper) + 1, MEM_COMMIT, PAGE_READWRITE);
+    BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszCMD, (LPVOID) str_cuda_wrapper, strlen(str_cuda_wrapper) + 1, &written);
 
     ///////////////// Dll injection step 4 //////////////////////////////////////////////////
     // Set up memory containing instructions to load the Cuda memory debug dll
@@ -234,7 +238,7 @@ int main(int argc, char * argv[])
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_trace_all_calls, strlen(str_trace_all_calls) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -246,11 +250,29 @@ int main(int argc, char * argv[])
         AddBytes(code, 0x6a, 0x01); // push 1
         AddBytes(code, 0xff, 0xd0); // call eax
     }
+    if (level > 0)
+    {
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_trace, strlen(str_set_trace) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTrace@CUDA_WRAPPER@@SAXH@Z"
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0x68, 0, 0, 0, 0); // push level
+        JmpAbsoluteAddress(code, size-4, level);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
+
     if (set_quit_on_error)
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_quit_on_error) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_quit_on_error, strlen(str_quit_on_error) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -266,7 +288,7 @@ int main(int argc, char * argv[])
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_do_not_call_cuda_after_sanity_check_fail, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -282,7 +304,7 @@ int main(int argc, char * argv[])
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_device_pointer_to_first_byte_in_block) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_device_pointer_to_first_byte_in_block, strlen(str_device_pointer_to_first_byte_in_block) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -299,7 +321,7 @@ int main(int argc, char * argv[])
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_padding_size, strlen(str_padding_size) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -316,7 +338,7 @@ int main(int argc, char * argv[])
     {
         LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_pading_byte) + 1, MEM_COMMIT, PAGE_READWRITE);
         BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_pading_byte, strlen(str_pading_byte) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
@@ -335,11 +357,11 @@ int main(int argc, char * argv[])
 		BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
 		LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
 		BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetDevice"
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "RunDevice"
         JmpAbsoluteAddress(code, size-4, pszSetFunc);
         AddBytes(code, 0x50); // push eax
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress

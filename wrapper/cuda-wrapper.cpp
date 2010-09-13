@@ -186,7 +186,7 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     cu->do_emulation = true;
     cu->global_context = 0;
     cu->hook_manager = 0;
-    cu->do_crash = false;
+    cu->do_debug_halt = false;
 }
 
 void CUDA_WRAPPER::Unimplemented()
@@ -295,10 +295,10 @@ bool CUDA_WRAPPER::DoInit(char * cuda_module_name, HookManager * hm)
     cu->hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::GetDeviceCount);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::GetDeviceProperties);
     cu->hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented);
-    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::Unimplemented);
+    cu->hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::SetDevice);
     cu->hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::GetDevice);
     cu->hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented);
     cu->hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)CUDA_WRAPPER::Unimplemented);
@@ -538,6 +538,155 @@ void CUDA_WRAPPER::MakeContext(char * file_name, int line)
     sprintf(buffer2, "%d", line);
     strncat(buffer, buffer2, BUFFERSIZE);
     cu->global_context = strdup(buffer);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+//
+//  Options for behavior of this debugging wrapper.
+//
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingSize(size_t s)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->padding_size = s;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetPaddingSize called, " << context << ".\n";
+        (*cu->output_stream) << " Padding size now " << s << "\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingByte(unsigned char b)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->padding_byte = b;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetPaddingByte called, " << context << ".\n";
+        (*cu->output_stream) << " Padding byte now " << b << "\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDevicePointerToFirstByteInBlock(bool b)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->device_pointer_to_first_byte_in_block = b;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetDevicePointerToFirstByteInBlock called, " << context << ".\n";
+        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetOutputStream(std::ostream * fp)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    cu->output_stream = fp;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetOutputStream called, " << context << ".\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetTraceAllCalls(bool b)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->trace_all_calls = b;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetTraceAllCalls called, " << context << ".\n";
+        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetQuitOnError(bool b)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->quit_on_error = b;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetQuitOnError called, " << context << ".\n";
+        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
+    }
+    return OK;
+}
+
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDoNotCallCudaAfterSanityCheckFail(bool b)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->do_not_call_cuda_after_sanity_check_fail = b;
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetDoNotCallCudaAfterSanityCheckFail called, " << context << ".\n";
+        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
+    }
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::CopyOptions(CUDA_WRAPPER * ptr)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    (*cu->output_stream) << "CopyOptions called, " << context << ".\n\n";
+    cu->padding_size = ptr->padding_size;
+    cu->padding_byte = ptr->padding_byte;
+    cu->device_pointer_to_first_byte_in_block = ptr->device_pointer_to_first_byte_in_block;
+    cu->do_not_call_cuda_after_sanity_check_fail = ptr->do_not_call_cuda_after_sanity_check_fail;
+    cu->trace_all_calls = ptr->trace_all_calls;
+    cu->quit_on_error = ptr->quit_on_error;
+    return OK;
+}
+
+CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+
+    cu->device = device;
+    CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+    emulator->SetDevice(device);
+
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetDevice called, " << context << ".\n";
+        (*cu->output_stream) << " Device now " << device << "\n\n";
+    }
+    return OK;
+}
+
+void CUDA_WRAPPER::SetTrace(int level)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (level >= 10)
+	{
+		cu->do_debug_halt = true;
+		level -= 10;
+	}
+    CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+    emulator->SetTrace(level);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1271,14 +1420,14 @@ cudaError_t CUDA_WRAPPER::GetLastError()
 void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (cu->do_crash)
+    if (cu->do_debug_halt)
     {
-        printf("here\n");
+        printf("Halting to invoke debugger...\n");
         //assert(false);
         // if this fails, try another...
-        int x = 0;
-        int y = 0;
-        int z = x/y;
+        _asm {
+			int 3;
+		}
     }
 
     // std::cout << "NEW FATBIN\n";
@@ -1291,11 +1440,6 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
         {
             char * profile = ptx->gpuProfileName;
             char * code = ptx->ptx;
-            //std::cout << "====================================================\n";
-            //std::cout << "PROFILE = " << profile << std::endl;
-            //std::cout << "CODE:\n";
-            //std::cout << code << std::endl;
-            //std::cout << "====================================================\n\n\n";
             CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
             emulator->Extract_From_Source(profile, code);
         }
@@ -1432,140 +1576,32 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::GetDeviceProperties(struct cudaDeviceProp *p
     }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  Options for behavior of this debugging wrapper.
-//
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingSize(size_t s)
+cudaError_t CUDARTAPI CUDA_WRAPPER::GetDeviceCount(int *count)
 {
+    // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->padding_size = s;
-    if (cu->trace_all_calls)
+    if (! cu->do_emulation)
     {
-        (*cu->output_stream) << "SetPaddingSize called, " << context << ".\n";
-        (*cu->output_stream) << " Padding size now " << s << "\n\n";
+        typePtrCudaGetDeviceCount proc = (typePtrCudaGetDeviceCount)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::GetDeviceCount);
+        return (*proc)(count);
+    } else
+    {
+        *count = 1;
+        return cudaSuccess;
     }
-    return OK;
 }
 
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetPaddingByte(unsigned char b)
+cudaError_t CUDARTAPI CUDA_WRAPPER::SetDevice(int device)
 {
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->padding_byte = b;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetPaddingByte called, " << context << ".\n";
-        (*cu->output_stream) << " Padding byte now " << b << "\n\n";
-    }
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDevicePointerToFirstByteInBlock(bool b)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->device_pointer_to_first_byte_in_block = b;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetDevicePointerToFirstByteInBlock called, " << context << ".\n";
-        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
-    }
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetOutputStream(std::ostream * fp)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-    cu->output_stream = fp;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetOutputStream called, " << context << ".\n\n";
-    }
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetTraceAllCalls(bool b)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->trace_all_calls = b;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetTraceAllCalls called, " << context << ".\n";
-        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
-    }
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetQuitOnError(bool b)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->quit_on_error = b;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetQuitOnError called, " << context << ".\n";
-        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
-    }
-    return OK;
-}
-
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDoNotCallCudaAfterSanityCheckFail(bool b)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->do_not_call_cuda_after_sanity_check_fail = b;
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetDoNotCallCudaAfterSanityCheckFail called, " << context << ".\n";
-        (*cu->output_stream) << " value now " << (b?"true":"false") << "\n\n";
-    }
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::CopyOptions(CUDA_WRAPPER * ptr)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-    (*cu->output_stream) << "CopyOptions called, " << context << ".\n\n";
-    cu->padding_size = ptr->padding_size;
-    cu->padding_byte = ptr->padding_byte;
-    cu->device_pointer_to_first_byte_in_block = ptr->device_pointer_to_first_byte_in_block;
-    cu->do_not_call_cuda_after_sanity_check_fail = ptr->do_not_call_cuda_after_sanity_check_fail;
-    cu->trace_all_calls = ptr->trace_all_calls;
-    cu->quit_on_error = ptr->quit_on_error;
-    return OK;
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::SetDevice(char * device)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * context = cu->Context();
-
-    cu->device = device;
-    CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-    emulator->SetDevice(device);
-
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "SetDevice called, " << context << ".\n";
-        (*cu->output_stream) << " Device now " << device << "\n\n";
-    }
-    return OK;
+	// arg contains pointer to the argument for the function call.
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (! cu->do_emulation)
+	{
+		typePtrCudaSetDevice proc = (typePtrCudaSetDevice)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::SetDevice);
+		return (*proc)(device);
+	} else
+	{
+		return cudaSuccess;
+	}
 }
 

@@ -55,7 +55,7 @@ private:
     bool quit_on_error;
     bool do_not_call_cuda_after_sanity_check_fail;
     bool do_emulation;
-    bool do_crash;
+    bool do_debug_halt;
     bool init;
     static void ExitHandler();
     std::vector<data> alloc_list;
@@ -281,6 +281,8 @@ public:
     static void CUDARTAPI UnregisterFatBinary(void **fatCubinHandle);
     static cudaError_t CUDARTAPI GetDevice(int *device);
     static cudaError_t CUDARTAPI GetDeviceProperties(struct cudaDeviceProp *prop, int device);
+    static cudaError_t CUDARTAPI GetDeviceCount(int *count);
+    static cudaError_t CUDARTAPI SetDevice(int device);
 
     enum return_type {
         NOT_OK = 0,
@@ -295,7 +297,8 @@ public:
     static return_type CUDARTAPI SetQuitOnError(bool b);
     static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
-    static return_type CUDARTAPI SetDevice(char * device);
+    static return_type CUDARTAPI RunDevice(char * device);
+	static void CUDARTAPI SetTrace(int level);
 
 private:
     static return_type CheckSinglePtrOverwrite(const data * d);

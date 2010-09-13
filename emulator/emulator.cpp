@@ -22,6 +22,12 @@ CUDA_EMULATOR::CUDA_EMULATOR()
     this->trace_level = 0;
 }
 
+void CUDA_EMULATOR::SetTrace(int level)
+{
+	this->trace_level = level;
+}
+
+// In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
 void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
@@ -29,6 +35,16 @@ void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
     // Pick modules of only one type.
     if (strstr(module_name, this->device) == 0)
         return;
+
+	if (this->trace_level > 0)
+	{
+		std::cout << "====================================================\n";
+		std::cout << "PROFILE = " << module_name << std::endl;
+		std::cout << "CODE:\n";
+		std::cout << source << std::endl;
+		std::cout << "====================================================\n\n\n";
+	}
+
     TREE * mod = parse(source);
     if (! mod)
     {
@@ -933,170 +949,175 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
             return 0; // continue.
         }
     }
-    switch (inst_type)
+    try {
+        switch (inst_type)
+        {
+            case KI_ABS:
+                return DoAbs(inst);
+            case KI_ADD:
+                return DoAdd(inst);
+            case KI_ADDC:
+                return DoAddc(inst);
+            case KI_AND:
+                return DoAnd(inst);
+            case KI_ATOM:
+                return DoAtom(inst);
+            case KI_BAR:
+                return DoBar(inst);
+            case KI_BFE:
+                return DoBfe(inst);
+            case KI_BFI:
+                return DoBfi(inst);
+            case KI_BFIND:
+                return DoBfind(inst);
+            case KI_BRA:
+                return DoBra(inst);
+            case KI_BREV:
+                return DoBrev(inst);
+            case KI_BRKPT:
+                return DoBrkpt(inst);
+            case KI_CALL:
+                return DoCall(inst);
+            case KI_CLZ:
+                return DoClz(inst);
+            case KI_CNOT:
+                return DoCnot(inst);
+            case KI_COPYSIGN:
+                return DoCopysign(inst);
+            case KI_COS:
+                return DoCos(inst);
+            case KI_CVT:
+                return DoCvt(inst);
+            case KI_CVTA:
+                return DoCvta(inst);
+            case KI_DIV:
+                return DoDiv(inst);
+            case KI_EX2:
+                return DoEx2(inst);
+            case KI_EXIT:
+                return DoExit(inst);
+            case KI_FMA:
+                return DoFma(inst);
+            case KI_ISSPACEP:
+                return DoIsspacep(inst);
+            case KI_LD:
+                return DoLd(inst);
+            case KI_LDU:
+                return DoLdu(inst);
+            case KI_LG2:
+                return DoLg2(inst);
+            case KI_MAD:
+                return DoMad(inst);
+            case KI_MAD24:
+                return DoMad24(inst);
+            case KI_MAX:
+                return DoMax(inst);
+            case KI_MEMBAR:
+                return DoMembar(inst);
+            case KI_MIN:
+                return DoMin(inst);
+            case KI_MOV:
+                return DoMov(inst);
+            case KI_MUL24:
+                return DoMul24(inst);
+            case KI_MUL:
+                return DoMul(inst);
+            case KI_NEG:
+                return DoNeg(inst);
+            case KI_NOT:
+                return DoNot(inst);
+            case KI_OR:
+                return DoOr(inst);
+            case KI_PMEVENT:
+                return DoPmevent(inst);
+            case KI_POPC:
+                return DoPopc(inst);
+            case KI_PREFETCH:
+                return DoPrefetch(inst);
+            case KI_PREFETCHU:
+                return DoPrefetchu(inst);
+            case KI_PRMT:
+                return DoPrmt(inst);
+            case KI_RCP:
+                return DoRcp(inst);
+            case KI_RED:
+                return DoRed(inst);
+            case KI_REM:
+                return DoRem(inst);
+            case KI_RET:
+                return DoRet(inst);
+            case KI_RSQRT:
+                return DoRsqrt(inst);
+            case KI_SAD:
+                return DoSad(inst);
+            case KI_SELP:
+                return DoSelp(inst);
+            case KI_SET:
+                return DoSet(inst);
+            case KI_SETP:
+                return DoSetp(inst);
+            case KI_SHL:
+                return DoShl(inst);
+            case KI_SHR:
+                return DoShr(inst);
+            case KI_SIN:
+                return DoSin(inst);
+            case KI_SLCT:
+                return DoSlct(inst);
+            case KI_SQRT:
+                return DoSqrt(inst);
+            case KI_ST:
+                return DoSt(inst);
+            case KI_SUB:
+                return DoSub(inst);
+            case KI_SUBC:
+                return DoSubc(inst);
+            case KI_SULD:
+                return DoSuld(inst);
+            case KI_SUQ:
+                return DoSuq(inst);
+            case KI_SURED:
+                return DoSured(inst);
+            case KI_SUST:
+                return DoSust(inst);
+            case KI_TESTP:
+                return DoTestp(inst);
+            case KI_TEX:
+                return DoTex(inst);
+            case KI_TRAP:
+                return DoTrap(inst);
+            case KI_TXQ:
+                return DoTxq(inst);
+            case KI_VABSDIFF:
+                return DoVabsdiff(inst);
+            case KI_VADD:
+                return DoVadd(inst);
+            case KI_VMAD:
+                return DoVmad(inst);
+            case KI_VMAX:
+                return DoVmax(inst);
+            case KI_VMIN:
+                return DoVmin(inst);
+            case KI_VOTE:
+                return DoVote(inst);
+            case KI_VSET:
+                return DoVset(inst);
+            case KI_VSHL:
+                return DoVshl(inst);
+            case KI_VSHR:
+                return DoVshr(inst);
+            case KI_VSUB:
+                return DoVsub(inst);
+            case KI_XOR:
+                return DoXor(inst);
+            default:
+                assert(false);
+        }
+    } catch (Unimplemented * u)
     {
-        case KI_ABS:
-            break;
-        case KI_ADD:
-            return DoAdd(inst);
-        case KI_ADDC:
-            break;
-        case KI_AND:
-            break;
-        case KI_ATOM:
-            break;
-        case KI_BAR:
-            return DoBar(inst);
-        case KI_BFE:
-            break;
-        case KI_BFI:
-            break;
-        case KI_BFIND:
-            break;
-        case KI_BRA:
-            return DoBra(inst);
-        case KI_BREV:
-            break;
-        case KI_BRKPT:
-            break;
-        case KI_CALL:
-            break;
-        case KI_CLZ:
-            break;
-        case KI_CNOT:
-            break;
-        case KI_COPYSIGN:
-            break;
-        case KI_COS:
-            break;
-        case KI_CVT:
-            return DoCvt(inst);
-        case KI_CVTA:
-            return DoCvta(inst);
-        case KI_DIV:
-            return DoDiv(inst);
-        case KI_EX2:
-            break;
-        case KI_EXIT:
-            return DoExit(inst);
-        case KI_FMA:
-            return DoFma(inst);
-        case KI_ISSPACEP:
-            break;
-        case KI_LD:
-            return DoLd(inst);
-        case KI_LDU:
-            return DoLdu(inst);
-        case KI_LG2:
-            break;
-        case KI_MAD24:
-            break;
-        case KI_MAD:
-            return DoMad(inst);
-        case KI_MAX:
-            break;
-        case KI_MEMBAR:
-            break;
-        case KI_MIN:
-            break;
-        case KI_MOV:
-            return DoMov(inst);
-        case KI_MUL24:
-            return DoMul24(inst);
-        case KI_MUL:
-            return DoMul(inst);
-        case KI_NEG:
-            break;
-        case KI_NOT:
-            break;
-        case KI_OR:
-            break;
-        case KI_PMEVENT:
-            break;
-        case KI_POPC:
-            break;
-        case KI_PREFETCH:
-            break;
-        case KI_PREFETCHU:
-            break;
-        case KI_PRMT:
-            break;
-        case KI_RCP:
-            break;
-        case KI_RED:
-            break;
-        case KI_REM:
-            break;
-        case KI_RET:
-            break;
-        case KI_RSQRT:
-            break;
-        case KI_SAD:
-            break;
-        case KI_SELP:
-            break;
-        case KI_SET:
-            break;
-        case KI_SETP:
-            return DoSetp(inst);
-        case KI_SHL:
-            break;
-        case KI_SHR:
-            break;
-        case KI_SIN:
-            break;
-        case KI_SLCT:
-            break;
-        case KI_SQRT:
-            break;
-        case KI_ST:
-            return DoSt(inst);
-        case KI_SUB:
-            return DoSub(inst);
-        case KI_SUBC:
-            break;
-        case KI_SULD:
-            break;
-        case KI_SUQ:
-            break;
-        case KI_SURED:
-            break;
-        case KI_SUST:
-            break;
-        case KI_TESTP:
-            break;
-        case KI_TEX:
-            break;
-        case KI_TRAP:
-            break;
-        case KI_TXQ:
-            break;
-        case KI_VABSDIFF:
-            break;
-        case KI_VADD:
-            break;
-        case KI_VMAD:
-            break;
-        case KI_VMAX:
-            break;
-        case KI_VMIN:
-            break;
-        case KI_VOTE:
-            break;
-        case KI_VSET:
-            break;
-        case KI_VSHL:
-            break;
-        case KI_VSHR:
-            break;
-        case KI_VSUB:
-            break;
-        case KI_XOR:
-            break;
-        default:
-            break;
+		std::cout << u->ShowReason() << "\n";
+		delete u;
     }
-    assert(false); // unimplemented instruction.
     return -1; // end.
 }
 
@@ -1214,4 +1235,17 @@ CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr
         }
     } else assert(false);
     return result;
+}
+
+void CUDA_EMULATOR::unimplemented(bool condition, char * text)
+{
+    if (condition)
+    {
+        throw new Unimplemented(text);
+    }
+}
+
+void CUDA_EMULATOR::unimplemented(char * text)
+{
+    throw new Unimplemented(text);
 }

@@ -78,16 +78,16 @@ TREE * parse(char * ptx_module)
 	{
 		// Dump tree.
 		pANTLR3_BASE_TREE tree = langAST.tree;
-		// print(tree, 0);
+		//print(tree, 0);
 
 		// Convert Antlr tree into emulator tree for more efficient representation.
 		TREE * result = convert(tree);
+
+		psr->free  (psr);
+		tstream->free(tstream);
+		lxr->free  (lxr);
+		input->close (input);
 		return result;
 	}
- 
-		//psr     ->free  (psr);      psr     = NULL;
-		//tstream ->free  (tstream);  tstream = NULL;
-		//lxr     ->free  (lxr);      lxr     = NULL;
-		//input   ->close (input);    input   = NULL;
 	return 0;
 }
