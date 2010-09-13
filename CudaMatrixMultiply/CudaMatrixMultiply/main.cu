@@ -3,7 +3,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-#define BASETYPE float
+#define BASETYPE short
     // Get device properties.
     int DevID;
     cudaDeviceProp props;

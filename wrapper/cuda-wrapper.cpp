@@ -1281,7 +1281,7 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
         int z = x/y;
     }
 
-    std::cout << "NEW FATBIN\n";
+    // std::cout << "NEW FATBIN\n";
     // Get PTX code from the record.
     __cudaFatCudaBinary * fcb = (__cudaFatCudaBinary *)fatCubin;
     if (fcb)
@@ -1291,11 +1291,11 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
         {
             char * profile = ptx->gpuProfileName;
             char * code = ptx->ptx;
-            std::cout << "====================================================\n";
-            std::cout << "PROFILE = " << profile << std::endl;
-            std::cout << "CODE:\n";
-            std::cout << code << std::endl;
-            std::cout << "====================================================\n\n\n";
+            //std::cout << "====================================================\n";
+            //std::cout << "PROFILE = " << profile << std::endl;
+            //std::cout << "CODE:\n";
+            //std::cout << code << std::endl;
+            //std::cout << "====================================================\n\n\n";
             CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
             emulator->Extract_From_Source(profile, code);
         }

@@ -9,6 +9,7 @@
 
 class CUDA_EMULATOR
 {
+private:
     struct ltstr
     {
         bool operator()(const char* s1, const char* s2) const
@@ -50,27 +51,52 @@ class CUDA_EMULATOR
         }
     };
 
-    class StringTable
-    {
-    public:
-        char * Entry(char * node);
-    private:
-        std::map<char *, char*> table;
-    };
-
-    StringTable * string_table;
-
     class SymbolTable
     {
     public:
         std::map<char*, Symbol*, ltstr> symbols;
         SymbolTable * parent_block_symbol_table;
     };
-    SymbolTable * root;
-    char * device;
+
+	SymbolTable * root;
+
+	class StringTable
+	{
+		public:
+			char * Entry(char * node);
+		private:
+			std::map<char *, char*> table;
+	};
+
+	StringTable * string_table;
+
+	char * device;
+
     int trace_level;
 
-public:
+	struct arg
+	{
+		const void * argument;
+		size_t size;
+		size_t offset;
+	};
+
+	struct config
+	{
+		dim3 gridDim;
+		dim3 blockDim;
+		size_t sharedMem;
+		cudaStream_t stream;
+	};
+	
+
+	class ThreadQueue
+	{
+		// context information for location of thread in code.
+		int pc;
+		SymbolTable * root;
+	};
+
     class Constant
     {
         public:
@@ -85,6 +111,24 @@ public:
                 memset(&this->value, 0, sizeof(value));
             }
     };
+
+	class Thread
+	{
+		public:
+			Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, SymbolTable * root);
+			~Thread();
+			bool Execute();
+			bool Finished();
+			void Reset();
+			bool Waiting();
+		private:
+			TREE * block;
+			int pc;
+			bool finished;
+			bool wait;
+			SymbolTable * root;
+			CUDA_EMULATOR * emulator;
+	};
 
 private:
     CUDA_EMULATOR();
@@ -109,7 +153,7 @@ private:
     void Dump(char * comment, int pc, TREE * inst);
 
 public:
-	char * StringTableEntry(char * text);
+    char * StringTableEntry(char * text);
     static CUDA_EMULATOR * Singleton();
     void Extract_From_Source(char * module_name, char * source);
     void Extract_From_Tree(TREE * node);
@@ -123,19 +167,6 @@ public:
     cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
 
 private:
-    struct arg
-    {
-        const void * argument;
-        size_t size;
-        size_t offset;
-    };
-    struct config
-    {
-        dim3 gridDim;
-        dim3 blockDim;
-        size_t sharedMem;
-        cudaStream_t stream;
-    };
     std::map<char*, TREE *, ltstr> entry;
     std::map<char*, TREE *, ltstr> func;
     std::map<void*, char*> fun_to_name;
@@ -144,13 +175,6 @@ private:
     std::list<arg*> arguments;
     config conf;
 
-    class ThreadQueue
-    {
-        // context information for location of thread in code.
-        int pc;
-        SymbolTable * root;
-    };
-            
     void SetupThreadQueue();
     void ProcessThreadQueue();
     int DoAdd(TREE * inst);
@@ -179,21 +203,4 @@ private:
     void ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
 
-    class Thread
-    {
-    public:
-        Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, SymbolTable * root);
-        ~Thread();
-        bool Execute();
-        bool Finished();
-        void Reset();
-        bool Waiting();
-    private:
-        TREE * block;
-        int pc;
-        bool finished;
-        bool wait;
-        SymbolTable * root;
-        CUDA_EMULATOR * emulator;
-    };
 };

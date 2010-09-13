@@ -2812,22 +2812,174 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
         start++;
-    TREE * odst = GetChild(inst, start+2);
-    TREE * dst = GetChild(odst,0);
-    TREE * osrc = GetChild(inst, start+3);
-    TREE * src = GetChild(osrc,0);
-    Symbol * sdst = 0;
-    Symbol * ssrc = 0;
-    if (dst->GetType() == T_WORD)
-    {
-        sdst = FindSymbol(dst->GetText());
-    } else assert(false);
-    if (src->GetType() == T_WORD)
-    {
-        ssrc = FindSymbol(src->GetText());
-    } else assert(false);
-    *(int*) (((TYPES*)sdst->pvalue)->u32) = ((TYPES*)ssrc->pvalue)->u32;
-    return 0;
+	assert(GetType(GetChild(inst, start)) == KI_ST);
+	start++;
+	TREE * ttype = 0;
+	TREE * odst = 0;
+	TREE * osrc = 0;
+	for (;; ++start)
+	{
+		TREE * t = GetChild(inst, start);
+		if (t == 0)
+			break;
+		int gt = GetType(t);
+		if (gt == TREE_TYPE)
+			ttype = t;
+		else if (gt == TREE_OPR)
+		{
+			if (odst == 0)
+			{
+				odst = t;
+			} else if (osrc == 0)
+			{
+				osrc = t;
+			} else assert(false);
+		} else assert(false);
+	}
+	assert(ttype != 0);
+	assert(odst != 0);
+	assert(osrc != 0);
+
+	int ss = 0;
+	int cop = 0;
+	int vec = 0;
+	for (int i = 0; ; ++i)
+	{
+		TREE * t = GetChild(ttype, i);
+		if (t == 0)
+			break;
+		int gt = GetType(t);
+		if (gt == K_CONST || gt == K_GLOBAL || gt == K_LOCAL || gt == K_PARAM || gt == K_SHARED)
+			ss = gt;
+		else if (gt == K_U8 || gt == K_U16 || gt == K_U32 || gt == K_U64
+				 || gt == K_S8 || gt == K_S16 || gt == K_S32 || gt == K_S64
+				 || gt == K_F32 || gt == K_F64
+				 || gt == K_B8 || gt == K_B16 || gt == K_B32 || gt == K_B64)
+			ttype = t;
+		else if (gt == K_CA || gt == K_CG || gt == K_CS || gt == K_LU || gt == K_CV)
+			cop = gt;
+		else if (gt == K_V2 || gt == K_V4)
+			vec = gt;
+		else assert(false);
+	}
+	assert(ttype != 0);
+	assert(vec == 0);
+	assert(cop == 0);
+	int type = GetType(ttype);
+
+	TREE * dst = GetChild(odst, 0);
+	TREE * src = GetChild(osrc, 0);
+	Symbol * sdst = 0;
+	Symbol * ssrc = 0;
+	assert(dst->GetType() == T_WORD);
+	sdst = FindSymbol(dst->GetText());
+	assert(sdst != 0);
+
+	assert(src->GetType() == T_WORD);
+	ssrc = FindSymbol(src->GetText());
+	assert(ssrc != 0);
+	
+	TREE * plus = GetChild(odst, 1);
+	Constant value(0);
+	if (plus != 0)
+	{
+		TREE * const_expr_tree = GetChild(odst, 2);
+		assert(const_expr_tree != 0);
+		assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
+		TREE * const_expr = GetChild(const_expr_tree, 0);
+		assert(const_expr != 0);
+		value = Eval(K_S32, const_expr);
+	}
+
+	typedef union TYPES {
+		__int64 s64;
+		__int32 s32;
+		__int16 s16;;
+		__int8 s8;
+		unsigned __int64 u64;
+		unsigned __int32 u32;
+		unsigned __int16 u16;
+		unsigned __int8 u8;
+		float f32;
+		double f64;
+	} TYPES;
+	TYPES * s = (TYPES*)ssrc->pvalue;
+	// Unfortunately, different semantics for different storage classes.
+	TYPES * d = 0;
+	if (sdst->storage_class != K_REG)
+		d = (TYPES*)sdst->pvalue;
+	else if (plus != 0)
+	{
+		void * addr = *(void**)sdst->pvalue;
+		switch (value.type)
+		{
+			case K_U8:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.u8);
+				break;
+			case K_U16:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.u16);
+				break;
+			case K_U32:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.u32);
+				break;
+			case K_U64:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.u64);
+				break;
+			case K_S8:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.s8);
+				break;
+			case K_S16:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.s16);
+				break;
+			case K_S32:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.s32);
+				break;
+			case K_S64:
+				d = (TYPES*)(((unsigned char *)addr) + value.value.s64);
+				break;
+			default:
+				assert(false);
+		}
+	}
+	else
+		d = (TYPES*)sdst->pvalue;
+
+	switch (type)
+	{
+		case K_U8:
+			d->u8 = s->u8;
+			break;
+		case K_U16:
+			d->u16 = s->u16;
+			break;
+		case K_U32:
+			d->u32 = s->u32;
+			break;
+		case K_U64:
+			d->u64 = s->u64;
+			break;
+		case K_S8:
+			d->s8 = s->s8;
+			break;
+		case K_S16:
+			d->s16 = s->s16;
+			break;
+		case K_S32:
+			d->s32 = s->s32;
+			break;
+		case K_S64:
+			d->s64 = s->s64;
+			break;
+		case K_F32:
+			d->f32 = s->f32;
+			break;
+		case K_F64:
+			d->f64 = s->f64;
+			break;
+		default:
+			assert(false);
+	}
+	return 0;
 }
 
 int CUDA_EMULATOR::DoSub(TREE * inst)

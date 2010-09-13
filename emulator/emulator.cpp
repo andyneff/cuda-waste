@@ -315,10 +315,10 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                     sprintf(full_name, "%s%d", name, k+1);
                     // Create a symbol table entry.
                     Symbol * s = new Symbol();
-					s->name = this->string_table->Entry(full_name);
+                    s->name = this->string_table->Entry(full_name);
                     s->size = size;
                     s->pvalue = (void*)malloc(size);
-					s->type = this->string_table->Entry(type);
+                    s->type = this->string_table->Entry(type);
                     s->storage_class = storage_class;
                     // Add the entry into the symbol table.
                     std::pair<char*, Symbol*> sym;
@@ -329,7 +329,7 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
             } else {
                 // Create a symbol table entry.
                 Symbol * s = new Symbol();
-				s->name = this->string_table->Entry(name);
+                s->name = this->string_table->Entry(name);
                 s->size = size;
                 // Allocate array if declared as one.
                 if (tarray != 0)
@@ -373,7 +373,7 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                 {
                     s->pvalue = (void*)malloc(size);
                 }
-				s->type = this->string_table->Entry(type);
+                s->type = this->string_table->Entry(type);
                 s->storage_class = storage_class;
                 // Add the entry into the symbol table.
                 std::pair<char*, Symbol*> sym;
@@ -414,7 +414,7 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
             TREE * label = child->GetChild(0);
             char * name = label->GetText();
             Symbol * s = new Symbol();
-			s->name = this->string_table->Entry(name);
+            s->name = this->string_table->Entry(name);
             s->type = "label";
             s->size = 0;
             s->pvalue = (void*)i;
@@ -808,8 +808,8 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
     }
     // Create a symbol table entry.
     s = new Symbol();
-	s->name = this->string_table->Entry(name);
-	s->type = this->string_table->Entry(type);
+    s->name = this->string_table->Entry(name);
+    s->type = this->string_table->Entry(type);
     s->size = size;
     s->pvalue = (void*)malloc(size);
     s->storage_class = storage_class;
@@ -866,7 +866,7 @@ char * CUDA_EMULATOR::StringTable::Entry(char * text)
     if (it == this->table.end())
     {
         std::pair<char *, char*> p;
-		char * the_text = strdup(text);
+        char * the_text = strdup(text);
         p.first = the_text;
         p.second = the_text;
         this->table.insert(p);
@@ -881,7 +881,7 @@ char * CUDA_EMULATOR::StringTable::Entry(char * text)
 
 char * CUDA_EMULATOR::StringTableEntry(char * text)
 {
-	return this->string_table->Entry(text);
+    return this->string_table->Entry(text);
 }
 
 int CUDA_EMULATOR::Dispatch(TREE * inst)
@@ -1102,7 +1102,7 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
 
 void CUDA_EMULATOR::SetDevice(char * device)
 {
-	this->device = this->string_table->Entry(device);
+    this->device = this->string_table->Entry(device);
 }
 
 CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
