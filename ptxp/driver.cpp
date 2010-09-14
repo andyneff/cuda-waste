@@ -30,6 +30,7 @@ static TREE * convert(pANTLR3_BASE_TREE node)
 	    pANTLR3_BASE_TREE child = (pANTLR3_BASE_TREE)node->getChild(node, i);
 	    TREE * c = convert(child);
 		result->AddChild(c);
+		c->SetParent(result);
 	}
 	return result;
 }

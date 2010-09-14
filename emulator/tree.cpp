@@ -1,6 +1,14 @@
 
 #include "tree.h"
 
+TREE::TREE()
+{
+	this->parent = 0;
+	this->text = 0;
+	this->symbol = 0;
+	this->type = 0;
+}
+
 int TREE::GetType()
 {
 	return type;
@@ -37,4 +45,14 @@ void TREE::SetText(char * text)
 void TREE::SetType(int type)
 {
 	this->type = type;
+}
+
+TREE * TREE::GetParent()
+{
+	return this->parent;
+}
+
+void TREE::SetParent(TREE * parent)
+{
+	this->parent = parent;
 }

@@ -278,11 +278,13 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
             // Now extract info out of variable declaration.
             char * name = 0;
             int nreg = 0;
-            char * type = 0;
+			TREE * ttype = 0;
+			char * type = 0;
             int size = 0;
             int storage_class = 0;
             bool wrong_class = true;
-            TREE * tarray = 0;
+			TREE * tarray = 0;
+			TREE * tinitializer_values = 0;
             for (int j = 0; j < (int)var->GetChildCount(); ++j)
             {
                 TREE * c = var->GetChild(j);
@@ -304,9 +306,9 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                     // Nothing to do.
                 } else if (ct == TREE_TYPE)
                 {
-                    TREE * chi = GetChild(c, 0);
-                    type = chi->GetText();
-                    int t = GetType(chi);
+					ttype = GetChild(c, 0);
+                    type = ttype->GetText();
+                    int t = GetType(ttype);
                     size = Sizeof(t);
                 } else if (ct == T_WORD)
                 {
@@ -317,7 +319,10 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                 } else if (ct == TREE_ARRAY)
                 {
                     // declare var as an array.
-                    tarray = c;
+					tarray = c;
+				} else if (ct == T_EQ)
+				{
+					tinitializer_values = c;
                 } else assert(false);
             }
             if (wrong_class)
@@ -383,7 +388,49 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                     if (sizeof(void*) == 4)
                         ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
                     else
-                        ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
+						((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
+
+					// Now work on optional initializer...
+					if (tinitializer_values != 0)
+					{
+						unsigned char * mptr = (unsigned char *)ptr;
+						for (int a = 0; ; ++a)
+						{
+							TREE * t = GetChild(tinitializer_values, a);
+							if (t == 0)
+								break;
+							int gt = GetType(t);
+							if (gt == TREE_CONSTANT_EXPR)
+							{
+								TREE * n = GetChild(t, 0);
+								int type = ttype->GetType();
+								Constant c = Eval(type, n);
+								TYPES * s1 = (TYPES*)mptr;
+								switch (type)
+								{
+									case K_B8:
+										s1->b8 = c.value.b8;
+										break;
+									case K_U16:
+										s1->u16 = c.value.u16;
+										break;
+									case K_S16:
+										s1->s16 = c.value.s16;
+										break;
+									case K_U32:
+										s1->u32 = c.value.u32;
+										break;
+									case K_S32:
+										s1->s32 = c.value.s32;
+										break;
+									default:
+										assert(false);
+								}
+							}
+							else assert(false);
+							mptr += size;
+						}
+					}
                 }
                 else
                 {
@@ -461,6 +508,14 @@ void CUDA_EMULATOR::Execute(void* hostfun)
 
     // Get function block.
     TREE * code = FindBlock(entry);
+
+    // Create symbol table for glboal block.
+	PushSymbolTable();
+	for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
+	{
+	    int sc[] = { K_GLOBAL, 0};
+	    SetupVariables(p, sc);
+	}
 
     // Create symbol table for this block.
     PushSymbolTable();

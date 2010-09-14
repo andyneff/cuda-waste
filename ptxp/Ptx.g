@@ -824,24 +824,29 @@ variable_declarator_with_initializer
     (
     (
         array_spec
-        ( T_EQ variable_initializer )?
+        variable_equal_initializer
     ) |
     /// Parameterized register names 1.4 spec, page 28. Only a constant is allow.
     ( T_LT integer T_GT )
     )
     ;
 
+variable_equal_initializer
+	:
+	( T_EQ^ variable_initializer )?
+	;
+
 variable_initializer
     : ( aggregate_initializer | constant_expression | id_or_opcode )
     ;
 
 aggregate_initializer
-    :   T_OC
+    :   T_OC!
             (variable_initializer
-                (T_COMMA variable_initializer
+                (T_COMMA! variable_initializer
                 )*
-            )? 
-        T_CC
+            )?
+        T_CC!
     ;
 
 type
@@ -1362,19 +1367,19 @@ i_brkpt
     ;
 
 i_call
-    : KI_CALL^
-    K_UNI?
-    ( T_OP caller_ret_list T_CP T_COMMA )? func_name ( T_COMMA T_OP caller_param_list T_CP )?
-        ( T_COMMA flist | T_COMMA fproto )?
+    :
+	KI_CALL
+	i_call_type
+	( T_OP! opr ( T_COMMA! opr )* T_CP! T_COMMA! )?
+	func_name
+	( T_COMMA! T_OP! opr ( T_COMMA! opr )* T_CP! )?
+	( T_COMMA! flist | T_COMMA! fproto )?
     ;
 
-
-caller_ret_list
-    : opr ( T_COMMA opr )*
-    ;
-
-caller_param_list
-    : opr ( T_COMMA opr )*
+i_call_type
+    :
+    t=K_UNI -> ^(TREE_TYPE $t)
+    |
     ;
 
 flist
@@ -2947,7 +2952,8 @@ opr_aux
             (( T_COMMA (id_or_opcode | T_UNDERSCORE))
              ( T_COMMA (id_or_opcode | T_UNDERSCORE)))?
             T_CC
-        )
+        ) |
+	T_UNDERSCORE
     )
     ;
 
