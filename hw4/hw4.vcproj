@@ -35,6 +35,7 @@
 			<Tool
 				Name="CUDA Build Rule"
 				Debug="true"
+				Keep="true"
 				Optimization="0"
 				Runtime="1"
 			/>

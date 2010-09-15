@@ -36,7 +36,7 @@
 				Name="CUDA Build Rule"
 				Debug="true"
 				CInterleavedPTX="true"
-				Keep="false"
+				Keep="true"
 				Optimization="0"
 				Runtime="1"
 			/>

@@ -24,7 +24,7 @@ CUDA_EMULATOR::CUDA_EMULATOR()
 
 void CUDA_EMULATOR::SetTrace(int level)
 {
-	this->trace_level = level;
+    this->trace_level = level;
 }
 
 // In ptxp/driver.cpp.
@@ -36,14 +36,14 @@ void CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
     if (strstr(module_name, this->device) == 0)
         return;
 
-	if (this->trace_level > 0)
-	{
-		std::cout << "====================================================\n";
-		std::cout << "PROFILE = " << module_name << std::endl;
-		std::cout << "CODE:\n";
-		std::cout << source << std::endl;
-		std::cout << "====================================================\n\n\n";
-	}
+    if (this->trace_level > 0)
+    {
+        std::cout << "====================================================\n";
+        std::cout << "PROFILE = " << module_name << std::endl;
+        std::cout << "CODE:\n";
+        std::cout << source << std::endl;
+        std::cout << "====================================================\n\n\n";
+    }
 
     TREE * mod = parse(source);
     if (! mod)
@@ -197,7 +197,10 @@ void CUDA_EMULATOR::SetupParams(TREE * e)
             s->pvalue = (void*)a->argument;
             s->name = n;
             s->size = a->size;
-            s->type = t;
+            s->typestring = t;
+            s->array = false;
+            s->index_max = 0;
+            s->type = type->GetType();
             s->storage_class = K_PARAM;
             // Add the entry into the symbol table.
             std::pair<char*, Symbol*> sym;
@@ -278,13 +281,13 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
             // Now extract info out of variable declaration.
             char * name = 0;
             int nreg = 0;
-			TREE * ttype = 0;
-			char * type = 0;
+            TREE * ttype = 0;
+            char * type = 0;
             int size = 0;
             int storage_class = 0;
             bool wrong_class = true;
-			TREE * tarray = 0;
-			TREE * tinitializer_values = 0;
+            TREE * tarray = 0;
+            TREE * tinitializer_values = 0;
             for (int j = 0; j < (int)var->GetChildCount(); ++j)
             {
                 TREE * c = var->GetChild(j);
@@ -306,7 +309,7 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                     // Nothing to do.
                 } else if (ct == TREE_TYPE)
                 {
-					ttype = GetChild(c, 0);
+                    ttype = GetChild(c, 0);
                     type = ttype->GetText();
                     int t = GetType(ttype);
                     size = Sizeof(t);
@@ -319,10 +322,10 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                 } else if (ct == TREE_ARRAY)
                 {
                     // declare var as an array.
-					tarray = c;
-				} else if (ct == T_EQ)
-				{
-					tinitializer_values = c;
+                    tarray = c;
+                } else if (ct == T_EQ)
+                {
+                    tinitializer_values = c;
                 } else assert(false);
             }
             if (wrong_class)
@@ -339,8 +342,11 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                     s->name = this->string_table->Entry(full_name);
                     s->size = size;
                     s->pvalue = (void*)malloc(size);
-                    s->type = this->string_table->Entry(type);
+                    s->typestring = this->string_table->Entry(type);
+                    s->type = ttype->GetType();
                     s->storage_class = storage_class;
+                    s->array = false;
+                    s->index_max = 0;
                     // Add the entry into the symbol table.
                     std::pair<char*, Symbol*> sym;
                     sym.first = s->name;
@@ -352,9 +358,12 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                 Symbol * s = new Symbol();
                 s->name = this->string_table->Entry(name);
                 s->size = size;
+                s->array = false;
+                s->index_max = 0;
                 // Allocate array if declared as one.
                 if (tarray != 0)
                 {
+                    s->array = true;
                     // Using the symbol in ptx is essentially a pointer.
                     // So, mov and cvta loads a pointer to a buffer.
                     // So, there are two malloc's.
@@ -383,60 +392,62 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
                         }
                         else assert(false);
                     }
+                    s->index_max = total;
                     void * ptr = (void*)malloc(size * total);
                     s->pvalue = (void*)malloc(sizeof(void*));
                     if (sizeof(void*) == 4)
                         ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
                     else
-						((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
+                        ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
 
-					// Now work on optional initializer...
-					if (tinitializer_values != 0)
-					{
-						unsigned char * mptr = (unsigned char *)ptr;
-						for (int a = 0; ; ++a)
-						{
-							TREE * t = GetChild(tinitializer_values, a);
-							if (t == 0)
-								break;
-							int gt = GetType(t);
-							if (gt == TREE_CONSTANT_EXPR)
-							{
-								TREE * n = GetChild(t, 0);
-								int type = ttype->GetType();
-								Constant c = Eval(type, n);
-								TYPES * s1 = (TYPES*)mptr;
-								switch (type)
-								{
-									case K_B8:
-										s1->b8 = c.value.b8;
-										break;
-									case K_U16:
-										s1->u16 = c.value.u16;
-										break;
-									case K_S16:
-										s1->s16 = c.value.s16;
-										break;
-									case K_U32:
-										s1->u32 = c.value.u32;
-										break;
-									case K_S32:
-										s1->s32 = c.value.s32;
-										break;
-									default:
-										assert(false);
-								}
-							}
-							else assert(false);
-							mptr += size;
-						}
-					}
+                    // Now work on optional initializer...
+                    if (tinitializer_values != 0)
+                    {
+                        unsigned char * mptr = (unsigned char *)ptr;
+                        for (int a = 0; ; ++a)
+                        {
+                            TREE * t = GetChild(tinitializer_values, a);
+                            if (t == 0)
+                                break;
+                            int gt = GetType(t);
+                            if (gt == TREE_CONSTANT_EXPR)
+                            {
+                                TREE * n = GetChild(t, 0);
+                                int type = ttype->GetType();
+                                Constant c = Eval(type, n);
+                                TYPES * s1 = (TYPES*)mptr;
+                                switch (type)
+                                {
+                                    case K_B8:
+                                        s1->b8 = c.value.b8;
+                                        break;
+                                    case K_U16:
+                                        s1->u16 = c.value.u16;
+                                        break;
+                                    case K_S16:
+                                        s1->s16 = c.value.s16;
+                                        break;
+                                    case K_U32:
+                                        s1->u32 = c.value.u32;
+                                        break;
+                                    case K_S32:
+                                        s1->s32 = c.value.s32;
+                                        break;
+                                    default:
+                                        assert(false);
+                                }
+                            }
+                            else assert(false);
+                            mptr += size;
+                        }
+                    }
                 }
                 else
                 {
                     s->pvalue = (void*)malloc(size);
                 }
-                s->type = this->string_table->Entry(type);
+                s->typestring = this->string_table->Entry(type);
+                s->type = ttype->GetType();
                 s->storage_class = storage_class;
                 // Add the entry into the symbol table.
                 std::pair<char*, Symbol*> sym;
@@ -478,10 +489,13 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
             char * name = label->GetText();
             Symbol * s = new Symbol();
             s->name = this->string_table->Entry(name);
-            s->type = "label";
+            s->typestring = "label";
+            s->type = label->GetType();
             s->size = 0;
             s->pvalue = (void*)i;
             s->storage_class = 0;
+            s->array = false;
+            s->index_max = 0;
             // Add the entry into the symbol table.
             std::pair<char*, Symbol*> sym;
             sym.first = s->name;
@@ -510,12 +524,12 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     TREE * code = FindBlock(entry);
 
     // Create symbol table for glboal block.
-	PushSymbolTable();
-	for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
-	{
-	    int sc[] = { K_GLOBAL, 0};
-	    SetupVariables(p, sc);
-	}
+    PushSymbolTable();
+    for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
+    {
+        int sc[] = { K_GLOBAL, 0};
+        SetupVariables(p, sc);
+    }
 
     // Create symbol table for this block.
     PushSymbolTable();
@@ -523,8 +537,8 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     SetupVariables(code, sc);
     SetupGotos(code);
     SetupParams(entry);
-    CreateSymbol("%nctaid", "dim3", &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
-    CreateSymbol("%ntid", "dim3", &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
+    CreateSymbol("%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
+    CreateSymbol("%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
     bool do_thread_synch = CodeRequiresThreadSynchronization(code);
     if (this->trace_level > 0)
@@ -593,7 +607,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     {
         PushSymbolTable();
         dim3 bid(bidx, bidy, bidz);
-        CreateSymbol("%ctaid", "dim3", &bid, sizeof(bid), K_LOCAL);
+        CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
         int sc[] = { K_SHARED, 0 };
         SetupVariables(code, sc);
 
@@ -605,7 +619,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
                 {
                     PushSymbolTable();
                     dim3 tid(tidx, tidy, tidz);
-                    CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
+                    CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
                     int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
                     SetupVariables(code, sc);
                     Thread * thread = new Thread(this, code, 0, this->root);
@@ -622,7 +636,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     {
         PushSymbolTable();
         dim3 bid(bidx, bidy, bidz);
-        CreateSymbol("%ctaid", "dim3", &bid, sizeof(bid), K_LOCAL);
+        CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
         int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
         SetupVariables(code, sc);
 
@@ -634,7 +648,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
                 {
                     PushSymbolTable();
                     dim3 tid(tidx, tidy, tidz);
-                    CreateSymbol("%tid", "dim3", &tid, sizeof(tid), K_LOCAL);
+                    CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
                     Thread * thread = new Thread(this, code, 0, this->root);
                     queue.push(thread);
                     PopSymbolTable();
@@ -799,51 +813,51 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, TREE * inst)
             std::cout << "name: " << s->name << " ";
             std::cout << "size: " << s->size << " ";
             std::cout << "stor: " << s->storage_class << " ";
-            std::cout << "type: " << s->type << " ";
-            if (strcmp(s->type, "label") == 0)
+            std::cout << "type: " << s->typestring << " ";
+            if (strcmp(s->typestring, "label") == 0)
                 std::cout << "val:  " << (int)s->pvalue << "\n";
-            else if (strcmp(s->type, "dim3") == 0)
+            else if (strcmp(s->typestring, "dim3") == 0)
                 std::cout << "val:  " << ((dim3*)s->pvalue)->x
                 << " " << ((dim3*)s->pvalue)->y
                 << " " << ((dim3*)s->pvalue)->z
                 << "\n";
-            else if (strcmp(s->type, ".pred") == 0)
+            else if (strcmp(s->typestring, ".pred") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->pred << "\n";
-            else if (strcmp(s->type, ".u8") == 0)
+            else if (strcmp(s->typestring, ".u8") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
-            else if (strcmp(s->type, ".u16") == 0)
+            else if (strcmp(s->typestring, ".u16") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
-            else if (strcmp(s->type, ".u32") == 0)
+            else if (strcmp(s->typestring, ".u32") == 0)
             {
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
                 std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
                 std::cout << std::dec << "\n";
             }
-            else if (strcmp(s->type, ".u64") == 0)
+            else if (strcmp(s->typestring, ".u64") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
-            else if (strcmp(s->type, ".s8") == 0)
+            else if (strcmp(s->typestring, ".s8") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->s8 << "\n";
-            else if (strcmp(s->type, ".s16") == 0)
+            else if (strcmp(s->typestring, ".s16") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->s16 << "\n";
-            else if (strcmp(s->type, ".s32") == 0)
+            else if (strcmp(s->typestring, ".s32") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->s32 << "\n";
-            else if (strcmp(s->type, ".s64") == 0)
+            else if (strcmp(s->typestring, ".s64") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->s64 << "\n";
-            else if (strcmp(s->type, ".b8") == 0)
+            else if (strcmp(s->typestring, ".b8") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
-            else if (strcmp(s->type, ".b16") == 0)
+            else if (strcmp(s->typestring, ".b16") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
-            else if (strcmp(s->type, ".b32") == 0)
+            else if (strcmp(s->typestring, ".b32") == 0)
             {
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
                 std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
                 std::cout << std::dec << "\n";
             }
-            else if (strcmp(s->type, ".b64") == 0)
+            else if (strcmp(s->typestring, ".b64") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
-            else if (strcmp(s->type, ".f32") == 0)
+            else if (strcmp(s->typestring, ".f32") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->f32 << "\n";
-            else if (strcmp(s->type, ".f64") == 0)
+            else if (strcmp(s->typestring, ".f64") == 0)
                 std::cout << "val:  " << ((TYPES*)s->pvalue)->f64 << "\n";
             else assert(false);
         }
@@ -866,7 +880,7 @@ CUDA_EMULATOR::Symbol * CUDA_EMULATOR::FindSymbol(char * name)
     return 0;
 }
 
-void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t size, int storage_class)
+void CUDA_EMULATOR::CreateSymbol(char * name, char * typestring, int type, void * value, size_t size, int storage_class)
 {
     // First find it.
     Symbol * s = FindSymbol(name);
@@ -880,10 +894,13 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * type, void * value, size_t 
     // Create a symbol table entry.
     s = new Symbol();
     s->name = this->string_table->Entry(name);
-    s->type = this->string_table->Entry(type);
+    s->typestring = this->string_table->Entry(typestring);
+    s->type = type;
     s->size = size;
     s->pvalue = (void*)malloc(size);
     s->storage_class = storage_class;
+    s->array = false;
+    s->index_max = 0;
     memcpy(s->pvalue, value, size);
     // Add the entry into the symbol table.
     std::pair<char*, Symbol*> sym;
@@ -1170,8 +1187,8 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
         }
     } catch (Unimplemented * u)
     {
-		std::cout << u->ShowReason() << "\n";
-		delete u;
+        std::cout << u->ShowReason() << "\n";
+        delete u;
     }
     return -1; // end.
 }

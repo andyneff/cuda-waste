@@ -34,6 +34,7 @@
 			/>
 			<Tool
 				Name="CUDA Build Rule"
+				Keep="true"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"

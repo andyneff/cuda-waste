@@ -43,7 +43,10 @@ private:
         char * name;
         void * pvalue;
         size_t size;
-        char * type;
+        char * typestring;
+        int type;
+        bool array;
+        size_t index_max;
         int storage_class;
         ~Symbol()
         {
@@ -104,7 +107,8 @@ private:
             TYPES value;
             Constant(int i)
             {
-                value.s64 = i;
+				type = K_S32;
+                value.s32 = i;
             }
             Constant()
             {
@@ -138,10 +142,10 @@ private:
         {
             the_reason = strdup(reason);
         };
-		Unimplemented(const Unimplemented & r)
-		{
-			this->the_reason = r.the_reason;
-		}
+        Unimplemented(const Unimplemented & r)
+        {
+            this->the_reason = r.the_reason;
+        }
         ~Unimplemented()
         {
            free(the_reason);
@@ -167,7 +171,7 @@ private:
     Symbol * FindSymbol(char * name);
     void SetupDimensionLocals();
     void SetupPredefined(dim3 tid, dim3 bid);
-    void CreateSymbol(char * name, char * type, void * value, size_t size, int storage_class);
+    void CreateSymbol(char * name, char * typestring, int type, void * value, size_t size, int storage_class);
     void SetupGotos(TREE * block);
     void Print(TREE * node, int level);
     void PrintName(TREE * node);
@@ -287,6 +291,6 @@ public:
     void SetDevice(char * device);
     cudaError_t GetDevice(int * device);
     cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
-	void SetTrace(int level);
+    void SetTrace(int level);
 
 };

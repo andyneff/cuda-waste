@@ -35,7 +35,7 @@
 			<Tool
 				Name="CUDA Build Rule"
 				ExtraNvccOptions=""
-				Keep="false"
+				Keep="true"
 				Optimization="0"
 				ExtraCppOptions="-Xcompiler &quot;/O1&quot;"
 			/>
