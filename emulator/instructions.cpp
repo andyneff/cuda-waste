@@ -1279,9 +1279,9 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
         assert(ssrc != 0);
         if (ssrc->storage_class == K_REG)
             s = (TYPES*)ssrc->pvalue;
-		else if (ssrc->array)
+        else if (ssrc->array)
             s = (TYPES*)ssrc->pvalue;
-		else
+        else
             s = (TYPES*)&ssrc->pvalue;
     }
 
@@ -3488,8 +3488,8 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
     int type = GetType(ttype);
     TREE * dst = GetChild(odst,0);
     TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc1,0);
-    TREE * src3 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
+    TREE * src3 = GetChild(osrc3,0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
@@ -3718,10 +3718,10 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
             d->b64 = s3->pred == 1 ? s1->b64 : s2->b64;
             break;
         case K_F32:
-            d->s32 = s3->pred == 1 ? s1->s32 : s2->s32;
+            d->f32 = s3->pred == 1 ? s1->f32 : s2->f32;
             break;
         case K_F64:
-            d->s32 = s3->pred == 1 ? s1->s32 : s2->s32;
+            d->f64 = s3->pred == 1 ? s1->f64 : s2->f64;
             break;
         default:
             assert(false);
@@ -3909,10 +3909,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
                     d->pred = s1->s64 != s2->s64;
                     break;
                 case K_F32:
-                    d->pred = s1->f32 == s2->f32;
+                    d->pred = s1->f32 != s2->f32;
                     break;
                 case K_F64:
-                    d->pred = s1->f64 == s2->f64;
+                    d->pred = s1->f64 != s2->f64;
                     break;
                 default:
                     assert(false);
@@ -3940,10 +3940,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
                     d->pred = s1->s64 < s2->s64;
                     break;
                 case K_F32:
-                    d->pred = s1->f32 == s2->f32;
+                    d->pred = s1->f32 < s2->f32;
                     break;
                 case K_F64:
-                    d->pred = s1->f64 == s2->f64;
+                    d->pred = s1->f64 < s2->f64;
                     break;
                 default:
                     assert(false);
@@ -3971,10 +3971,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
                     d->pred = s1->s64 <= s2->s64;
                     break;
                 case K_F32:
-                    d->pred = s1->f32 == s2->f32;
+                    d->pred = s1->f32 <= s2->f32;
                     break;
                 case K_F64:
-                    d->pred = s1->f64 == s2->f64;
+                    d->pred = s1->f64 <= s2->f64;
                     break;
                 default:
                     assert(false);
@@ -4002,10 +4002,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
                     d->pred = s1->s64 > s2->s64;
                     break;
                 case K_F32:
-                    d->pred = s1->f32 == s2->f32;
+                    d->pred = s1->f32 > s2->f32;
                     break;
                 case K_F64:
-                    d->pred = s1->f64 == s2->f64;
+                    d->pred = s1->f64 > s2->f64;
                     break;
                 default:
                     assert(false);
@@ -4033,10 +4033,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
                     d->pred = s1->s64 >= s2->s64;
                     break;
                 case K_F32:
-                    d->pred = s1->f32 == s2->f32;
+                    d->pred = s1->f32 >= s2->f32;
                     break;
                 case K_F64:
-                    d->pred = s1->f64 == s2->f64;
+                    d->pred = s1->f64 >= s2->f64;
                     break;
                 default:
                     assert(false);
@@ -4693,10 +4693,10 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
             d->u64 = s1->u64 - s2->u64;
             break;
         case K_F32:
-            d->f32 = s1->f32 + s2->f32;
+            d->f32 = s1->f32 - s2->f32;
             break;
         case K_F64:
-            d->f64 = s1->f64 + s2->f64;
+            d->f64 = s1->f64 - s2->f64;
             break;
         default:
             assert(false);

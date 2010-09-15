@@ -52,7 +52,7 @@ BOOL LoadCuda()
             CloseHandle(hProcess);
             return FALSE;
         }
-        if (strstr(szModuleName, "cudart32_30_14") != 0 || strstr(szModuleName, "cudart32_31_9") != 0)
+        if (strstr(szModuleName, "cudart") != 0)
         {
             AddWrapper(szModuleName, p);
             found = true;

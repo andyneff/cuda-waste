@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(CUDA_LIB_PATH)\cudart.lib"
+				AdditionalDependencies="&quot;$(CUDA_LIB_PATH)\cudart.lib&quot;"
 				LinkIncremental="2"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
