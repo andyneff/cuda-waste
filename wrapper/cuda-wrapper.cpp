@@ -1423,8 +1423,6 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
     if (cu->do_debug_halt)
     {
         printf("Halting to invoke debugger...\n");
-        //assert(false);
-        // if this fails, try another...
         _asm {
 			int 3;
 		}

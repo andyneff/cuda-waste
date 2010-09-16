@@ -3408,7 +3408,167 @@ int CUDA_EMULATOR::DoRed(TREE * inst)
 
 int CUDA_EMULATOR::DoRem(TREE * inst)
 {
-    throw new Unimplemented("REM unimplemented");
+    int start = 0;
+    if (GetType(GetChild(inst, start)) == TREE_PRED)
+        start++;
+    assert(GetType(GetChild(inst, start)) == KI_REM);
+    start++;
+    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
+    TREE * ttype = GetChild(inst, start);
+    start++;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    for (;; ++start)
+    {
+        TREE * t = GetChild(inst, start);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    int type = 0;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = GetChild(ttype, i);
+        if (t == 0)
+            break;
+        int gt = GetType(t);
+        if (gt == K_U16 || gt == K_U32 || gt == K_U64
+                 || gt == K_S16 || gt == K_S32 || gt == K_S64)
+            type = gt;
+        else assert(false);
+    }
+	assert(type != 0);
+    TREE * dst = GetChild(odst,0);
+    TREE * src1 = GetChild(osrc1,0);
+    TREE * src2 = GetChild(osrc2,0);
+
+    TYPES * pdst_value;
+    TYPES * psrc1_value;
+    TYPES * psrc2_value;
+    TYPES src1_value;// used if literal
+    TYPES src2_value;// used if literal
+
+    Symbol * sdst = 0;
+    Symbol * ssrc1 = 0;
+    Symbol * ssrc2 = 0;
+    assert(GetType(dst) == T_WORD);
+    sdst = FindSymbol(dst->GetText());
+    char * dummy;
+
+    TYPES value1; // used if literal
+    TYPES value2; // used if literal
+    TYPES * d = (TYPES*)sdst->pvalue;
+    TYPES * s1 = &value1;
+    TYPES * s2 = &value2;
+
+    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src1, 0));
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s1->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src1) == T_WORD)
+    {
+        ssrc1 = FindSymbol(src1->GetText());
+        assert(ssrc1 != 0);
+        s1 = (TYPES*)ssrc1->pvalue;
+    } else assert(false);
+
+    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    {
+        Constant c = Eval(type, GetChild(src2, 0));
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s2->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(src2) == T_WORD)
+    {
+        ssrc2 = FindSymbol(src2->GetText());
+        assert(ssrc2 != 0);
+        s2 = (TYPES*)ssrc2->pvalue;
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U16:
+            d->u16 = s1->u16 % s2->u16;
+            break;
+        case K_S16:
+            d->s16 = s1->s16 % s2->s16;
+            break;
+        case K_U32:
+            d->u32 = s1->u32 % s2->u32;
+            break;
+        case K_S32:
+            d->s32 = s1->s32 % s2->s32;
+            break;
+        case K_U64:
+            d->u64 = s1->u64 % s2->u64;
+            break;
+        case K_S64:
+            d->s64 = s1->s64 % s2->s64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 int CUDA_EMULATOR::DoRet(TREE * inst)

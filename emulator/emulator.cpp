@@ -277,185 +277,201 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
         TREE * var = code->GetChild(i);
         if (var->GetType() == TREE_VAR)
         {
-            // Got variable declaration.
-            // Now extract info out of variable declaration.
-            char * name = 0;
-            int nreg = 0;
-            TREE * ttype = 0;
-            char * type = 0;
-            int size = 0;
-            int storage_class = 0;
-            bool wrong_class = true;
-            TREE * tarray = 0;
-            TREE * tinitializer_values = 0;
-            for (int j = 0; j < (int)var->GetChildCount(); ++j)
-            {
-                TREE * c = var->GetChild(j);
-                int ct = GetType(c);
-                if (ct == TREE_SPACE)
-                {
-                    TREE * chi = GetChild(c, 0);
-                    storage_class = GetType(chi);
-                    // no need to continue if wrong storage class.
-                    for (int k = 0; desired_storage_classes[k] != 0; ++k)
-                    {
-                        if (storage_class == desired_storage_classes[k])
-                        {
-                            wrong_class = false;
-                        }
-                    }
-                } else if (ct == TREE_ALIGN)
-                {
-                    // Nothing to do.
-                } else if (ct == TREE_TYPE)
-                {
-                    ttype = GetChild(c, 0);
-                    type = ttype->GetText();
-                    int t = GetType(ttype);
-                    size = Sizeof(t);
-                } else if (ct == T_WORD)
-                {
-                    name = c->GetText();
-                } else if (ct == TREE_PAR_REGISTER)
-                {
-                    nreg = GetSize(c);
-                } else if (ct == TREE_ARRAY)
-                {
-                    // declare var as an array.
-                    tarray = c;
-                } else if (ct == T_EQ)
-                {
-                    tinitializer_values = c;
-                } else assert(false);
-            }
-            if (wrong_class)
-                continue;
-            // Convert raw info into symbol declarations and sizes.
-            if (nreg > 0)
-            {
-                for (int k = 0; k < nreg; ++k)
-                {
-                    char full_name[1000];
-                    sprintf(full_name, "%s%d", name, k+1);
-                    // Create a symbol table entry.
-                    Symbol * s = new Symbol();
-                    s->name = this->string_table->Entry(full_name);
-                    s->size = size;
-                    s->pvalue = (void*)malloc(size);
-                    s->typestring = this->string_table->Entry(type);
-                    s->type = ttype->GetType();
-                    s->storage_class = storage_class;
-                    s->array = false;
-                    s->index_max = 0;
-                    // Add the entry into the symbol table.
-                    std::pair<char*, Symbol*> sym;
-                    sym.first = s->name;
-                    sym.second = s;
-                    symbol_table->symbols.insert(sym);
-                }
-            } else {
-                // Create a symbol table entry.
-                Symbol * s = new Symbol();
-                s->name = this->string_table->Entry(name);
-                s->size = size;
-                s->array = false;
-                s->index_max = 0;
-                // Allocate array if declared as one.
-                if (tarray != 0)
-                {
-                    s->array = true;
-                    // Using the symbol in ptx is essentially a pointer.
-                    // So, mov and cvta loads a pointer to a buffer.
-                    // So, there are two malloc's.
-                    int total = 1;
-                    for (int a = 0; ; ++a)
-                    {
-                        TREE * t = GetChild(tarray, a);
-                        if (t == 0)
-                            break;
-                        int gt = GetType(t);
-                        if (gt == T_OB)
-                        {
-                            ++a;
-                            TREE * n = GetChild(tarray, a);
-                            assert(n != 0);
-                            if (GetType(n) == T_DEC_LITERAL)
-                            {
-                                int sz = atoi(n->GetText());
-                                total = total * sz;
-                            }
-                            ++a;
-                            TREE * t2 = GetChild(tarray, a);
-                            assert(t2 != 0);
-                            assert(GetType(t2) == T_CB);
-                            ++a;
-                        }
-                        else assert(false);
-                    }
-                    s->index_max = total;
-                    void * ptr = (void*)malloc(size * total);
-                    s->pvalue = (void*)malloc(sizeof(void*));
-                    if (sizeof(void*) == 4)
-                        ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
-                    else
-                        ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
+			SetupSingleVar(var, desired_storage_classes, 0);
+        }
+    }
+}
 
-                    // Now work on optional initializer...
-                    if (tinitializer_values != 0)
+void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bool externed)
+{
+    // Create a new symbol table block for the globals.
+    SymbolTable * symbol_table = this->root;
+    // Got variable declaration.
+    // Now extract info out of variable declaration.
+    char * name = 0;
+    int nreg = 0;
+    TREE * ttype = 0;
+    char * type = 0;
+    int size = 0;
+    int storage_class = 0;
+    bool wrong_class = true;
+    TREE * tarray = 0;
+    TREE * tinitializer_values = 0;
+    for (int j = 0; j < (int)var->GetChildCount(); ++j)
+    {
+        TREE * c = var->GetChild(j);
+        int ct = GetType(c);
+        if (ct == TREE_SPACE)
+        {
+            TREE * chi = GetChild(c, 0);
+            storage_class = GetType(chi);
+            // no need to continue if wrong storage class.
+            for (int k = 0; desired_storage_classes[k] != 0; ++k)
+            {
+                if (storage_class == desired_storage_classes[k])
+                {
+                    wrong_class = false;
+                }
+            }
+        } else if (ct == TREE_ALIGN)
+        {
+            // Nothing to do.
+        } else if (ct == TREE_TYPE)
+        {
+            ttype = GetChild(c, 0);
+            type = ttype->GetText();
+            int t = GetType(ttype);
+            size = Sizeof(t);
+        } else if (ct == T_WORD)
+        {
+            name = c->GetText();
+        } else if (ct == TREE_PAR_REGISTER)
+        {
+            nreg = GetSize(c);
+        } else if (ct == TREE_ARRAY)
+        {
+            // declare var as an array.
+            tarray = c;
+        } else if (ct == T_EQ)
+        {
+            tinitializer_values = c;
+        } else assert(false);
+    }
+    if (wrong_class)
+        return;
+    // Convert raw info into symbol declarations and sizes.
+    if (nreg > 0)
+    {
+        for (int k = 0; k < nreg; ++k)
+        {
+            char full_name[1000];
+            sprintf(full_name, "%s%d", name, k+1);
+            // Create a symbol table entry.
+            Symbol * s = new Symbol();
+            s->name = this->string_table->Entry(full_name);
+            s->size = size;
+            s->pvalue = (void*)malloc(size);
+            s->typestring = this->string_table->Entry(type);
+            s->type = ttype->GetType();
+            s->storage_class = storage_class;
+            s->array = false;
+            s->index_max = 0;
+            // Add the entry into the symbol table.
+            std::pair<char*, Symbol*> sym;
+            sym.first = s->name;
+            sym.second = s;
+            symbol_table->symbols.insert(sym);
+        }
+    } else {
+        // Create a symbol table entry.
+        Symbol * s = new Symbol();
+        s->name = this->string_table->Entry(name);
+        s->size = size;
+        s->array = false;
+        s->index_max = 0;
+        // Allocate array if declared as one.
+        if (tarray != 0)
+        {
+            s->array = true;
+            // Using the symbol in ptx is essentially a pointer.
+            // So, mov and cvta loads a pointer to a buffer.
+            // So, there are two malloc's.
+            int total = 1;
+            for (int a = 0; ; ++a)
+            {
+                TREE * t = GetChild(tarray, a);
+                if (t == 0)
+                    break;
+                int gt = GetType(t);
+				// Look at size information if not external.
+                if (externed == false && gt == T_OB)
+                {
+                    ++a;
+                    TREE * n = GetChild(tarray, a);
+                    assert(n != 0);
+                    if (GetType(n) == T_DEC_LITERAL)
                     {
-                        unsigned char * mptr = (unsigned char *)ptr;
-                        for (int a = 0; ; ++a)
+                        int sz = atoi(n->GetText());
+                        total = total * sz;
+                    }
+                    ++a;
+                    TREE * t2 = GetChild(tarray, a);
+                    assert(t2 != 0);
+                    assert(GetType(t2) == T_CB);
+                    ++a;
+                }
+                else if (externed != 0)
+					;
+				else assert(false);
+            }
+            s->index_max = total;
+			void * ptr = 0;
+			if (externed == 0)
+				ptr = (void*)malloc(size * total);
+			else
+				ptr = (void*)malloc(conf.sharedMem);
+            s->pvalue = (void*)malloc(sizeof(void*));
+            if (sizeof(void*) == 4)
+                ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
+            else if (sizeof(void*) == 8)
+                ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
+			else
+				assert(false);
+
+            // Now work on optional initializer...
+            if (tinitializer_values != 0)
+            {
+                unsigned char * mptr = (unsigned char *)ptr;
+                for (int a = 0; ; ++a)
+                {
+                    TREE * t = GetChild(tinitializer_values, a);
+                    if (t == 0)
+                        break;
+                    int gt = GetType(t);
+                    if (gt == TREE_CONSTANT_EXPR)
+                    {
+                        TREE * n = GetChild(t, 0);
+                        int type = ttype->GetType();
+                        Constant c = Eval(type, n);
+                        TYPES * s1 = (TYPES*)mptr;
+                        switch (type)
                         {
-                            TREE * t = GetChild(tinitializer_values, a);
-                            if (t == 0)
+                            case K_B8:
+                                s1->b8 = c.value.b8;
                                 break;
-                            int gt = GetType(t);
-                            if (gt == TREE_CONSTANT_EXPR)
-                            {
-                                TREE * n = GetChild(t, 0);
-                                int type = ttype->GetType();
-                                Constant c = Eval(type, n);
-                                TYPES * s1 = (TYPES*)mptr;
-                                switch (type)
-                                {
-                                    case K_B8:
-                                        s1->b8 = c.value.b8;
-                                        break;
-                                    case K_U16:
-                                        s1->u16 = c.value.u16;
-                                        break;
-                                    case K_S16:
-                                        s1->s16 = c.value.s16;
-                                        break;
-                                    case K_U32:
-                                        s1->u32 = c.value.u32;
-                                        break;
-                                    case K_S32:
-                                        s1->s32 = c.value.s32;
-                                        break;
-                                    default:
-                                        assert(false);
-                                }
-                            }
-                            else assert(false);
-                            mptr += size;
+                            case K_U16:
+                                s1->u16 = c.value.u16;
+                                break;
+                            case K_S16:
+                                s1->s16 = c.value.s16;
+                                break;
+                            case K_U32:
+                                s1->u32 = c.value.u32;
+                                break;
+                            case K_S32:
+                                s1->s32 = c.value.s32;
+                                break;
+                            default:
+                                assert(false);
                         }
                     }
+                    else assert(false);
+                    mptr += size;
                 }
-                else
-                {
-                    s->pvalue = (void*)malloc(size);
-                }
-                s->typestring = this->string_table->Entry(type);
-                s->type = ttype->GetType();
-                s->storage_class = storage_class;
-                // Add the entry into the symbol table.
-                std::pair<char*, Symbol*> sym;
-                sym.first = s->name;
-                sym.second = s;
-                symbol_table->symbols.insert(sym);
             }
         }
+        else
+        {
+            s->pvalue = (void*)malloc(size);
+        }
+        s->typestring = this->string_table->Entry(type);
+        s->type = ttype->GetType();
+        s->storage_class = storage_class;
+        // Add the entry into the symbol table.
+        std::pair<char*, Symbol*> sym;
+        sym.first = s->name;
+        sym.second = s;
+        symbol_table->symbols.insert(sym);
     }
 }
 
@@ -505,6 +521,42 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
     }
 }
 
+void CUDA_EMULATOR::SetupExternShared(TREE * code)
+{
+	// No need to resolve anything if no shared memory to set up.
+	if (this->conf.sharedMem == 0)
+		return;
+	void * extern_buffer = malloc(this->conf.sharedMem);
+	int times = 0;
+    for (TREE * p = code; p != 0; p = p->GetParent())
+    {
+		SymbolTable * symbol_table = this->root;
+		// Scan ahead and find all extern nodes.
+		// Enter them into the symbol table if they are shared
+		// memory.
+		for (int i = 0; i < p->GetChildCount(); ++i)
+		{
+			TREE * child = (TREE *)p->GetChild(i);
+			if (child->GetType() == TREE_EXTERN)
+			{
+				TREE * cc = child->GetChild(0);
+				if (cc)
+				{
+					int t = child->GetChild(0)->GetType();
+					if (t != TREE_VAR)
+						continue;
+				}
+				TREE * var = child->GetChild(0);
+		        int sc[] = { K_SHARED, 0};
+				if (times != 0)
+					throw new Unimplemented("Multiple shared memory external variables declared.  Not sure what to do.");
+				times++;
+				SetupSingleVar(var, sc, true);
+			}
+		}
+	}
+}
+
 void CUDA_EMULATOR::Execute(void* hostfun)
 {
     // Given the address of the kernel function in the host, determine the name of the kernel
@@ -523,7 +575,7 @@ void CUDA_EMULATOR::Execute(void* hostfun)
     // Get function block.
     TREE * code = FindBlock(entry);
 
-    // Create symbol table for glboal block.
+    // Create symbol table for outer blocks.
     PushSymbolTable();
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
@@ -603,64 +655,52 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     // global level.  If the code contains thread synchronization,
     // then create the local symbols for each thread.
     // This test is just for performance enhancement.
+    // Create a new symbol table and add the block index variables.
+    PushSymbolTable();
+    dim3 bid(bidx, bidy, bidz);
+    CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
+
     if (do_thread_synch)
     {
-        PushSymbolTable();
-        dim3 bid(bidx, bidy, bidz);
-        CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
+        // Add to this symbol table any explicit shared memory
+        // variables.
         int sc[] = { K_SHARED, 0 };
         SetupVariables(code, sc);
-
-        for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
-        {
-            for (int tidy = 0; tidy < conf.blockDim.y; ++tidy)
-            {
-                for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
-                {
-                    PushSymbolTable();
-                    dim3 tid(tidx, tidy, tidz);
-                    CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
-                    int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
-                    SetupVariables(code, sc);
-                    Thread * thread = new Thread(this, code, 0, this->root);
-                    queue.push(thread);
-                    PopSymbolTable();
-                }
-            }
-        }
-        PopSymbolTable();
-        // Keep track of symbol table root to restore later.  This is because of the awful
-        // use of root on a per-thread basis.
-        save = this->root;
     } else
     {
-        PushSymbolTable();
-        dim3 bid(bidx, bidy, bidz);
-        CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
         int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
         SetupVariables(code, sc);
+    }
 
-        for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
+    // Add to this symbol table any extern declared shared memory
+    // variables.
+    SetupExternShared(code);
+
+    for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
+    {
+        for (int tidy = 0; tidy < conf.blockDim.y; ++tidy)
         {
-            for (int tidy = 0; tidy < conf.blockDim.y; ++tidy)
+            for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
             {
-                for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
+                PushSymbolTable();
+                dim3 tid(tidx, tidy, tidz);
+                CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
+                if (do_thread_synch)
                 {
-                    PushSymbolTable();
-                    dim3 tid(tidx, tidy, tidz);
-                    CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
-                    Thread * thread = new Thread(this, code, 0, this->root);
-                    queue.push(thread);
-                    PopSymbolTable();
+                    int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
+                    SetupVariables(code, sc);
                 }
+                Thread * thread = new Thread(this, code, 0, this->root);
+                queue.push(thread);
+                PopSymbolTable();
             }
         }
-        PopSymbolTable();
-        // Keep track of symbol table root to restore later.  This is because of the awful
-        // use of root on a per-thread basis.
-        save = this->root;
     }
-    
+    PopSymbolTable();
+    // Keep track of symbol table root to restore later.  This is because of the awful
+    // use of root on a per-thread basis.
+    save = this->root;
+
     int num_waiting_threads = 0;
     while (! queue.empty())
     {

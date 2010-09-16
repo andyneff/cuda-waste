@@ -346,6 +346,7 @@ tokens {
     TREE_FRND;
     TREE_CAST;
     TREE_CONSTANT_EXPR;
+    TREE_EXTERN;
 }
 
 @members
@@ -680,7 +681,10 @@ linking_directive
     ;
 
 extern_
-    : K_EXTERN identifier_decl
+    :
+    K_EXTERN
+    i=identifier_decl
+    -> ^( TREE_EXTERN $i )
     ;
 
 visible
@@ -832,9 +836,9 @@ variable_declarator_with_initializer
     ;
 
 variable_equal_initializer
-	:
-	( T_EQ^ variable_initializer )?
-	;
+        :
+        ( T_EQ^ variable_initializer )?
+        ;
 
 variable_initializer
     : ( aggregate_initializer | constant_expression | id_or_opcode )
@@ -1368,12 +1372,12 @@ i_brkpt
 
 i_call
     :
-	KI_CALL
-	i_call_type
-	( T_OP! opr ( T_COMMA! opr )* T_CP! T_COMMA! )?
-	func_name
-	( T_COMMA! T_OP! opr ( T_COMMA! opr )* T_CP! )?
-	( T_COMMA! flist | T_COMMA! fproto )?
+        KI_CALL
+        i_call_type
+        ( T_OP! opr ( T_COMMA! opr )* T_CP! T_COMMA! )?
+        func_name
+        ( T_COMMA! T_OP! opr ( T_COMMA! opr )* T_CP! )?
+        ( T_COMMA! flist | T_COMMA! fproto )?
     ;
 
 i_call_type
@@ -2953,7 +2957,7 @@ opr_aux
              ( T_COMMA (id_or_opcode | T_UNDERSCORE)))?
             T_CC
         ) |
-	T_UNDERSCORE
+        T_UNDERSCORE
     )
     ;
 

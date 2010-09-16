@@ -107,7 +107,7 @@ private:
             TYPES value;
             Constant(int i)
             {
-				type = K_S32;
+                type = K_S32;
                 value.s32 = i;
             }
             Constant()
@@ -278,11 +278,13 @@ private:
     void unimplemented(bool condition, char * text);
     void unimplemented(char * text);
 
+	void SetupExternShared(TREE * code);
+    void Extract_From_Tree(TREE * node);
+	void SetupSingleVar(TREE * var, int * desired_storage_classes, bool externed);
+
 public:
-    char * StringTableEntry(char * text);
     static CUDA_EMULATOR * Singleton();
     void Extract_From_Source(char * module_name, char * source);
-    void Extract_From_Tree(TREE * node);
     void Execute(void * hostfun);
     void ** RegisterFunction(void * fun, char * name);
     cudaError_t SetupArgument(const void *arg, size_t size, size_t offset);
@@ -292,5 +294,6 @@ public:
     cudaError_t GetDevice(int * device);
     cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
     void SetTrace(int level);
+	char * StringTableEntry(char * text);
 
 };
