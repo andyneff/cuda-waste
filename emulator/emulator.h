@@ -1,5 +1,7 @@
 #pragma once
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include <list>
 #include <map>
 #include "../ptxp/PtxLexer.h"
@@ -35,6 +37,7 @@ private:
         float f32;
         double f64;
         bool pred;
+        void * pvoid;
     } TYPES;
 
     class Symbol
@@ -48,17 +51,22 @@ private:
         bool array;
         size_t index_max;
         int storage_class;
+        CUDA_EMULATOR * emulator;
         ~Symbol()
         {
-            free(pvalue);
+            if (this->array && emulator->extern_memory_buffer != ((TYPES*)this->pvalue)->pvoid)
+                free(((TYPES*)this->pvalue)->pvoid);
+            free(this->pvalue);
         }
     };
 
     class SymbolTable
     {
-    public:
-        std::map<char*, Symbol*, ltstr> symbols;
-        SymbolTable * parent_block_symbol_table;
+        public:
+            std::map<char*, Symbol*, ltstr> symbols;
+            SymbolTable * parent_block_symbol_table;
+            SymbolTable();
+            ~SymbolTable();
     };
 
     SymbolTable * root;
@@ -68,7 +76,7 @@ private:
         public:
             char * Entry(char * node);
         private:
-            std::map<char *, char*> table;
+            std::map<char *, char*, ltstr> table;
     };
 
     StringTable * string_table;
@@ -184,6 +192,7 @@ private:
     std::list<Symbol*> symbol_table;
     std::list<arg*> arguments;
     config conf;
+    void * extern_memory_buffer;
 
     void SetupThreadQueue();
     void ProcessThreadQueue();
@@ -270,7 +279,7 @@ private:
     int FindFirstInst(TREE * block, int first);
     Constant Eval(int expected_type, TREE * const_expr);
 
-    void PushSymbolTable();
+    SymbolTable * PushSymbolTable();
     void PopSymbolTable();
     void ExecuteBlocks(bool do_thread_synch, TREE * code);
     void ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
@@ -278,9 +287,9 @@ private:
     void unimplemented(bool condition, char * text);
     void unimplemented(char * text);
 
-	void SetupExternShared(TREE * code);
+    void SetupExternShared(TREE * code);
     void Extract_From_Tree(TREE * node);
-	void SetupSingleVar(TREE * var, int * desired_storage_classes, bool externed);
+    void SetupSingleVar(TREE * var, int * desired_storage_classes, bool externed);
 
 public:
     static CUDA_EMULATOR * Singleton();
@@ -294,6 +303,6 @@ public:
     cudaError_t GetDevice(int * device);
     cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
     void SetTrace(int level);
-	char * StringTableEntry(char * text);
+    char * StringTableEntry(char * text);
 
 };

@@ -20,6 +20,7 @@ CUDA_EMULATOR::CUDA_EMULATOR()
     this->device = "compute_20";
     this->string_table = new StringTable();
     this->trace_level = 0;
+    this->extern_memory_buffer = 0;
 }
 
 void CUDA_EMULATOR::SetTrace(int level)
@@ -63,7 +64,6 @@ void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
         // First child will be name node.
         TREE * word = GetChild(node, 0);
         char * name = word->GetText();
-        printf("entry %s\n", name);
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
         i.second = node;
@@ -73,7 +73,6 @@ void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
     {
         TREE * word = GetChild(node, 0);
         char * name = word->GetText();
-        printf("func %s\n", name);
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
         i.second = node;
@@ -194,6 +193,7 @@ void CUDA_EMULATOR::SetupParams(TREE * e)
             arg * a = *ia;
             // Create a symbol table entry.
             Symbol * s = new Symbol();
+            s->emulator = this;
             s->pvalue = (void*)a->argument;
             s->name = n;
             s->size = a->size;
@@ -254,11 +254,12 @@ int CUDA_EMULATOR::GetSize(TREE * tree_par_register)
     return (int)atoi(c->GetText());
 }
 
-void CUDA_EMULATOR::PushSymbolTable()
+CUDA_EMULATOR::SymbolTable * CUDA_EMULATOR::PushSymbolTable()
 {
     SymbolTable * symbol_table = new SymbolTable();
     symbol_table->parent_block_symbol_table = this->root;
     this->root = symbol_table;
+    return symbol_table;
 }
 
 void CUDA_EMULATOR::PopSymbolTable()
@@ -277,7 +278,7 @@ void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
         TREE * var = code->GetChild(i);
         if (var->GetType() == TREE_VAR)
         {
-			SetupSingleVar(var, desired_storage_classes, 0);
+            SetupSingleVar(var, desired_storage_classes, false);
         }
     }
 }
@@ -348,6 +349,7 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
             sprintf(full_name, "%s%d", name, k+1);
             // Create a symbol table entry.
             Symbol * s = new Symbol();
+            s->emulator = this;
             s->name = this->string_table->Entry(full_name);
             s->size = size;
             s->pvalue = (void*)malloc(size);
@@ -365,6 +367,7 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
     } else {
         // Create a symbol table entry.
         Symbol * s = new Symbol();
+        s->emulator = this;
         s->name = this->string_table->Entry(name);
         s->size = size;
         s->array = false;
@@ -383,7 +386,7 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
                 if (t == 0)
                     break;
                 int gt = GetType(t);
-				// Look at size information if not external.
+                // Look at size information if not external.
                 if (externed == false && gt == T_OB)
                 {
                     ++a;
@@ -401,22 +404,18 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
                     ++a;
                 }
                 else if (externed != 0)
-					;
-				else assert(false);
+                    ;
+                else assert(false);
             }
             s->index_max = total;
-			void * ptr = 0;
-			if (externed == 0)
-				ptr = (void*)malloc(size * total);
-			else
-				ptr = (void*)malloc(conf.sharedMem);
+            void * ptr = 0;
+            if (! externed)
+                ptr = (void*)malloc(size * total);
+            else
+                // Each extern points to the same allocated array.
+                ptr = this->extern_memory_buffer;
             s->pvalue = (void*)malloc(sizeof(void*));
-            if (sizeof(void*) == 4)
-                ((TYPES*)s->pvalue)->u32 = (unsigned __int32)ptr;
-            else if (sizeof(void*) == 8)
-                ((TYPES*)s->pvalue)->u64 = (unsigned __int64)ptr;
-			else
-				assert(false);
+            ((TYPES*)s->pvalue)->pvoid = ptr;
 
             // Now work on optional initializer...
             if (tinitializer_values != 0)
@@ -504,6 +503,7 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
             TREE * label = child->GetChild(0);
             char * name = label->GetText();
             Symbol * s = new Symbol();
+            s->emulator = this;
             s->name = this->string_table->Entry(name);
             s->typestring = "label";
             s->type = label->GetType();
@@ -523,38 +523,34 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
 
 void CUDA_EMULATOR::SetupExternShared(TREE * code)
 {
-	// No need to resolve anything if no shared memory to set up.
-	if (this->conf.sharedMem == 0)
-		return;
-	void * extern_buffer = malloc(this->conf.sharedMem);
-	int times = 0;
+    // No need to resolve anything if no shared memory to set up.
+    if (this->conf.sharedMem == 0)
+        return;
+    this->extern_memory_buffer = (void*)malloc(conf.sharedMem);
     for (TREE * p = code; p != 0; p = p->GetParent())
     {
-		SymbolTable * symbol_table = this->root;
-		// Scan ahead and find all extern nodes.
-		// Enter them into the symbol table if they are shared
-		// memory.
-		for (int i = 0; i < p->GetChildCount(); ++i)
-		{
-			TREE * child = (TREE *)p->GetChild(i);
-			if (child->GetType() == TREE_EXTERN)
-			{
-				TREE * cc = child->GetChild(0);
-				if (cc)
-				{
-					int t = child->GetChild(0)->GetType();
-					if (t != TREE_VAR)
-						continue;
-				}
-				TREE * var = child->GetChild(0);
-		        int sc[] = { K_SHARED, 0};
-				if (times != 0)
-					throw new Unimplemented("Multiple shared memory external variables declared.  Not sure what to do.");
-				times++;
-				SetupSingleVar(var, sc, true);
-			}
-		}
-	}
+        SymbolTable * symbol_table = this->root;
+        // Scan ahead and find all extern nodes.
+        // Enter them into the symbol table if they are shared
+        // memory.
+        for (int i = 0; i < p->GetChildCount(); ++i)
+        {
+            TREE * child = (TREE *)p->GetChild(i);
+            if (child->GetType() == TREE_EXTERN)
+            {
+                TREE * cc = child->GetChild(0);
+                if (cc)
+                {
+                    int t = child->GetChild(0)->GetType();
+                    if (t != TREE_VAR)
+                        continue;
+                }
+                TREE * var = child->GetChild(0);
+                int sc[] = { K_SHARED, 0};
+                SetupSingleVar(var, sc, true);
+            }
+        }
+    }
 }
 
 void CUDA_EMULATOR::Execute(void* hostfun)
@@ -645,8 +641,14 @@ bool CUDA_EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
 
 void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
+    //_CrtMemState state_begin;
+    //_CrtMemCheckpoint(&state_begin);
+    
     std::queue<Thread*> queue;
-    SymbolTable * save;
+
+    // Keep track of symbol table root to restore later.  This is because of the awful
+    // use of root on a per-thread basis.
+    SymbolTable * save = this->root;
 
     // Two ways to do this.  If there is no thread synchronization,
     // then threads can run serially, one after another.  In this case,
@@ -656,7 +658,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     // then create the local symbols for each thread.
     // This test is just for performance enhancement.
     // Create a new symbol table and add the block index variables.
-    PushSymbolTable();
+    SymbolTable * block_symbol_table = PushSymbolTable();
     dim3 bid(bidx, bidy, bidz);
     CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
 
@@ -697,9 +699,6 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
         }
     }
     PopSymbolTable();
-    // Keep track of symbol table root to restore later.  This is because of the awful
-    // use of root on a per-thread basis.
-    save = this->root;
 
     int num_waiting_threads = 0;
     while (! queue.empty())
@@ -736,6 +735,16 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     }
     // Restore...
     this->root = save;
+    // Delete block symbol table.
+    delete block_symbol_table;
+    if (this->extern_memory_buffer)
+        delete this->extern_memory_buffer;
+    this->extern_memory_buffer = 0;
+
+    //_CrtMemState state_end;
+    //_CrtMemCheckpoint(&state_end);
+
+    //_CrtMemDumpAllObjectsSince(&state_begin);
 }
 
 CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, CUDA_EMULATOR::SymbolTable * root)
@@ -933,6 +942,7 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * typestring, int type, void 
     }
     // Create a symbol table entry.
     s = new Symbol();
+    s->emulator = this;
     s->name = this->string_table->Entry(name);
     s->typestring = this->string_table->Entry(typestring);
     s->type = type;
@@ -990,7 +1000,7 @@ TREE * CUDA_EMULATOR::GetChild(TREE * node, int n)
 char * CUDA_EMULATOR::StringTable::Entry(char * text)
 {
     char * result = 0;
-    std::map<char *, char*>::iterator it = this->table.find(text);
+    std::map<char *, char*, ltstr>::iterator it = this->table.find(text);
     if (it == this->table.end())
     {
         std::pair<char *, char*> p;
@@ -1361,3 +1371,17 @@ void CUDA_EMULATOR::unimplemented(char * text)
 {
     throw new Unimplemented(text);
 }
+
+CUDA_EMULATOR::SymbolTable::SymbolTable()
+{
+}
+
+CUDA_EMULATOR::SymbolTable::~SymbolTable()
+{
+    std::map<char*, Symbol*, ltstr>::iterator it = this->symbols.begin();
+    for ( ; it != this->symbols.end(); ++it)
+    {
+        delete it->second;
+    }
+}
+
