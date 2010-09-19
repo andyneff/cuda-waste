@@ -1,0 +1,51 @@
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+
+	.entry InstBasic (
+		.param .u32 __results	// bool*
+	)
+	{
+	.reg .u32 %r<5>;
+	// basic load, store.
+	ld.param.u32	%r1,[__results];
+	mov.u32		%r2,1;
+	st.global.b8	[%r1],%r2;
+	exit;
+	}
+
+	.entry InstIntegerArithmetic (
+		.param .u32 __results	// bool*
+	)
+	{
+	.reg .u32 %r<5>;
+	.reg .u8 %u8reg<15>;
+	.reg .u16 %u16reg<15>;
+	.reg .u32 %u32reg<15>;
+	.reg .u64 %u64reg<15>;
+	.reg .b16 %b<15>;
+	.reg .pred %p<15>;
+	ld.param.u32	%r1,[__results];
+
+	add.u16 %u16reg1, 1, 2;
+	setp.eq.u16 %p1, %u16reg1, 3;
+	selp.b16 %b1, 1, 0, %p1;
+	st.global.b8	[%r1+0],%b1;
+	
+	add.u16 %u16reg1, 65535, 1;
+	setp.eq.u16 %p1, %u16reg1, 0;
+	selp.b16 %b1, 1, 0, %p1;
+	st.global.b8	[%r1+1],%b1;
+
+	add.cc.u32 %u32reg1, 4294967295, 2;
+	setp.eq.u32 %p1, %u32reg1, 1;	// Overflow!
+	selp.b16 %b1, 1, 0, %p1;
+	st.global.b8	[%r1+2],%b1;
+
+	addc.cc.u32 %u32reg2, 0, 0;
+	setp.eq.u32 %p1, %u32reg2, 1;	// Overflow!
+	selp.b16 %b1, 1, 0, %p1;
+	st.global.b8	[%r1+3],%b1;
+
+	exit;
+	}
+
