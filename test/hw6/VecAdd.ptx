@@ -1,0 +1,41 @@
+	.version 1.4
+	.target sm_10, map_f64_to_f32
+
+	.entry VecAdd (
+		.param .u32 __cudaparm_VecAdd_A,
+		.param .u32 __cudaparm_VecAdd_B,
+		.param .u32 __cudaparm_VecAdd_C,
+		.param .s32 __cudaparm_VecAdd_N)
+	{
+	.reg .u16 %rh<4>;
+	.reg .u32 %r<13>;
+	.reg .f32 %f<5>;
+	.reg .pred %p<3>;
+	.loc	28	25	0
+$LDWbegin_VecAdd:
+	mov.u16 	%rh1, %ctaid.x;
+	mov.u16 	%rh2, %ntid.x;
+	mul.wide.u16 	%r1, %rh1, %rh2;
+	cvt.u32.u16 	%r2, %tid.x;
+	add.u32 	%r3, %r2, %r1;
+	ld.param.s32 	%r4, [__cudaparm_VecAdd_N];
+	setp.le.s32 	%p1, %r4, %r3;
+	@%p1 bra 	$Lt_0_1026;
+	.loc	28	29	0
+	mul.lo.u32 	%r5, %r3, 4;
+	ld.param.u32 	%r6, [__cudaparm_VecAdd_A];
+	add.u32 	%r7, %r6, %r5;
+	ld.global.f32 	%f1, [%r7+0];
+	ld.param.u32 	%r8, [__cudaparm_VecAdd_B];
+	add.u32 	%r9, %r8, %r5;
+	ld.global.f32 	%f2, [%r9+0];
+	add.f32 	%f3, %f1, %f2;
+	ld.param.u32 	%r10, [__cudaparm_VecAdd_C];
+	add.u32 	%r11, %r10, %r5;
+	st.global.f32 	[%r11+0], %f3;
+$Lt_0_1026:
+	.loc	28	30	0
+	exit;
+$LDWend_VecAdd:
+	} // VecAdd
+
