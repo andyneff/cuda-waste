@@ -7,6 +7,7 @@
 #include "../ptxp/PtxLexer.h"
 //#include "../ptxp/PtxParser.h"
 #include "tree.h"
+#include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
 class CUDA_EMULATOR
@@ -293,16 +294,34 @@ private:
 
 public:
     static CUDA_EMULATOR * Singleton();
-    void Extract_From_Source(char * module_name, char * source);
-    void Execute(void * hostfun);
-    void ** RegisterFunction(void * fun, char * name);
-    cudaError_t SetupArgument(const void *arg, size_t size, size_t offset);
-    cudaError_t ConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
-    cudaError_t ThreadSynchronize();
-    void SetDevice(char * device);
-    cudaError_t GetDevice(int * device);
-    cudaError_t GetDeviceProperties(struct cudaDeviceProp *prop, int device);
-    void SetTrace(int level);
-    char * StringTableEntry(char * text);
+    
+	// Parse
+	TREE * Extract_From_Source(char * module_name, char * source);
+    
+	// cuda_runtime.h equivalents.
+    void ** _cudaRegisterFunction(void * fun, char * name);
+    cudaError_t _cudaSetupArgument(const void *arg, size_t size, size_t offset);
+    cudaError_t _cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
+	cudaError_t _cudaThreadSynchronize();
+	cudaError_t _cudaLaunch(const char *entry);
+    void _cudaSetDevice(char * device);
+    cudaError_t _cudaGetDevice(int * device);
+    cudaError_t _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
 
+	// cuda.h equivalents.
+	CUresult _cuLaunchGrid(CUfunction f, int grid_width, int grid_height);
+	CUresult _cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name);
+	CUresult _cuModuleLoad(CUmodule *module, const char *fname);
+	CUresult _cuParamSetSize(CUfunction hfunc, unsigned int numbytes);
+	CUresult _cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes);
+
+	// Generic setup, execution.
+	void ConfigureBlock(dim3 dim);
+	void ConfigureGrid(dim3 dim);
+	void ConfigureSharedMemory(size_t sharedMem);
+	void ConfigureStream(cudaStream_t stream);
+	void Execute(TREE * entry);
+
+	void SetTrace(int level);
+    char * StringTableEntry(char * text);
 };

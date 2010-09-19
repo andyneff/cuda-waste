@@ -19,17 +19,10 @@
 #include "cuda-wrapper.h"
 #include "hook-mgr.h"
 
-
-
-void AddWrapper(char * cuda_module_name, HookManager * p)
+BOOL CUDA_WRAPPER::WrapCuda()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    cu->DoInit(cuda_module_name, p);
-}
-
-BOOL LoadCuda()
-{
-    HookManager * p = new HookManager();
+    cu->DoInit();
     HANDLE  hProcess = GetCurrentProcess();
     HMODULE hModuleArray[1024];
     DWORD   nModules;
@@ -52,12 +45,8 @@ BOOL LoadCuda()
             CloseHandle(hProcess);
             return FALSE;
         }
-        if (strstr(szModuleName, "cudart") != 0)
-        {
-            AddWrapper(szModuleName, p);
-            found = true;
-            break;
-        }
+    // Regardless of which module, add wrapper API.
+    cu->WrapModule(szModuleName);
     }
     return TRUE;
 }
@@ -69,7 +58,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
     {
     case DLL_PROCESS_ATTACH:
         {
-            return LoadCuda();
             break;
         }
     case DLL_PROCESS_DETACH:

@@ -68,6 +68,7 @@ char * str_do_not_call_cuda_after_sanity_check_fail = "?SetDoNotCallCudaAfterSan
 char * str_device_pointer_to_first_byte_in_block = "?SetDevicePointerToFirstByteInBlock@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z";
 char * str_set_device = "?RunDevice@CUDA_WRAPPER@@SG?AW4return_type@1@PAD@Z";
 char * str_set_trace = "?SetTrace@CUDA_WRAPPER@@SGXH@Z";
+char * str_wrap_cuda = "?WrapCuda@CUDA_WRAPPER@@SGHXZ";
 
 int main(int argc, char * argv[])
 {
@@ -92,9 +93,9 @@ int main(int argc, char * argv[])
     int do_not_call_cuda_after_sanity_check_fail;
     bool set_device_pointer_to_first_byte_in_block = false;
     int device_pointer_to_first_byte_in_block;
-	bool set_device = false;
-	char * device;
-	int level = 0;
+    bool set_device = false;
+    char * device;
+    int level = 0;
 
     // Create a structure containing options for debug.
     while (argc > 0)
@@ -105,7 +106,7 @@ int main(int argc, char * argv[])
             {
                 set_trace_all_calls = true;
                 trace_all_calls = true;
-				level = atoi(3+*argv);
+                level = atoi(3+*argv);
             }
             else if (strncmp("-s=", *argv, 3) == 0)
             {
@@ -142,12 +143,12 @@ int main(int argc, char * argv[])
                 set_device_pointer_to_first_byte_in_block = true;
                 device_pointer_to_first_byte_in_block = true;
             }
-			else if (strcmp("-d", *argv) == 0 || strcmp("--device", *argv) == 0)
-			{
-				set_device = true;
-				argc--; argv++;
-				device = *argv;
-			}
+            else if (strcmp("-d", *argv) == 0 || strcmp("--device", *argv) == 0)
+            {
+                set_device = true;
+                argc--; argv++;
+                device = *argv;
+            }
             else
                 Help();
             argc--; argv++;
@@ -225,7 +226,7 @@ int main(int argc, char * argv[])
     AddBytes(code, 0x60);   // pushad
 
     // Inject cuda-memory-debug wrapper library target (load the library into this program).
-    AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "cuda-memory-debug.dll"
+    AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
     JmpAbsoluteAddress(code, size-4, pszCMD);   // patch with actual string address.
     
     AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
@@ -353,10 +354,10 @@ int main(int argc, char * argv[])
     }
     if (set_device)
     {
-	    LPVOID pszDevice = VirtualAllocEx(hProcess, NULL, strlen(device) + 1, MEM_COMMIT, PAGE_READWRITE);
-		BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
-		LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
-		BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
+        LPVOID pszDevice = VirtualAllocEx(hProcess, NULL, strlen(device) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
         AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
@@ -370,6 +371,23 @@ int main(int argc, char * argv[])
         JmpAbsoluteAddress(code, size-4, pszDevice);
         AddBytes(code, 0xff, 0xd0); // call eax
     }
+
+    // Add hooks.
+    {
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_wrap_cuda, strlen(str_wrap_cuda) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_wrap_cuda
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
+
     // Restore registers and jump to original program entry.  Address
     // patched below.
     AddBytes(code, 0x61); // popad

@@ -38,7 +38,7 @@ public:
     HookManager();
     virtual ~HookManager();
 public:
-    PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook);
+    PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag);
     HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
     HookedFunction * FindHook(void * iat);
     PROC FindOriginal(PROC wrapper_function);

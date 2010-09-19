@@ -70,10 +70,10 @@ bool HookManager::HookSystemFuncs()
 {
     if (m_bSystemFuncsHooked)
     {
-        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA);
-        HookImport("Kernel32.dll", "LoadLibraryW", (PROC) HookManager::MyLoadLibraryW);
-        HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HookManager::MyLoadLibraryExA);
-        HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HookManager::MyLoadLibraryExW);
+        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA, true);
+        HookImport("Kernel32.dll", "LoadLibraryW", (PROC) HookManager::MyLoadLibraryW, true);
+        HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HookManager::MyLoadLibraryExA, true);
+        HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HookManager::MyLoadLibraryExW, true);
         m_bSystemFuncsHooked = true;
     }
     return m_bSystemFuncsHooked;
@@ -102,7 +102,7 @@ BOOL HookManager::AreThereHookedFunctions()
 }
 
 
-PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook)
+PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag)
 {
     LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
 
@@ -137,9 +137,10 @@ PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfn
                     );
             else
             {
-                std::cerr << "Unknown function " << pszFuncName << " of module " << pszCalleeModName
-                << "\n Check name.\n";
-                exit(1);
+				// Unknown function...
+				if (flag)
+					std::cerr << "Unknown function " << pszFuncName << " of module " << pszCalleeModName << "\n Check name.\n";
+                return 0;
             }
         }
     }
