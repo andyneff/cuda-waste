@@ -22,6 +22,7 @@ CUDA_EMULATOR::CUDA_EMULATOR()
     this->string_table = new StringTable();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
+    this->carry = 0;
 }
 
 void CUDA_EMULATOR::SetTrace(int level)
@@ -55,7 +56,7 @@ TREE * CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
     }
     modules.push_back(mod);
     Extract_From_Tree(mod);
-	return mod;
+    return mod;
 }
 
 void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
@@ -457,12 +458,12 @@ void CUDA_EMULATOR::SetupExternShared(TREE * code)
 
 void CUDA_EMULATOR::ConfigureGrid(dim3 dim)
 {
-	this->conf.gridDim = dim;
+    this->conf.gridDim = dim;
 }
 
 void CUDA_EMULATOR::ConfigureBlock(dim3 dim)
 {
-	this->conf.blockDim = dim;
+    this->conf.blockDim = dim;
 }
 
 void CUDA_EMULATOR::ConfigureSharedMemory(size_t sharedMem)
@@ -472,7 +473,7 @@ void CUDA_EMULATOR::ConfigureSharedMemory(size_t sharedMem)
 
 void CUDA_EMULATOR::ConfigureStream(cudaStream_t stream)
 {
-	conf.stream = stream;
+    conf.stream = stream;
 }
 
 void CUDA_EMULATOR::Execute(TREE * entry)
@@ -664,6 +665,7 @@ CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, CU
     this->root = root;
     this->finished = false;
     this->wait = false;
+    this->carry = 0;
 }
 
 CUDA_EMULATOR::Thread::~Thread()
@@ -676,6 +678,7 @@ bool CUDA_EMULATOR::Thread::Execute()
     // set up symbol table environment.
     this->emulator->root = this->root;
     int pc = this->pc;
+    this->emulator->carry = this->carry;
 
     // Execute.
     pc = emulator->FindFirstInst(block, pc);
@@ -702,7 +705,8 @@ bool CUDA_EMULATOR::Thread::Execute()
         {
             // Set state of this thread to wait, and pack up current program counter.
             this->wait = true;
-            this->pc = pc + 1;
+        this->pc = pc + 1;
+        this->carry = this->emulator->carry;
             return this->finished;
         }
         else
@@ -1302,70 +1306,72 @@ CUresult CUDA_EMULATOR::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, c
     // the entry for it.
     std::map<char*, TREE *, ltstr>::iterator j = this->entry.find((char*)name);
     if (j == this->entry.end())
-		return CUDA_ERROR_NOT_FOUND;
+        return CUDA_ERROR_NOT_FOUND;
     TREE * data = j->second;
-	*hfunc = (CUfunction)data;
-	return CUDA_SUCCESS;
+    *hfunc = (CUfunction)data;
+    return CUDA_SUCCESS;
 }
 
 CUresult CUDA_EMULATOR::_cuModuleLoad(CUmodule *module, const char *fname)
 {
-	int size = 1000000;
-	char * buffer = (char *)malloc(size);
-	// Open file, parse, and record AST.
-	std::ifstream myfile(fname);
-	int count = 0;
-	if (myfile.is_open())
-	{
-		while (! myfile.eof())
-		{
-			if (count >= size)
-			{
-				size = size * 2;
-				buffer = (char *)realloc(buffer, size);
-			}
-			int c = myfile.get();
-			if (c != -1)
-				buffer[count++] = c;
-			else
-				break;
-		}
-		myfile.close();
-		buffer[count++] = 0;
-	}
-	TREE * mod = this->Extract_From_Source(this->device, (char*)buffer);
-	*module = (CUmodule) mod;
-	if (mod != 0)
-		return CUDA_SUCCESS;
-	else
-		return CUDA_ERROR_INVALID_CONTEXT;
+    int size = 1000000;
+    char * buffer = (char *)malloc(size);
+    // Open file, parse, and record AST.
+    std::ifstream myfile(fname);
+    int count = 0;
+    if (myfile.is_open())
+    {
+        while (! myfile.eof())
+        {
+            if (count >= size)
+            {
+                size = size * 2;
+                buffer = (char *)realloc(buffer, size);
+            }
+            int c = myfile.get();
+            if (c != -1)
+                buffer[count++] = c;
+            else
+                break;
+        }
+        myfile.close();
+        buffer[count++] = 0;
+    }
+    if (count == 0)
+        return CUDA_ERROR_FILE_NOT_FOUND;
+    TREE * mod = this->Extract_From_Source(this->device, (char*)buffer);
+    *module = (CUmodule) mod;
+    if (mod != 0)
+        return CUDA_SUCCESS;
+    else
+        return CUDA_ERROR_INVALID_CONTEXT;
 }
 
 CUresult CUDA_EMULATOR::_cuParamSetSize(CUfunction hfunc, unsigned int numbytes)
 {
-	// Unknown what to do for param size.
-	return CUDA_SUCCESS;
+    // Unknown what to do for param size.
+    return CUDA_SUCCESS;
 }
 
 CUresult CUDA_EMULATOR::_cuLaunchGrid(CUfunction hfunc, int grid_width, int grid_height)
 {
-	dim3 gridDim(grid_width, grid_height, 1);
-	this->ConfigureGrid(gridDim);
-	this->Execute((TREE*)hfunc);
-	return CUDA_SUCCESS;
+    dim3 gridDim(grid_width, grid_height, 1);
+    this->ConfigureGrid(gridDim);
+    this->Execute((TREE*)hfunc);
+    return CUDA_SUCCESS;
 }
 
 
 CUresult CUDA_EMULATOR::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
 {
-	// record argument, size, offset.
+    // record argument, size, offset.
     CUDA_EMULATOR::arg * a = new CUDA_EMULATOR::arg();
     a->argument = malloc(numbytes);
-	memcpy(const_cast<void*>(a->argument), ptr, numbytes);
+    memcpy(const_cast<void*>(a->argument), ptr, numbytes);
     a->size = numbytes;
     a->offset = offset;
     this->arguments.push_back(a);
-	return CUDA_SUCCESS;
+    return CUDA_SUCCESS;
 }
 
 
@@ -1377,10 +1383,10 @@ CUresult CUDA_EMULATOR::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, un
 
 cudaError_t CUDA_EMULATOR::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream)
 {
-	this->ConfigureBlock(blockDim);
-	this->ConfigureGrid(gridDim);
-	this->ConfigureSharedMemory(sharedMem);
-	this->ConfigureStream(stream);
+    this->ConfigureBlock(blockDim);
+    this->ConfigureGrid(gridDim);
+    this->ConfigureSharedMemory(sharedMem);
+    this->ConfigureStream(stream);
     return cudaSuccess;
 }
 
@@ -1415,7 +1421,7 @@ cudaError_t CUDA_EMULATOR::_cudaLaunch(const char *hostfun)
 {
     // Given the address of the kernel function in the host, determine the name of the kernel
     // it is calling in PTX, using information provided by RegisterFatBinary and _cudaRegisterFunction.
-	std::map<void*, char*>::iterator i = this->fun_to_name.find((void*)hostfun);
+    std::map<void*, char*>::iterator i = this->fun_to_name.find((void*)hostfun);
     assert(i != this->fun_to_name.end());
     char * name = i->second;
 
@@ -1424,7 +1430,7 @@ cudaError_t CUDA_EMULATOR::_cudaLaunch(const char *hostfun)
     std::map<char*, TREE *, ltstr>::iterator j = this->entry.find(name);
     assert(j != this->entry.end());
     TREE * entry = j->second;
-	this->Execute(entry);
+    this->Execute(entry);
     return cudaSuccess;
 }
 
