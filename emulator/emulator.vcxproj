@@ -80,6 +80,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cuda-runtime.cpp" />
+    <ClCompile Include="cuda.cpp" />
     <ClCompile Include="emulator.cpp" />
     <ClCompile Include="instructions.cpp" />
     <ClCompile Include="tree.cpp" />
