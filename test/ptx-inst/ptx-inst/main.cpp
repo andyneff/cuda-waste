@@ -4,7 +4,7 @@
 // Host code
 int main()
 {
-	int N = 16;
+	int N = 10000;
 	double * h_A = (double*)malloc(N * sizeof(double));
 	float * h_B = (float*)malloc(N * sizeof(float));
 	int * h_C = (int*)malloc(N * sizeof(int));
@@ -47,29 +47,11 @@ int main()
 	int offset = 0;
 	void* ptr;
 	
-	ptr = (void*)(size_t)d_E;
-	ALIGN_UP(offset, __alignof(ptr));
-	CUresult r9 = cuParamSetv(inst_basic, offset, &ptr, sizeof(ptr));
-	offset += sizeof(ptr);
-	
-	CUresult r12 = cuParamSetSize(inst_basic, offset);
-
-	int threadsPerBlock = 1;
-	int blocksPerGrid = 1;
-
-	CUresult r13 = cuFuncSetBlockShape(inst_basic, threadsPerBlock, 1, 1);
-	CUresult r14 = cuLaunchGrid(inst_basic, blocksPerGrid, 1);
-
-	CUresult r15 = cuMemcpyDtoH(h_E, d_E, N * sizeof(bool));
-	for (int i = 0; i < N; ++i)
 	{
-		std::cout << "i " << i << " = " << h_E[i] << "\n";
-	}
-
-
-	{
-		memset(h_E, 0, N * sizeof(bool));
-		CUresult r7 = cuMemcpyHtoD(d_E, h_E, N * sizeof(bool));
+		CUdeviceptr d_C;
+		memset(h_C, 0, N * sizeof(int));
+		CUresult r4 = cuMemAlloc(&d_C, sizeof(int));
+		CUresult r20 = cuMemcpyHtoD(d_C, h_C, sizeof(int));
 
 		CUfunction proc;
 		CUresult r3 = cuModuleGetFunction(&proc, cuModule, "InstIntegerArithmetic");
@@ -82,6 +64,11 @@ int main()
 		CUresult r9 = cuParamSetv(proc, offset, &ptr, sizeof(ptr));
 		offset += sizeof(ptr);
 		
+		ptr = (void*)(size_t)d_C;
+		ALIGN_UP(offset, __alignof(ptr));
+		CUresult r21 = cuParamSetv(proc, offset, &ptr, sizeof(ptr));
+		offset += sizeof(ptr);
+		
 		CUresult r12 = cuParamSetSize(proc, offset);
 
 		int threadsPerBlock = 1;
@@ -91,11 +78,17 @@ int main()
 		CUresult r14 = cuLaunchGrid(proc, blocksPerGrid, 1);
 
 		CUresult r15 = cuMemcpyDtoH(h_E, d_E, N * sizeof(bool));
+		CUresult r16 = cuMemcpyDtoH(h_C, d_C, sizeof(int));
+
+		N = *h_C;
 		for (int i = 0; i < N; ++i)
 		{
 			std::cout << "i " << i << " = " << h_E[i] << "\n";
+			if (h_E[i] == 0)
+			{
+				std::cout << "Test " << i << " failed.\n";
+			}
 		}
-
 	}
 
 	// Free device memory

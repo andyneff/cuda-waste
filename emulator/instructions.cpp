@@ -4803,7 +4803,7 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
     if (src2->GetType() == T_WORD)
     {
         ssrc2 = FindSymbol(src2->GetText());
-        assert(ssrc1 != 0);
+        assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
         assert(s2 != 0);
     }

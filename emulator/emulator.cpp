@@ -1158,6 +1158,7 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
 
 CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
 {
+    // Perform bottom-up evaluation of a constant expression.
     Constant result;
     result.type = expected_type;
     char * dummy;
@@ -1263,7 +1264,1020 @@ CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr
             default:
                 assert(false);
         }
-    } else assert(false);
+    } else if (GetType(const_expr) == T_QUESTION)
+    {
+        throw new Unimplemented("Question operator in constant expression not supported.\n");
+    } else if (GetType(const_expr) == T_OROR)
+    {
+        // Perform boolean OR.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 || rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 || rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 || rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 || rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 || rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 || rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 || rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 || rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 || rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 || rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 || rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 || rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_ANDAND)
+    {
+        // Perform boolean AND.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 && rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 && rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 && rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 && rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 && rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 && rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 && rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 && rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 && rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 && rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 && rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 && rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_OR)
+    {
+        // Perform bit OR.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 | rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 | rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 | rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 | rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 | rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 | rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 | rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 | rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 | rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 | rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 | rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 | rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_XOR)
+    {
+        // Perform bit XOR.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 ^ rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 ^ rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 ^ rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 ^ rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 ^ rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 ^ rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 ^ rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 ^ rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 ^ rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 ^ rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 ^ rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 ^ rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_AND)
+    {
+        // Perform bit OR.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 & rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 & rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 & rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 & rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 & rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 & rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 & rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 & rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 & rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 & rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 & rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 & rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_EQEQ)
+    {
+        // Perform EQ.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 == rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 == rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 == rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 == rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 == rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 == rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 == rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 == rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 == rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 == rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 == rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 == rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_NOTEQ)
+    {
+        // Perform bit !=.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 != rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 != rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 != rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 != rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 != rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 != rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 != rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 != rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 != rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 != rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 != rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 != rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_LE)
+    {
+        // Perform bit LE.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 <= rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 <= rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 <= rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 <= rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 <= rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 <= rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 <= rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 <= rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 <= rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 <= rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 <= rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 <= rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_GE)
+    {
+        // Perform bit GE
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 >= rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 >= rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 >= rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 >= rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 >= rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 >= rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 >= rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 >= rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 >= rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 >= rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 >= rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 >= rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_LT)
+    {
+        // Perform bit <.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 < rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 < rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 < rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 < rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 < rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 < rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 < rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 < rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 < rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 < rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 < rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 < rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_GT)
+    {
+        // Perform bit OR.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 > rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 > rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 > rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 > rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 > rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 > rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 > rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 > rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 > rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 > rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 > rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 > rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_LTLT)
+    {
+        // Perform bit <<
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 << rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 << rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 << rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 << rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 << rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 << rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 << rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 << rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 << rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 << rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 << rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 << rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_GTGT)
+    {
+        // Perform bit >>
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 >> rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 >> rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 >> rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 >> rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 >> rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 >> rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 >> rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 >> rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 >> rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 >> rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 >> rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 >> rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_PLUS && const_expr->GetChild(1) != 0)
+    {
+        // Perform bit '+'.
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 + rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 + rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 + rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 + rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 + rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 + rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 + rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 + rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 + rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 + rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 + rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 + rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_MINUS && const_expr->GetChild(1) != 0)
+    {
+        // Perform bit '-'
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 - rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 - rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 - rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 - rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 - rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 - rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 - rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 - rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 - rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 - rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 - rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 - rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_STAR)
+    {
+        // Perform bit '*'
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 * rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 * rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 * rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 * rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 * rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 * rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 * rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 * rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 * rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 * rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 * rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 * rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_SLASH)
+    {
+        // Perform bit '/'
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 / rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 / rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 / rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 / rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 / rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 / rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 / rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 / rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 / rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 / rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 / rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 / rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_PERCENT)
+    {
+        // Perform bit '%'
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8 % rhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16 % rhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32 % rhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64 % rhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8 % rhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16 % rhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32 % rhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64 % rhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8 % rhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16 % rhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32 % rhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64 % rhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_PLUS)
+    {
+        // Perform bit >>
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = lhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = lhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = lhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = lhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = lhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = lhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = lhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = lhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = lhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = lhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = lhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = lhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_MINUS)
+    {
+        // Perform bit >>
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = - lhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = - lhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = - lhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = - lhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = - lhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = - lhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = - lhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = - lhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = - lhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = - lhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = - lhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = - lhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_TILDE)
+    {
+        // Perform bit >>
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = ~ lhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = ~ lhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = ~ lhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = ~ lhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = ~ lhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = ~ lhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = ~ lhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = ~ lhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = ~ lhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = ~ lhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = ~ lhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = ~ lhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (GetType(const_expr) == T_NOT)
+    {
+        // Perform !
+        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        switch (expected_type)
+        {
+            case K_U8:
+                result.value.u8 = ! lhs.value.u8;
+                break;
+            case K_U16:
+                result.value.u16 = ! lhs.value.u16;
+                break;
+            case K_U32:
+                result.value.u32 = ! lhs.value.u32;
+                break;
+            case K_U64:
+                result.value.u64 = ! lhs.value.u64;
+                break;
+            case K_S8:
+                result.value.s8 = ! lhs.value.s8;
+                break;
+            case K_S16:
+                result.value.s16 = ! lhs.value.s16;
+                break;
+            case K_S32:
+                result.value.s32 = ! lhs.value.s32;
+                break;
+            case K_S64:
+                result.value.s64 = ! lhs.value.s64;
+                break;
+            case K_B8:
+                result.value.b8 = ! lhs.value.b8;
+                break;
+            case K_B16:
+                result.value.b16 = ! lhs.value.b16;
+                break;
+            case K_B32:
+                result.value.b32 = ! lhs.value.b32;
+                break;
+            case K_B64:
+                result.value.b64 = ! lhs.value.b64;
+                break;
+            default:
+                assert(false);
+        }
+    }
+    else
+        assert(false);
     return result;
 }
 

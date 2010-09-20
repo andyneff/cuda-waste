@@ -18,33 +18,63 @@
 	)
 	{
 	.reg .u32 %r<5>;
-	.reg .u8 %u8reg<15>;
-	.reg .u16 %u16reg<15>;
-	.reg .u32 %u32reg<15>;
-	.reg .u64 %u64reg<15>;
+
+	.reg .u8 %u8_<15>;
+	.reg .u16 %u16_<15>;
+	.reg .u32 %u32_<15>;
+	.reg .u64 %u64_<15>;
+
+	.reg .s8 %s8_<15>;
+	.reg .s16 %s16_<15>;
+	.reg .s32 %s32_<15>;
+	.reg .s64 %s64_<15>;
+
+	.reg .f32 %f32_<15>;
+	.reg .f64 %f64_<15>;
+
 	.reg .b16 %b<15>;
 	.reg .pred %p<15>;
 	ld.param.u32	%r1,[__results];
 
-	add.u16 %u16reg1, 1, 2;
-	setp.eq.u16 %p1, %u16reg1, 3;
-	selp.b16 %b1, 1, 0, %p1;
+	// ADD - 16 bit.
+	add.u16		%u16_1, 1, 2;
+	setp.eq.u16	%p1, %u16_1, 3;
+	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+0],%b1;
 	
-	add.u16 %u16reg1, 65535, 1;
-	setp.eq.u16 %p1, %u16reg1, 0;
-	selp.b16 %b1, 1, 0, %p1;
+	// ADD - 16 bit with overflow.
+	add.u16		%u16_1, 65535, 1;
+	setp.eq.u16	%p1, %u16_1, 0;
+	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+1],%b1;
 
-	add.cc.u32 %u32reg1, 4294967295, 2;
-	setp.eq.u32 %p1, %u32reg1, 1;	// Overflow!
-	selp.b16 %b1, 1, 0, %p1;
+	// ADD - 32 bit with overflow/carry out
+	add.cc.u32	%u32_1, 4294967295, 2;
+	setp.eq.u32	%p1, %u32_1, 1;
+	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+2],%b1;
 
-	addc.cc.u32 %u32reg2, 0, 0;
-	setp.eq.u32 %p1, %u32reg2, 1;	// Overflow!
-	selp.b16 %b1, 1, 0, %p1;
+	// ADD - 32 bit with carry in
+	addc.cc.u32	%u32_2, 0, 0;
+	setp.eq.u32	%p1, %u32_2, 1;
+	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+3],%b1;
+
+	// ADD - 32 bit reg/const
+	mov.s32		%s32_2, 15;
+	add.s32		%s32_1, %s32_2, -20;
+	setp.eq.s32	%p1, %s32_1, -5;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+4],%b1;
+
+	// ADD - 32 bit const/reg
+	mov.s32		%s32_2, 16;
+	add.s32		%s32_1, -20, %s32_2;
+	setp.eq.s32	%p1, -4, %s32_1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+5],%b1;
+
+	// ADD - 32 bit float.
 
 	exit;
 	}

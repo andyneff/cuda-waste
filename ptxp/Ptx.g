@@ -3120,7 +3120,7 @@ primary
     ;
 
 par_expression
-    :   T_OP^ constant_expression_aux T_CP
+    :   T_OP! constant_expression_aux T_CP!
     ;
 
 integer
