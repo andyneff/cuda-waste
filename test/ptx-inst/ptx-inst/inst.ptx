@@ -14,7 +14,8 @@
 	}
 
 	.entry InstIntegerArithmetic (
-		.param .u32 __results	// bool*
+		.param .u32 __results,	// bool*
+		.param .u32 __N		// N*
 	)
 	{
 	.reg .u32 %r<5>;
@@ -74,7 +75,18 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+5],%b1;
 
-	// ADD - 32 bit float.
+	// ADD - 32 bit reg/reg
+	mov.s32		%s32_2, 16;
+	mov.s32		%s32_3, 4;
+	add.s32		%s32_1, %s32_2, %s32_3;
+	setp.eq.s32	%p1, 1+2 + 3*2 + 10 +(-4 + 5), %s32_1; // 20.
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+6],%b1;
+
+	// Pass back the number of tests performed.
+	ld.param.u32	%r1,[__N];
+	mov.u32		%r2, 7;
+	st.global.u32	[%r1], %r2;
 
 	exit;
 	}
