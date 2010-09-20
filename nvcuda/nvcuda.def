@@ -1,0 +1,188 @@
+EXPORTS 
+; clGetExtensionFunctionAddress
+; clGetPlatformInfo
+cuArray3DCreate = _cuArray3DCreate@8
+cuArray3DGetDescriptor = _cuArray3DGetDescriptor@8
+cuArrayCreate = _cuArrayCreate@8
+cuArrayDestroy = _cuArrayDestroy@4
+cuArrayGetDescriptor =_cuArrayGetDescriptor@8
+cuCtxAttach = _cuCtxAttach@8
+cuCtxCreate = _cuCtxCreate@12
+cuCtxCreate_v2 = _cuCtxCreate@12
+cuCtxDestroy = _cuCtxDestroy@4
+cuCtxDetach = _cuCtxDetach@4
+; cuCtxGetApiVersion
+; cuCtxGetCacheConfig
+cuCtxGetDevice = _cuCtxGetDevice@4
+cuCtxGetLimit = _cuCtxGetLimit@8
+cuCtxPopCurrent = _cuCtxPopCurrent@4
+cuCtxPushCurrent = _cuCtxPushCurrent@4
+; cuCtxSetCacheConfig = _cuCtxSetCacheConfig@8
+cuCtxSetLimit = _cuCtxSetLimit@8
+cuCtxSynchronize = _cuCtxSynchronize@0
+; cuD3D10CtxCreate
+; cuD3D10CtxCreateOnDevice
+; cuD3D10GetDevice
+; cuD3D10GetDevices
+; cuD3D10GetDirect3DDevice
+; cuD3D10MapResources
+; cuD3D10RegisterResource
+; cuD3D10ResourceGetMappedArray
+; cuD3D10ResourceGetMappedPitch
+; cuD3D10ResourceGetMappedPointer
+; cuD3D10ResourceGetMappedSize
+; cuD3D10ResourceGetSurfaceDimensions
+; cuD3D10ResourceSetMapFlags
+; cuD3D10UnmapResources
+; cuD3D10UnregisterResource
+; cuD3D11CtxCreate
+; cuD3D11CtxCreateOnDevice
+; cuD3D11GetDevice
+; cuD3D11GetDevices
+; cuD3D11GetDirect3DDevice
+; cuD3D9Begin
+; cuD3D9CtxCreate
+; cuD3D9CtxCreateOnDevice
+; cuD3D9End
+; cuD3D9GetDevice
+; cuD3D9GetDevices
+; cuD3D9GetDirect3DDevice
+; cuD3D9MapResources
+; cuD3D9MapVertexBuffer
+; cuD3D9RegisterResource
+; cuD3D9RegisterVertexBuffer
+; cuD3D9ResourceGetMappedArray
+; cuD3D9ResourceGetMappedPitch
+; cuD3D9ResourceGetMappedPointer
+; cuD3D9ResourceGetMappedSize
+; cuD3D9ResourceGetSurfaceDimensions
+; cuD3D9ResourceSetMapFlags
+; cuD3D9UnmapResources
+; cuD3D9UnmapVertexBuffer
+; cuD3D9UnregisterResource
+; cuD3D9UnregisterVertexBuffer
+cuDeviceComputeCapability = _cuDeviceComputeCapability@12
+cuDeviceGet = _cuDeviceGet@8
+cuDeviceGetAttribute = _cuDeviceGetAttribute@12
+cuDeviceGetCount = _cuDeviceGetCount@4
+cuDeviceGetName = _cuDeviceGetName@12
+cuDeviceGetProperties = _cuDeviceGetProperties@8
+cuDeviceTotalMem = _cuDeviceTotalMem@8
+cuDriverGetVersion = _cuDriverGetVersion@4
+cuEventCreate = _cuEventCreate@8
+cuEventDestroy = _cuEventDestroy@4
+cuEventElapsedTime = _cuEventElapsedTime@12
+cuEventQuery = _cuEventQuery@4
+cuEventRecord = _cuEventRecord@8
+cuEventSynchronize = _cuEventSynchronize@4
+cuFuncGetAttribute = _cuFuncGetAttribute@12
+cuFuncSetBlockShape = _cuFuncSetBlockShape@16
+cuFuncSetCacheConfig = _cuFuncSetCacheConfig@8
+cuFuncSetSharedSize = _cuFuncSetSharedSize@8
+; cuGLCtxCreate
+; cuGLInit
+; cuGLMapBufferObject
+; cuGLMapBufferObjectAsync
+; cuGLRegisterBufferObject
+; cuGLSetBufferObjectMapFlags
+; cuGLUnmapBufferObject
+; cuGLUnmapBufferObjectAsync
+; cuGLUnregisterBufferObject
+cuGetExportTable = _cuGetExportTable@8
+; cuGraphicsD3D10RegisterResource
+; cuGraphicsD3D11RegisterResource
+; cuGraphicsD3D9RegisterResource
+; cuGraphicsGLRegisterBuffer
+; cuGraphicsGLRegisterImage
+cuGraphicsMapResources = _cuGraphicsMapResources@12
+cuGraphicsResourceGetMappedPointer = _cuGraphicsResourceGetMappedPointer@12
+cuGraphicsResourceSetMapFlags = _cuGraphicsResourceSetMapFlags@8
+cuGraphicsSubResourceGetMappedArray = _cuGraphicsSubResourceGetMappedArray@16
+cuGraphicsUnmapResources = _cuGraphicsUnmapResources@12
+cuGraphicsUnregisterResource = _cuGraphicsUnregisterResource@4
+cuInit = _cuInit@4
+cuLaunch = _cuLaunch@4
+cuLaunchGrid = _cuLaunchGrid@12
+cuLaunchGridAsync = _cuLaunchGridAsync@16
+cuMemAlloc = _cuMemAlloc@8
+cuMemAlloc_v2 = _cuMemAlloc@8
+cuMemAllocHost = _cuMemAllocHost@8
+cuMemAllocPitch = _cuMemAllocPitch@20
+cuMemFree = _cuMemFree@4
+cuMemFree_v2 = _cuMemFree@4
+cuMemFreeHost = _cuMemFreeHost@4
+cuMemGetAddressRange = _cuMemGetAddressRange@12
+cuMemGetInfo = _cuMemGetInfo@8
+cuMemHostAlloc = _cuMemHostAlloc@12
+cuMemHostGetDevicePointer = _cuMemHostGetDevicePointer@12
+cuMemHostGetFlags = _cuMemHostGetFlags@8
+cuMemcpy2D = _cuMemcpy2D@4
+cuMemcpy2DAsync = _cuMemcpy2DAsync@8
+cuMemcpy2DUnaligned = _cuMemcpy2DUnaligned@4
+cuMemcpy3D = _cuMemcpy3D@4
+cuMemcpy3DAsync = _cuMemcpy3DAsync@8
+cuMemcpyAtoA = _cuMemcpyAtoA@20
+cuMemcpyAtoD = _cuMemcpyAtoD@16
+cuMemcpyAtoH = _cuMemcpyAtoH@16
+cuMemcpyAtoHAsync = _cuMemcpyAtoHAsync@20
+cuMemcpyDtoA = _cuMemcpyDtoA@16
+cuMemcpyDtoD = _cuMemcpyDtoD@12
+cuMemcpyDtoDAsync = _cuMemcpyDtoDAsync@16
+cuMemcpyDtoH = _cuMemcpyDtoH@12
+cuMemcpyDtoH_v2 = _cuMemcpyDtoH@12
+cuMemcpyDtoHAsync = _cuMemcpyDtoHAsync@16
+cuMemcpyHtoA = _cuMemcpyHtoA@16
+cuMemcpyHtoA_v2 = _cuMemcpyHtoA@16
+cuMemcpyHtoAAsync = _cuMemcpyHtoAAsync@20
+cuMemcpyHtoD = _cuMemcpyHtoD@12
+cuMemcpyHtoD_v2 = _cuMemcpyHtoD@12
+cuMemcpyHtoDAsync = _cuMemcpyHtoDAsync@16
+cuMemsetD16 = _cuMemsetD16@12
+; cuMemsetD16Async = _cuMemsetD16Async@16
+cuMemsetD2D16 = _cuMemsetD2D16@20
+; cuMemsetD2D16Async
+cuMemsetD2D32 = _cuMemsetD2D32@20
+; cuMemsetD2D32Async
+cuMemsetD2D8 = _cuMemsetD2D8@20
+; cuMemsetD2D8Async
+cuMemsetD32 = _cuMemsetD32@12
+; cuMemsetD32Async
+cuMemsetD8 = _cuMemsetD8@12
+; cuMemsetD8Async
+cuModuleGetFunction = _cuModuleGetFunction@12
+cuModuleGetGlobal = _cuModuleGetGlobal@16
+cuModuleGetSurfRef = _cuModuleGetSurfRef@12
+cuModuleGetTexRef = _cuModuleGetTexRef@12
+cuModuleLoad = _cuModuleLoad@8
+cuModuleLoadData = _cuModuleLoadData@8
+cuModuleLoadDataEx = _cuModuleLoadDataEx@20
+cuModuleLoadFatBinary = _cuModuleLoadFatBinary@8
+cuModuleUnload = _cuModuleUnload@4
+cuParamSetSize = _cuParamSetSize@8
+cuParamSetTexRef = _cuParamSetTexRef@12
+cuParamSetf = _cuParamSetf@12
+cuParamSeti = _cuParamSeti@12
+cuParamSetv = _cuParamSetv@16
+cuStreamCreate = _cuStreamCreate@8
+cuStreamDestroy = _cuStreamDestroy@4
+cuStreamQuery = _cuStreamQuery@4
+cuStreamSynchronize = _cuStreamSynchronize@4
+; cuStreamWaitEvent
+cuSurfRefGetArray = _cuSurfRefGetArray@8
+cuSurfRefSetArray = _cuSurfRefSetArray@12
+cuTexRefCreate = _cuTexRefCreate@4
+cuTexRefDestroy = _cuTexRefDestroy@4
+cuTexRefGetAddress = _cuTexRefGetAddress@8
+cuTexRefGetAddressMode = _cuTexRefGetAddressMode@12
+cuTexRefGetArray = _cuTexRefGetArray@8
+cuTexRefGetFilterMode = _cuTexRefGetFilterMode@8
+cuTexRefGetFlags = _cuTexRefGetFlags@8
+cuTexRefGetFormat = _cuTexRefGetFormat@12
+cuTexRefSetAddress = _cuTexRefSetAddress@16
+cuTexRefSetAddress2D = _cuTexRefSetAddress2D@16
+cuTexRefSetAddressMode = _cuTexRefSetAddressMode@12
+cuTexRefSetArray = _cuTexRefSetArray@12
+cuTexRefSetFilterMode = _cuTexRefSetFilterMode@8
+cuTexRefSetFlags = _cuTexRefSetFlags@8
+cuTexRefSetFormat = _cuTexRefSetFormat@12
+; cuWGLGetDevice
