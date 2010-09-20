@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptx-inst", "ptx-inst\ptx-inst.vcproj", "{FC31EFF9-753F-4E82-BC44-BB8A81ABF401}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptx-inst", "ptx-inst\ptx-inst.vcxproj", "{FC31EFF9-753F-4E82-BC44-BB8A81ABF401}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
