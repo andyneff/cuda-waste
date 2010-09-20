@@ -32,8 +32,8 @@
 #include <assert.h>
 #include "cuda-wrapper.h"
 #include "cuda-memory-debug-undefs.h"
-#include <atlcomcli.h> // For CComPtr
-#include <dia2.h>
+//#include <atlcomcli.h> // For CComPtr
+//#include <dia2.h>
 #include "call-stack-info.h"
 #include "hook-mgr.h"
 #include <__cudaFatFormat.h>
