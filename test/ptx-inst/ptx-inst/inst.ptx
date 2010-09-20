@@ -55,7 +55,7 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+2],%b1;
 
-	// ADD - 32 bit with carry in
+	// ADDC - 32 bit with carry in
 	addc.cc.u32	%u32_2, 0, 0;
 	setp.eq.u32	%p1, %u32_2, 1;
 	selp.b16	%b1, 1, 0, %p1;
