@@ -2949,13 +2949,12 @@ opr_aux
             ( T_LT opr T_GT )?
         ) |
         ( // aggregate
-            T_OC
+            T_OC!
             (id_or_opcode | T_UNDERSCORE)
-            ( T_COMMA (id_or_opcode | T_UNDERSCORE))
-
-            (( T_COMMA (id_or_opcode | T_UNDERSCORE))
-             ( T_COMMA (id_or_opcode | T_UNDERSCORE)))?
-            T_CC
+            ( T_COMMA! (id_or_opcode | T_UNDERSCORE))
+            (( T_COMMA! (id_or_opcode | T_UNDERSCORE))
+             ( T_COMMA! (id_or_opcode | T_UNDERSCORE)))?
+            T_CC!
         ) |
         T_UNDERSCORE
     )
