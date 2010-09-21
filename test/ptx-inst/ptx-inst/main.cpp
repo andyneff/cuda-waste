@@ -2,6 +2,13 @@
 #include <iostream>
 #include <cuda.h>
 // Host code
+void doit(char * t)
+{
+	printf(t);
+	exit(1);
+}
+#define Test(x, s) {int t = x; if (t != CUDA_SUCCESS) {printf("fail %d %s\n",t, s); exit(1);}}
+
 int main()
 {
 	int N = 10000;
@@ -13,12 +20,11 @@ int main()
 	memset(h_E, 0, N * sizeof(bool));
 
 	// Initialize
-	if (cuInit(0) != CUDA_SUCCESS)
-		exit (0);
+	Test(cuInit(0), "cuInit");
 
 	// Get number of devices supporting CUDA
 	int deviceCount = 0;
-	cuDeviceGetCount(&deviceCount);
+	Test(cuDeviceGetCount(&deviceCount), "cuDeviceGetCount");
 	if (deviceCount == 0)
 	{
 		printf("There is no device supporting CUDA.\n");
@@ -27,21 +33,16 @@ int main()
 
 	// Get handle for device 0
 	CUdevice cuDevice = 0;
-	CUresult r1 = cuDeviceGet(&cuDevice, 0);
+	Test(cuDeviceGet(&cuDevice, 0), "cuDeviceGet");
 	CUcontext cuContext;
-	cuCtxCreate(&cuContext, 0, cuDevice);
+	int xxx = cuCtxCreate(&cuContext, 0, cuDevice);
 	CUmodule cuModule;
-	CUresult r2 = cuModuleLoad(&cuModule, "inst.ptx");
+	Test(cuModuleLoad(&cuModule, "inst.ptx"), "cuModuleLoad");
 	CUfunction inst_basic;
-	CUresult r3 = cuModuleGetFunction(&inst_basic, cuModule, "InstBasic");
-	if (r3 != CUDA_SUCCESS)
-	{
-		std::cout << "File not found\n";
-		exit(1);
-	}
+	Test(cuModuleGetFunction(&inst_basic, cuModule, "InstBasic"), "cuModuleGetFunction");
 	CUdeviceptr d_E;
-	CUresult r4 = cuMemAlloc(&d_E, N * sizeof(bool));
-	CUresult r7 = cuMemcpyHtoD(d_E, h_E, N * sizeof(bool));
+	Test(cuMemAlloc(&d_E, N * sizeof(bool)), "cuMemAlloc");
+	Test(cuMemcpyHtoD(d_E, h_E, N * sizeof(bool)), "cuMemcpyHtoD");
 
 #define ALIGN_UP(offset, alignment) (offset) = ((offset) + (alignment) - 1) & ~((alignment) - 1)
 	int offset = 0;
@@ -50,35 +51,35 @@ int main()
 	{
 		CUdeviceptr d_C;
 		memset(h_C, 0, N * sizeof(int));
-		CUresult r4 = cuMemAlloc(&d_C, sizeof(int));
-		CUresult r20 = cuMemcpyHtoD(d_C, h_C, sizeof(int));
+		Test(cuMemAlloc(&d_C, sizeof(int)), "cuMemAlloc");
+		Test(cuMemcpyHtoD(d_C, h_C, sizeof(int)), "cuMemcpyHtoD");
 
 		CUfunction proc;
-		CUresult r3 = cuModuleGetFunction(&proc, cuModule, "InstIntegerArithmetic");
+		Test(cuModuleGetFunction(&proc, cuModule, "InstIntegerArithmetic"), "cuModuleGetFunction");
 
 		int offset = 0;
 		void* ptr;
 		
 		ptr = (void*)(size_t)d_E;
 		ALIGN_UP(offset, __alignof(ptr));
-		CUresult r9 = cuParamSetv(proc, offset, &ptr, sizeof(ptr));
+		Test(cuParamSetv(proc, offset, &ptr, sizeof(ptr)), "cuParamSetv");
 		offset += sizeof(ptr);
 		
 		ptr = (void*)(size_t)d_C;
 		ALIGN_UP(offset, __alignof(ptr));
-		CUresult r21 = cuParamSetv(proc, offset, &ptr, sizeof(ptr));
+		Test(cuParamSetv(proc, offset, &ptr, sizeof(ptr)), "cuParamSetv");
 		offset += sizeof(ptr);
 		
-		CUresult r12 = cuParamSetSize(proc, offset);
+		Test(cuParamSetSize(proc, offset), "cuParamSetSize");
 
 		int threadsPerBlock = 1;
 		int blocksPerGrid = 1;
 
-		CUresult r13 = cuFuncSetBlockShape(proc, threadsPerBlock, 1, 1);
-		CUresult r14 = cuLaunchGrid(proc, blocksPerGrid, 1);
+		Test(cuFuncSetBlockShape(proc, threadsPerBlock, 1, 1), "cuFuncSetBlockShape");
+		Test(cuLaunchGrid(proc, blocksPerGrid, 1), "cuLaunchGrid");
 
-		CUresult r15 = cuMemcpyDtoH(h_E, d_E, N * sizeof(bool));
-		CUresult r16 = cuMemcpyDtoH(h_C, d_C, sizeof(int));
+		Test(cuMemcpyDtoH(h_E, d_E, N * sizeof(bool)), "cuMemcpyDtoH");
+		Test(cuMemcpyDtoH(h_C, d_C, sizeof(int)), "cuMemcpyDtoH");
 
 		N = *h_C;
 		for (int i = 0; i < N; ++i)
@@ -92,5 +93,5 @@ int main()
 	}
 
 	// Free device memory
-	cuMemFree(d_E);
+	Test(cuMemFree(d_E), "cuMemFree");
 }

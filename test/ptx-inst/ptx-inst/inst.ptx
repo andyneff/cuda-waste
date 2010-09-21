@@ -83,9 +83,27 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+6],%b1;
 
+	// SUB - 16 bit (negative, unsigned!)
+	add.u16		%u16_1, 0, 0;		// First, clear carry.
+	sub.u16		%u16_1, 1, 2;		// should not set carry
+	setp.eq.u16	%p1, %u16_1, -1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+7],%b1;
+	
+	// test result is also the same as 0xffff.
+	setp.eq.u16	%p1, %u16_1, 0xffff;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+8],%b1;
+
+	// test carry out
+	add.u16		%u16_1, 1, 0;
+	setp.eq.u16	%p1, %u16_1, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+9],%b1;
+	
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
-	mov.u32		%r2, 7;
+	mov.u32		%r2, 10;
 	st.global.u32	[%r1], %r2;
 
 	exit;

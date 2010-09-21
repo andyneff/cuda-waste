@@ -2303,18 +2303,12 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    assert(vec == 0);
     assert(cop == 0);
     int type = GetType(ttype);
 
     // Get two operands, assign source to destination.
-    TREE * dst = GetChild(odst, 0);
     TREE * src = GetChild(osrc, 0);
-    Symbol * sdst = 0;
     Symbol * ssrc = 0;
-    assert(dst->GetType() == T_WORD);
-    sdst = FindSymbol(dst->GetText());
-    assert(sdst != 0);
     
     assert(src->GetType() == T_WORD);
     ssrc = FindSymbol(src->GetText());
@@ -2331,94 +2325,130 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
         value = Eval(K_S32, const_expr);
     }
 
-    typedef union TYPES {
-        __int64 s64;
-        __int32 s32;
-        __int16 s16;;
-        __int8 s8;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        unsigned __int8 u8;
-        float f32;
-        double f64;
-    } TYPES;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    // Unfortunately, different semantics for different storage classes.
-    TYPES * s = 0;
-    if (ssrc->storage_class != K_REG)
-        s = (TYPES*)ssrc->pvalue;
-    else if (plus != 0)
-    {
-        void * addr = *(void**)ssrc->pvalue;
-        switch (value.type)
-        {
-        case K_U8:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
-            break;
-        case K_U16:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
-            break;
-        case K_U32:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
-            break;
-        case K_U64:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
-            break;
-        case K_S8:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
-            break;
-        case K_S16:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
-            break;
-        case K_S32:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
-            break;
-        case K_S64:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
-            break;
-        default:
-            assert(false);
-        }
-    }
-    else
-        s = (TYPES*)ssrc->pvalue;
-    
-    switch (type)
-    {
-        case K_U8:
-            d->u8 = s->u8;
-            break;
-        case K_U16:
-            d->u16 = s->u16;
-            break;
-        case K_U32:
-            d->u32 = s->u32;
-            break;
-        case K_U64:
-            d->u64 = s->u64;
-            break;
-        case K_S8:
-            d->s8 = s->s8;
-            break;
-        case K_S16:
-            d->s16 = s->s16;
-            break;
-        case K_S32:
-            d->s32 = s->s32;
-            break;
-        case K_S64:
-            d->s64 = s->s64;
-            break;
-        case K_F32:
-            d->f32 = s->f32;
-            break;
-        case K_F64:
-            d->f64 = s->f64;
-            break;
-        default:
-            assert(false);
-    }
+	int times = 1;
+	if (vec == K_V2)
+		times = 2;
+	else if (vec == K_V4)
+		times = 4;
+	times = 1;
+
+	for (int i = 0; i < times; ++i)
+	{
+		TREE * dst = GetChild(odst, i);
+		Symbol * sdst = 0;
+		assert(dst->GetType() == T_WORD);
+		sdst = FindSymbol(dst->GetText());
+		assert(sdst != 0);
+		TYPES * d = (TYPES*)sdst->pvalue;
+
+		// Unfortunately, different semantics for different storage classes.
+		TYPES * s = 0;
+		if (ssrc->storage_class != K_REG)
+		{
+			s = (TYPES*)ssrc->pvalue;
+
+			void * addr;
+			addr = (void*)ssrc->pvalue;
+			switch (value.type)
+			{
+				case K_U8:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
+					break;
+				case K_U16:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
+					break;
+				case K_U32:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
+					break;
+				case K_U64:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
+					break;
+				case K_S8:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
+					break;
+				case K_S16:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
+					break;
+				case K_S32:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
+					break;
+				case K_S64:
+					s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
+					break;
+				default:
+					assert(false);
+			}
+		}
+		else
+		{
+			void * addr = *(void**)ssrc->pvalue;
+			switch (value.type)
+			{
+			case K_U8:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
+				break;
+			case K_U16:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
+				break;
+			case K_U32:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
+				break;
+			case K_U64:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
+				break;
+			case K_S8:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
+				break;
+			case K_S16:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
+				break;
+			case K_S32:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
+				break;
+			case K_S64:
+				s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
+				break;
+			default:
+				assert(false);
+			}
+		}
+
+		switch (type)
+		{
+			case K_U8:
+				d->u8 = s->u8;
+				break;
+			case K_U16:
+				d->u16 = s->u16;
+				break;
+			case K_U32:
+				d->u32 = s->u32;
+				break;
+			case K_U64:
+				d->u64 = s->u64;
+				break;
+			case K_S8:
+				d->s8 = s->s8;
+				break;
+			case K_S16:
+				d->s16 = s->s16;
+				break;
+			case K_S32:
+				d->s32 = s->s32;
+				break;
+			case K_S64:
+				d->s64 = s->s64;
+				break;
+			case K_F32:
+				d->f32 = s->f32;
+				break;
+			case K_F64:
+				d->f64 = s->f64;
+				break;
+			default:
+				assert(false);
+		}
+	}
     return 0;
 }
 
@@ -3044,18 +3074,6 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
         sdst = FindSymbol(dst->GetText());
     } else assert(false);
 
-    typedef union TYPES {
-        __int64 s64;
-        __int32 s32;
-        __int16 s16;;
-        __int8 s8;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        unsigned __int8 u8;
-        float f32;
-        double f64;
-    } TYPES;
     TYPES * d;
     TYPES * s;
     TYPES value;
@@ -3099,8 +3117,25 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
     } else if (GetType(src) == T_WORD)
     {
         ssrc = FindSymbol(src->GetText());
+		assert(ssrc != 0);
         // Various types of id's to handle:
-        assert(ssrc != 0);
+		switch (ssrc->storage_class)
+		{
+			case K_GLOBAL:
+			case K_LOCAL:
+			case K_PARAM:
+			case K_SHARED:
+			case K_CONST:
+				// names in instructions refer to the address of the
+				// variable, not the contents.
+				s = (TYPES*)&ssrc->pvalue;
+				break;
+			case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+				s = (TYPES*)ssrc->pvalue;
+				break;
+		}
         if (strcmp(ssrc->typestring, "dim3") == 0)
         {
             // Get qualifier of the structure.
@@ -3108,84 +3143,16 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
             assert(tqual != 0);
             int qual = GetType(tqual);
             if (qual == K_X)
-            {
-                switch (type)
-                {
-                    case K_U16:
-                        s->u16 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    case K_S16:
-                        s->s16 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    case K_U32:
-                        s->u32 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    case K_S32:
-                        s->s32 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    case K_S64:
-                        s->s64 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    case K_U64:
-                        s->u64 = ((dim3*)ssrc->pvalue)->x;
-                        break;
-                    default:
-                        assert(false);
-                }
+			{
+				s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
             } else if (qual == K_Y)
             {
-                switch (type)
-                {
-                    case K_U16:
-                        s->u16 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    case K_S16:
-                        s->s16 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    case K_U32:
-                        s->u32 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    case K_S32:
-                        s->s32 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    case K_S64:
-                        s->s64 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    case K_U64:
-                        s->u64 = ((dim3*)ssrc->pvalue)->y;
-                        break;
-                    default:
-                        assert(false);
-                }
+				s = (TYPES*)& ((dim3*)ssrc->pvalue)->y;
             } else if (qual == K_Z)
             {
-                switch (type)
-                {
-                    case K_U16:
-                        s->u16 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    case K_S16:
-                        s->s16 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    case K_U32:
-                        s->u32 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    case K_S32:
-                        s->s32 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    case K_S64:
-                        s->s64 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    case K_U64:
-                        s->u64 = ((dim3*)ssrc->pvalue)->z;
-                        break;
-                    default:
-                        assert(false);
-                }
+				s = (TYPES*)& ((dim3*)ssrc->pvalue)->z;
             }
             else assert(false);
-        } else {
-            s = (TYPES*)ssrc->pvalue;
         }
     }
 
@@ -5752,12 +5719,7 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
     if (sdst->storage_class != K_REG)
     {
         void * addr;
-        if (sdst->array)
-        {
-            addr = *(void**)sdst->pvalue;
-        }
-        else
-            addr = (void*)sdst->pvalue;
+		addr = (void*)sdst->pvalue;
         switch (value.type)
         {
             case K_U8:

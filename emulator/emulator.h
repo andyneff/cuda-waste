@@ -54,10 +54,10 @@ private:
         int storage_class;
         CUDA_EMULATOR * emulator;
         ~Symbol()
-        {
-            if (this->array && emulator->extern_memory_buffer != ((TYPES*)this->pvalue)->pvoid)
-                free(((TYPES*)this->pvalue)->pvoid);
-            free(this->pvalue);
+	{
+	    // Do not free here if this is shared memory.
+            if (emulator->extern_memory_buffer != (TYPES*)this->pvalue)
+		free(this->pvalue);
         }
     };
 
@@ -309,6 +309,10 @@ public:
     void _cudaSetDevice(char * device);
     cudaError_t _cudaGetDevice(int * device);
     cudaError_t _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
+    cudaError_t _cudaStreamCreate(cudaStream_t *pStream);
+    cudaError_t _cudaStreamDestroy(cudaStream_t stream);
+    cudaError_t _cudaStreamSynchronize(cudaStream_t stream);
+    cudaError_t _cudaStreamQuery(cudaStream_t stream);
 
     // cuda.h equivalents.
     CUresult _cuLaunchGrid(CUfunction f, int grid_width, int grid_height);

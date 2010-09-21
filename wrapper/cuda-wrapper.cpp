@@ -218,7 +218,7 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::GetDeviceCount, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::_cudaGetDeviceProperties, true);
-        hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::Unimplemented, true);
+        hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::_cudaChooseDevice, true);
         hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::_cudaSetDevice, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)CUDA_WRAPPER::_cudaGetDevice, true);
         hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -245,10 +245,10 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)CUDA_WRAPPER::_cudaLaunch, true);
         hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CUDA_WRAPPER::Unimplemented, true);
+        hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)CUDA_WRAPPER::_cudaStreamCreate, true);
+        hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)CUDA_WRAPPER::_cudaStreamDestroy, true);
+        hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)CUDA_WRAPPER::_cudaStreamSynchronize, true);
+        hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)CUDA_WRAPPER::_cudaStreamQuery, true);
         hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -289,10 +289,12 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cuDeviceGetCount", (PROC)CUDA_WRAPPER::_cuDeviceGetCount, true);
         hook_manager->HookImport(cuda_module_name, "cuDeviceGetName", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuDeviceComputeCapability", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuDeviceTotalMem", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuDeviceTotalMem", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuDeviceTotalMem_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuDeviceGetProperties", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuDeviceGetAttribute", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuCtxCreate", (PROC)CUDA_WRAPPER::_cuCtxCreate, true);
+		hook_manager->HookImport(cuda_module_name, "cuCtxCreate", (PROC)CUDA_WRAPPER::_cuCtxCreate, true);
+		hook_manager->HookImport(cuda_module_name, "cuCtxCreate_v2", (PROC)CUDA_WRAPPER::_cuCtxCreate, true);
         hook_manager->HookImport(cuda_module_name, "cuCtxDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuCtxAttach", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuCtxDetach", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -306,62 +308,102 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cuModuleLoadFatBinary", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuModuleUnload", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuModuleGetFunction", (PROC)CUDA_WRAPPER::_cuModuleGetFunction, true);
-        hook_manager->HookImport(cuda_module_name, "cuModuleGetGlobal", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuModuleGetGlobal", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuModuleGetGlobal_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuModuleGetTexRef", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuModuleGetSurfRef", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemGetInfo", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemAlloc", (PROC)CUDA_WRAPPER::_cuMemAlloc, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemAllocPitch", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemFree", (PROC)CUDA_WRAPPER::_cuMemFree, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemGetAddressRange", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemAllocHost", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemGetInfo", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemGetInfo_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAlloc", (PROC)CUDA_WRAPPER::_cuMemAlloc, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAlloc_v2", (PROC)CUDA_WRAPPER::_cuMemAlloc, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAllocPitch", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAllocPitch_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemFree", (PROC)CUDA_WRAPPER::_cuMemFree, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemFree_v2", (PROC)CUDA_WRAPPER::_cuMemFree, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemGetAddressRange", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemGetAddressRange_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAllocHost", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemAllocHost_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuMemFreeHost", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemHostAlloc", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemHostGetDevicePointer", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemHostAlloc", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemHostAlloc_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemHostGetDevicePointer", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemHostGetDevicePointer_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuMemHostGetFlags", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoD", (PROC)CUDA_WRAPPER::_cuMemcpyHtoD, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoH", (PROC)CUDA_WRAPPER::_cuMemcpyDtoH, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoD", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoD", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoH", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpy2D", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpy2DUnaligned", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpy3D", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoDAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoHAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoDAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoAAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoHAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpy2DAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemcpy3DAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD8", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD16", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD32", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD2D8", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD2D16", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuMemsetD2D32", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoD", (PROC)CUDA_WRAPPER::_cuMemcpyHtoD, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoD_v2", (PROC)CUDA_WRAPPER::_cuMemcpyHtoD, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoH", (PROC)CUDA_WRAPPER::_cuMemcpyDtoH, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoH_v2", (PROC)CUDA_WRAPPER::_cuMemcpyDtoH, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoD", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoD_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoA_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoD", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoD_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoA_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoH", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoH_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoA", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoA_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2D", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2D_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2DUnaligned", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2DUnaligned_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy3D", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy3D_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoDAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoDAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoHAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoHAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoDAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyDtoDAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoAAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyHtoAAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoHAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpyAtoHAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2DAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy2DAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy3DAsync", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemcpy3DAsync_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD8", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD8_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD16", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD16_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD32", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD32_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D8", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D8_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D16", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D16_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D32", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuMemsetD2D32_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuFuncSetBlockShape", (PROC)CUDA_WRAPPER::_cuFuncSetBlockShape, true);
         hook_manager->HookImport(cuda_module_name, "cuFuncSetSharedSize", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuFuncGetAttribute", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuFuncSetCacheConfig", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuArrayCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuArrayGetDescriptor", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArrayCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArrayCreate_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArrayGetDescriptor", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArrayGetDescriptor_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuArrayDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuArray3DCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuArray3DGetDescriptor", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuTexRefCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuTexRefDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArray3DCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArray3DCreate_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArray3DGetDescriptor", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuArray3DGetDescriptor_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefCreate", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefSetArray", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress2D", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress2D", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddress2D_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefSetFormat", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefSetAddressMode", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefSetFilterMode", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefSetFlags", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuTexRefGetAddress", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefGetAddress", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuTexRefGetAddress_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefGetArray", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefGetAddressMode", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuTexRefGetFilterMode", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -389,7 +431,8 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cuStreamDestroy", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuGraphicsUnregisterResource", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuGraphicsSubResourceGetMappedArray", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cuGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented, true);
+		hook_manager->HookImport(cuda_module_name, "cuGraphicsResourceGetMappedPointer_v2", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuGraphicsResourceSetMapFlags", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuGraphicsMapResources", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cuGraphicsUnmapResources", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -1634,6 +1677,21 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::GetDeviceCount(int *count)
     }
 }
 
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaChooseDevice(int *device, const struct cudaDeviceProp *prop)
+{
+    // arg contains pointer to the argument for the function call.
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (! cu->do_emulation)
+    {
+        ptrCudaChooseDevice proc = (ptrCudaChooseDevice)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaChooseDevice);
+        return (*proc)(device, prop);
+    } else
+    {
+		*device = 0;
+        return cudaSuccess;
+    }
+}
+
 cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaSetDevice(int device)
 {
     // arg contains pointer to the argument for the function call.
@@ -1646,6 +1704,66 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaSetDevice(int device)
     {
         return cudaSuccess;
     }
+}
+
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaStreamCreate(cudaStream_t *pStream)
+{
+    // arg contains pointer to the argument for the function call.
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (! cu->do_emulation)
+	{
+		ptrCudaStreamCreate proc = (ptrCudaStreamCreate)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaStreamCreate);
+		return (*proc)(pStream);
+	} else
+	{
+		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		return emulator->_cudaStreamCreate(pStream);
+	}
+}
+
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaStreamDestroy(cudaStream_t stream)
+{
+	// arg contains pointer to the argument for the function call.
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (! cu->do_emulation)
+	{
+		ptrCudaStreamDestroy proc = (ptrCudaStreamDestroy)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaStreamDestroy);
+		return (*proc)(stream);
+	} else
+	{
+		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		return emulator->_cudaStreamDestroy(stream);
+	}
+}
+
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaStreamSynchronize(cudaStream_t stream)
+{
+	// arg contains pointer to the argument for the function call.
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (! cu->do_emulation)
+	{
+		ptrCudaStreamSynchronize proc = (ptrCudaStreamSynchronize)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaStreamSynchronize);
+		return (*proc)(stream);
+	} else
+	{
+		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		return emulator->_cudaStreamSynchronize(stream);
+	}
+}
+
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaStreamQuery(cudaStream_t stream)
+{
+	// arg contains pointer to the argument for the function call.
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	if (! cu->do_emulation)
+	{
+		ptrCudaStreamQuery proc = (ptrCudaStreamQuery)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaStreamQuery);
+		return (*proc)(stream);
+	} else
+	{
+		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		return emulator->_cudaStreamQuery(stream);
+	}
 }
 
 

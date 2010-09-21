@@ -264,7 +264,7 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
         for (int k = 0; k < nreg; ++k)
         {
             char full_name[1000];
-            sprintf(full_name, "%s%d", name, k+1);
+            sprintf(full_name, "%s%d", name, k);
             // Create a symbol table entry.
             Symbol * s = new Symbol();
             s->emulator = this;
@@ -288,15 +288,18 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
         s->emulator = this;
         s->name = this->string_table->Entry(name);
         s->size = size;
+        // array flag helps in printing, but it works like any other
+        // storage.
         s->array = false;
         s->index_max = 0;
+        void * ptr = 0;
         // Allocate array if declared as one.
         if (tarray != 0)
         {
             s->array = true;
             // Using the symbol in ptx is essentially a pointer.
-            // So, mov and cvta loads a pointer to a buffer.
-            // So, there are two malloc's.
+            // But, mov and cvta loads a pointer to the pointer when
+            // addressing symbols in memory.
             int total = 1;
             for (int a = 0; ; ++a)
             {
@@ -326,60 +329,86 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
                 else assert(false);
             }
             s->index_max = total;
-            void * ptr = 0;
             if (! externed)
                 ptr = (void*)malloc(size * total);
             else
                 // Each extern points to the same allocated array.
                 ptr = this->extern_memory_buffer;
-            s->pvalue = (void*)malloc(sizeof(void*));
-            ((TYPES*)s->pvalue)->pvoid = ptr;
-
-            // Now work on optional initializer...
-            if (tinitializer_values != 0)
-            {
-                unsigned char * mptr = (unsigned char *)ptr;
-                for (int a = 0; ; ++a)
-                {
-                    TREE * t = GetChild(tinitializer_values, a);
-                    if (t == 0)
-                        break;
-                    int gt = GetType(t);
-                    if (gt == TREE_CONSTANT_EXPR)
-                    {
-                        TREE * n = GetChild(t, 0);
-                        int type = ttype->GetType();
-                        Constant c = Eval(type, n);
-                        TYPES * s1 = (TYPES*)mptr;
-                        switch (type)
-                        {
-                            case K_B8:
-                                s1->b8 = c.value.b8;
-                                break;
-                            case K_U16:
-                                s1->u16 = c.value.u16;
-                                break;
-                            case K_S16:
-                                s1->s16 = c.value.s16;
-                                break;
-                            case K_U32:
-                                s1->u32 = c.value.u32;
-                                break;
-                            case K_S32:
-                                s1->s32 = c.value.s32;
-                                break;
-                            default:
-                                assert(false);
-                        }
-                    }
-                    else assert(false);
-                    mptr += size;
-                }
-            }
+            s->pvalue = ptr;
         }
         else
         {
             s->pvalue = (void*)malloc(size);
+			ptr = s->pvalue;
+        }
+
+        // Now work on optional initializer...
+        if (tinitializer_values != 0)
+        {
+            unsigned char * mptr = (unsigned char *)ptr;
+            for (int a = 0; ; ++a)
+            {
+                TREE * t = GetChild(tinitializer_values, a);
+                if (t == 0)
+                break;
+                int gt = GetType(t);
+                if (gt == TREE_CONSTANT_EXPR)
+                {
+					TREE * n = GetChild(t, 0);
+					int type = ttype->GetType();
+					Constant c = Eval(type, n);
+					TYPES * s1 = (TYPES*)mptr;
+					switch (type)
+					{
+						case K_B8:
+							s1->b8 = c.value.b8;
+							break;
+						case K_U8:
+							s1->u8 = c.value.u8;
+							break;
+						case K_S8:
+							s1->s8 = c.value.s8;
+							break;
+						case K_B16:
+							s1->b16 = c.value.b16;
+							break;
+						case K_U16:
+							s1->u16 = c.value.u16;
+							break;
+						case K_S16:
+							s1->s16 = c.value.s16;
+							break;
+						case K_B32:
+							s1->b32 = c.value.b32;
+							break;
+						case K_U32:
+							s1->u32 = c.value.u32;
+							break;
+						case K_S32:
+							s1->s32 = c.value.s32;
+							break;
+						case K_B64:
+							s1->b64 = c.value.b64;
+							break;
+						case K_U64:
+							s1->u64 = c.value.u64;
+							break;
+						case K_S64:
+							s1->s64 = c.value.s64;
+							break;
+						case K_F32:
+							s1->f32 = c.value.f32;
+							break;
+						case K_F64:
+							s1->f64 = c.value.f64;
+							break;
+						default:
+						assert(false);
+					}
+                }
+                else assert(false);
+                mptr += size;
+            }
         }
         s->typestring = this->string_table->Entry(type);
         s->type = ttype->GetType();
@@ -824,6 +853,7 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, TREE * inst)
             else assert(false);
         }
     }
+    std::cout.flush();
 }
 
 

@@ -133,3 +133,27 @@ cudaError_t CUDA_EMULATOR::_cudaGetDeviceProperties(struct cudaDeviceProp *prop,
 }
 
 
+cudaError_t CUDA_EMULATOR::_cudaStreamCreate(cudaStream_t *pStream)
+{
+	// nop
+	return cudaSuccess;
+}
+
+cudaError_t CUDA_EMULATOR::_cudaStreamDestroy(cudaStream_t stream)
+{
+	// nop
+	return cudaSuccess;
+}
+
+cudaError_t CUDA_EMULATOR::_cudaStreamSynchronize(cudaStream_t stream)
+{
+	// nop
+	return cudaSuccess;
+}
+
+cudaError_t CUDA_EMULATOR::_cudaStreamQuery(cudaStream_t stream)
+{
+	// nop
+	return cudaSuccess;
+}
+

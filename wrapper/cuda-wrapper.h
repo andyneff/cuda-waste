@@ -90,7 +90,7 @@ private:
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpy2DArrayToArray)(struct cudaArray *dst, size_t wOffsetDst, size_t hOffsetDst, const struct cudaArray *src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToDevice));
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpyToSymbol)(const char *symbol, const void *src, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyHostToDevice));
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpyFromSymbol)(void *dst, const char *symbol, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToHost));
-    typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpyAsync)(void *dst, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
+    typedef cudaError_t (CUDARTAPI *ptrCudaMemcpyAsync)(void *dst, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpyToArrayAsync)(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpyFromArrayAsync)(void *dst, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
     typedef cudaError_t (CUDARTAPI *typePtrCudaMemcpy2DAsync)(void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
@@ -104,7 +104,7 @@ private:
     typedef cudaError_t (CUDARTAPI *typePtrCudaGetSymbolSize)(size_t *size, const char *symbol);
     typedef cudaError_t (CUDARTAPI *typePtrCudaGetDeviceCount)(int *count);
     typedef cudaError_t (CUDARTAPI *typePtrCudaGetDeviceProperties)(struct cudaDeviceProp *prop, int device);
-    typedef cudaError_t (CUDARTAPI *typePtrCudaChooseDevice)(int *device, const struct cudaDeviceProp *prop);
+    typedef cudaError_t (CUDARTAPI *ptrCudaChooseDevice)(int *device, const struct cudaDeviceProp *prop);
     typedef cudaError_t (CUDARTAPI *typePtrCudaSetDevice)(int device);
     typedef cudaError_t (CUDARTAPI *typePtrCudaGetDevice)(int *device);
     typedef cudaError_t (CUDARTAPI *typePtrCudaSetValidDevices)(int *device_arr, int len);
@@ -128,10 +128,10 @@ private:
     typedef cudaError_t (CUDARTAPI *typePtrCudaFuncSetCacheConfig)(const char *func, enum cudaFuncCache cacheConfig);
     typedef cudaError_t (CUDARTAPI *typePtrCudaLaunch)(const char *entry);
     typedef cudaError_t (CUDARTAPI *typePtrCudaFuncGetAttributes)(struct cudaFuncAttributes *attr, const char *func);
-    typedef cudaError_t (CUDARTAPI *typePtrCudaStreamCreate)(cudaStream_t *pStream);
-    typedef cudaError_t (CUDARTAPI *typePtrCudaStreamDestroy)(cudaStream_t stream);
-    typedef cudaError_t (CUDARTAPI *typePtrCudaStreamSynchronize)(cudaStream_t stream);
-    typedef cudaError_t (CUDARTAPI *typePtrCudaStreamQuery)(cudaStream_t stream);
+    typedef cudaError_t (CUDARTAPI *ptrCudaStreamCreate)(cudaStream_t *pStream);
+    typedef cudaError_t (CUDARTAPI *ptrCudaStreamDestroy)(cudaStream_t stream);
+    typedef cudaError_t (CUDARTAPI *ptrCudaStreamSynchronize)(cudaStream_t stream);
+    typedef cudaError_t (CUDARTAPI *ptrCudaStreamQuery)(cudaStream_t stream);
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventCreate)(cudaEvent_t *event);
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventCreateWithFlags)(cudaEvent_t *event, int flags);
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventRecord)(cudaEvent_t event, cudaStream_t stream __dv(0));
@@ -188,6 +188,11 @@ public:
     static cudaError_t CUDARTAPI _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
     static cudaError_t CUDARTAPI GetDeviceCount(int *count);
     static cudaError_t CUDARTAPI _cudaSetDevice(int device);
+    static cudaError_t CUDARTAPI _cudaStreamCreate(cudaStream_t *pStream);
+    static cudaError_t CUDARTAPI _cudaStreamDestroy(cudaStream_t stream);
+    static cudaError_t CUDARTAPI _cudaStreamSynchronize(cudaStream_t stream);
+    static cudaError_t CUDARTAPI _cudaStreamQuery(cudaStream_t stream);
+	static cudaError_t CUDARTAPI _cudaChooseDevice(int *device, const struct cudaDeviceProp *prop);
 
     enum return_type {
         NOT_OK = 0,
