@@ -13,67 +13,176 @@
 	exit;
 	}
 
-	.entry InstIntegerArithmetic (
+	.entry InstLSMC (
 		.param .u32 __results,	// bool*
 		.param .u32 __N		// N*
 	)
 	{
 	.reg .u32 %r<5>;
 
-	.reg .u8 %u8_<15>;
-	.reg .u16 %u16_<15>;
-	.reg .u32 %u32_<15>;
-	.reg .u64 %u64_<15>;
+	.reg .u8 %u8_<3>;
+	.reg .u16 %u16_<3>;
+	.reg .u32 %u32_<3>;
+	.reg .u64 %u64_<3>;
 
-	.reg .s8 %s8_<15>;
-	.reg .s16 %s16_<15>;
-	.reg .s32 %s32_<15>;
-	.reg .s64 %s64_<15>;
+	.reg .s8 %s8_<3>;
+	.reg .s16 %s16_<3>;
+	.reg .s32 %s32_<4>;
+	.reg .s64 %s64_<3>;
 
-	.reg .f32 %f32_<15>;
-	.reg .f64 %f64_<15>;
+	.reg .f32 %f32_<3>;
+	.reg .f64 %f64_<3>;
 
-	.reg .b16 %b<15>;
-	.reg .pred %p<15>;
+	.reg .b16 %b<3>;
+	.reg .pred %p<3>;
+
+	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
+	.global .u64 __gl2_u32 = 0x0102030405060708;
+
+	// Test LD and MOV equivalence.
 	ld.param.u32	%r1,[__results];
+	mov.u32		%r2, __results;
+	ld.param.u32	%r2, [%r2];		// equivalent to mov/ld equiv to ld, should be zero.
+	setp.eq.u32	%p1, %r1, %r2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+0], %b1;
+
+	// Test LD from global area.  The value loaded should be 1.
+	// Make sure both forms of indirect, one with "+0" and the other without,
+	// work and yield a value = 1.
+	ld.global.u32	%u32_1,[__gl_u32];	// load 1 from buffer
+	ld.global.u32	%u32_2,[__gl_u32+0];	// load 1 from buffer
+	setp.eq.u32	%p1, %u32_1, %u32_2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+1], %b1;
+	setp.eq.u32	%p1, %u32_2, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+2], %b1;
+
+	// Test LD from global area, indirect from register.  The value loaded
+	// should be 1.
+	mov.u32		%u32_2, 0;
+	mov.u32		%u32_1, __gl_u32;
+	ld.global.u32	%u32_2,[%u32_1];
+	setp.eq.u32	%p1, 1, %u32_2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+3], %b1;
+
+	// Test LD from global area, indirect from register plus immediate.  The value loaded
+	// should be 2 because we are picking up the second value in __gl_u32.
+	mov.u32		%u32_2, 0;
+	mov.u32		%u32_1, __gl_u32;
+	ld.global.u32	%u32_2,[%u32_1+4];
+	setp.eq.u32	%p1, 2, %u32_2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+4], %b1;
+
+	// Test LD from global area, indirect from register, no immediate.
+	// This contrasts with the previous test in that the global is not an array of data,
+	// but a 64-bit integer.
+	mov.u32		%u32_2, 0;
+        mov.u32		%u32_1, __gl2_u32;
+	ld.global.u32	%u32_2,[%u32_1];
+	setp.eq.u32	%p1, 0x05060708, %u32_2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+5], %b1;
+
+	// Test LD from global area, indirect from register, no immediate, and plus immediate.
+	// This also tests cvt for conversion of byte to short int.
+	// This contrasts with the previous test in that the global is not an array of data,
+	// but a 64-bit integer.  In addition, this test works the little endianess of the data.
+	// So, the bytes in order are 8, 7, 6, 5, 4, 3, 2, 1.
+	mov.u32		%u32_2, 0;
+        mov.u32		%u32_1, __gl2_u32;
+	ld.global.u8	%u8_1, [%u32_1];
+	cvt.u16.u8	%u16_1, %u8_1;
+	setp.eq.u16	%p1, 0x0008, %u16_1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.u8	[%r1+6], %b1;
+	ld.global.u8	%u8_1, [%u32_1+1];
+	cvt.u16.u8	%u16_1, %u8_1;
+	setp.eq.u16	%p1, 0x0007, %u16_1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+7], %b1;
+	ld.global.u8	%u8_1, [%u32_1+2];
+	cvt.u16.u8	%u16_1, %u8_1;
+	setp.eq.u16	%p1, 0x0006, %u16_1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+8], %b1;
+	ld.global.u8	%u8_1, [%u32_1+3];
+	cvt.u16.u8	%u16_1, %u8_1;
+	setp.eq.u16	%p1, 0x0005, %u16_1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+9], %b1;
+
+	// Test LD of large fetch.  Using indirect plus immediate, fetch a 32-bit number
+	// from global.  Then test the value.
+	mov.u32		%u32_2, 0;
+	mov.u32		%u32_1, __gl2_u32;
+	ld.global.u32	%u32_2,[%u32_1+4];
+	setp.eq.u32	%p1, 0x01020304, %u32_2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+10], %b1;
+
+	bra end;
+
+	// Vector
+//	st.shared.u32	[%sh_u32+0], 1;
+//	st.shared.u32	[%sh_u32+4], 2;
+//	st.shared.u32	[%sh_u32+8], 3;
+//	st.shared.u32	[%sh_u32+12], 4;
+//	ld.shared.v4.u32	{%u32_1, %u32_2, %u32_3, %u32_4}, [%sh_u32];
+//	setp.eq.u32	%p1, %u32_1, 1;
+//	selp.b16	%b1, 1, 0, %p1;
+//	st.global.b8	[%r1+9], %b1;
+//	setp.eq.u32	%p1, %u32_2, 2;
+//	selp.b16	%b1, 1, 0, %p1;
+//	st.global.b8	[%r1+10], %b1;
+//	setp.eq.u32	%p1, %u32_3, 3;
+//	selp.b16	%b1, 1, 0, %p1;
+//	st.global.b8	[%r1+11], %b1;
+//	setp.eq.u32	%p1, %u32_4, 4;
+//	selp.b16	%b1, 1, 0, %p1;
+//	st.global.b8	[%r1+12], %b1;
+
 
 	// ADD - 16 bit.
 	add.u16		%u16_1, 1, 2;
 	setp.eq.u16	%p1, %u16_1, 3;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+0],%b1;
+	st.global.b8	[%r1+10],%b1;
 	
 	// ADD - 16 bit with overflow.
 	add.u16		%u16_1, 65535, 1;
 	setp.eq.u16	%p1, %u16_1, 0;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+1],%b1;
+	st.global.b8	[%r1+11],%b1;
 
 	// ADD - 32 bit with overflow/carry out
 	add.cc.u32	%u32_1, 4294967295, 2;
 	setp.eq.u32	%p1, %u32_1, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+2],%b1;
+	st.global.b8	[%r1+12],%b1;
 
 	// ADDC - 32 bit with carry in
 	addc.cc.u32	%u32_2, 0, 0;
 	setp.eq.u32	%p1, %u32_2, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+3],%b1;
+	st.global.b8	[%r1+13],%b1;
 
 	// ADD - 32 bit reg/const
 	mov.s32		%s32_2, 15;
 	add.s32		%s32_1, %s32_2, -20;
 	setp.eq.s32	%p1, %s32_1, -5;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+4],%b1;
+	st.global.b8	[%r1+14],%b1;
 
 	// ADD - 32 bit const/reg
 	mov.s32		%s32_2, 16;
 	add.s32		%s32_1, -20, %s32_2;
 	setp.eq.s32	%p1, -4, %s32_1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+5],%b1;
+	st.global.b8	[%r1+15],%b1;
 
 	// ADD - 32 bit reg/reg
 	mov.s32		%s32_2, 16;
@@ -81,31 +190,33 @@
 	add.s32		%s32_1, %s32_2, %s32_3;
 	setp.eq.s32	%p1, 1+2 + 3*2 + 10 +(-4 + 5), %s32_1; // 20.
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+6],%b1;
+	st.global.b8	[%r1+16],%b1;
 
 	// SUB - 16 bit (negative, unsigned!)
 	add.u16		%u16_1, 0, 0;		// First, clear carry.
 	sub.u16		%u16_1, 1, 2;		// should not set carry
 	setp.eq.u16	%p1, %u16_1, -1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+7],%b1;
+	st.global.b8	[%r1+17],%b1;
 	
 	// test result is also the same as 0xffff.
 	setp.eq.u16	%p1, %u16_1, 0xffff;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+8],%b1;
+	st.global.b8	[%r1+18],%b1;
 
 	// test carry out
 	add.u16		%u16_1, 1, 0;
 	setp.eq.u16	%p1, %u16_1, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+9],%b1;
-	
+	st.global.b8	[%r1+19],%b1;
+
+
+end:
+
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
-	mov.u32		%r2, 10;
+	mov.u32		%r2, 11;
 	st.global.u32	[%r1], %r2;
 
 	exit;
 	}
-

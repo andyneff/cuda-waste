@@ -1243,18 +1243,6 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
         }
     }
 
-    typedef union TYPES {
-        __int64 s64;
-        __int32 s32;
-        __int16 s16;;
-        __int8 s8;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        unsigned __int8 u8;
-        float f32;
-        double f64;
-    } TYPES;
     TYPES * dst_value;
     TYPES * src_value;
 
@@ -1729,10 +1717,6 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
         sdst = FindSymbol(dst->GetText());
     } else assert(false);
 
-    typedef union TYPES {
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-    } TYPES;
     TYPES * d;
     TYPES * s;
     TYPES value;
@@ -1833,17 +1817,6 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     TREE * dst = GetChild(odst,0);
     TREE * src1 = GetChild(osrc1,0);
     TREE * src2 = GetChild(osrc2,0);
-
-    typedef union TYPES {
-        long s64;
-        int s32;
-        short s16;
-        unsigned long u64;
-        unsigned int u32;
-        unsigned short u16;
-        float f32;
-        double f64;
-    } TYPES;
 
     TYPES * pdst_value;
     TYPES * psrc1_value;
@@ -2143,12 +2116,6 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     TREE * src1 = GetChild(osrc1,0);
     TREE * src2 = GetChild(osrc2,0);
     TREE * src3 = GetChild(osrc3,0);
-
-    // Supported types of MUL.
-    typedef union TYPES {
-        float f32;
-        double f64;
-    } TYPES;
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
@@ -2533,18 +2500,6 @@ int CUDA_EMULATOR::DoLdu(TREE * inst)
         value = Eval(K_S32, const_expr);
     }
 
-    typedef union TYPES {
-        __int64 s64;
-        __int32 s32;
-        __int16 s16;;
-        __int8 s8;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        unsigned __int8 u8;
-        float f32;
-        double f64;
-    } TYPES;
     TYPES * d = (TYPES*)sdst->pvalue;
     // Unfortunately, different semantics for different storage classes.
     TYPES * s = 0;
@@ -2819,18 +2774,6 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     TREE * src1 = GetChild(osrc1,0);
     TREE * src2 = GetChild(osrc2,0);
     TREE * src3 = GetChild(osrc3,0);
-
-    // Supported types of MAD.
-    typedef union TYPES {
-        __int64 s64;
-        __int32 s32;
-        __int16 s16;;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        float f32;
-        double f64;
-    } TYPES;
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
@@ -3260,18 +3203,6 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
     TREE * src1 = GetChild(osrc1,0);
     TREE * src2 = GetChild(osrc2,0);
 
-    // Supported types of MUL.
-    typedef union TYPES {
-        long s64;
-        int s32;
-        short s16;
-        unsigned long u64;
-        unsigned int u32;
-        unsigned short u16;
-        float f32;
-        double f64;
-    } TYPES;
-
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
@@ -3464,12 +3395,6 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
     TREE * dst = GetChild(odst,0);
     TREE * src1 = GetChild(osrc1,0);
     TREE * src2 = GetChild(osrc2,0);
-
-    // Supported types of MUL24.
-    typedef union TYPES {
-        int s32;
-        unsigned int u32;
-    } TYPES;
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
