@@ -140,21 +140,21 @@ size_t CUDA_EMULATOR::Sizeof(int type)
 {
     switch (type)
     {
-    case K_S8: return sizeof(char);
-    case K_S16: return sizeof(short);
-    case K_S32: return sizeof(int);
-    case K_S64: return sizeof(long);
-    case K_U8: return sizeof(unsigned char);
-    case K_U16: return sizeof(unsigned short);
-    case K_U32: return sizeof(unsigned int);
-    case K_U64: return sizeof(unsigned long);
-    case K_F16: return sizeof(float);
+    case K_S8: return sizeof(signed __int8);
+    case K_S16: return sizeof(signed __int16);
+    case K_S32: return sizeof(signed __int32);
+    case K_S64: return sizeof(signed __int64);
+    case K_U8: return sizeof(unsigned __int8);
+    case K_U16: return sizeof(unsigned __int16);
+    case K_U32: return sizeof(unsigned __int32);
+    case K_U64: return sizeof(unsigned __int64);
+    case K_F16: throw new Unimplemented("F16 unimplemented.\n"); return sizeof(float);
     case K_F32: return sizeof(float);
     case K_F64: return sizeof(double);
-    case K_B8: return sizeof(char);
-    case K_B16: return sizeof(short);
-    case K_B32: return sizeof(int);
-    case K_B64: return sizeof(long);
+    case K_B8: return sizeof(unsigned __int8);
+    case K_B16: return sizeof(signed __int16);
+    case K_B32: return sizeof(signed __int32);
+    case K_B64: return sizeof(signed __int64);
     case K_PRED: return sizeof(bool);
     }
     assert(false);
@@ -216,6 +216,8 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
     bool wrong_class = true;
     TREE * tarray = 0;
     TREE * tinitializer_values = 0;
+    int vec = 0;
+    int total = 0;
     for (int j = 0; j < (int)var->GetChildCount(); ++j)
     {
         TREE * c = var->GetChild(j);
@@ -251,9 +253,50 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
         {
             // declare var as an array.
             tarray = c;
+            // Using the symbol in ptx is essentially a pointer.
+            // But, mov and cvta loads a pointer to the pointer when
+            // addressing symbols in memory.
+            total = 1;
+            for (int a = 0; ; ++a)
+            {
+                TREE * t = GetChild(tarray, a);
+                if (t == 0)
+                    break;
+                int gt = GetType(t);
+                // Look at size information if not external.
+                if (externed == false && gt == T_OB)
+                {
+                    ++a;
+                    TREE * n = GetChild(tarray, a);
+                    assert(n != 0);
+                    if (GetType(n) == T_DEC_LITERAL)
+                    {
+                        int sz = atoi(n->GetText());
+                        total = total * sz;
+                    }
+                    ++a;
+                    TREE * t2 = GetChild(tarray, a);
+                    assert(t2 != 0);
+                    assert(GetType(t2) == T_CB);
+                    ++a;
+                }
+                else if (externed != 0)
+                    ;
+                else assert(false);
+            }
         } else if (ct == T_EQ)
         {
             tinitializer_values = c;
+        } else if (ct == TREE_VECTOR_TYPE)
+        {
+            tarray = c;
+            TREE * c2 = c->GetChild(0);
+            ct = c2->GetType();
+            vec = ct;
+            if (ct == K_V2)
+                total = 2;
+            else
+                total = 4;
         } else assert(false);
     }
     if (wrong_class)
@@ -297,37 +340,6 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
         if (tarray != 0)
         {
             s->array = true;
-            // Using the symbol in ptx is essentially a pointer.
-            // But, mov and cvta loads a pointer to the pointer when
-            // addressing symbols in memory.
-            int total = 1;
-            for (int a = 0; ; ++a)
-            {
-                TREE * t = GetChild(tarray, a);
-                if (t == 0)
-                    break;
-                int gt = GetType(t);
-                // Look at size information if not external.
-                if (externed == false && gt == T_OB)
-                {
-                    ++a;
-                    TREE * n = GetChild(tarray, a);
-                    assert(n != 0);
-                    if (GetType(n) == T_DEC_LITERAL)
-                    {
-                        int sz = atoi(n->GetText());
-                        total = total * sz;
-                    }
-                    ++a;
-                    TREE * t2 = GetChild(tarray, a);
-                    assert(t2 != 0);
-                    assert(GetType(t2) == T_CB);
-                    ++a;
-                }
-                else if (externed != 0)
-                    ;
-                else assert(false);
-            }
             s->index_max = total;
             if (! externed)
                 ptr = (void*)malloc(size * total);
@@ -339,7 +351,7 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
         else
         {
             s->pvalue = (void*)malloc(size);
-			ptr = s->pvalue;
+            ptr = s->pvalue;
         }
 
         // Now work on optional initializer...
@@ -354,57 +366,57 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
                 int gt = GetType(t);
                 if (gt == TREE_CONSTANT_EXPR)
                 {
-					TREE * n = GetChild(t, 0);
-					int type = ttype->GetType();
-					Constant c = Eval(type, n);
-					TYPES * s1 = (TYPES*)mptr;
-					switch (type)
-					{
-						case K_B8:
-							s1->b8 = c.value.b8;
-							break;
-						case K_U8:
-							s1->u8 = c.value.u8;
-							break;
-						case K_S8:
-							s1->s8 = c.value.s8;
-							break;
-						case K_B16:
-							s1->b16 = c.value.b16;
-							break;
-						case K_U16:
-							s1->u16 = c.value.u16;
-							break;
-						case K_S16:
-							s1->s16 = c.value.s16;
-							break;
-						case K_B32:
-							s1->b32 = c.value.b32;
-							break;
-						case K_U32:
-							s1->u32 = c.value.u32;
-							break;
-						case K_S32:
-							s1->s32 = c.value.s32;
-							break;
-						case K_B64:
-							s1->b64 = c.value.b64;
-							break;
-						case K_U64:
-							s1->u64 = c.value.u64;
-							break;
-						case K_S64:
-							s1->s64 = c.value.s64;
-							break;
-						case K_F32:
-							s1->f32 = c.value.f32;
-							break;
-						case K_F64:
-							s1->f64 = c.value.f64;
-							break;
-						default:
-						assert(false);
-					}
+                    TREE * n = GetChild(t, 0);
+                    int type = ttype->GetType();
+                    Constant c = Eval(type, n);
+                    TYPES * s1 = (TYPES*)mptr;
+                    switch (type)
+                    {
+                        case K_B8:
+                            s1->b8 = c.value.b8;
+                            break;
+                        case K_U8:
+                            s1->u8 = c.value.u8;
+                            break;
+                        case K_S8:
+                            s1->s8 = c.value.s8;
+                            break;
+                        case K_B16:
+                            s1->b16 = c.value.b16;
+                            break;
+                        case K_U16:
+                            s1->u16 = c.value.u16;
+                            break;
+                        case K_S16:
+                            s1->s16 = c.value.s16;
+                            break;
+                        case K_B32:
+                            s1->b32 = c.value.b32;
+                            break;
+                        case K_U32:
+                            s1->u32 = c.value.u32;
+                            break;
+                        case K_S32:
+                            s1->s32 = c.value.s32;
+                            break;
+                        case K_B64:
+                            s1->b64 = c.value.b64;
+                            break;
+                        case K_U64:
+                            s1->u64 = c.value.u64;
+                            break;
+                        case K_S64:
+                            s1->s64 = c.value.s64;
+                            break;
+                        case K_F32:
+                            s1->f32 = c.value.f32;
+                            break;
+                        case K_F64:
+                            s1->f64 = c.value.f64;
+                            break;
+                        default:
+                        assert(false);
+                    }
                 }
                 else assert(false);
                 mptr += size;

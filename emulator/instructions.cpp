@@ -2297,7 +2297,76 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
 		times = 2;
 	else if (vec == K_V4)
 		times = 4;
-	times = 1;
+
+	// Different semantics for different storage classes.
+	TYPES * s = 0;
+	unsigned char * addr = 0;
+	switch (ssrc->storage_class)
+	{
+		case K_GLOBAL:
+		case K_LOCAL:
+		case K_PARAM:
+		case K_SHARED:
+		case K_CONST:
+			{
+				addr = (unsigned char*)ssrc->pvalue;
+			}
+			break;
+		case K_REG:
+			{
+				addr = *(unsigned char**)ssrc->pvalue;
+			}
+			break;
+		default:
+			assert(false);
+	}
+	switch (value.type)
+	{
+		case K_U8:
+			addr = (addr + value.value.s32);
+			break;
+		case K_U16:
+			addr = (addr + value.value.s32);
+			break;
+		case K_U32:
+			addr = (addr + value.value.s32);
+			break;
+		case K_U64:
+			addr = (addr + value.value.s32);
+			break;
+		case K_S8:
+			addr = (addr + value.value.s32);
+			break;
+		case K_S16:
+			addr = (addr + value.value.s32);
+			break;
+		case K_S32:
+			addr = (addr + value.value.s32);
+			break;
+		case K_S64:
+			addr = (addr + value.value.s32);
+			break;
+		case K_B8:
+			addr = (addr + value.value.s32);
+			break;
+		case K_B16:
+			addr = (addr + value.value.s32);
+			break;
+		case K_B32:
+			addr = (addr + value.value.s32);
+			break;
+		case K_B64:
+			addr = (addr + value.value.s32);
+			break;
+		case K_F32:
+			addr = (addr + value.value.s32);
+			break;
+		case K_F64:
+			addr = (addr + value.value.s32);
+			break;
+		default:
+			assert(false);
+	}
 
 	for (int i = 0; i < times; ++i)
 	{
@@ -2308,77 +2377,7 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
 		assert(sdst != 0);
 		TYPES * d = (TYPES*)sdst->pvalue;
 
-		// Unfortunately, different semantics for different storage classes.
-		TYPES * s = 0;
-		if (ssrc->storage_class != K_REG)
-		{
-			s = (TYPES*)ssrc->pvalue;
-
-			void * addr;
-			addr = (void*)ssrc->pvalue;
-			switch (value.type)
-			{
-				case K_U8:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
-					break;
-				case K_U16:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
-					break;
-				case K_U32:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
-					break;
-				case K_U64:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
-					break;
-				case K_S8:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
-					break;
-				case K_S16:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
-					break;
-				case K_S32:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
-					break;
-				case K_S64:
-					s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
-					break;
-				default:
-					assert(false);
-			}
-		}
-		else
-		{
-			void * addr = *(void**)ssrc->pvalue;
-			switch (value.type)
-			{
-			case K_U8:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
-				break;
-			case K_U16:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
-				break;
-			case K_U32:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
-				break;
-			case K_U64:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
-				break;
-			case K_S8:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
-				break;
-			case K_S16:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
-				break;
-			case K_S32:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
-				break;
-			case K_S64:
-				s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
-				break;
-			default:
-				assert(false);
-			}
-		}
+		TYPES * s = (TYPES*)addr;
 
 		switch (type)
 		{
@@ -2415,6 +2414,8 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
 			default:
 				assert(false);
 		}
+
+		addr = addr + Sizeof(type);
 	}
     return 0;
 }
@@ -5606,161 +5607,207 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    assert(vec == 0);
     assert(cop == 0);
     int type = GetType(ttype);
 
     TREE * dst = GetChild(odst, 0);
-    TREE * src = GetChild(osrc, 0);
-    Symbol * sdst = 0;
-    Symbol * ssrc = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = FindSymbol(dst->GetText());
-    assert(sdst != 0);
+	Symbol * sdst = FindSymbol(dst->GetText());
+	assert(sdst != 0);
+	TREE * plus = GetChild(odst, 1);
+	Constant value(0);
+	if (plus != 0)
+	{
+		TREE * const_expr_tree = GetChild(odst, 2);
+		assert(const_expr_tree != 0);
+		assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
+		TREE * const_expr = GetChild(const_expr_tree, 0);
+		assert(const_expr != 0);
+		value = Eval(K_S32, const_expr);
+	}
 
-    assert(src->GetType() == T_WORD);
-    ssrc = FindSymbol(src->GetText());
-    assert(ssrc != 0);
-    
-    TREE * plus = GetChild(odst, 1);
-    Constant value(0);
-    if (plus != 0)
-    {
-        TREE * const_expr_tree = GetChild(odst, 2);
-        assert(const_expr_tree != 0);
-        assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        TREE * const_expr = GetChild(const_expr_tree, 0);
-        assert(const_expr != 0);
-        value = Eval(K_S32, const_expr);
-    }
+	TYPES * d = 0;
+	unsigned char * addr = 0;
+	switch (sdst->storage_class)
+	{
+		case K_GLOBAL:
+		case K_LOCAL:
+		case K_PARAM:
+		case K_SHARED:
+		case K_CONST:
+			{
+				addr = (unsigned char *)sdst->pvalue;
+			}
+			break;
+		case K_REG:
+			{
+				addr = *(unsigned char **)sdst->pvalue;
+			}
+			break;
+		default:
+			assert(false);
+	}
 
-    TYPES * s = (TYPES*)ssrc->pvalue;
-    // Unfortunately, different semantics for different storage
-    // classes.
-    // AND, the cuda ptx assembly language manual is wrong.  It seems
-    // to be missing an address mode: st [local+imm],b (local storage
-    // class is not the same as register, but st allows this mode).
-    TYPES * d = 0;
-    if (sdst->storage_class != K_REG)
-    {
-        void * addr;
-		addr = (void*)sdst->pvalue;
-        switch (value.type)
-        {
-            case K_U8:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u8);
-                break;
-            case K_U16:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u16);
-                break;
-            case K_U32:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u32);
-                break;
-            case K_U64:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u64);
-                break;
-            case K_S8:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s8);
-                break;
-            case K_S16:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s16);
-                break;
-            case K_S32:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s32);
-                break;
-            case K_S64:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s64);
-                break;
-            default:
-                assert(false);
-        }
-    }
-    else if (plus != 0)
-    {
-        void * addr = *(void**)sdst->pvalue;
-        switch (value.type)
-        {
-            case K_U8:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u8);
-                break;
-            case K_U16:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u16);
-                break;
-            case K_U32:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u32);
-                break;
-            case K_U64:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.u64);
-                break;
-            case K_S8:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s8);
-                break;
-            case K_S16:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s16);
-                break;
-            case K_S32:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s32);
-                break;
-            case K_S64:
-                d = (TYPES*)(((unsigned char *)addr) + value.value.s64);
-                break;
-            default:
-                assert(false);
-        }
-    }
-    else
-    {
-        void * addr = *(void**)sdst->pvalue;
-        d = (TYPES*)addr;
-    }
+	switch (value.type)
+	{
+		case K_U8:
+			addr = addr + value.value.s32;
+			break;
+		case K_U16:
+			addr = addr + value.value.s32;
+			break;
+		case K_U32:
+			addr = addr + value.value.s32;
+			break;
+		case K_U64:
+			addr = addr + value.value.s32;
+			break;
+		case K_S8:
+			addr = addr + value.value.s32;
+			break;
+		case K_S16:
+			addr = addr + value.value.s32;
+			break;
+		case K_S32:
+			addr = addr + value.value.s32;
+			break;
+		case K_S64:
+			addr = addr + value.value.s32;
+			break;
+		case K_B8:
+			addr = addr + value.value.s32;
+			break;
+		case K_B16:
+			addr = addr + value.value.s32;
+			break;
+		case K_B32:
+			addr = addr + value.value.s32;
+			break;
+		case K_B64:
+			addr = addr + value.value.s32;
+			break;
+		case K_F32:
+			addr = addr + value.value.s32;
+			break;
+		case K_F64:
+			addr = addr + value.value.s32;
+			break;
+		default:
+			assert(false);
+	}
 
-    switch (type)
-    {
-        case K_B8:
-            d->b8 = s->b8;
-            break;
-        case K_B16:
-            d->b16 = s->b16;
-            break;
-        case K_B32:
-            d->b32 = s->b32;
-            break;
-        case K_B64:
-            d->b64 = s->b64;
-            break;
-        case K_U8:
-            d->u8 = s->u8;
-            break;
-        case K_U16:
-            d->u16 = s->u16;
-            break;
-        case K_U32:
-            d->u32 = s->u32;
-            break;
-        case K_U64:
-            d->u64 = s->u64;
-            break;
-        case K_S8:
-            d->s8 = s->s8;
-            break;
-        case K_S16:
-            d->s16 = s->s16;
-            break;
-        case K_S32:
-            d->s32 = s->s32;
-            break;
-        case K_S64:
-            d->s64 = s->s64;
-            break;
-        case K_F32:
-            d->f32 = s->f32;
-            break;
-        case K_F64:
-            d->f64 = s->f64;
-            break;
-        default:
-            assert(false);
-    }
+	int times = 1;
+	if (vec == K_V2)
+		times = 2;
+	else if (vec == K_V4)
+		times = 4;
+
+	for (int i = 0; i < times; ++i)
+	{
+		TYPES * d = (TYPES*)addr;
+		
+		TREE * src = GetChild(osrc, i);
+		TYPES * s = 0;
+		Symbol * ssrc = 0;
+		if (GetType(src) == TREE_CONSTANT_EXPR)
+		{
+			// cannot do both store from constant and to vector.
+			assert(i == 0);
+			Constant c = Eval(type, GetChild(src, 0));
+			s = &c.value;
+		} else if (GetType(src) == T_WORD)
+		{
+			ssrc = FindSymbol(src->GetText());
+			assert(ssrc != 0);
+			// Various types of id's to handle:
+			switch (ssrc->storage_class)
+			{
+				case K_GLOBAL:
+				case K_LOCAL:
+				case K_PARAM:
+				case K_SHARED:
+				case K_CONST:
+				// names in instructions refer to the address of the
+				// variable, not the contents.
+					s = (TYPES*)&ssrc->pvalue;
+					break;
+				case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+					s = (TYPES*)ssrc->pvalue;
+					break;
+			}
+			if (strcmp(ssrc->typestring, "dim3") == 0)
+			{
+			// Get qualifier of the structure.
+				TREE * tqual = (TREE *)osrc->GetChild(1);
+				assert(tqual != 0);
+				int qual = GetType(tqual);
+				if (qual == K_X)
+				{
+					s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
+				} else if (qual == K_Y)
+				{
+					s = (TYPES*)& ((dim3*)ssrc->pvalue)->y;
+				} else if (qual == K_Z)
+				{
+					s = (TYPES*)& ((dim3*)ssrc->pvalue)->z;
+				}
+				else assert(false);
+			}
+		} else assert(false);
+
+		switch (type)
+		{
+			case K_U8:
+				d->u8 = s->u8;
+				break;
+			case K_U16:
+				d->u16 = s->u16;
+				break;
+			case K_U32:
+				d->u32 = s->u32;
+				break;
+			case K_U64:
+				d->u64 = s->u64;
+				break;
+			case K_S8:
+				d->s8 = s->s8;
+				break;
+			case K_S16:
+				d->s16 = s->s16;
+				break;
+			case K_S32:
+				d->s32 = s->s32;
+				break;
+			case K_S64:
+				d->s64 = s->s64;
+				break;
+			case K_B8:
+				d->b8 = s->b8;
+				break;
+			case K_B16:
+				d->b16 = s->b16;
+				break;
+			case K_B32:
+				d->b32 = s->b32;
+				break;
+			case K_B64:
+				d->b64 = s->b64;
+				break;
+			case K_F32:
+				d->f32 = s->f32;
+				break;
+			case K_F64:
+				d->f64 = s->f64;
+				break;
+			default:
+				assert(false);
+		}
+
+		addr = addr + Sizeof(type);
+	}
+
     return 0;
 }
 

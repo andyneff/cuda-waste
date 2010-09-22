@@ -498,11 +498,14 @@ fundamental_type_aux
 
 vector_type
     :
-    a=vector_type_aux -> ^( TREE_VECTOR_TYPE $a )
+    v=vector_type_aux
+    f=fundamental_type
+    -> ^( TREE_VECTOR_TYPE $v ) $f
     ;
 
 vector_type_aux
-    : ( K_V4 | K_V2 ) fundamental_type
+    :
+    ( K_V4 | K_V2 )
     ;
 
 opaque_type

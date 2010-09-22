@@ -22,7 +22,7 @@
 
 	.reg .u8 %u8_<3>;
 	.reg .u16 %u16_<3>;
-	.reg .u32 %u32_<3>;
+	.reg .u32 %u32_<4>;
 	.reg .u64 %u64_<3>;
 
 	.reg .s8 %s8_<3>;
@@ -38,6 +38,8 @@
 
 	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
 	.global .u64 __gl2_u32 = 0x0102030405060708;
+	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
+	.shared .v4 .u32 %sh_u32;
 
 	// Test LD and MOV equivalence.
 	ld.param.u32	%r1,[__results];
@@ -124,27 +126,49 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+10], %b1;
 
+	// LD Vector test.  Store four integers into a global area. Then, load the global as a vector,
+	// using indirect register.
+	st.shared.u32	[%sh_u32+0], 1;
+	st.shared.u32	[%sh_u32+4], 2;
+	st.shared.u32	[%sh_u32+8], 3;
+	st.shared.u32	[%sh_u32+12], 4;
+	mov.u32		%u32_1, __gl_u32;
+	ld.global.v4.u32	{%u32_0, %u32_1, %u32_2, %u32_3}, [%u32_1];
+	setp.eq.u32	%p1, %u32_0, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+11], %b1;
+	setp.eq.u32	%p1, %u32_1, 2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+12], %b1;
+	setp.eq.u32	%p1, %u32_2, 3;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+13], %b1;
+	setp.eq.u32	%p1, %u32_3, 4;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+14], %b1;
+	
+	// LD Vector test.  Store four integers into a global area. Then, load the global as a vector,
+	// using indirect address with offset.
+	st.shared.u32	[%sh_u32+0], 13;
+	st.shared.u32	[%sh_u32+4], 31;
+	st.shared.u32	[%sh_u32+8], 21;
+	st.shared.u32	[%sh_u32+12], 12;
+	mov.u32		%u32_1, __gl_u32;
+	ld.global.v4.u32	{%u32_0, %u32_1, %u32_2, %u32_3}, [__gl3_u32];
+	setp.eq.u32	%p1, %u32_0, 31;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+15], %b1;
+	setp.eq.u32	%p1, %u32_1, 13;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+16], %b1;
+	setp.eq.u32	%p1, %u32_2, 21;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+17], %b1;
+	setp.eq.u32	%p1, %u32_3, 12;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r1+18], %b1;
+	
 	bra end;
-
-	// Vector
-//	st.shared.u32	[%sh_u32+0], 1;
-//	st.shared.u32	[%sh_u32+4], 2;
-//	st.shared.u32	[%sh_u32+8], 3;
-//	st.shared.u32	[%sh_u32+12], 4;
-//	ld.shared.v4.u32	{%u32_1, %u32_2, %u32_3, %u32_4}, [%sh_u32];
-//	setp.eq.u32	%p1, %u32_1, 1;
-//	selp.b16	%b1, 1, 0, %p1;
-//	st.global.b8	[%r1+9], %b1;
-//	setp.eq.u32	%p1, %u32_2, 2;
-//	selp.b16	%b1, 1, 0, %p1;
-//	st.global.b8	[%r1+10], %b1;
-//	setp.eq.u32	%p1, %u32_3, 3;
-//	selp.b16	%b1, 1, 0, %p1;
-//	st.global.b8	[%r1+11], %b1;
-//	setp.eq.u32	%p1, %u32_4, 4;
-//	selp.b16	%b1, 1, 0, %p1;
-//	st.global.b8	[%r1+12], %b1;
-
 
 	// ADD - 16 bit.
 	add.u16		%u16_1, 1, 2;
@@ -210,12 +234,11 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+19],%b1;
 
-
 end:
 
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
-	mov.u32		%r2, 11;
+	mov.u32		%r2, 19;
 	st.global.u32	[%r1], %r2;
 
 	exit;

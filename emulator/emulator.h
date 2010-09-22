@@ -54,10 +54,10 @@ private:
         int storage_class;
         CUDA_EMULATOR * emulator;
         ~Symbol()
-	{
-	    // Do not free here if this is shared memory.
+        {
+            // Do not free here if this is shared memory.
             if (emulator->extern_memory_buffer != (TYPES*)this->pvalue)
-		free(this->pvalue);
+                free(this->pvalue);
         }
     };
 
