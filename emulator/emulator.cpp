@@ -1294,18 +1294,53 @@ CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr
         }
     } else if (GetType(const_expr) == T_FLT_LITERAL)
     {
-        text += 2;
-        switch (expected_type)
-        {
-            case K_F32:
-                result.value.u32 = _strtoi64(text, &dummy, 16);
-                break;
-            case K_F64:
-                result.value.u64 = _strtoi64(text, &dummy, 16);
-                break;
-            default:
-                assert(false);
-        }
+		// Three cases:
+		// "0F...", or "0f..." (hex 32-bit float)
+		// "0D...", or "0f..." (hex 64-bit float)
+		// "3.14159..." (float with decimal point)
+		int len = strlen(text);
+		if (len >= 2 && (text[1] == 'f' || text[1] == 'F'))
+		{
+	        text += 2;
+	        switch (expected_type)
+	        {
+				case K_F32:
+					result.value.u32 = _strtoi64(text, &dummy, 16);
+					break;
+				case K_F64:
+					result.value.u64 = _strtoi64(text, &dummy, 16);
+					break;
+				default:
+					assert(false);
+			}
+		} else if (len >= 2 && (text[1] == 'd' || text[1] == 'D'))
+		{
+	        text += 2;
+	        switch (expected_type)
+	        {
+				case K_F32:
+					result.value.u32 = _strtoi64(text, &dummy, 16);
+					break;
+				case K_F64:
+					result.value.u64 = _strtoi64(text, &dummy, 16);
+					break;
+				default:
+					assert(false);
+			}
+		} else
+		{
+	        switch (expected_type)
+	        {
+				case K_F32:
+					result.value.f32 = strtod(text, &dummy);
+					break;
+				case K_F64:
+					result.value.f64 = strtod(text, &dummy);
+					break;
+				default:
+					assert(false);
+			}
+		}
     } else if (GetType(const_expr) == T_QUESTION)
     {
         throw new Unimplemented("Question operator in constant expression not supported.\n");

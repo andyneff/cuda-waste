@@ -412,14 +412,31 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
             d->s32 = temp->s64;
             break;
         case K_S64:
-            // FIX
             d->s64 = s1->s64 + s2->s64;
             break;
         case K_U64:
             d->u64 = s1->u64 + s2->u64;
             break;
-        case K_F32:
-            d->f32 = s1->f32 + s2->f32;
+		case K_F32:
+			temp->f64 = s1->f32 + (double)s2->f32;
+			// Round.
+			switch (rnd)
+			{
+				case K_RN:
+				case K_RZ:
+				case K_RM:
+					d->f32 = temp->f64;
+					break;
+				case K_RP:
+					// test low bits of mantissa, round up.
+					if (temp->b64 & 0x00000000ffffffff)
+						temp->b64 |= 0x0000000100000000;
+					d->f32 = temp->f64;
+					break;
+				default:
+					d->f32 = temp->f64;
+					break;
+			}
             if (sat)
             {
                 if (d->f32 > 1.0)
@@ -1880,6 +1897,18 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
             case K_S32:
                 s1->s32 = c.value.s32;
                 break;
+	        case K_U64:
+	            s1->u64 = c.value.u64;
+		        break;
+			case K_S64:
+				s1->s64 = c.value.s64;
+				break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
             default:
                 assert(false);
         }
@@ -1906,6 +1935,18 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
                 break;
             case K_S32:
                 s2->s32 = c.value.s32;
+                break;
+	        case K_U64:
+	            s2->u64 = c.value.u64;
+		        break;
+			case K_S64:
+				s2->s64 = c.value.s64;
+				break;
+            case K_F32:
+                s2->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s2->f64 = c.value.f64;
                 break;
             default:
                 assert(false);

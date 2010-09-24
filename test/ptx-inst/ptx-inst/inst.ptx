@@ -319,7 +319,7 @@ end:
 	st.global.b8	[%r0+11], %b0;
 	mov.u32		%r2, 12;
 
-	// ADD - 32 float.
+	// ADD - 32 float, using rz rounding.
 	mov.f32		%f32_0, 2.0;
 	mov.f32		%f32_1, 0.2;
 	mov.f32		%f32_2, 2.2;
@@ -328,6 +328,24 @@ end:
 	selp.b16	%b0, 1, 0, %p0;
 	st.global.b8	[%r0+12], %b0;
 	mov.u32		%r2, 13;
+
+	// ADD - 32 float, using rp rounding.
+	// First, create a very small number in register %f32_1, 1/2^130.
+	mov.f32		%f32_1, 1.0;
+	mov.u32		%r3, 130;		// Only go to 130 bin decimal places.
+again:
+	div.full.f32	%f32_1, %f32_1, 2.0;
+	add.u32		%r2, %r2, 1;
+	setp.ne.u32	%p0, %r3, %r2;
+@%p0	bra		again;
+	// Next, add this number to 1, and see if it rounds correctly.
+	mov.f32		%f32_0, 1.0;
+	add.rp.f32	%f32_3, %f32_0, %f32_1;
+	// The numbers should NOT be equal if rounding RP worked.
+	setp.eq.f32	%p0, %f32_0, %f32_3;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+13], %b0;
+	mov.u32		%r2, 14;
 
 bra end;
 
