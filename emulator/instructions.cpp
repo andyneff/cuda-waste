@@ -417,26 +417,26 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
         case K_U64:
             d->u64 = s1->u64 + s2->u64;
             break;
-		case K_F32:
-			temp->f64 = s1->f32 + (double)s2->f32;
-			// Round.
-			switch (rnd)
-			{
-				case K_RN:
-				case K_RZ:
-				case K_RM:
-					d->f32 = temp->f64;
-					break;
-				case K_RP:
-					// test low bits of mantissa, round up.
-					if (temp->b64 & 0x00000000ffffffff)
-						temp->b64 |= 0x0000000100000000;
-					d->f32 = temp->f64;
-					break;
-				default:
-					d->f32 = temp->f64;
-					break;
-			}
+        case K_F32:
+            temp->f64 = s1->f32 + (double)s2->f32;
+            // Round.
+            switch (rnd)
+            {
+                case K_RN:
+                case K_RZ:
+                case K_RM:
+                    d->f32 = temp->f64;
+                    break;
+                case K_RP:
+                    // test low bits of mantissa, round up.
+                    if (temp->b64 & 0x00000000ffffffff)
+                        temp->b64 |= 0x0000000100000000;
+                    d->f32 = temp->f64;
+                    break;
+                default:
+                    d->f32 = temp->f64;
+                    break;
+            }
             if (sat)
             {
                 if (d->f32 > 1.0)
@@ -1897,12 +1897,12 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
             case K_S32:
                 s1->s32 = c.value.s32;
                 break;
-	        case K_U64:
-	            s1->u64 = c.value.u64;
-		        break;
-			case K_S64:
-				s1->s64 = c.value.s64;
-				break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
             case K_F32:
                 s1->f32 = c.value.f32;
                 break;
@@ -1936,12 +1936,12 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
             case K_S32:
                 s2->s32 = c.value.s32;
                 break;
-	        case K_U64:
-	            s2->u64 = c.value.u64;
-		        break;
-			case K_S64:
-				s2->s64 = c.value.s64;
-				break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
             case K_F32:
                 s2->f32 = c.value.f32;
                 break;
@@ -5916,6 +5916,7 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     assert(osrc1 != 0);
     assert(osrc2 != 0);
     bool sat = false;
+    bool cc = false;
     int rnd = 0;
     bool ftz = false;
     for (int i = 0; ; ++i)
@@ -5931,6 +5932,8 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
             ttype = t;
         else if (gt == K_F32 || gt == K_F64)
             ttype = t;
+        else if (gt == K_CC)
+            cc = true;
         else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
             rnd = gt;
         else if (gt == K_FTZ)
@@ -5938,7 +5941,6 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    assert(sat == 0);
     int type = GetType(ttype);
     TREE * dst = GetChild(odst,0);
     TREE * src1 = GetChild(osrc1,0);
@@ -5952,10 +5954,13 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
 
     TYPES value1;
     TYPES value2;
+    TYPES value3;
     char * dummy;
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
+    // used for carry out calculation.
+    TYPES * temp = &value3;
 
     if (GetType(src1) == TREE_CONSTANT_EXPR)
     {
@@ -6098,16 +6103,49 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     switch (type)
     {
         case K_U16:
-            d->u16 = s1->u16 - s2->u16;
+            temp->u32 = s1->u16 - (unsigned __int32)s2->u16;
+            if (temp->u32 >> 16)
+                this->carry = 1;
+            else
+                this->carry = 0;
+            d->u16 = temp->u32;
             break;
         case K_S16:
-            d->s16 = s1->s16 - s2->s16;
+            temp->s32 = s1->s16 - (signed __int32)s2->s16;
+            if ((temp->s32 >> 16) && 0xffff)
+                this->carry = 1;
+            else
+                this->carry = 0;
+            d->s16 = temp->s32;
             break;
         case K_U32:
-            d->u32 = s1->u32 - s2->u32;
+            temp->u64 = s1->u32 - (unsigned __int64)s2->u32;
+            if ((temp->u64 >> 32) && 0xffffffff)
+                this->carry = 1;
+            else
+                this->carry = 0;
+            d->u32 = temp->u64;
             break;
         case K_S32:
-            d->s32 = s1->s32 - s2->s32;
+            temp->s64 = s1->s32 - (signed __int64)s2->s32;
+            if ( temp->s64 > (__int64)0x7fffffff
+                 || temp->s64 < (__int64)0xffffffff80000000)
+            {
+                if (sat && temp->s64 > (__int64)0x7fffffff)
+                {
+                    temp->s64 = (__int64)0x7fffffff;
+                }
+                else if (sat && temp->s64 < (__int64)0xffffffff80000000)
+                {
+                    temp->s64 = (__int64)0xffffffff80000000;
+                }
+                this->carry = 1;
+            }
+            else
+            {
+                this->carry = 0;
+            }
+            d->s32 = temp->s64;
             break;
         case K_S64:
             d->s64 = s1->s64 - s2->s64;
@@ -6116,10 +6154,42 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
             d->u64 = s1->u64 - s2->u64;
             break;
         case K_F32:
-            d->f32 = s1->f32 - s2->f32;
+            temp->f64 = s1->f32 - (double)s2->f32;
+            // Round.
+            switch (rnd)
+            {
+                case K_RN:
+                case K_RZ:
+                case K_RM:
+                    d->f32 = temp->f64;
+                    break;
+                case K_RP:
+                    // test low bits of mantissa, round up.
+                    if (temp->b64 & 0x00000000ffffffff)
+                        temp->b64 |= 0x0000000100000000;
+                    d->f32 = temp->f64;
+                    break;
+                default:
+                    d->f32 = temp->f64;
+                    break;
+            }
+            if (sat)
+            {
+                if (d->f32 > 1.0)
+                    d->f32 = 1.0;
+                else if (d->f32 < 0.0)
+                    d->f32 = 0.0;
+            }
             break;
         case K_F64:
             d->f64 = s1->f64 - s2->f64;
+            if (sat)
+            {
+                if (d->f64 > 1.0)
+                    d->f64 = 1.0;
+                else if (d->f64 < 0.0)
+                    d->f64 = 0.0;
+            }
             break;
         default:
             assert(false);
