@@ -39,7 +39,7 @@ int main()
 	cuCtxCreate(&cuContext, 0, cuDevice);
 	// Create module from binary file
 	CUmodule cuModule;
-	CUresult r2 = cuModuleLoad(&cuModule, "../hw6/VecAdd.ptx");
+	CUresult r2 = cuModuleLoad(&cuModule, "VecAdd.ptx");
 	// Get function handle from module
 	CUfunction vecAdd;
 	CUresult r3 = cuModuleGetFunction(&vecAdd, cuModule, "VecAdd");

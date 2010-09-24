@@ -1,15 +1,25 @@
-	.version 1.4
-	.target sm_10, map_f64_to_f32
+	.version 2.1
+	.target sm_20
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// InstBasic -- this PTX routine tests basic communication between the host and the device.
+	// The routine inputs a pointer to a bool.  It loads the pointer, loads 1 into a register, then
+	// stores the result (*pointer = 1).  If run incorrectly, which could happen if run on an
+	// emulator, means that the host program should stop since it cannot check the results of the rest
+	// of the self-checking code below.
+	//
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	.entry InstBasic (
 		.param .u32 __results	// bool*
 	)
 	{
-	.reg .u32 %r<5>;
+	.reg .u32 %r<2>;
 	// basic load, store.
-	ld.param.u32	%r1,[__results];
-	mov.u32		%r2,1;
-	st.global.b8	[%r1],%r2;
+	ld.param.u32	%r0,[__results];
+	mov.u32		%r1, 1;
+	st.global.b8	[%r0], %r1;
 	exit;
 	}
 
@@ -41,8 +51,10 @@
 	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
 	.shared .v4 .u32 %sh_u32;
 
-	// Test LD and MOV equivalence.
+	// Set up
 	ld.param.u32	%r1,[__results];
+
+	// Test LD and MOV equivalence.
 	mov.u32		%r2, __results;
 	ld.param.u32	%r2, [%r2];		// equivalent to mov/ld equiv to ld, should be zero.
 	setp.eq.u32	%p1, %r1, %r2;
@@ -168,77 +180,235 @@
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+18], %b1;
 	
-	bra end;
+end:
 
-	// ADD - 16 bit.
-	add.u16		%u16_1, 1, 2;
-	setp.eq.u16	%p1, %u16_1, 3;
-	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+10],%b1;
+	// Pass back the number of tests performed.
+	ld.param.u32	%r1,[__N];
+	mov.u32		%r2, 19;
+	st.global.u32	[%r1], %r2;
+
+	exit;
+	}
+
+	.entry InstAddSub (
+		.param .u32 __results,	// bool*
+		.param .u32 __N		// N*
+	)
+	{
+	.reg .u32 %r<5>;
+
+	.reg .u8 %u8_<3>;
+	.reg .u16 %u16_<3>;
+	.reg .u32 %u32_<4>;
+	.reg .u64 %u64_<3>;
+
+	.reg .s8 %s8_<3>;
+	.reg .s16 %s16_<3>;
+	.reg .s32 %s32_<4>;
+	.reg .s64 %s64_<3>;
+
+	.reg .f32 %f32_<5>;
+	.reg .f64 %f64_<3>;
+
+	.reg .b16 %b<3>;
+	.reg .pred %p<3>;
+
+	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
+	.global .u64 __gl2_u32 = 0x0102030405060708;
+	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
+	.shared .v4 .u32 %sh_u32;
+
+	// Set up
+	ld.param.u32	%r0,[__results];
+
+	// ADD - 16 bit, add two positive constants.
+	add.u16		%u16_0, 1, 2;
+	setp.eq.u16	%p0, %u16_0, 3;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+0], %b0;
+	mov.u32		%r2, 1;
 	
-	// ADD - 16 bit with overflow.
-	add.u16		%u16_1, 65535, 1;
-	setp.eq.u16	%p1, %u16_1, 0;
-	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+11],%b1;
+	// ADD - 16 bit with overflow using two positive contants.
+	add.u16		%u16_0, 65535, 1;
+	setp.eq.u16	%p0, %u16_0, 0;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+1], %b0;
+	mov.u32		%r2, 2;
+
+	// ADD - 16 bit, add a positive constant, and an unsigned register with a positive number.
+	mov.s16		%u16_1, 1;
+	add.u16		%u16_0, %u16_1, 4;
+	setp.eq.u16	%p0, %u16_0, 5;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+2], %b0;
+	mov.u32		%r2, 3;
+
+	// ADD - 16 bit, add a positive constant, and a signed register with a positive number.
+	mov.s16		%s16_0, 1;
+	add.u16		%u16_0, %s16_0, 6;
+	setp.eq.u16	%p0, %u16_0, 7;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+3], %b0;
+	mov.u32		%r2, 4;
+
+	// ADD - 16 bit, add a positive constant, and a signed register with a negative number.
+	// The GPU will interpret the binary as an unsigned number.
+	mov.s16		%s16_0, -7;
+	add.u16		%u16_0, %s16_0, 6;
+	setp.eq.u16	%p0, %u16_0, 65535;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+4], %b0;
+	mov.u32		%r2, 5;
 
 	// ADD - 32 bit with overflow/carry out
 	add.cc.u32	%u32_1, 4294967295, 2;
 	setp.eq.u32	%p1, %u32_1, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+12],%b1;
+	st.global.b8	[%r0+5], %b1;
+	mov.u32		%r2, 6;
 
 	// ADDC - 32 bit with carry in
 	addc.cc.u32	%u32_2, 0, 0;
 	setp.eq.u32	%p1, %u32_2, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+13],%b1;
+	st.global.b8	[%r0+6],%b1;
+	mov.u32		%r2, 7;
 
 	// ADD - 32 bit reg/const
 	mov.s32		%s32_2, 15;
 	add.s32		%s32_1, %s32_2, -20;
 	setp.eq.s32	%p1, %s32_1, -5;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+14],%b1;
+	st.global.b8	[%r0+7],%b1;
+	mov.u32		%r2, 8;
 
 	// ADD - 32 bit const/reg
 	mov.s32		%s32_2, 16;
 	add.s32		%s32_1, -20, %s32_2;
 	setp.eq.s32	%p1, -4, %s32_1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+15],%b1;
+	st.global.b8	[%r0+8],%b1;
+	mov.u32		%r2, 9;
 
-	// ADD - 32 bit reg/reg
+	// ADD - 32 bit reg/reg.  Constant evaluation is also tested a little here.
 	mov.s32		%s32_2, 16;
 	mov.s32		%s32_3, 4;
 	add.s32		%s32_1, %s32_2, %s32_3;
 	setp.eq.s32	%p1, 1+2 + 3*2 + 10 +(-4 + 5), %s32_1; // 20.
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+16],%b1;
+	st.global.b8	[%r0+9],%b1;
+	mov.u32		%r2, 10;
+
+	// ADD - 32 bit reg/reg, with sat.  Addition that has overflow or underflow
+	// is shunted to MAXINT or MININT.
+	mov.s32		%s32_2, 2147483645;
+	mov.s32		%s32_3, 4;
+	add.sat.s32	%s32_1, %s32_2, %s32_3;
+	setp.eq.s32	%p1, %s32_1, 2147483647;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+10],%b1;
+	mov.u32		%r2, 11;
+
+	// ADD - 32 float.
+	mov.f32		%f32_0, 1.0;
+	mov.f32		%f32_1, 0.1;
+	mov.f32		%f32_2, 1.1;
+	add.f32		%f32_3, %f32_0, %f32_1;
+	setp.eq.f32	%p0, %f32_2, %f32_3;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+11], %b0;
+	mov.u32		%r2, 12;
+
+	// ADD - 32 float.
+	mov.f32		%f32_0, 2.0;
+	mov.f32		%f32_1, 0.2;
+	mov.f32		%f32_2, 2.2;
+	add.rz.f32	%f32_3, %f32_0, %f32_1;
+	setp.eq.f32	%p0, %f32_2, %f32_3;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r0+12], %b0;
+	mov.u32		%r2, 13;
+
+bra end;
 
 	// SUB - 16 bit (negative, unsigned!)
 	add.u16		%u16_1, 0, 0;		// First, clear carry.
 	sub.u16		%u16_1, 1, 2;		// should not set carry
 	setp.eq.u16	%p1, %u16_1, -1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+17],%b1;
+	st.global.b8	[%r0+10],%b1;
 	
 	// test result is also the same as 0xffff.
 	setp.eq.u16	%p1, %u16_1, 0xffff;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+18],%b1;
+	st.global.b8	[%r0+11],%b1;
 
 	// test carry out
 	add.u16		%u16_1, 1, 0;
 	setp.eq.u16	%p1, %u16_1, 1;
 	selp.b16	%b1, 1, 0, %p1;
-	st.global.b8	[%r1+19],%b1;
+	st.global.b8	[%r0+12],%b1;
 
 end:
 
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
-	mov.u32		%r2, 19;
+	st.global.u32	[%r1], %r2;
+
+	exit;
+	}
+
+	.entry Test (
+		.param .u32 __results,	// Float*
+		.param .u32 __N		// N*
+	)
+	{
+	.reg .u32 %r<5>;
+
+	.reg .u8 %u8_<3>;
+	.reg .u16 %u16_<3>;
+	.reg .u32 %u32_<4>;
+	.reg .u64 %u64_<3>;
+
+	.reg .s8 %s8_<3>;
+	.reg .s16 %s16_<3>;
+	.reg .s32 %s32_<4>;
+	.reg .s64 %s64_<3>;
+
+	.reg .f32 %f32_<5>;
+	.reg .f64 %f64_<3>;
+
+	.reg .b16 %b<3>;
+	.reg .pred %p<3>;
+
+	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
+	.global .u64 __gl2_u32 = 0x0102030405060708;
+	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
+	.shared .v4 .u32 %sh_u32;
+
+	// Set up
+	ld.param.u32	%r0,[__results];
+	mov.u32		%r2, 0;
+	mov.f32		%f32_1, 1.0;
+
+again:
+	// ADD - 32 float.
+	mov.f32		%f32_0, 1.0;
+	div.full.f32	%f32_1, %f32_1, 2.0;
+	add.rp.f32	%f32_3, %f32_0, %f32_1;
+	st.global.f32	[%r0], %f32_3;
+	add.u32		%r2, %r2, 1;
+	add.u32		%r0, %r0, 4;
+	setp.ne.u32	%p1, %r2, 40;
+
+	// compare
+	setp.ne.f32	%p2, %f32_3, %f32_0;
+@%p2	bra		again;
+
+end:
+
+	// Pass back the number of tests performed.
+	ld.param.u32	%r1,[__N];
 	st.global.u32	[%r1], %r2;
 
 	exit;

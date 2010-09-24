@@ -70,12 +70,6 @@ cudaError_t CUDA_EMULATOR::_cudaGetDevice(int * device)
 	return cudaSuccess;
 }
 
-void CUDA_EMULATOR::_cudaSetDevice(char * device)
-{
-	this->device = this->string_table->Entry(device);
-}
-
-
 cudaError_t CUDA_EMULATOR::_cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device)
 {
 	if (strcmp(this->device, "compute_20") == 0)

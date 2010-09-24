@@ -13,4 +13,10 @@ clean:
 	rm -rf Debug Release
 
 	
-	
+tests:
+	cd Debug; ../test/hw/Debug/hw.exe; ./waste -d compute_20 ../test/hw/Debug/hw.exe; ./waste -d compute_10 ../test/hw/Debug/hw.exe
+	cd Debug; ../test/hw/Debug/hw2.exe; ./waste -d compute_20 ../test/hw/Debug/hw2.exe; ./waste -d compute_10 ../test/hw/Debug/hw2.exe
+	cd Debug; ../test/hw/Debug/hw3.exe; ./waste -d compute_20 ../test/hw/Debug/hw3.exe; ./waste -d compute_10 ../test/hw/Debug/hw3.exe
+	cd Debug; ../test/hw/Debug/hw4.exe; ./waste -d compute_20 ../test/hw/Debug/hw4.exe; ./waste -d compute_10 ../test/hw/Debug/hw4.exe
+	cd Debug; ../test/hw/Debug/hw5.exe; ./waste -d compute_20 ../test/hw/Debug/hw5.exe; ./waste -d compute_10 ../test/hw/Debug/hw5.exe
+	cd Debug; cp ../test/hw6/VecAdd.ptx .; ../test/hw/Debug/hw6.exe; ./waste -d ompute_20 ../test/hw/Debug/hw6.exe; ./waste -d compute_10 ../test/hw/Debug/hw6.exe

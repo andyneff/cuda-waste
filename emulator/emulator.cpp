@@ -2336,16 +2336,11 @@ void CUDA_EMULATOR::unimplemented(char * text)
     throw new Unimplemented(text);
 }
 
-CUDA_EMULATOR::SymbolTable::SymbolTable()
+
+void CUDA_EMULATOR::RunDevice(char * device)
 {
+    this->device = this->string_table->Entry(device);
 }
 
-CUDA_EMULATOR::SymbolTable::~SymbolTable()
-{
-    std::map<char*, Symbol*, ltstr>::iterator it = this->symbols.begin();
-    for ( ; it != this->symbols.end(); ++it)
-    {
-        delete it->second;
-    }
-}
+
 

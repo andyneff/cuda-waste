@@ -66,8 +66,15 @@ private:
         public:
             std::map<char*, Symbol*, ltstr> symbols;
             SymbolTable * parent_block_symbol_table;
-            SymbolTable();
-            ~SymbolTable();
+            SymbolTable() {}
+            ~SymbolTable()
+            {
+                std::map<char*, Symbol*, ltstr>::iterator it = this->symbols.begin();
+                for ( ; it != this->symbols.end(); ++it)
+                {
+                    delete it->second;
+                }
+            }
     };
 
     SymbolTable * root;
@@ -306,7 +313,6 @@ public:
     cudaError_t _cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream);
     cudaError_t _cudaThreadSynchronize();
     cudaError_t _cudaLaunch(const char *entry);
-    void _cudaSetDevice(char * device);
     cudaError_t _cudaGetDevice(int * device);
     cudaError_t _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
     cudaError_t _cudaStreamCreate(cudaStream_t *pStream);
@@ -330,4 +336,5 @@ public:
 
     void SetTrace(int level);
     char * StringTableEntry(char * text);
+    void RunDevice(char * device);
 };

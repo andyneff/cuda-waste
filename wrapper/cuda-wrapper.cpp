@@ -216,7 +216,7 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::GetDeviceCount, true);
+        hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)CUDA_WRAPPER::_cudaGetDeviceCount, true);
         hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)CUDA_WRAPPER::_cudaGetDeviceProperties, true);
         hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)CUDA_WRAPPER::_cudaChooseDevice, true);
         hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)CUDA_WRAPPER::_cudaSetDevice, true);
@@ -271,8 +271,8 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)CUDA_WRAPPER::Unimplemented, true);
-        hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::RegisterFatBinary, true);
-        hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CUDA_WRAPPER::UnregisterFatBinary, true);
+        hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)CUDA_WRAPPER::_cudaRegisterFatBinary, true);
+        hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)CUDA_WRAPPER::_cudaUnregisterFatBinary, true);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)CUDA_WRAPPER::Unimplemented, true);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)CUDA_WRAPPER::Unimplemented, true);
@@ -753,7 +753,7 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
 
     cu->device = device;
     CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
-    emulator->_cudaSetDevice(device);
+    emulator->RunDevice(device);
 
     if (cu->trace_all_calls)
     {
@@ -1512,7 +1512,7 @@ cudaError_t CUDA_WRAPPER::GetLastError()
         return cudaSuccess;
 }
 
-void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
+void** CUDA_WRAPPER::_cudaRegisterFatBinary(void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
@@ -1540,19 +1540,19 @@ void** CUDA_WRAPPER::RegisterFatBinary(void *fatCubin)
     }
     if (! cu->do_emulation)
     {
-        typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::RegisterFatBinary);
+        typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaRegisterFatBinary);
         return (*proc)(fatCubin);
     } else
         return 0;
 }
 
-void CUDARTAPI CUDA_WRAPPER::UnregisterFatBinary(void **fatCubinHandle)
+void CUDARTAPI CUDA_WRAPPER::_cudaUnregisterFatBinary(void **fatCubinHandle)
 {
     // Should probably do something like free the ast...
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (! cu->do_emulation)
     {
-        typePtrCudaUnregisterFatBinary proc = (typePtrCudaUnregisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::UnregisterFatBinary);
+        typePtrCudaUnregisterFatBinary proc = (typePtrCudaUnregisterFatBinary)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaUnregisterFatBinary);
         (*proc)(fatCubinHandle);
     }
 }
@@ -1662,13 +1662,13 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaGetDeviceProperties(struct cudaDevicePr
     }
 }
 
-cudaError_t CUDARTAPI CUDA_WRAPPER::GetDeviceCount(int *count)
+cudaError_t CUDARTAPI CUDA_WRAPPER::_cudaGetDeviceCount(int *count)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (! cu->do_emulation)
     {
-        typePtrCudaGetDeviceCount proc = (typePtrCudaGetDeviceCount)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::GetDeviceCount);
+        typePtrCudaGetDeviceCount proc = (typePtrCudaGetDeviceCount)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::_cudaGetDeviceCount);
         return (*proc)(count);
     } else
     {
