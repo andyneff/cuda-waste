@@ -45,8 +45,8 @@ BOOL CUDA_WRAPPER::WrapCuda()
             CloseHandle(hProcess);
             return FALSE;
         }
-    // Regardless of which module, add wrapper API.
-    cu->WrapModule(szModuleName);
+        // Regardless of which module, add wrapper API.
+        cu->WrapModule(szModuleName);
     }
     return TRUE;
 }

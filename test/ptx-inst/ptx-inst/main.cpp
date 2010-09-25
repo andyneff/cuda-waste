@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cuda.h>
+#include <Windows.h>
 
 void test(int x, const char * s)
 {
@@ -173,6 +174,7 @@ int main(int argc, char *argv[])
 
 	// Do ADD, SUB test.
 	load_and_test(cuModule, "InstAddSub");
+	while (1) Sleep(1000);
 
 	return 0;
 }

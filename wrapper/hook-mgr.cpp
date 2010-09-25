@@ -23,6 +23,7 @@
 #include <imagehlp.h>
 #include "hook-mgr.h"
 #include "lock-mgr.h"
+#include <Psapi.h>
 
 #pragma comment(lib, "imagehlp.lib")
 
@@ -68,12 +69,13 @@ HookManager::~HookManager()
 
 bool HookManager::HookSystemFuncs()
 {
-    if (m_bSystemFuncsHooked)
+    if (! m_bSystemFuncsHooked)
     {
-        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA, true);
         HookImport("Kernel32.dll", "LoadLibraryW", (PROC) HookManager::MyLoadLibraryW, true);
         HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HookManager::MyLoadLibraryExA, true);
         HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HookManager::MyLoadLibraryExW, true);
+        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA, true);
+		HookImport("Kernel32.dll", "GetProcAddress", (PROC) HookManager::MyGetProcAddress, true);
         m_bSystemFuncsHooked = true;
     }
     return m_bSystemFuncsHooked;
@@ -110,36 +112,45 @@ PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfn
     PROC                  pfnOrig = NULL;
     try
     {
+		HMODULE hModule = ::GetModuleHandleA(pszCalleeModName);
+		HANDLE  hProcess = GetCurrentProcess();
+		char    szModuleName[MAX_PATH];
+		BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hModule, szModuleName, sizeof(szModuleName));
+		if (! rv_gmfn)
+		{
+			CloseHandle(hProcess);
+			return pfnOrig;
+		}
         if (!sm_pHookedFunctions->GetHookedFunction(
-                pszCalleeModName, 
+                hModule, 
                 pszFuncName
                 ))
         {
             pfnOrig = GetProcAddressWindows(
-                ::GetModuleHandleA(pszCalleeModName),
+                ::GetModuleHandleA(szModuleName),
                 pszFuncName
                 );
             if (NULL == pfnOrig)
             {
-                HMODULE hmod = ::LoadLibraryA(pszCalleeModName);
+                HMODULE hmod = ::LoadLibraryA(szModuleName);
                 if (NULL != hmod)
                     pfnOrig = GetProcAddressWindows(
-                        ::GetModuleHandleA(pszCalleeModName),
+                        ::GetModuleHandleA(szModuleName),
                         pszFuncName
                         );
             }
             if (NULL != pfnOrig)
                 bResult = AddHook(
-                    pszCalleeModName, 
+                    szModuleName, 
                     pszFuncName, 
                     pfnOrig,
                     pfnHook
                     );
             else
             {
-				// Unknown function...
-				if (flag)
-					std::cerr << "Unknown function " << pszFuncName << " of module " << pszCalleeModName << "\n Check name.\n";
+                // Unknown function...
+                if (flag)
+                    std::cerr << "Unknown function " << pszFuncName << " of module " << pszCalleeModName << "\n Check name.\n";
                 return 0;
             }
         }
@@ -312,7 +323,9 @@ FARPROC WINAPI HookManager::MyGetProcAddress(HMODULE hmod, PCSTR pszProcName)
             pszProcName
             );
     if (NULL != pFuncHook)
-        pfn = pFuncHook->Get_pfnHook();
+    {
+		pfn = pFuncHook->Get_pfnHook();
+	}
     return pfn;
 }
 
@@ -432,16 +445,37 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
         if (pImportDesc == NULL)
             __leave;  
         while (pImportDesc->Name)
-        {
+		{
             PSTR pszModName = (PSTR)((PBYTE) hmodCaller + pImportDesc->Name);
-            if (stricmp(pszModName, pszCalleeModName) == 0) 
+			char import_mod_name[4000];
+			for (int i = 0; ; i++)
+			{
+				import_mod_name[i] = tolower(pszModName[i]);
+				if (pszModName[i] == '\0')
+					break;
+			}
+
+			char import_callee_mod_name[4000];
+			for (int i = 0; ; i++)
+			{
+				import_callee_mod_name[i] = tolower(pszCalleeModName[i]);
+				if (pszCalleeModName[i] == '\0')
+					break;
+			}
+
+//			std::cout << "pszModName " << import_mod_name << " pszCalleeModName " << import_callee_mod_name << "\n";
+            if (stricmp(import_mod_name, import_callee_mod_name) == 0) 
                 break;   // Found
-            else if (strstr(pszCalleeModName, pszModName) != 0)
-                break;
+			if (stricmp(import_callee_mod_name, import_mod_name) == 0) 
+				break;   // Found
+            if (strstr(import_callee_mod_name, import_mod_name) != 0)
+				break;   // Found
+			if (strstr(import_mod_name, import_callee_mod_name) != 0)
+				break;   // Found
             pImportDesc++;
         }
         if (pImportDesc->Name == 0)
-            __leave;  
+			__leave;
         // Get caller's IAT 
         PIMAGE_THUNK_DATA pThunk = 
             (PIMAGE_THUNK_DATA)( (PBYTE) hmodCaller + pImportDesc->FirstThunk );
@@ -452,6 +486,7 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
             if (bFound) 
             {
                 MEMORY_BASIC_INFORMATION mbi;
+        
                 ::VirtualQuery(ppfn, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
                 if (FALSE == ::VirtualProtect(
                     mbi.BaseAddress,
@@ -460,7 +495,6 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
                     &mbi.Protect)
                     )
                     __leave;
-                this->m_iatList.push_back(ppfn);
                 *ppfn = *pfnNew;
                 bResult = TRUE;
                 DWORD dwOldProtect;
@@ -470,6 +504,8 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
                     mbi.Protect,
                     &dwOldProtect
                     );
+                this->m_iatList.push_back(ppfn);
+
                 break;
             }
             pThunk++;
@@ -500,10 +536,20 @@ BOOL HookedFunction::DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew)
 
 HookedFunction* HookedFunctions::GetHookedFunction(HMODULE hmodOriginal, PCSTR pszFuncName)
 {
-    char szFileName[MAX_PATH];
+	char szFileName[MAX_PATH];
+	// Hmm, does not seem to get full path name.
     ::GetModuleFileNameA(hmodOriginal, szFileName, MAX_PATH);
     ExtractModuleFileName(szFileName);
-    return GetHookedFunction(szFileName, pszFuncName);
+	// Get full path.
+	HANDLE  hProcess = GetCurrentProcess();
+	char    szModuleName[MAX_PATH];
+	BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hmodOriginal, szModuleName, sizeof(szModuleName));
+	if (! rv_gmfn)
+	{
+		CloseHandle(hProcess);
+		return FALSE;
+	}
+    return GetHookedFunction(szModuleName, pszFuncName);
 }
 
 HookedFunction* HookedFunctions::GetHookedFunction(void * iat)

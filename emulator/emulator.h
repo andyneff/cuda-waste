@@ -326,6 +326,19 @@ public:
     CUresult _cuModuleLoad(CUmodule *module, const char *fname);
     CUresult _cuParamSetSize(CUfunction hfunc, unsigned int numbytes);
     CUresult _cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes);
+    CUresult _cuDeviceGet(CUdevice *device, int ordinal);
+	CUresult _cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev);
+    CUresult _cuDeviceGetName(char *name, int len, CUdevice dev);
+	CUresult _cuDeviceGetProperties(CUdevprop *prop, CUdevice dev);
+    CUresult _cuDriverGetVersion(int * driverVersion);
+    CUresult _cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId );
+    CUresult _cuDeviceTotalMem(unsigned int *bytes, CUdevice dev);
+    CUresult _cuDeviceComputeCapability(int *major, int *minor, CUdevice dev);
+	CUresult _cuCtxAttach(CUcontext *pctx, unsigned int flags);
+	CUresult _cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev );
+	CUresult _cuCtxDestroy( CUcontext ctx );
+	CUresult _cuCtxDetach(CUcontext ctx);
+
 
     // Generic setup, execution.
     void ConfigureBlock(dim3 dim);

@@ -48,6 +48,7 @@ public:
     BOOL AreThereHookedFunctions();
 private:
     friend class HookedFunction;
+	friend class _CUDA;
     static CriticalSection sm_CritSec;
     HMODULE m_hmodThisInstance;
     static HookedFunctions* sm_pHookedFunctions;
