@@ -1773,12 +1773,23 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
         ssrc = FindSymbol(src->GetText());
         // Various types of id's to handle:
         assert(ssrc != 0);
-        if (ssrc->storage_class == K_REG)
-            s = (TYPES*)ssrc->pvalue;
-        else if (ssrc->array)
-            s = (TYPES*)ssrc->pvalue;
-        else
-            s = (TYPES*)&ssrc->pvalue;
+		switch (ssrc->storage_class)
+		{
+			case K_GLOBAL:
+			case K_LOCAL:
+			case K_PARAM:
+			case K_SHARED:
+			case K_CONST:
+				// names in instructions refer to the address of the
+				// variable, not the contents.
+				s = (TYPES*)&ssrc->pvalue;
+				break;
+			case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+				s = (TYPES*)ssrc->pvalue;
+				break;
+		}
     }
 
     switch (type)
