@@ -2,22 +2,22 @@
 #include <assert.h>
 #include <iostream>
 
-int CUDA_EMULATOR::DoAbs(TREE * inst)
+int CUDA_EMULATOR::Thread::DoAbs(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_ABS);
+    assert(inst->GetChild( start)->GetType() == KI_ABS);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -37,10 +37,10 @@ int CUDA_EMULATOR::DoAbs(TREE * inst)
     bool ftz = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_S16 || gt == K_S32 || gt == K_S64)
             ttype = t;
         else if (gt == K_F32 || gt == K_F64)
@@ -50,16 +50,16 @@ int CUDA_EMULATOR::DoAbs(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "ABS.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "ABS.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -67,9 +67,9 @@ int CUDA_EMULATOR::DoAbs(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -90,11 +90,11 @@ int CUDA_EMULATOR::DoAbs(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -141,12 +141,12 @@ int CUDA_EMULATOR::DoAbs(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoAdd(TREE * inst)
+int CUDA_EMULATOR::Thread::DoAdd(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_ADD);
+    assert(inst->GetChild(start)->GetType() == KI_ADD);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -154,10 +154,10 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -184,10 +184,10 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
     bool ftz = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SAT)
             sat = true;
         else if (gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -204,16 +204,16 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "ADD.ftz not implemented.");
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    this->emulator->unimplemented(ftz, "ADD.ftz not implemented.");
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -226,9 +226,9 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
     // used for carry out calculation.
     TYPES * temp = &value3;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -258,11 +258,11 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -295,9 +295,9 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -327,11 +327,11 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -461,12 +461,12 @@ int CUDA_EMULATOR::DoAdd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoAddc(TREE * inst)
+int CUDA_EMULATOR::Thread::DoAddc(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_ADDC);
+    assert(inst->GetChild(start)->GetType() == KI_ADDC);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -474,10 +474,10 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -501,10 +501,10 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
     bool cc = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_U32 || gt == K_S32)
             ttype = t;
         else if (gt == K_CC)
@@ -512,15 +512,15 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -533,9 +533,9 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
     // used for carry out calculation.
     TYPES * temp = &value3;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -547,11 +547,11 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -566,9 +566,9 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -580,11 +580,11 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -623,12 +623,12 @@ int CUDA_EMULATOR::DoAddc(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoAnd(TREE * inst)
+int CUDA_EMULATOR::Thread::DoAnd(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_AND);
+    assert(inst->GetChild(start)->GetType() == KI_AND);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -636,10 +636,10 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -663,23 +663,23 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -689,9 +689,9 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -709,11 +709,11 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -734,9 +734,9 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -754,11 +754,11 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -799,27 +799,27 @@ int CUDA_EMULATOR::DoAnd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoAtom(TREE * inst)
+int CUDA_EMULATOR::Thread::DoAtom(TREE * inst)
 {
     throw new Unimplemented("ATOM unimplemented");
 }
 
-int CUDA_EMULATOR::DoBar(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBar(TREE * inst)
 {
     // ONLY VERY SIMPLE SYNCHRONIZATION IMPLEMENTED!!!
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_BAR);
+    assert(inst->GetChild(start)->GetType() == KI_BAR);
     start++;
     TREE * ttype = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -827,7 +827,7 @@ int CUDA_EMULATOR::DoBar(TREE * inst)
             if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else unimplemented(true, "BAR with two or more operands unimplemented.");
+            } else this->emulator->unimplemented(true, "BAR with two or more operands unimplemented.");
         } else assert(false);
     }
     assert(ttype != 0);
@@ -840,10 +840,10 @@ int CUDA_EMULATOR::DoBar(TREE * inst)
     int size = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SYNC)
             sync = true;
         else if (gt == K_ARRIVE)
@@ -859,19 +859,19 @@ int CUDA_EMULATOR::DoBar(TREE * inst)
         else if (gt = K_U32)
             size = K_U32;
     }
-    unimplemented(arrive, "BAR.arrive not implemented.");
-    unimplemented(red, "BAR.red not implemented.");
+    this->emulator->unimplemented(arrive, "BAR.arrive not implemented.");
+    this->emulator->unimplemented(red, "BAR.red not implemented.");
     
     int type = K_U32;
-    TREE * src1 = GetChild(osrc1,0);
+    TREE * src1 = osrc1->GetChild(0);
 
     TYPES value1;
     char * dummy;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -880,12 +880,12 @@ int CUDA_EMULATOR::DoBar(TREE * inst)
             default:
                 assert(false);
         }
-        unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
-    } else if (GetType(src1) == T_WORD)
+        this->emulator->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -897,63 +897,63 @@ int CUDA_EMULATOR::DoBar(TREE * inst)
         }
     } else assert(false);
 
-    unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
+    this->emulator->unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
 
     // pack up the thread context.  Synchronize all assumed.
 
     return -KI_BAR;
 }
 
-int CUDA_EMULATOR::DoBfe(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBfe(TREE * inst)
 {
     throw new Unimplemented("BFE unimplemented");
 }
 
-int CUDA_EMULATOR::DoBfi(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBfi(TREE * inst)
 {
     throw new Unimplemented("BFI unimplemented");
 }
 
-int CUDA_EMULATOR::DoBfind(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBfind(TREE * inst)
 {
     throw new Unimplemented("BFIND unimplemented");
 }
 
-int CUDA_EMULATOR::DoBrev(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBrev(TREE * inst)
 {
     throw new Unimplemented("BREV unimplemented");
 }
 
-int CUDA_EMULATOR::DoBra(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBra(TREE * inst)
 {
     int start = 0;
     for (;;)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         assert(t != 0);
-        if (GetType(t) == TREE_OPR)
+        if (t->GetType() == TREE_OPR)
             break;
         start++;
     }
-    TREE * opr = GetChild(inst, start);
-    TREE * dst = GetChild(opr, 0);
-    assert(GetType(dst) == T_WORD);
-    Symbol * sdst = FindSymbol(dst->GetText());
+    TREE * opr = inst->GetChild(start);
+    TREE * dst = opr->GetChild(0);
+    assert(dst->GetType() == T_WORD);
+    Symbol * sdst = this->root->FindSymbol(dst->GetText());
     assert (sdst != 0);
     return (int)sdst->pvalue;
 }
 
-int CUDA_EMULATOR::DoBrkpt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoBrkpt(TREE * inst)
 {
     throw new Unimplemented("BRKPT unimplemented");
 }
 
-int CUDA_EMULATOR::DoCall(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCall(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_CALL);
+    assert(inst->GetChild(start)->GetType() == KI_CALL);
     start++;
     TREE * ttype = 0;
     int start_rets = 0;
@@ -961,10 +961,10 @@ int CUDA_EMULATOR::DoCall(TREE * inst)
     TREE * tfunc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -988,10 +988,10 @@ int CUDA_EMULATOR::DoCall(TREE * inst)
     int i = 0;
     for (;; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_UNI)
             uni = true;
         else assert(false);
@@ -1001,13 +1001,13 @@ int CUDA_EMULATOR::DoCall(TREE * inst)
     int once = 0;
     for (;; ++start_rets)
     {
-        TREE * t = GetChild(inst, start_rets);
+        TREE * t = inst->GetChild( start_rets);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
-            TREE * u = GetChild(t, 0);
+            TREE * u = t->GetChild(0);
             if (u->GetType() == T_UNDERSCORE)
                 once++;
             else
@@ -1021,23 +1021,23 @@ int CUDA_EMULATOR::DoCall(TREE * inst)
     std::vector<Symbol*> stack;
     for (;; ++start_params)
     {
-        TREE * t = GetChild(inst, start_params);
+        TREE * t = inst->GetChild( start_params);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
-            TREE * u = GetChild(t, 0);
+            TREE * u = t->GetChild(0);
             if (u->GetType() == T_WORD)
             {
                 // load value into stack...
-                Symbol * param = FindSymbol(u->GetText());
+                Symbol * param = this->root->FindSymbol(u->GetText());
                 assert(param != 0);
-                unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
+                this->emulator->unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
                 stack.push_back(param);
             }
             else
-                unimplemented("CALL unimplemented parameter type.");
+                this->emulator->unimplemented("CALL unimplemented parameter type.");
         } else
             break;
     }
@@ -1079,27 +1079,27 @@ int CUDA_EMULATOR::DoCall(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoClz(TREE * inst)
+int CUDA_EMULATOR::Thread::DoClz(TREE * inst)
 {
     throw new Unimplemented("CLZ unimplemented");
 }
 
-int CUDA_EMULATOR::DoCnot(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCnot(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild( start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_CNOT);
+    assert(inst->GetChild(start)->GetType() == KI_CNOT);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -1119,22 +1119,22 @@ int CUDA_EMULATOR::DoCnot(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -1142,9 +1142,9 @@ int CUDA_EMULATOR::DoCnot(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -1162,11 +1162,11 @@ int CUDA_EMULATOR::DoCnot(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -1207,25 +1207,25 @@ int CUDA_EMULATOR::DoCnot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoCopysign(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCopysign(TREE * inst)
 {
     throw new Unimplemented("COPYSIGN unimplemented");
 }
 
-int CUDA_EMULATOR::DoCos(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCos(TREE * inst)
 {
     throw new Unimplemented("COS unimplemented");
 }
 
-int CUDA_EMULATOR::DoCvt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCvt(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_CVT);
+    assert(inst->GetChild(start)->GetType() == KI_CVT);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * type = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * type = inst->GetChild(start);
     start++;
     bool ftz = false;
     bool sat = false;
@@ -1238,10 +1238,10 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
     int i = 0;
     for (;; ++i)
     {
-        TREE * t = GetChild(type, i);
+        TREE * t = type->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_IRND)
             tirnd = t;
         else if (gt == TREE_FRND)
@@ -1263,10 +1263,10 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
     {
         for (int i = 0; ; ++i)
         {
-            TREE * t = GetChild(tirnd, i);
+            TREE * t = tirnd->GetChild(i);
             if (t == 0)
                 break;
-            int gt = GetType(t);
+            int gt = t->GetType();
             if (gt == K_RNI || gt == K_RZI || gt == K_RMI || gt == K_RPI)
                 irnd = gt;
             else assert(false);
@@ -1276,10 +1276,10 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
     {
         for (int i = 0; ; ++i)
         {
-            TREE * t = GetChild(tfrnd, i);
+            TREE * t = tfrnd->GetChild(i);
             if (t == 0)
                 break;
-            int gt = GetType(t);
+            int gt = t->GetType();
             if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
                 frnd = gt;
             else assert(false);
@@ -1289,16 +1289,16 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
     TYPES * dst_value;
     TYPES * src_value;
 
-    TREE * o1 = GetChild(inst, start++);
-    assert(GetType(o1) == TREE_OPR);
-    assert(GetType(GetChild(o1, 0)) == T_WORD);
-    TREE * o2 = GetChild(inst, start++);
-    assert(GetType(o2) == TREE_OPR);
-    assert(GetType(GetChild(o2, 0)) == T_WORD);
+    TREE * o1 = inst->GetChild(start++);
+    assert(o1->GetType() == TREE_OPR);
+    assert(o1->GetChild(0)->GetType() == T_WORD);
+    TREE * o2 = inst->GetChild(start++);
+    assert(o2->GetType() == TREE_OPR);
+    assert(o2->GetChild(0)->GetType() == T_WORD);
 
-    Symbol * s1 = FindSymbol(GetChild(o1, 0)->GetText());
+    Symbol * s1 = this->root->FindSymbol(o1->GetChild(0)->GetText());
     assert(s1 != 0);
-    Symbol * s2 = FindSymbol(GetChild(o2, 0)->GetText());
+    Symbol * s2 = this->root->FindSymbol(o2->GetChild(0)->GetText());
     assert(s2 != 0);
 
     dst_value = (TYPES*)s1->pvalue;
@@ -1307,9 +1307,9 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
     if (strcmp(s2->typestring, "dim3") == 0)
     {
         // Get qualifier of the structure.
-        TREE * tqual = GetChild(o2, 1);
+        TREE * tqual = o2->GetChild(1);
         assert(tqual != 0);
-        int qual = GetType(tqual);
+        int qual = tqual->GetType();
         if (qual == K_X)
         {
             src_value = (TYPES*) &(((dim3*)s2->pvalue)->x);
@@ -1703,23 +1703,23 @@ int CUDA_EMULATOR::DoCvt(TREE * inst)
 }
 
 
-int CUDA_EMULATOR::DoCvta(TREE * inst)
+int CUDA_EMULATOR::Thread::DoCvta(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_CVTA);
+    assert(inst->GetChild(start)->GetType() == KI_CVTA);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -1739,10 +1739,10 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
     int storage_class = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_U32 || gt == K_U64)
             ttype = t;
         else if (gt == K_SHARED || gt == K_GLOBAL || gt == K_LOCAL)
@@ -1750,14 +1750,14 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
         else assert(false);
     }
     assert(ttype);
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst, 0);
-    TREE * src = GetChild(osrc,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild( 0);
+    TREE * src = osrc->GetChild(0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES * d;
@@ -1768,28 +1768,28 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
     d = (TYPES*)sdst->pvalue;
 
     // different semantics depending on if register, global, etc.
-    if (GetType(src) == T_WORD)
+    if (src->GetType() == T_WORD)
     {
-        ssrc = FindSymbol(src->GetText());
+        ssrc = this->root->FindSymbol(src->GetText());
         // Various types of id's to handle:
         assert(ssrc != 0);
-		switch (ssrc->storage_class)
-		{
-			case K_GLOBAL:
-			case K_LOCAL:
-			case K_PARAM:
-			case K_SHARED:
-			case K_CONST:
-				// names in instructions refer to the address of the
-				// variable, not the contents.
-				s = (TYPES*)&ssrc->pvalue;
-				break;
-			case K_REG:
-				// names in instructions refer to the contents of the
-				// register.
-				s = (TYPES*)ssrc->pvalue;
-				break;
-		}
+        switch (ssrc->storage_class)
+        {
+            case K_GLOBAL:
+            case K_LOCAL:
+            case K_PARAM:
+            case K_SHARED:
+            case K_CONST:
+                // names in instructions refer to the address of the
+                // variable, not the contents.
+                s = (TYPES*)&ssrc->pvalue;
+                break;
+            case K_REG:
+                // names in instructions refer to the contents of the
+                // register.
+                s = (TYPES*)ssrc->pvalue;
+                break;
+        }
     }
 
     switch (type)
@@ -1806,25 +1806,25 @@ int CUDA_EMULATOR::DoCvta(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoDiv(TREE * inst)
+int CUDA_EMULATOR::Thread::DoDiv(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_DIV);
+    assert(inst->GetChild(start)->GetType() == KI_DIV);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -1847,10 +1847,10 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_FTZ)
             ftz = true;
         else if (gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -1866,11 +1866,11 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     }
     assert(ttype != 0);
     assert(ftz == 0);  // unimplemented.
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     TYPES * pdst_value;
     TYPES * psrc1_value;
@@ -1881,8 +1881,8 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -1891,9 +1891,9 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -1923,16 +1923,16 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -1962,9 +1962,9 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -2001,22 +2001,22 @@ int CUDA_EMULATOR::DoDiv(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoEx2(TREE * inst)
+int CUDA_EMULATOR::Thread::DoEx2(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_EX2);
+    assert(inst->GetChild(start)->GetType() == KI_EX2);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -2037,10 +2037,10 @@ int CUDA_EMULATOR::DoEx2(TREE * inst)
     int rnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_F32 || gt == K_F64)
             ttype = t;
         else if (gt == K_FTZ)
@@ -2052,16 +2052,16 @@ int CUDA_EMULATOR::DoEx2(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "EX2.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "EX2.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -2069,9 +2069,9 @@ int CUDA_EMULATOR::DoEx2(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2083,11 +2083,11 @@ int CUDA_EMULATOR::DoEx2(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -2116,23 +2116,21 @@ int CUDA_EMULATOR::DoEx2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoExit(TREE * inst)
+int CUDA_EMULATOR::Thread::DoExit(TREE * inst)
 {
-    if (this->trace_level > 1)
-        std::cout << "EXIT\n";
     return -KI_EXIT;
 }
 
-int CUDA_EMULATOR::DoFma(TREE * inst)
+int CUDA_EMULATOR::Thread::DoFma(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_FMA);
+    assert(inst->GetChild(start)->GetType() == KI_FMA);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
@@ -2140,10 +2138,10 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     TREE * osrc3 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -2171,10 +2169,10 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SAT)
             sat = true;
         else if (gt == K_FTZ)
@@ -2188,19 +2186,19 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     assert(ttype != 0);
     assert(sat == 0); // unimplemented
     assert(ftz == 0);  // unimplemented.
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
-    TREE * src3 = GetChild(osrc3,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+    TREE * src3 = osrc3->GetChild(0);
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     Symbol * ssrc3 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -2211,9 +2209,9 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     TYPES * s2 = &value2;
     TYPES * s3 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2225,16 +2223,16 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2246,16 +2244,16 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
 
-    if (GetType(src3) == TREE_CONSTANT_EXPR)
+    if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src3, 0));
+        Constant c = this->emulator->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2267,9 +2265,9 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src3) == T_WORD)
+    } else if (src3->GetType() == T_WORD)
     {
-        ssrc3 = FindSymbol(src3->GetText());
+        ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES*)ssrc3->pvalue;
     } else assert(false);
@@ -2288,27 +2286,27 @@ int CUDA_EMULATOR::DoFma(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoIsspacep(TREE * inst)
+int CUDA_EMULATOR::Thread::DoIsspacep(TREE * inst)
 {
     throw new Unimplemented("ISSPACEP unimplemented");
 }
 
-int CUDA_EMULATOR::DoLd(TREE * inst)
+int CUDA_EMULATOR::Thread::DoLd(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_LD);
+    assert(inst->GetChild(start)->GetType() == KI_LD);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -2330,10 +2328,10 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
     int vec = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_CONST || gt == K_GLOBAL || gt == K_LOCAL || gt == K_PARAM || gt == K_SHARED)
             ss = gt;
         else if (gt == K_U8 || gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -2349,25 +2347,25 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
     }
     assert(ttype != 0);
     assert(cop == 0);
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
     // Get two operands, assign source to destination.
-    TREE * src = GetChild(osrc, 0);
+    TREE * src = osrc->GetChild( 0);
     Symbol * ssrc = 0;
     
     assert(src->GetType() == T_WORD);
-    ssrc = FindSymbol(src->GetText());
+    ssrc = this->root->FindSymbol(src->GetText());
     assert(ssrc != 0);
-    TREE * plus = GetChild(osrc, 1);
+    TREE * plus = osrc->GetChild( 1);
     Constant value(0);
     if (plus != 0)
     {
-        TREE * const_expr_tree = GetChild(osrc, 2);
+        TREE * const_expr_tree = osrc->GetChild( 2);
         assert(const_expr_tree != 0);
-        assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        TREE * const_expr = GetChild(const_expr_tree, 0);
+        assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
+        TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = Eval(K_S32, const_expr);
+        value = this->emulator->Eval(K_S32, const_expr);
     }
 
     int times = 1;
@@ -2448,10 +2446,10 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
 
     for (int i = 0; i < times; ++i)
     {
-        TREE * dst = GetChild(odst, i);
+        TREE * dst = odst->GetChild( i);
         Symbol * sdst = 0;
         assert(dst->GetType() == T_WORD);
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
         assert(sdst != 0);
         TYPES * d = (TYPES*)sdst->pvalue;
 
@@ -2861,27 +2859,27 @@ int CUDA_EMULATOR::DoLd(TREE * inst)
                     assert(false);
             }
 
-        addr = addr + Sizeof(type);
+        addr = addr + this->emulator->Sizeof(type);
     }
     return 0;
 }
 
-int CUDA_EMULATOR::DoLdu(TREE * inst)
+int CUDA_EMULATOR::Thread::DoLdu(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_LDU);
+    assert(inst->GetChild(start)->GetType() == KI_LDU);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -2903,10 +2901,10 @@ int CUDA_EMULATOR::DoLdu(TREE * inst)
     int vec = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_CONST || gt == K_GLOBAL || gt == K_LOCAL || gt == K_PARAM || gt == K_SHARED)
             ss = gt;
         else if (gt == K_U8 || gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -2923,28 +2921,28 @@ int CUDA_EMULATOR::DoLdu(TREE * inst)
     assert(ttype != 0);
     assert(vec == 0);
     assert(cop == 0);
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
     // Get two operands, assign source to destination.
-    TREE * dst = GetChild(odst, 0);
-    TREE * src = GetChild(osrc, 0);
+    TREE * dst = odst->GetChild( 0);
+    TREE * src = osrc->GetChild( 0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    sdst = this->root->FindSymbol(dst->GetText());
     
     assert(src->GetType() == T_WORD);
-    ssrc = FindSymbol(src->GetText());
-    TREE * plus = GetChild(osrc, 1);
+    ssrc = this->root->FindSymbol(src->GetText());
+    TREE * plus = osrc->GetChild( 1);
     Constant value(0);
     if (plus != 0)
     {
-        TREE * const_expr_tree = GetChild(osrc, 2);
+        TREE * const_expr_tree = osrc->GetChild( 2);
         assert(const_expr_tree != 0);
-        assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        TREE * const_expr = GetChild(const_expr_tree, 0);
+        assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
+        TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = Eval(K_S32, const_expr);
+        value = this->emulator->Eval(K_S32, const_expr);
     }
 
     TYPES * d = (TYPES*)sdst->pvalue;
@@ -3026,22 +3024,22 @@ int CUDA_EMULATOR::DoLdu(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoLg2(TREE * inst)
+int CUDA_EMULATOR::Thread::DoLg2(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_LG2);
+    assert(inst->GetChild(start)->GetType() == KI_LG2);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -3062,10 +3060,10 @@ int CUDA_EMULATOR::DoLg2(TREE * inst)
     int rnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_F32 || gt == K_F64)
             ttype = t;
         else if (gt == K_FTZ)
@@ -3077,16 +3075,16 @@ int CUDA_EMULATOR::DoLg2(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "LG2.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "LG2.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -3094,9 +3092,9 @@ int CUDA_EMULATOR::DoLg2(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -3108,11 +3106,11 @@ int CUDA_EMULATOR::DoLg2(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -3141,16 +3139,16 @@ int CUDA_EMULATOR::DoLg2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMad(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMad(TREE * inst)
 {
     // Multiply+add register and/or constants, and store in a register.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
     start++;
-    assert(GetType(GetChild(inst, start)) == KI_MAD);
+    assert(inst->GetChild(start)->GetType() == KI_MAD);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
@@ -3158,10 +3156,10 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     TREE * osrc3 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -3190,10 +3188,10 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SAT)
             sat = true;
         else if (gt == K_FTZ)
@@ -3212,22 +3210,22 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     assert(ttype != 0);
     assert(sat == 0); // unimplemented
     assert(ftz == 0);  // unimplemented.
-    int type = GetType(ttype);
+    int type = ttype->GetType();
     int width = 0;
     if (twidth != 0)
-        width = GetType(twidth);
+        width = twidth->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
-    TREE * src3 = GetChild(osrc3,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+    TREE * src3 = osrc3->GetChild(0);
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
     Symbol * ssrc3 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -3238,9 +3236,9 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     TYPES * s2 = &value2;
     TYPES * s3 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -3264,16 +3262,16 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3297,16 +3295,16 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
 
-    if (GetType(src3) == TREE_CONSTANT_EXPR)
+    if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src3, 0));
+        Constant c = this->emulator->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3330,9 +3328,9 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src3) == T_WORD)
+    } else if (src3->GetType() == T_WORD)
     {
-        ssrc3 = FindSymbol(src3->GetText());
+        ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES*)ssrc3->pvalue;
     } else assert(false);
@@ -3387,43 +3385,43 @@ int CUDA_EMULATOR::DoMad(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMad24(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMad24(TREE * inst)
 {
     throw new Unimplemented("MAD24 unimplemented");
 }
 
-int CUDA_EMULATOR::DoMax(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMax(TREE * inst)
 {
     throw new Unimplemented("MAX unimplemented");
 }
 
-int CUDA_EMULATOR::DoMembar(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMembar(TREE * inst)
 {
     throw new Unimplemented("MEMBAR unimplemented");
 }
 
-int CUDA_EMULATOR::DoMin(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMin(TREE * inst)
 {
     throw new Unimplemented("MIN unimplemented");
 }
 
-int CUDA_EMULATOR::DoMov(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMov(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_MOV);
+    assert(inst->GetChild(start)->GetType() == KI_MOV);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -3442,10 +3440,10 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
     assert(osrc != 0);
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED
               || gt == K_U16 || gt == K_U32 || gt == K_U64
               || gt == K_S16 || gt == K_S32 || gt == K_S64
@@ -3454,14 +3452,14 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
         else assert(false);
     }
     assert(ttype);
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst, 0);
-    TREE * src = GetChild(osrc,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild( 0);
+    TREE * src = osrc->GetChild(0);
     Symbol * sdst = 0;
     Symbol * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES * d;
@@ -3472,9 +3470,9 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
     d = (TYPES*)sdst->pvalue;
     s = &value;
 
-    if (GetType(src) == TREE_CONSTANT_EXPR)
+    if (src->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src, 0));
+        Constant c = this->emulator->Eval(type, src->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3504,9 +3502,9 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src) == T_WORD)
+    } else if (src->GetType() == T_WORD)
     {
-        ssrc = FindSymbol(src->GetText());
+        ssrc = this->root->FindSymbol(src->GetText());
         assert(ssrc != 0);
         // Various types of id's to handle:
         switch (ssrc->storage_class)
@@ -3531,7 +3529,7 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
             // Get qualifier of the structure.
             TREE * tqual = (TREE *)osrc->GetChild(1);
             assert(tqual != 0);
-            int qual = GetType(tqual);
+            int qual = tqual->GetType();
             if (qual == K_X)
             {
                 s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
@@ -3578,26 +3576,26 @@ int CUDA_EMULATOR::DoMov(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMul(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMul(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_MUL);
+    assert(inst->GetChild(start)->GetType() == KI_MUL);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -3621,10 +3619,10 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
     TREE * twidth = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SAT)
             sat = true;
         else if (gt == K_FTZ)
@@ -3641,20 +3639,20 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
     assert(ttype != 0);
     assert(sat == 0); // unimplemented
     assert(ftz == 0);  // unimplemented.
-    int type = GetType(ttype);
+    int type = ttype->GetType();
     int width = 0;
     if (twidth != 0)
-        width = GetType(twidth);
+        width = twidth->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -3663,9 +3661,9 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -3683,16 +3681,16 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3710,9 +3708,9 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -3781,27 +3779,27 @@ int CUDA_EMULATOR::DoMul(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoMul24(TREE * inst)
+int CUDA_EMULATOR::Thread::DoMul24(TREE * inst)
 {
     // Multiply 24-bit integer numbers, in register and/or constants,
     // and store in a register.
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_MUL24);
+    assert(inst->GetChild(start)->GetType() == KI_MUL24);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -3823,10 +3821,10 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
     TREE * twidth = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_U32 || gt == K_S32)
             ttype = t;
         else if (gt== K_LO || gt == K_HI)
@@ -3834,20 +3832,20 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    int type = GetType(ttype);
+    int type = ttype->GetType();
     int width = 0;
     if (twidth != 0)
-        width = GetType(twidth);
+        width = twidth->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -3856,9 +3854,9 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U32:
@@ -3870,16 +3868,16 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -3891,9 +3889,9 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -3920,22 +3918,22 @@ int CUDA_EMULATOR::DoMul24(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoNeg(TREE * inst)
+int CUDA_EMULATOR::Thread::DoNeg(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_NEG);
+    assert(inst->GetChild(start)->GetType() == KI_NEG);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -3955,10 +3953,10 @@ int CUDA_EMULATOR::DoNeg(TREE * inst)
     bool ftz = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_S16 || gt == K_S32 || gt == K_S64)
             ttype = t;
         else if (gt == K_F32 || gt == K_F64)
@@ -3968,16 +3966,16 @@ int CUDA_EMULATOR::DoNeg(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "NEG.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "NEG.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -3985,9 +3983,9 @@ int CUDA_EMULATOR::DoNeg(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -4008,11 +4006,11 @@ int CUDA_EMULATOR::DoNeg(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -4059,22 +4057,22 @@ int CUDA_EMULATOR::DoNeg(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoNot(TREE * inst)
+int CUDA_EMULATOR::Thread::DoNot(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_NOT);
+    assert(inst->GetChild(start)->GetType() == KI_NOT);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -4094,22 +4092,22 @@ int CUDA_EMULATOR::DoNot(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -4117,9 +4115,9 @@ int CUDA_EMULATOR::DoNot(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4137,11 +4135,11 @@ int CUDA_EMULATOR::DoNot(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -4182,12 +4180,12 @@ int CUDA_EMULATOR::DoNot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoOr(TREE * inst)
+int CUDA_EMULATOR::Thread::DoOr(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_OR);
+    assert(inst->GetChild(start)->GetType() == KI_OR);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -4195,10 +4193,10 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -4222,23 +4220,23 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -4248,9 +4246,9 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4268,11 +4266,11 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -4293,9 +4291,9 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -4313,11 +4311,11 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -4358,47 +4356,47 @@ int CUDA_EMULATOR::DoOr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoPmevent(TREE * inst)
+int CUDA_EMULATOR::Thread::DoPmevent(TREE * inst)
 {
     throw new Unimplemented("PMEVENT unimplemented");
 }
 
-int CUDA_EMULATOR::DoPopc(TREE * inst)
+int CUDA_EMULATOR::Thread::DoPopc(TREE * inst)
 {
     throw new Unimplemented("POPC unimplemented");
 }
 
-int CUDA_EMULATOR::DoPrefetch(TREE * inst)
+int CUDA_EMULATOR::Thread::DoPrefetch(TREE * inst)
 {
     throw new Unimplemented("PREFETCH unimplemented");
 }
 
-int CUDA_EMULATOR::DoPrefetchu(TREE * inst)
+int CUDA_EMULATOR::Thread::DoPrefetchu(TREE * inst)
 {
     throw new Unimplemented("PREFETCHU unimplemented");
 }
 
-int CUDA_EMULATOR::DoPrmt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoPrmt(TREE * inst)
 {
     throw new Unimplemented("PRMT unimplemented");
 }
 
-int CUDA_EMULATOR::DoRcp(TREE * inst)
+int CUDA_EMULATOR::Thread::DoRcp(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_RCP);
+    assert(inst->GetChild(start)->GetType() == KI_RCP);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -4419,10 +4417,10 @@ int CUDA_EMULATOR::DoRcp(TREE * inst)
     int rnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_F32 || gt == K_F64)
             ttype = t;
         else if (gt == K_FTZ)
@@ -4434,16 +4432,16 @@ int CUDA_EMULATOR::DoRcp(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "RCP.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "RCP.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -4451,9 +4449,9 @@ int CUDA_EMULATOR::DoRcp(TREE * inst)
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -4465,11 +4463,11 @@ int CUDA_EMULATOR::DoRcp(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -4498,30 +4496,30 @@ int CUDA_EMULATOR::DoRcp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoRed(TREE * inst)
+int CUDA_EMULATOR::Thread::DoRed(TREE * inst)
 {
     throw new Unimplemented("RED unimplemented");
 }
 
-int CUDA_EMULATOR::DoRem(TREE * inst)
+int CUDA_EMULATOR::Thread::DoRem(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_REM);
+    assert(inst->GetChild(start)->GetType() == KI_REM);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -4543,19 +4541,19 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_U16 || gt == K_U32 || gt == K_U64
                  || gt == K_S16 || gt == K_S32 || gt == K_S64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     TYPES * pdst_value;
     TYPES * psrc1_value;
@@ -4566,8 +4564,8 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
@@ -4576,9 +4574,9 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -4602,16 +4600,16 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -4635,9 +4633,9 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
     } else assert(false);
@@ -4668,27 +4666,27 @@ int CUDA_EMULATOR::DoRem(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoRet(TREE * inst)
+int CUDA_EMULATOR::Thread::DoRet(TREE * inst)
 {
     throw new Unimplemented("RET unimplemented");
 }
 
-int CUDA_EMULATOR::DoRsqrt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoRsqrt(TREE * inst)
 {
     throw new Unimplemented("RSQRT unimplemented");
 }
 
-int CUDA_EMULATOR::DoSad(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSad(TREE * inst)
 {
     throw new Unimplemented("SAD unimplemented");
 }
 
-int CUDA_EMULATOR::DoSelp(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSelp(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SELP);
+    assert(inst->GetChild(start)->GetType() == KI_SELP);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -4697,10 +4695,10 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
     TREE * osrc3 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -4728,10 +4726,10 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
     bool ftz = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_U16 || gt == K_U32 || gt == K_U64
                  || gt == K_S16 || gt == K_S32 || gt == K_S64
                  || gt == K_B16 || gt == K_B32 || gt == K_B64
@@ -4740,18 +4738,18 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    unimplemented(ftz, "SELP.ftz not implemented.");
+    this->emulator->unimplemented(ftz, "SELP.ftz not implemented.");
 
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
-    TREE * src3 = GetChild(osrc3,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+    TREE * src3 = osrc3->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES * d = (TYPES*)sdst->pvalue;
@@ -4762,9 +4760,9 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
     TYPES * s3 = 0;
     char * dummy;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -4803,11 +4801,11 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -4849,9 +4847,9 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -4890,11 +4888,11 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -4936,9 +4934,9 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src3) == T_WORD)
+    if (src3->GetType() == T_WORD)
     {
-        Symbol * ssrc3 = FindSymbol(src3->GetText());
+        Symbol * ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
 // FIX      assert(strcmp(ssrc3->type, ".pred") == 0);
         s3 = (TYPES*)ssrc3->pvalue;
@@ -4986,17 +4984,17 @@ int CUDA_EMULATOR::DoSelp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSet(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSet(TREE * inst)
 {
     throw new Unimplemented("SET unimplemented");
 }
 
-int CUDA_EMULATOR::DoSetp(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSetp(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SETP);
+    assert(inst->GetChild(start)->GetType() == KI_SETP);
     start++;
     TREE * ttype = 0;
     TREE * odst1 = 0;
@@ -5006,10 +5004,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
     TREE * osrc3 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -5040,15 +5038,15 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
 
     // split destination, eg, if "p|q" syntax was used, is not
     // supported yet.
-    assert(GetChild(odst1, 1) == 0);
+    assert(odst1->GetChild(1) == 0);
     bool ftz = false;
     int op = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_FTZ)
             ftz = true;
         else if (gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -5068,10 +5066,10 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
     assert(op != 0);
     assert(ftz == false);
 
-    int type = GetType(ttype);
-    TREE * dst1 = GetChild(odst1,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    int type = ttype->GetType();
+    TREE * dst1 = odst1->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst1 = 0;
     Symbol * ssrc1 = 0;
@@ -5083,21 +5081,21 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
 
     if (dst1->GetType() == T_WORD)
     {
-        sdst1 = FindSymbol(dst1->GetText());
+        sdst1 = this->root->FindSymbol(dst1->GetText());
     } else assert(false);
 
     TYPES * d = (TYPES*)sdst1->pvalue;
 
     if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
         assert(s1 != 0);
     }
-    else if (GetType(src1) == TREE_CONSTANT_EXPR)
+    else if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5141,14 +5139,14 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
 
     if (src2->GetType() == T_WORD)
     {
-        ssrc2 = FindSymbol(src2->GetText());
+        ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES*)ssrc2->pvalue;
         assert(s2 != 0);
     }
-    else if (GetType(src2) == TREE_CONSTANT_EXPR)
+    else if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5467,12 +5465,12 @@ int CUDA_EMULATOR::DoSetp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoShl(TREE * inst)
+int CUDA_EMULATOR::Thread::DoShl(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SHL);
+    assert(inst->GetChild(start)->GetType() == KI_SHL);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -5480,10 +5478,10 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -5507,23 +5505,23 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -5533,9 +5531,9 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5550,11 +5548,11 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -5572,9 +5570,9 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5589,11 +5587,11 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -5628,12 +5626,12 @@ int CUDA_EMULATOR::DoShl(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoShr(TREE * inst)
+int CUDA_EMULATOR::Thread::DoShr(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SHR);
+    assert(inst->GetChild(start)->GetType() == KI_SHR);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -5641,10 +5639,10 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -5668,10 +5666,10 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_B16 || gt == K_B32 || gt == K_B64
               || gt == K_U16 || gt == K_U32 || gt == K_U64
               || gt == K_S16 || gt == K_S32 || gt == K_S64)
@@ -5679,14 +5677,14 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -5696,9 +5694,9 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5731,11 +5729,11 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -5771,9 +5769,9 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5806,11 +5804,11 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -5881,34 +5879,34 @@ int CUDA_EMULATOR::DoShr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSin(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSin(TREE * inst)
 {
     throw new Unimplemented("SIN unimplemented");
 }
 
-int CUDA_EMULATOR::DoSlct(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSlct(TREE * inst)
 {
     throw new Unimplemented("SLCT unimplemented");
 }
 
-int CUDA_EMULATOR::DoSqrt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSqrt(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SQRT);
+    assert(inst->GetChild(start)->GetType() == KI_SQRT);
     start++;
-    assert(GetType(GetChild(inst, start)) == TREE_TYPE);
-    TREE * ttype = GetChild(inst, start);
+    assert(inst->GetChild(start)->GetType() == TREE_TYPE);
+    TREE * ttype = inst->GetChild(start);
     start++;
     TREE * odst = 0;
     TREE * osrc1 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_OPR)
         {
             if (odst == 0)
@@ -5927,10 +5925,10 @@ int CUDA_EMULATOR::DoSqrt(TREE * inst)
     TREE * tfrnd = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_FTZ)
             ftz = true;
         else if (gt == K_F32 || gt == K_F64)
@@ -5943,10 +5941,10 @@ int CUDA_EMULATOR::DoSqrt(TREE * inst)
     }
     assert(ttype != 0);
     assert(ftz == 0);  // unimplemented.
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
 
     TYPES * pdst_value;
     TYPES * psrc1_value;
@@ -5954,17 +5952,17 @@ int CUDA_EMULATOR::DoSqrt(TREE * inst)
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
-    assert(GetType(dst) == T_WORD);
-    sdst = FindSymbol(dst->GetText());
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES value1; // used if literal
     TYPES * d = (TYPES*)sdst->pvalue;
     TYPES * s1 = &value1;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -5976,9 +5974,9 @@ int CUDA_EMULATOR::DoSqrt(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = FindSymbol(src1->GetText());
+        ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES*)ssrc1->pvalue;
     } else assert(false);
@@ -5997,22 +5995,22 @@ int CUDA_EMULATOR::DoSqrt(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSt(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSt(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_ST);
+    assert(inst->GetChild(start)->GetType() == KI_ST);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
     TREE * osrc = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -6035,10 +6033,10 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
     int vec = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_CONST || gt == K_GLOBAL || gt == K_LOCAL || gt == K_PARAM || gt == K_SHARED)
             ss = gt;
         else if (gt == K_U8 || gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -6054,22 +6052,22 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
     }
     assert(ttype != 0);
     assert(cop == 0);
-    int type = GetType(ttype);
+    int type = ttype->GetType();
 
-    TREE * dst = GetChild(odst, 0);
+    TREE * dst = odst->GetChild( 0);
     assert(dst->GetType() == T_WORD);
-    Symbol * sdst = FindSymbol(dst->GetText());
+    Symbol * sdst = this->root->FindSymbol(dst->GetText());
     assert(sdst != 0);
-    TREE * plus = GetChild(odst, 1);
+    TREE * plus = odst->GetChild( 1);
     Constant value(0);
     if (plus != 0)
     {
-        TREE * const_expr_tree = GetChild(odst, 2);
+        TREE * const_expr_tree = odst->GetChild( 2);
         assert(const_expr_tree != 0);
-        assert(GetType(const_expr_tree) == TREE_CONSTANT_EXPR);
-        TREE * const_expr = GetChild(const_expr_tree, 0);
+        assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
+        TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = Eval(K_S32, const_expr);
+        value = this->emulator->Eval(K_S32, const_expr);
     }
 
     TYPES * d = 0;
@@ -6152,18 +6150,18 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
     {
         TYPES * d = (TYPES*)addr;
         
-        TREE * src = GetChild(osrc, i);
+        TREE * src = osrc->GetChild( i);
         TYPES * s = 0;
         Symbol * ssrc = 0;
-        if (GetType(src) == TREE_CONSTANT_EXPR)
+        if (src->GetType() == TREE_CONSTANT_EXPR)
         {
             // cannot do both store from constant and to vector.
             assert(i == 0);
-            Constant c = Eval(type, GetChild(src, 0));
+            Constant c = this->emulator->Eval(type, src->GetChild(0));
             s = &c.value;
-        } else if (GetType(src) == T_WORD)
+        } else if (src->GetType() == T_WORD)
         {
-            ssrc = FindSymbol(src->GetText());
+            ssrc = this->root->FindSymbol(src->GetText());
             assert(ssrc != 0);
             // Various types of id's to handle:
             switch (ssrc->storage_class)
@@ -6188,7 +6186,7 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
             // Get qualifier of the structure.
                 TREE * tqual = (TREE *)osrc->GetChild(1);
                 assert(tqual != 0);
-                int qual = GetType(tqual);
+                int qual = tqual->GetType();
                 if (qual == K_X)
                 {
                     s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
@@ -6251,18 +6249,18 @@ int CUDA_EMULATOR::DoSt(TREE * inst)
                 assert(false);
         }
 
-        addr = addr + Sizeof(type);
+        addr = addr + this->emulator->Sizeof(type);
     }
 
     return 0;
 }
 
-int CUDA_EMULATOR::DoSub(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSub(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_SUB);
+    assert(inst->GetChild(start)->GetType() == KI_SUB);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -6270,10 +6268,10 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -6300,10 +6298,10 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     bool ftz = false;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_SAT)
             sat = true;
         else if (gt == K_U16 || gt == K_U32 || gt == K_U64
@@ -6320,15 +6318,15 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    int type = GetType(ttype);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -6341,9 +6339,9 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     // used for carry out calculation.
     TYPES * temp = &value3;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -6373,11 +6371,11 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -6410,9 +6408,9 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -6442,11 +6440,11 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {
@@ -6576,107 +6574,107 @@ int CUDA_EMULATOR::DoSub(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::DoSubc(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSubc(TREE * inst)
 {
     throw new Unimplemented("SUBC unimplemented");
 }
 
-int CUDA_EMULATOR::DoSuld(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSuld(TREE * inst)
 {
     throw new Unimplemented("SULD unimplemented");
 }
 
-int CUDA_EMULATOR::DoSuq(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSuq(TREE * inst)
 {
     throw new Unimplemented("SUQ unimplemented");
 }
 
-int CUDA_EMULATOR::DoSured(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSured(TREE * inst)
 {
     throw new Unimplemented("SURED unimplemented");
 }
 
-int CUDA_EMULATOR::DoSust(TREE * inst)
+int CUDA_EMULATOR::Thread::DoSust(TREE * inst)
 {
     throw new Unimplemented("SUST unimplemented");
 }
 
-int CUDA_EMULATOR::DoTestp(TREE * inst)
+int CUDA_EMULATOR::Thread::DoTestp(TREE * inst)
 {
     throw new Unimplemented("TESTP unimplemented");
 }
 
-int CUDA_EMULATOR::DoTex(TREE * inst)
+int CUDA_EMULATOR::Thread::DoTex(TREE * inst)
 {
     throw new Unimplemented("TEX unimplemented");
 }
 
-int CUDA_EMULATOR::DoTrap(TREE * inst)
+int CUDA_EMULATOR::Thread::DoTrap(TREE * inst)
 {
     throw new Unimplemented("TRAP unimplemented");
 }
 
-int CUDA_EMULATOR::DoTxq(TREE * inst)
+int CUDA_EMULATOR::Thread::DoTxq(TREE * inst)
 {
     throw new Unimplemented("TXQ unimplemented");
 }
 
-int CUDA_EMULATOR::DoVabsdiff(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVabsdiff(TREE * inst)
 {
     throw new Unimplemented("VABSDIFF unimplemented");
 }
 
-int CUDA_EMULATOR::DoVadd(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVadd(TREE * inst)
 {
     throw new Unimplemented("Vadd unimplemented");
 }
 
-int CUDA_EMULATOR::DoVmad(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVmad(TREE * inst)
 {
     throw new Unimplemented("VMAD unimplemented");
 }
 
-int CUDA_EMULATOR::DoVmax(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVmax(TREE * inst)
 {
     throw new Unimplemented("VMAX unimplemented");
 }
 
-int CUDA_EMULATOR::DoVmin(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVmin(TREE * inst)
 {
     throw new Unimplemented("VMIN unimplemented");
 }
 
-int CUDA_EMULATOR::DoVote(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVote(TREE * inst)
 {
     throw new Unimplemented("VOTE unimplemented");
 }
 
-int CUDA_EMULATOR::DoVset(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVset(TREE * inst)
 {
     throw new Unimplemented("VSET unimplemented");
 }
 
-int CUDA_EMULATOR::DoVshl(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVshl(TREE * inst)
 {
     throw new Unimplemented("VSHL unimplemented");
 }
 
-int CUDA_EMULATOR::DoVshr(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVshr(TREE * inst)
 {
     throw new Unimplemented("VSHR unimplemented");
 }
 
-int CUDA_EMULATOR::DoVsub(TREE * inst)
+int CUDA_EMULATOR::Thread::DoVsub(TREE * inst)
 {
     throw new Unimplemented("VSUB unimplemented");
 }
 
-int CUDA_EMULATOR::DoXor(TREE * inst)
+int CUDA_EMULATOR::Thread::DoXor(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(GetType(GetChild(inst, start)) == KI_XOR);
+    assert(inst->GetChild(start)->GetType() == KI_XOR);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -6684,10 +6682,10 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
     TREE * osrc2 = 0;
     for (;; ++start)
     {
-        TREE * t = GetChild(inst, start);
+        TREE * t = inst->GetChild(start);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == TREE_TYPE)
             ttype = t;
         else if (gt == TREE_OPR)
@@ -6711,23 +6709,23 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
     int type = 0;
     for (int i = 0; ; ++i)
     {
-        TREE * t = GetChild(ttype, i);
+        TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
-        int gt = GetType(t);
+        int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
         else assert(false);
     }
     assert(type != 0);
-    TREE * dst = GetChild(odst,0);
-    TREE * src1 = GetChild(osrc1,0);
-    TREE * src2 = GetChild(osrc2,0);
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
     Symbol * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = FindSymbol(dst->GetText());
+        sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES value1;
@@ -6737,9 +6735,9 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
     TYPES * s1 = &value1;
     TYPES * s2 = &value2;
 
-    if (GetType(src1) == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src1, 0));
+        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -6757,11 +6755,11 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src1) == T_WORD)
+    } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = FindSymbol(src1->GetText());
+        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == Sizeof(type));
+        assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
         switch (type)
         {
@@ -6782,9 +6780,9 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
         }
     } else assert(false);
 
-    if (GetType(src2) == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = Eval(type, GetChild(src2, 0));
+        Constant c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -6802,11 +6800,11 @@ int CUDA_EMULATOR::DoXor(TREE * inst)
             default:
                 assert(false);
         }
-    } else if (GetType(src2) == T_WORD)
+    } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = FindSymbol(src2->GetText());
+        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == Sizeof(type));
+        assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
         switch (type)
         {

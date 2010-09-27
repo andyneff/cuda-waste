@@ -17,12 +17,10 @@ CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
 
 CUDA_EMULATOR::CUDA_EMULATOR()
 {
-    this->root = 0;
     this->device = "compute_20";
     this->string_table = new StringTable();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
-    this->carry = 0;
 }
 
 void CUDA_EMULATOR::SetTrace(int level)
@@ -88,10 +86,10 @@ void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
     }
 } 
 
-void CUDA_EMULATOR::SetupParams(TREE * e)
+void CUDA_EMULATOR::SetupParams(SymbolTable * symbol_table, TREE * e)
 {
     // Create a new symbol table block for the parameters.
-    SymbolTable * symbol_table = this->root;
+    //SymbolTable * symbol_table = this->root;
     // For each parameter, create a symbol table entry, bind the arguments.
     // To do this, walk down both the AST and the setup argument list, and
     // associate each entry with the other in a symbol table entry.
@@ -172,39 +170,28 @@ int CUDA_EMULATOR::GetSize(TREE * tree_par_register)
     return (int)atoi(c->GetText());
 }
 
-CUDA_EMULATOR::SymbolTable * CUDA_EMULATOR::PushSymbolTable()
+CUDA_EMULATOR::SymbolTable * CUDA_EMULATOR::PushSymbolTable(SymbolTable * parent)
 {
     SymbolTable * symbol_table = new SymbolTable();
-    symbol_table->parent_block_symbol_table = this->root;
-    this->root = symbol_table;
+    symbol_table->parent_block_symbol_table = parent;
     return symbol_table;
 }
 
-void CUDA_EMULATOR::PopSymbolTable()
+void CUDA_EMULATOR::SetupVariables(SymbolTable * symbol_table, TREE * code, int * desired_storage_classes)
 {
-    SymbolTable * symbol_table = this->root;
-    this->root = symbol_table->parent_block_symbol_table;
-}
-
-void CUDA_EMULATOR::SetupVariables(TREE * code, int * desired_storage_classes)
-{
-    // Create a new symbol table block for the globals.
-    SymbolTable * symbol_table = this->root;
     // Go through the block and create entries in the symbol table for each variable declared.
     for (int i = 0; i < code->GetChildCount(); ++i)
     {
         TREE * var = code->GetChild(i);
         if (var->GetType() == TREE_VAR)
         {
-            SetupSingleVar(var, desired_storage_classes, false);
+            SetupSingleVar(symbol_table, var, desired_storage_classes, false);
         }
     }
 }
 
-void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bool externed)
+void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int * desired_storage_classes, bool externed)
 {
-    // Create a new symbol table block for the globals.
-    SymbolTable * symbol_table = this->root;
     // Got variable declaration.
     // Now extract info out of variable declaration.
     char * name = 0;
@@ -434,9 +421,8 @@ void CUDA_EMULATOR::SetupSingleVar(TREE * var, int * desired_storage_classes, bo
 }
 
 
-void CUDA_EMULATOR::SetupGotos(TREE * code)
+void CUDA_EMULATOR::SetupGotos(SymbolTable * symbol_table, TREE * code)
 {
-    SymbolTable * symbol_table = this->root;
     // Scan ahead and find all labels.  Enter them into the symbol
     // table.
     for (int i = 0; i < code->GetChildCount(); ++i)
@@ -465,7 +451,7 @@ void CUDA_EMULATOR::SetupGotos(TREE * code)
     }
 }
 
-void CUDA_EMULATOR::SetupExternShared(TREE * code)
+void CUDA_EMULATOR::SetupExternShared(SymbolTable * symbol_table, TREE * code)
 {
     // No need to resolve anything if no shared memory to set up.
     if (this->conf.sharedMem == 0)
@@ -473,7 +459,6 @@ void CUDA_EMULATOR::SetupExternShared(TREE * code)
     this->extern_memory_buffer = (void*)malloc(conf.sharedMem);
     for (TREE * p = code; p != 0; p = p->GetParent())
     {
-        SymbolTable * symbol_table = this->root;
         // Scan ahead and find all extern nodes.
         // Enter them into the symbol table if they are shared
         // memory.
@@ -491,7 +476,7 @@ void CUDA_EMULATOR::SetupExternShared(TREE * code)
                 }
                 TREE * var = child->GetChild(0);
                 int sc[] = { K_SHARED, 0};
-                SetupSingleVar(var, sc, true);
+                SetupSingleVar(symbol_table, var, sc, true);
             }
         }
     }
@@ -523,37 +508,32 @@ void CUDA_EMULATOR::Execute(TREE * entry)
     TREE * code = FindBlock(entry);
 
     // Create symbol table for outer blocks.
-    PushSymbolTable();
+    SymbolTable * obst = PushSymbolTable(0);
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
         int sc[] = { K_GLOBAL, 0};
-        SetupVariables(p, sc);
+        SetupVariables(obst, p, sc);
     }
 
     // Create symbol table for this block.
-    PushSymbolTable();
+    SymbolTable * block_symbol_table = PushSymbolTable(obst);
     int sc[] = { K_GLOBAL, K_CONST, K_TEX, 0};
-    SetupVariables(code, sc);
-    SetupGotos(code);
-    SetupParams(entry);
-    CreateSymbol("%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
-    CreateSymbol("%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
+    SetupVariables(block_symbol_table, code, sc);
+    SetupGotos(block_symbol_table, code);
+    SetupParams(block_symbol_table, entry);
+    CreateSymbol(block_symbol_table, "%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
+    CreateSymbol(block_symbol_table, "%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
     bool do_thread_synch = CodeRequiresThreadSynchronization(code);
     if (this->trace_level > 0)
         std::cout << "Thread synchronization " << (do_thread_synch ? "is" : "is not") << " required.\n";
-    ExecuteBlocks(do_thread_synch, code);
-}
-
-void CUDA_EMULATOR::ExecuteBlocks(bool do_thread_synch, TREE * code)
-{
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
     {
         for (int bidy = 0; bidy < conf.gridDim.y; ++bidy)
         {
             for (int bidz = 0; bidz < conf.gridDim.z; ++bidz)
             {
-                ExecuteSingleBlock(do_thread_synch, code, bidx, bidy, bidz);
+                ExecuteSingleBlock(block_symbol_table, do_thread_synch, code, bidx, bidy, bidz);
             }
         }
     }
@@ -590,7 +570,7 @@ bool CUDA_EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
     return false;
 }
 
-void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
+void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
     //_CrtMemState state_begin;
     //_CrtMemCheckpoint(&state_begin);
@@ -599,7 +579,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
 
     // Keep track of symbol table root to restore later.  This is because of the awful
     // use of root on a per-thread basis.
-    SymbolTable * save = this->root;
+    SymbolTable * save = symbol_table;
 
     // Two ways to do this.  If there is no thread synchronization,
     // then threads can run serially, one after another.  In this case,
@@ -609,25 +589,25 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
     // then create the local symbols for each thread.
     // This test is just for performance enhancement.
     // Create a new symbol table and add the block index variables.
-    SymbolTable * block_symbol_table = PushSymbolTable();
+    SymbolTable * block_symbol_table = PushSymbolTable(symbol_table);
     dim3 bid(bidx, bidy, bidz);
-    CreateSymbol("%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
+    CreateSymbol(symbol_table, "%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
 
     if (do_thread_synch)
     {
         // Add to this symbol table any explicit shared memory
         // variables.
         int sc[] = { K_SHARED, 0 };
-        SetupVariables(code, sc);
+        SetupVariables(symbol_table, code, sc);
     } else
     {
         int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
-        SetupVariables(code, sc);
+        SetupVariables(symbol_table, code, sc);
     }
 
     // Add to this symbol table any extern declared shared memory
     // variables.
-    SetupExternShared(code);
+    SetupExternShared(symbol_table, code);
 
     for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
     {
@@ -635,21 +615,19 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
         {
             for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
             {
-                PushSymbolTable();
+                SymbolTable * root = PushSymbolTable(symbol_table);
                 dim3 tid(tidx, tidy, tidz);
-                CreateSymbol("%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
+                CreateSymbol(root, "%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
                 if (do_thread_synch)
                 {
                     int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
-                    SetupVariables(code, sc);
+                    SetupVariables(root, code, sc);
                 }
-                Thread * thread = new Thread(this, code, 0, this->root);
+                Thread * thread = new Thread(this, code, 0, root);
                 queue.push(thread);
-                PopSymbolTable();
             }
         }
     }
-    PopSymbolTable();
 
     int num_waiting_threads = 0;
     while (! queue.empty())
@@ -684,8 +662,6 @@ void CUDA_EMULATOR::ExecuteSingleBlock(bool do_thread_synch, TREE * code, int bi
             num_waiting_threads = 0;
         }
     }
-    // Restore...
-    this->root = save;
     // Delete block symbol table.
     delete block_symbol_table;
     if (this->extern_memory_buffer)
@@ -717,9 +693,7 @@ CUDA_EMULATOR::Thread::~Thread()
 bool CUDA_EMULATOR::Thread::Execute()
 {
     // set up symbol table environment.
-    this->emulator->root = this->root;
     int pc = this->pc;
-    this->emulator->carry = this->carry;
 
     // Execute.
     pc = emulator->FindFirstInst(block, pc);
@@ -732,9 +706,9 @@ bool CUDA_EMULATOR::Thread::Execute()
     {
         TREE * inst = this->emulator->GetInst(block, pc);
         if (this->emulator->trace_level > 3)
-            this->emulator->Dump("before", pc, inst);
+            this->Dump("before", pc, inst);
 
-        int next = this->emulator->Dispatch(inst);
+        int next = this->Dispatch(inst);
         if (next > 0)
             pc = next;
         else if (next == -KI_EXIT)
@@ -747,7 +721,6 @@ bool CUDA_EMULATOR::Thread::Execute()
             // Set state of this thread to wait, and pack up current program counter.
             this->wait = true;
         this->pc = pc + 1;
-        this->carry = this->emulator->carry;
             return this->finished;
         }
         else
@@ -756,7 +729,7 @@ bool CUDA_EMULATOR::Thread::Execute()
         pc = this->emulator->FindFirstInst(block, pc);
 
         if (this->emulator->trace_level > 2)
-            this->emulator->Dump("after", pc, inst);
+            this->Dump("after", pc, inst);
     }
 }
 
@@ -798,12 +771,12 @@ void CUDA_EMULATOR::Print(TREE * node, int level)
     }
 } 
 
-void CUDA_EMULATOR::Dump(char * comment, int pc, TREE * inst)
+void CUDA_EMULATOR::Thread::Dump(char * comment, int pc, TREE * inst)
 {
     std::cout << "\n";
     std::cout << comment << "\n";
     std::cout << "PC = " << pc << "\n";
-    Print(inst, 0);
+    this->emulator->Print(inst, 0);
     std::cout << "Symbol tables:\n";
     int level = 0;
     for (SymbolTable * st = this->root; st != 0; st = st->parent_block_symbol_table, level++)
@@ -869,9 +842,9 @@ void CUDA_EMULATOR::Dump(char * comment, int pc, TREE * inst)
 }
 
 
-CUDA_EMULATOR::Symbol * CUDA_EMULATOR::FindSymbol(char * name)
+CUDA_EMULATOR::Symbol * CUDA_EMULATOR::SymbolTable::FindSymbol(char * name)
 {
-    SymbolTable * st = this->root;
+    SymbolTable * st = this;
     while (st)
     {
         std::map<char*, Symbol*, ltstr>::iterator it = st->symbols.find(name);
@@ -884,10 +857,10 @@ CUDA_EMULATOR::Symbol * CUDA_EMULATOR::FindSymbol(char * name)
     return 0;
 }
 
-void CUDA_EMULATOR::CreateSymbol(char * name, char * typestring, int type, void * value, size_t size, int storage_class)
+void CUDA_EMULATOR::CreateSymbol(SymbolTable * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
 {
     // First find it.
-    Symbol * s = FindSymbol(name);
+    Symbol * s = symbol_table->FindSymbol(name);
     if (s)
     {
         assert(s->size == size);
@@ -911,7 +884,6 @@ void CUDA_EMULATOR::CreateSymbol(char * name, char * typestring, int type, void 
     std::pair<char*, Symbol*> sym;
     sym.first = s->name;
     sym.second = s;
-    SymbolTable * symbol_table = root;
     symbol_table->symbols.insert(sym);
 }
 
@@ -977,13 +949,13 @@ char * CUDA_EMULATOR::StringTableEntry(char * text)
     return this->string_table->Entry(text);
 }
 
-int CUDA_EMULATOR::Dispatch(TREE * inst)
+int CUDA_EMULATOR::Thread::Dispatch(TREE * inst)
 {
-    if (this->trace_level > 0)
+    if (this->emulator->trace_level > 0)
     {
-        PrintName(inst);
-        if (this->trace_level > 1)
-            Print(inst, 0);
+        this->emulator->PrintName(inst);
+        if (this->emulator->trace_level > 1)
+            this->emulator->Print(inst, 0);
     }
     
     TREE * i = (TREE *)inst->GetChild(0);
@@ -1001,10 +973,10 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
         TREE * tsym = 0;
         for (;; ++i)
         {
-            TREE * t = GetChild(pred, i);
+            TREE * t = pred->GetChild(i);
             if (t == 0)
                 break;
-            int gt = GetType(t);
+            int gt = t->GetType();
             if (gt == T_NOT)
                 not = true;
             else if (gt == T_WORD)
@@ -1012,7 +984,7 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
             else assert(false);
         }
         assert(tsym != 0);
-        Symbol * sym = FindSymbol(tsym->GetText());
+        Symbol * sym = this->root->FindSymbol(tsym->GetText());
         assert(sym != 0);
         TYPES * s = (TYPES*)sym->pvalue;
 
@@ -1021,7 +993,7 @@ int CUDA_EMULATOR::Dispatch(TREE * inst)
             test = ! test;
         if (! test)
         {
-            if (this->trace_level > 1)
+            if (this->emulator->trace_level > 1)
                 std::cout << "Skipping instruction because guard predicate is false\n";
             return 0; // continue.
         }

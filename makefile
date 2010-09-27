@@ -13,10 +13,25 @@ clean:
 	rm -rf Debug Release
 
 	
-tests:
+testd:
 	cd Debug; ../test/hw/Debug/hw.exe; ./waste -d compute_20 ../test/hw/Debug/hw.exe; ./waste -d compute_10 ../test/hw/Debug/hw.exe
 	cd Debug; ../test/hw/Debug/hw2.exe; ./waste -d compute_20 ../test/hw/Debug/hw2.exe; ./waste -d compute_10 ../test/hw/Debug/hw2.exe
 	cd Debug; ../test/hw/Debug/hw3.exe; ./waste -d compute_20 ../test/hw/Debug/hw3.exe; ./waste -d compute_10 ../test/hw/Debug/hw3.exe
 	cd Debug; ../test/hw/Debug/hw4.exe; ./waste -d compute_20 ../test/hw/Debug/hw4.exe; ./waste -d compute_10 ../test/hw/Debug/hw4.exe
 	cd Debug; ../test/hw/Debug/hw5.exe; ./waste -d compute_20 ../test/hw/Debug/hw5.exe; ./waste -d compute_10 ../test/hw/Debug/hw5.exe
 	cd Debug; cp ../test/hw6/VecAdd.ptx .; ../test/hw/Debug/hw6.exe; ./waste -d ompute_20 ../test/hw/Debug/hw6.exe; ./waste -d compute_10 ../test/hw/Debug/hw6.exe
+	cd Debug; cp ../test/ptx-inst/ptx-inst/inst.ptx .; ../test/ptx-inst/Debug/ptx-inst.exe; ./waste ../test/ptx-inst/Debug/ptx-inst.exe
+	cd Debug; echo "" | ../test/BlackScholes.exe; echo "" | ./waste ../test/BlackScholes.exe
+	cd Debug; echo "" | ../test/matrixMul.exe; echo "" | ./waste ../test/matrixMul.exe
+
+testr:
+	cd Release; ../test/hw/Debug/hw.exe; ./waste -d compute_20 ../test/hw/Debug/hw.exe; ./waste -d compute_10 ../test/hw/Debug/hw.exe
+	cd Release; ../test/hw/Debug/hw2.exe; ./waste -d compute_20 ../test/hw/Debug/hw2.exe; ./waste -d compute_10 ../test/hw/Debug/hw2.exe
+	cd Release; ../test/hw/Debug/hw3.exe; ./waste -d compute_20 ../test/hw/Debug/hw3.exe; ./waste -d compute_10 ../test/hw/Debug/hw3.exe
+	cd Release; ../test/hw/Debug/hw4.exe; ./waste -d compute_20 ../test/hw/Debug/hw4.exe; ./waste -d compute_10 ../test/hw/Debug/hw4.exe
+	cd Release; ../test/hw/Debug/hw5.exe; ./waste -d compute_20 ../test/hw/Debug/hw5.exe; ./waste -d compute_10 ../test/hw/Debug/hw5.exe
+	cd Release; cp ../test/hw6/VecAdd.ptx .; ../test/hw/Debug/hw6.exe; ./waste -d ompute_20 ../test/hw/Debug/hw6.exe; ./waste -d compute_10 ../test/hw/Debug/hw6.exe
+	cd Release; cp ../test/ptx-inst/ptx-inst/inst.ptx .; ../test/ptx-inst/Debug/ptx-inst.exe; ./waste ../test/ptx-inst/Debug/ptx-inst.exe
+	cd Release; echo "" | ../test/BlackScholes.exe; echo "" | ./waste ../test/BlackScholes.exe
+	cd Release; echo "" | ../test/matrixMul.exe; echo "" | ./waste ../test/matrixMul.exe
+
