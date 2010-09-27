@@ -28,8 +28,7 @@ void load_and_test(CUmodule cuModule, char * test_name)
 
 		CUdeviceptr d_R;
 		test(cuMemAlloc(&d_R, max * sizeof(bool)), "cuMemAlloc");
-
-		test(cuMemcpyHtoD(d_R, h_R, sizeof(int)), "cuMemcpyHtoD");
+		test(cuMemcpyHtoD(d_R, h_R, max * sizeof(bool)), "cuMemcpyHtoD");
 
 		CUdeviceptr d_N;
 		int h_N = 0;

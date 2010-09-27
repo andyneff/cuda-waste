@@ -179,12 +179,55 @@
 	setp.eq.u32	%p1, %u32_3, 12;
 	selp.b16	%b1, 1, 0, %p1;
 	st.global.b8	[%r1+18], %b1;
+
+	// LD instruction size different than operand size.
+	// See 8.4.1. Operand Size Exceeding Instruction-Type Size of the PTX documentation.
+	// Set whole register to non-zero value.  Store value with ld with 16 bits in lower half,
+	// and zeroed out upper half (actually signed extended, but sign is 0).
+	mov.u32		%s32_0, 0xcdcdcdcdcd;
+	ld.s16		%s32_0, [__gl2_u32+0];
+	setp.eq.u32	%p0, %s32_0, 0x0708;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r1+19], %b0;
+	mov.u32		%r2, 20;
+
+	// LD instruction size different than operand size.
+	mov.u32		%s32_0, 0xcdcdcdcdcd;
+	ld.s8		%s32_0, [__gl2_u32+0];
+	setp.eq.u32	%p0, %s32_0, 0x00000008;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r1+20], %b0;
+	mov.u32		%r2, 21;
+	
+	// LD instruction size different than operand size.
+	mov.u64		%s64_0, 0xcdcdcdcdcdcdcdcd;
+	ld.s8		%s64_0, [__gl2_u32+0];
+	setp.eq.u64	%p0, %s64_0, 0x0000000000000008;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r1+21], %b0;
+	mov.u32		%r2, 22;
+
+	// CVT instruction size different than operand size.
+	mov.u16		%s16_0, 0x8000;
+	cvt.s32.s16	%s32_0, %s16_0;
+	setp.eq.u32	%p0, %s32_0, 0xffff8000;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r1+22], %b0;
+	mov.u32		%r2, 23;
+
+	// CVT instruction size different than operand size, and different types.
+	mov.u16		%s16_0, 0x8000;
+	cvt.s32.u16	%s32_0, %s16_0;
+	setp.eq.u32	%p0, %s32_0, 0x00008000;
+	selp.b16	%b0, 1, 0, %p0;
+	st.global.b8	[%r1+22], %b0;
+	mov.u32		%r2, 23;
+
 	
 end:
 
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
-	mov.u32		%r2, 19;
 	st.global.u32	[%r1], %r2;
 
 	exit;
