@@ -82,29 +82,29 @@ CUresult EMULATOR::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigne
     a->size = numbytes;
     a->offset = offset;
     this->arguments.push_back(a);
-	return CUDA_SUCCESS;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
 {
-	*pctx = (CUcontext)malloc(sizeof(CUcontext));
-	return CUDA_SUCCESS;
+    *pctx = (CUcontext)malloc(sizeof(CUcontext));
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
-	*pctx = (CUcontext)malloc(sizeof(CUcontext));
-	return CUDA_SUCCESS;
+    *pctx = (CUcontext)malloc(sizeof(CUcontext));
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuCtxDestroy( CUcontext ctx )
 {
-	return CUDA_SUCCESS;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuCtxDetach(CUcontext ctx)
 {
-	return CUDA_SUCCESS;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuDeviceGet(CUdevice *device, int ordinal)
@@ -115,140 +115,140 @@ CUresult EMULATOR::_cuDeviceGet(CUdevice *device, int ordinal)
 
 CUresult EMULATOR::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
 {
-	switch (attrib)
-	{
-		case CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z:
-			*pi = 64;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK:
-			*pi = 49152;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TOTAL_CONSTANT_MEMORY:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_WARP_SIZE:
-			*pi = 32;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_PITCH:
-			*pi = 2147483647;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK:
-			*pi = 32768;
-			break;
-		//case CU_DEVICE_ATTRIBUTE_REGISTERS_PER_BLOCK:  same as CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK
-		//	*pi = 32768;
-		//	break;
-		case CU_DEVICE_ATTRIBUTE_CLOCK_RATE:
-			*pi = 810000;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TEXTURE_ALIGNMENT:
-			*pi = 512;
-			break;
-		case CU_DEVICE_ATTRIBUTE_GPU_OVERLAP:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT:
-			*pi = 14;
-			break;
-		case CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_INTEGRATED:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_COMPUTE_MODE:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_WIDTH:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_WIDTH:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_HEIGHT:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_WIDTH:
-			*pi = 16384;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_HEIGHT:
-			*pi = 16384;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_NUMSLICES:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_SURFACE_ALIGNMENT:
-			*pi = 512;
-			break;
-		case CU_DEVICE_ATTRIBUTE_CONCURRENT_KERNELS:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_ECC_ENABLED:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_PCI_BUS_ID:
-			*pi = 3;
-			break;
-		case CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TCC_DRIVER:
-			*pi = 0;
-			break;
-		default:
-			assert(false);
-			*pi = 0;
-			break;
-	}
-	return CUDA_SUCCESS;
+    switch (attrib)
+    {
+        case CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z:
+            *pi = 64;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK:
+            *pi = 49152;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TOTAL_CONSTANT_MEMORY:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_WARP_SIZE:
+            *pi = 32;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_PITCH:
+            *pi = 2147483647;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK:
+            *pi = 32768;
+            break;
+        //case CU_DEVICE_ATTRIBUTE_REGISTERS_PER_BLOCK:  same as CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK
+        //  *pi = 32768;
+        //  break;
+        case CU_DEVICE_ATTRIBUTE_CLOCK_RATE:
+            *pi = 810000;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TEXTURE_ALIGNMENT:
+            *pi = 512;
+            break;
+        case CU_DEVICE_ATTRIBUTE_GPU_OVERLAP:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT:
+            *pi = 14;
+            break;
+        case CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_INTEGRATED:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_COMPUTE_MODE:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_WIDTH:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_WIDTH:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_HEIGHT:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_WIDTH:
+            *pi = 16384;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_HEIGHT:
+            *pi = 16384;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_NUMSLICES:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_SURFACE_ALIGNMENT:
+            *pi = 512;
+            break;
+        case CU_DEVICE_ATTRIBUTE_CONCURRENT_KERNELS:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_ECC_ENABLED:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_PCI_BUS_ID:
+            *pi = 3;
+            break;
+        case CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TCC_DRIVER:
+            *pi = 0;
+            break;
+        default:
+            assert(false);
+            *pi = 0;
+            break;
+    }
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATOR::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 {
-	CUdevprop loc= {
-		1024,
-		{ 1024, 1024, 64},
-		{ 65535, 65535, 1},
-		49152,
-		65536,
-		32,
-		2147483647,
-		32768,
-		810000,
-		512
-	};
-	*prop = loc;
-	return CUDA_SUCCESS;
+    CUdevprop loc= {
+        1024,
+        { 1024, 1024, 64},
+        { 65535, 65535, 1},
+        49152,
+        65536,
+        32,
+        2147483647,
+        32768,
+        810000,
+        512
+    };
+    *prop = loc;
+    return CUDA_SUCCESS;
 }
 
 

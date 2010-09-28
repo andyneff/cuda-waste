@@ -28,7 +28,7 @@ public:
     SYMBOL_TABLE * parent_block_symbol_table;
     SYMBOL_TABLE();
     ~SYMBOL_TABLE();
-	void Dump();
+    void Dump();
     SYMBOL * FindSymbol(char * name);
 };
 

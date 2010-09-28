@@ -15,24 +15,24 @@ class STRING_TABLE
 {
 public:
     char * Entry(char * text)
-	{
-		char * result = 0;
-		std::map<char *, char*, ltstr>::iterator it = this->table.find(text);
-		if (it == this->table.end())
-		{
-			std::pair<char *, char*> p;
-			char * the_text = strdup(text);
-			p.first = the_text;
-			p.second = the_text;
-			this->table.insert(p);
-			result = the_text;
-		}
-		else
-		{
-			result = it->second;
-		}
-		return result;
-	}
+    {
+        char * result = 0;
+        std::map<char *, char*, ltstr>::iterator it = this->table.find(text);
+        if (it == this->table.end())
+        {
+            std::pair<char *, char*> p;
+            char * the_text = strdup(text);
+            p.first = the_text;
+            p.second = the_text;
+            this->table.insert(p);
+            result = the_text;
+        }
+        else
+        {
+            result = it->second;
+        }
+        return result;
+    }
 
 private:
     struct ltstr
@@ -43,6 +43,6 @@ private:
         }
     };
 
-	std::map<char *, char*, ltstr> table;
+    std::map<char *, char*, ltstr> table;
 };
 

@@ -83,7 +83,7 @@ private:
     ~EMULATOR();
     static EMULATOR * singleton;
 public:
-	TREE * FindBlock(TREE * node);
+    TREE * FindBlock(TREE * node);
     TREE * GetInst(TREE * block, int pc);
     void SetupParams(SYMBOL_TABLE * symbol_table, TREE * entry);
     void SetupVariables(SYMBOL_TABLE * symbol_table, TREE * block, int * desired_storage_classes);

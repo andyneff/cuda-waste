@@ -531,10 +531,10 @@ void EMULATOR::Execute(TREE * entry)
     CreateSymbol(block_symbol_table, "%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
     CreateSymbol(block_symbol_table, "%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
-	// do_thread_synch is a flag for an optimization.  If false, then the symbol tables for different threads
-	// can be shared, thus avoiding extra symbol table creation.  However, sharing the same symbol table for
-	// registers is not good for multithreading, so we set this to true for now--until I can figure out a
-	// way to get this optimization working again.
+    // do_thread_synch is a flag for an optimization.  If false, then the symbol tables for different threads
+    // can be shared, thus avoiding extra symbol table creation.  However, sharing the same symbol table for
+    // registers is not good for multithreading, so we set this to true for now--until I can figure out a
+    // way to get this optimization working again.
     bool do_thread_synch = true;
     // = CodeRequiresThreadSynchronization(code);
     if (this->trace_level > 0)

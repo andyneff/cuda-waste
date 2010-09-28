@@ -3,56 +3,56 @@
 
 TREE::TREE()
 {
-	this->parent = 0;
-	this->text = 0;
-	this->symbol = 0;
-	this->type = 0;
+    this->parent = 0;
+    this->text = 0;
+    this->symbol = 0;
+    this->type = 0;
 }
 
 int TREE::GetType()
 {
-	return type;
+    return type;
 }
 
 char * TREE::GetText()
 {
-	return text;
+    return text;
 }
 
 TREE * TREE::GetChild(int index)
 {
-	if (index >= this->children.size())
-		return 0;
-	else
-		return this->children[index];
+    if (index >= this->children.size())
+        return 0;
+    else
+        return this->children[index];
 }
 
 int TREE::GetChildCount()
 {
-	return this->children.size();
+    return this->children.size();
 }
 
 void TREE::AddChild(TREE * child)
 {
-	this->children.push_back(child);
+    this->children.push_back(child);
 }
 
 void TREE::SetText(char * text)
 {
-	this->text = text;
+    this->text = text;
 }
 
 void TREE::SetType(int type)
 {
-	this->type = type;
+    this->type = type;
 }
 
 TREE * TREE::GetParent()
 {
-	return this->parent;
+    return this->parent;
 }
 
 void TREE::SetParent(TREE * parent)
 {
-	this->parent = parent;
+    this->parent = parent;
 }
