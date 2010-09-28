@@ -4,6 +4,7 @@
 #include <iostream>
 #include <queue>
 #include "tree.h"
+#include <process.h>    /* _beginthread, _endthread */
 
 CUDA_EMULATOR * CUDA_EMULATOR::singleton;
 
@@ -524,7 +525,12 @@ void CUDA_EMULATOR::Execute(TREE * entry)
     CreateSymbol(block_symbol_table, "%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
     CreateSymbol(block_symbol_table, "%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
-    bool do_thread_synch = CodeRequiresThreadSynchronization(code);
+	// do_thread_synch is a flag for an optimization.  If false, then the symbol tables for different threads
+	// can be shared, thus avoiding extra symbol table creation.  However, sharing the same symbol table for
+	// registers is not good for multithreading, so we set this to true for now--until I can figure out a
+	// way to get this optimization working again.
+    bool do_thread_synch = true;
+    // = CodeRequiresThreadSynchronization(code);
     if (this->trace_level > 0)
         std::cout << "Thread synchronization " << (do_thread_synch ? "is" : "is not") << " required.\n";
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
@@ -575,7 +581,8 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
     //_CrtMemState state_begin;
     //_CrtMemCheckpoint(&state_begin);
     
-    std::queue<Thread*> queue;
+    std::queue<THREAD *> wait_queue;
+    std::queue<THREAD *> active_queue;
 
     // Keep track of symbol table root to restore later.  This is because of the awful
     // use of root on a per-thread basis.
@@ -623,41 +630,70 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
                     int sc[] = { K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
                     SetupVariables(root, code, sc);
                 }
-                Thread * thread = new Thread(this, code, 0, root);
-                queue.push(thread);
+                THREAD * thread = new THREAD(this, code, 0, root);
+                wait_queue.push(thread);
             }
         }
     }
 
+    int max_threads = 2;
     int num_waiting_threads = 0;
-    while (! queue.empty())
+    while (! wait_queue.empty())
     {
-        Thread * thread = queue.front();
-        queue.pop();
-        if (! thread->Waiting())
+        while (! wait_queue.empty())
         {
-            thread->Execute();
+            if (active_queue.size() >= max_threads)
+                break;
+            THREAD * thread = wait_queue.front();
+            wait_queue.pop();
+            if (! thread->Waiting())
+            {
+                HANDLE hThread = (HANDLE) _beginthreadex(0, 0, THREAD::WinThreadExecute, (void*)thread, CREATE_SUSPENDED, 0);
+                if (hThread)
+                {
+                    thread->hThread = hThread;
+                    ResumeThread(hThread);
+                    active_queue.push(thread);
+                }
+                else printf("error in thread spawn\n");
+            }
+            else if (! thread->Finished())
+            {
+                wait_queue.push(thread);
+                num_waiting_threads++;
+            }
+            else
+                delete thread;
         }
-        if (! thread->Finished())
+        // Wait for all active threads to stop.
+        while (! active_queue.empty())
         {
-            queue.push(thread);
-            num_waiting_threads++;
+            THREAD * thread = active_queue.front();
+            active_queue.pop();
+            WaitForSingleObject( thread->hThread, INFINITE );
+            thread->hThread = 0;
+            // Check the status of the threads.
+            if (! thread->Finished())
+            {
+                wait_queue.push(thread);
+                num_waiting_threads++;
+            }
+            else
+                delete thread;
         }
-        else
-            delete thread;
 
         // thread synchronization assumes all threads wait.
-        if (num_waiting_threads != 0 && num_waiting_threads == queue.size())
+        if (num_waiting_threads != 0 && num_waiting_threads == wait_queue.size())
         {
             if (this->trace_level > 0)
                 std::cout << "All " << num_waiting_threads << " threads synchronized!\n";
             // all threads waiting.  Reset all threads to not wait.
             for (int i = 0; i < num_waiting_threads; ++i)
             {
-                Thread * t = queue.front();
-                queue.pop();
+                THREAD * t = wait_queue.front();
+                wait_queue.pop();
                 t->Reset();
-                queue.push(t);
+                wait_queue.push(t);
             }
             num_waiting_threads = 0;
         }
@@ -674,7 +710,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
     //_CrtMemDumpAllObjectsSince(&state_begin);
 }
 
-CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, CUDA_EMULATOR::SymbolTable * root)
+CUDA_EMULATOR::THREAD::THREAD(CUDA_EMULATOR * emulator, TREE * block, int pc, CUDA_EMULATOR::SymbolTable * root)
 {
     this->emulator = emulator;
     this->block = block;
@@ -685,12 +721,20 @@ CUDA_EMULATOR::Thread::Thread(CUDA_EMULATOR * emulator, TREE * block, int pc, CU
     this->carry = 0;
 }
 
-CUDA_EMULATOR::Thread::~Thread()
+CUDA_EMULATOR::THREAD::~THREAD()
 {
     delete root;
 }
 
-bool CUDA_EMULATOR::Thread::Execute()
+unsigned int __stdcall CUDA_EMULATOR::THREAD::WinThreadExecute(void * thr)
+{
+    THREAD * thread = (THREAD*) thr;
+    thread->Execute();
+    _endthreadex(0);
+    return 0;
+}
+
+void CUDA_EMULATOR::THREAD::Execute()
 {
     // set up symbol table environment.
     int pc = this->pc;
@@ -700,7 +744,7 @@ bool CUDA_EMULATOR::Thread::Execute()
     if (pc < 0)
     {
         this->finished = true;
-        return this->finished;
+        return;
     }
     for (;;)
     {
@@ -714,14 +758,14 @@ bool CUDA_EMULATOR::Thread::Execute()
         else if (next == -KI_EXIT)
         {
             this->finished = true;
-            return this->finished;
+            return;
         }
         else if (next == -KI_BAR)
         {
             // Set state of this thread to wait, and pack up current program counter.
             this->wait = true;
-        this->pc = pc + 1;
-            return this->finished;
+            this->pc = pc + 1;
+            return;
         }
         else
             pc++;
@@ -733,17 +777,17 @@ bool CUDA_EMULATOR::Thread::Execute()
     }
 }
 
-bool CUDA_EMULATOR::Thread::Finished()
+bool CUDA_EMULATOR::THREAD::Finished()
 {
     return this->finished;
 }
 
-void CUDA_EMULATOR::Thread::Reset()
+void CUDA_EMULATOR::THREAD::Reset()
 {
     this->wait = false;
 }
 
-bool CUDA_EMULATOR::Thread::Waiting()
+bool CUDA_EMULATOR::THREAD::Waiting()
 {
     return this->wait;
 }
@@ -771,7 +815,7 @@ void CUDA_EMULATOR::Print(TREE * node, int level)
     }
 } 
 
-void CUDA_EMULATOR::Thread::Dump(char * comment, int pc, TREE * inst)
+void CUDA_EMULATOR::THREAD::Dump(char * comment, int pc, TREE * inst)
 {
     std::cout << "\n";
     std::cout << comment << "\n";
@@ -949,7 +993,7 @@ char * CUDA_EMULATOR::StringTableEntry(char * text)
     return this->string_table->Entry(text);
 }
 
-int CUDA_EMULATOR::Thread::Dispatch(TREE * inst)
+int CUDA_EMULATOR::THREAD::Dispatch(TREE * inst)
 {
     if (this->emulator->trace_level > 0)
     {
@@ -1266,53 +1310,53 @@ CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr
         }
     } else if (GetType(const_expr) == T_FLT_LITERAL)
     {
-		// Three cases:
-		// "0F...", or "0f..." (hex 32-bit float)
-		// "0D...", or "0f..." (hex 64-bit float)
-		// "3.14159..." (float with decimal point)
-		int len = strlen(text);
-		if (len >= 2 && (text[1] == 'f' || text[1] == 'F'))
-		{
-	        text += 2;
-	        switch (expected_type)
-	        {
-				case K_F32:
-					result.value.u32 = _strtoi64(text, &dummy, 16);
-					break;
-				case K_F64:
-					result.value.u64 = _strtoi64(text, &dummy, 16);
-					break;
-				default:
-					assert(false);
-			}
-		} else if (len >= 2 && (text[1] == 'd' || text[1] == 'D'))
-		{
-	        text += 2;
-	        switch (expected_type)
-	        {
-				case K_F32:
-					result.value.u32 = _strtoi64(text, &dummy, 16);
-					break;
-				case K_F64:
-					result.value.u64 = _strtoi64(text, &dummy, 16);
-					break;
-				default:
-					assert(false);
-			}
-		} else
-		{
-	        switch (expected_type)
-	        {
-				case K_F32:
-					result.value.f32 = strtod(text, &dummy);
-					break;
-				case K_F64:
-					result.value.f64 = strtod(text, &dummy);
-					break;
-				default:
-					assert(false);
-			}
-		}
+        // Three cases:
+        // "0F...", or "0f..." (hex 32-bit float)
+        // "0D...", or "0f..." (hex 64-bit float)
+        // "3.14159..." (float with decimal point)
+        int len = strlen(text);
+        if (len >= 2 && (text[1] == 'f' || text[1] == 'F'))
+        {
+            text += 2;
+            switch (expected_type)
+            {
+                case K_F32:
+                    result.value.u32 = _strtoi64(text, &dummy, 16);
+                    break;
+                case K_F64:
+                    result.value.u64 = _strtoi64(text, &dummy, 16);
+                    break;
+                default:
+                    assert(false);
+            }
+        } else if (len >= 2 && (text[1] == 'd' || text[1] == 'D'))
+        {
+            text += 2;
+            switch (expected_type)
+            {
+                case K_F32:
+                    result.value.u32 = _strtoi64(text, &dummy, 16);
+                    break;
+                case K_F64:
+                    result.value.u64 = _strtoi64(text, &dummy, 16);
+                    break;
+                default:
+                    assert(false);
+            }
+        } else
+        {
+            switch (expected_type)
+            {
+                case K_F32:
+                    result.value.f32 = strtod(text, &dummy);
+                    break;
+                case K_F64:
+                    result.value.f64 = strtod(text, &dummy);
+                    break;
+                default:
+                    assert(false);
+            }
+        }
     } else if (GetType(const_expr) == T_QUESTION)
     {
         throw new Unimplemented("Question operator in constant expression not supported.\n");

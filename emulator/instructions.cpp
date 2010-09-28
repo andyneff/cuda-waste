@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <iostream>
 
-int CUDA_EMULATOR::Thread::DoAbs(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoAbs(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -141,7 +141,7 @@ int CUDA_EMULATOR::Thread::DoAbs(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoAdd(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -461,7 +461,7 @@ int CUDA_EMULATOR::Thread::DoAdd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoAddc(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -623,7 +623,7 @@ int CUDA_EMULATOR::Thread::DoAddc(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoAnd(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -799,12 +799,12 @@ int CUDA_EMULATOR::Thread::DoAnd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoAtom(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoAtom(TREE * inst)
 {
     throw new Unimplemented("ATOM unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoBar(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBar(TREE * inst)
 {
     // ONLY VERY SIMPLE SYNCHRONIZATION IMPLEMENTED!!!
     int start = 0;
@@ -899,32 +899,32 @@ int CUDA_EMULATOR::Thread::DoBar(TREE * inst)
 
     this->emulator->unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
 
-    // pack up the thread context.  Synchronize all assumed.
+    // pack up the THREAD context.  Synchronize all assumed.
 
     return -KI_BAR;
 }
 
-int CUDA_EMULATOR::Thread::DoBfe(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBfe(TREE * inst)
 {
     throw new Unimplemented("BFE unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoBfi(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBfi(TREE * inst)
 {
     throw new Unimplemented("BFI unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoBfind(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBfind(TREE * inst)
 {
     throw new Unimplemented("BFIND unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoBrev(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBrev(TREE * inst)
 {
     throw new Unimplemented("BREV unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoBra(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBra(TREE * inst)
 {
     int start = 0;
     for (;;)
@@ -943,12 +943,12 @@ int CUDA_EMULATOR::Thread::DoBra(TREE * inst)
     return (int)sdst->pvalue;
 }
 
-int CUDA_EMULATOR::Thread::DoBrkpt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoBrkpt(TREE * inst)
 {
     throw new Unimplemented("BRKPT unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoCall(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCall(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -1079,12 +1079,12 @@ int CUDA_EMULATOR::Thread::DoCall(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoClz(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoClz(TREE * inst)
 {
     throw new Unimplemented("CLZ unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoCnot(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCnot(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild( start)->GetType() == TREE_PRED)
@@ -1207,17 +1207,17 @@ int CUDA_EMULATOR::Thread::DoCnot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoCopysign(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCopysign(TREE * inst)
 {
     throw new Unimplemented("COPYSIGN unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoCos(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCos(TREE * inst)
 {
     throw new Unimplemented("COS unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoCvt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -1703,7 +1703,7 @@ int CUDA_EMULATOR::Thread::DoCvt(TREE * inst)
 }
 
 
-int CUDA_EMULATOR::Thread::DoCvta(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoCvta(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -1806,7 +1806,7 @@ int CUDA_EMULATOR::Thread::DoCvta(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoDiv(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2001,7 +2001,7 @@ int CUDA_EMULATOR::Thread::DoDiv(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoEx2(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoEx2(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2116,12 +2116,12 @@ int CUDA_EMULATOR::Thread::DoEx2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoExit(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoExit(TREE * inst)
 {
     return -KI_EXIT;
 }
 
-int CUDA_EMULATOR::Thread::DoFma(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -2286,12 +2286,12 @@ int CUDA_EMULATOR::Thread::DoFma(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoIsspacep(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoIsspacep(TREE * inst)
 {
     throw new Unimplemented("ISSPACEP unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoLd(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoLd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2864,7 +2864,7 @@ int CUDA_EMULATOR::Thread::DoLd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoLdu(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoLdu(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -3024,7 +3024,7 @@ int CUDA_EMULATOR::Thread::DoLdu(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoLg2(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoLg2(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -3139,7 +3139,7 @@ int CUDA_EMULATOR::Thread::DoLg2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoMad(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
 {
     // Multiply+add register and/or constants, and store in a register.
     int start = 0;
@@ -3385,27 +3385,27 @@ int CUDA_EMULATOR::Thread::DoMad(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoMad24(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMad24(TREE * inst)
 {
     throw new Unimplemented("MAD24 unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoMax(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMax(TREE * inst)
 {
     throw new Unimplemented("MAX unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoMembar(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMembar(TREE * inst)
 {
     throw new Unimplemented("MEMBAR unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoMin(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMin(TREE * inst)
 {
     throw new Unimplemented("MIN unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoMov(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -3576,7 +3576,7 @@ int CUDA_EMULATOR::Thread::DoMov(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoMul(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -3779,7 +3779,7 @@ int CUDA_EMULATOR::Thread::DoMul(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoMul24(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
 {
     // Multiply 24-bit integer numbers, in register and/or constants,
     // and store in a register.
@@ -3918,7 +3918,7 @@ int CUDA_EMULATOR::Thread::DoMul24(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoNeg(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoNeg(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4057,7 +4057,7 @@ int CUDA_EMULATOR::Thread::DoNeg(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoNot(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoNot(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4180,7 +4180,7 @@ int CUDA_EMULATOR::Thread::DoNot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoOr(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4356,32 +4356,32 @@ int CUDA_EMULATOR::Thread::DoOr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoPmevent(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoPmevent(TREE * inst)
 {
     throw new Unimplemented("PMEVENT unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoPopc(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoPopc(TREE * inst)
 {
     throw new Unimplemented("POPC unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoPrefetch(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoPrefetch(TREE * inst)
 {
     throw new Unimplemented("PREFETCH unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoPrefetchu(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoPrefetchu(TREE * inst)
 {
     throw new Unimplemented("PREFETCHU unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoPrmt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoPrmt(TREE * inst)
 {
     throw new Unimplemented("PRMT unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoRcp(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoRcp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4496,12 +4496,12 @@ int CUDA_EMULATOR::Thread::DoRcp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoRed(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoRed(TREE * inst)
 {
     throw new Unimplemented("RED unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoRem(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4666,22 +4666,22 @@ int CUDA_EMULATOR::Thread::DoRem(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoRet(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoRet(TREE * inst)
 {
     throw new Unimplemented("RET unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoRsqrt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoRsqrt(TREE * inst)
 {
     throw new Unimplemented("RSQRT unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSad(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSad(TREE * inst)
 {
     throw new Unimplemented("SAD unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSelp(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4984,12 +4984,12 @@ int CUDA_EMULATOR::Thread::DoSelp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoSet(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSet(TREE * inst)
 {
     throw new Unimplemented("SET unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSetp(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSetp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5465,7 +5465,7 @@ int CUDA_EMULATOR::Thread::DoSetp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoShl(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5626,7 +5626,7 @@ int CUDA_EMULATOR::Thread::DoShl(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoShr(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5879,17 +5879,17 @@ int CUDA_EMULATOR::Thread::DoShr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoSin(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSin(TREE * inst)
 {
     throw new Unimplemented("SIN unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSlct(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSlct(TREE * inst)
 {
     throw new Unimplemented("SLCT unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSqrt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5995,7 +5995,7 @@ int CUDA_EMULATOR::Thread::DoSqrt(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoSt(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -6255,7 +6255,7 @@ int CUDA_EMULATOR::Thread::DoSt(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoSub(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -6574,102 +6574,102 @@ int CUDA_EMULATOR::Thread::DoSub(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::Thread::DoSubc(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSubc(TREE * inst)
 {
     throw new Unimplemented("SUBC unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSuld(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSuld(TREE * inst)
 {
     throw new Unimplemented("SULD unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSuq(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSuq(TREE * inst)
 {
     throw new Unimplemented("SUQ unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSured(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSured(TREE * inst)
 {
     throw new Unimplemented("SURED unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoSust(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoSust(TREE * inst)
 {
     throw new Unimplemented("SUST unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoTestp(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoTestp(TREE * inst)
 {
     throw new Unimplemented("TESTP unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoTex(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoTex(TREE * inst)
 {
     throw new Unimplemented("TEX unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoTrap(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoTrap(TREE * inst)
 {
     throw new Unimplemented("TRAP unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoTxq(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoTxq(TREE * inst)
 {
     throw new Unimplemented("TXQ unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVabsdiff(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVabsdiff(TREE * inst)
 {
     throw new Unimplemented("VABSDIFF unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVadd(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVadd(TREE * inst)
 {
     throw new Unimplemented("Vadd unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVmad(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVmad(TREE * inst)
 {
     throw new Unimplemented("VMAD unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVmax(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVmax(TREE * inst)
 {
     throw new Unimplemented("VMAX unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVmin(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVmin(TREE * inst)
 {
     throw new Unimplemented("VMIN unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVote(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVote(TREE * inst)
 {
     throw new Unimplemented("VOTE unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVset(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVset(TREE * inst)
 {
     throw new Unimplemented("VSET unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVshl(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVshl(TREE * inst)
 {
     throw new Unimplemented("VSHL unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVshr(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVshr(TREE * inst)
 {
     throw new Unimplemented("VSHR unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoVsub(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoVsub(TREE * inst)
 {
     throw new Unimplemented("VSUB unimplemented");
 }
 
-int CUDA_EMULATOR::Thread::DoXor(TREE * inst)
+int CUDA_EMULATOR::THREAD::DoXor(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
