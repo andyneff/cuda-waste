@@ -5,6 +5,12 @@
 #include <queue>
 #include "tree.h"
 #include <process.h>    /* _beginthread, _endthread */
+#include "thread.h"
+#include "symbol-table.h"
+#include "string-table.h"
+#include "symbol.h"
+#include "constant.h"
+#include "types.h"
 
 CUDA_EMULATOR * CUDA_EMULATOR::singleton;
 
@@ -171,7 +177,7 @@ int CUDA_EMULATOR::GetSize(TREE * tree_par_register)
     return (int)atoi(c->GetText());
 }
 
-CUDA_EMULATOR::SymbolTable * CUDA_EMULATOR::PushSymbolTable(SymbolTable * parent)
+SymbolTable * CUDA_EMULATOR::PushSymbolTable(SymbolTable * parent)
 {
     SymbolTable * symbol_table = new SymbolTable();
     symbol_table->parent_block_symbol_table = parent;
@@ -357,7 +363,7 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
                     TREE * n = GetChild(t, 0);
                     int type = ttype->GetType();
                     Constant c = Eval(type, n);
-                    TYPES * s1 = (TYPES*)mptr;
+                    TYPES::Types * s1 = (TYPES::Types*)mptr;
                     switch (type)
                     {
                         case K_B8:
@@ -710,88 +716,6 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
     //_CrtMemDumpAllObjectsSince(&state_begin);
 }
 
-CUDA_EMULATOR::THREAD::THREAD(CUDA_EMULATOR * emulator, TREE * block, int pc, CUDA_EMULATOR::SymbolTable * root)
-{
-    this->emulator = emulator;
-    this->block = block;
-    this->pc = pc;
-    this->root = root;
-    this->finished = false;
-    this->wait = false;
-    this->carry = 0;
-}
-
-CUDA_EMULATOR::THREAD::~THREAD()
-{
-    delete root;
-}
-
-unsigned int __stdcall CUDA_EMULATOR::THREAD::WinThreadExecute(void * thr)
-{
-    THREAD * thread = (THREAD*) thr;
-    thread->Execute();
-    _endthreadex(0);
-    return 0;
-}
-
-void CUDA_EMULATOR::THREAD::Execute()
-{
-    // set up symbol table environment.
-    int pc = this->pc;
-
-    // Execute.
-    pc = emulator->FindFirstInst(block, pc);
-    if (pc < 0)
-    {
-        this->finished = true;
-        return;
-    }
-    for (;;)
-    {
-        TREE * inst = this->emulator->GetInst(block, pc);
-        if (this->emulator->trace_level > 3)
-            this->Dump("before", pc, inst);
-
-        int next = this->Dispatch(inst);
-        if (next > 0)
-            pc = next;
-        else if (next == -KI_EXIT)
-        {
-            this->finished = true;
-            return;
-        }
-        else if (next == -KI_BAR)
-        {
-            // Set state of this thread to wait, and pack up current program counter.
-            this->wait = true;
-            this->pc = pc + 1;
-            return;
-        }
-        else
-            pc++;
-
-        pc = this->emulator->FindFirstInst(block, pc);
-
-        if (this->emulator->trace_level > 2)
-            this->Dump("after", pc, inst);
-    }
-}
-
-bool CUDA_EMULATOR::THREAD::Finished()
-{
-    return this->finished;
-}
-
-void CUDA_EMULATOR::THREAD::Reset()
-{
-    this->wait = false;
-}
-
-bool CUDA_EMULATOR::THREAD::Waiting()
-{
-    return this->wait;
-}
-
 void CUDA_EMULATOR::PrintName(TREE * inst)
 {
     int start = 0;
@@ -815,91 +739,6 @@ void CUDA_EMULATOR::Print(TREE * node, int level)
     }
 } 
 
-void CUDA_EMULATOR::THREAD::Dump(char * comment, int pc, TREE * inst)
-{
-    std::cout << "\n";
-    std::cout << comment << "\n";
-    std::cout << "PC = " << pc << "\n";
-    this->emulator->Print(inst, 0);
-    std::cout << "Symbol tables:\n";
-    int level = 0;
-    for (SymbolTable * st = this->root; st != 0; st = st->parent_block_symbol_table, level++)
-    {
-        std::cout << "---- Level " << level << " ----\n";
-        std::map<char*, Symbol*, ltstr>::iterator it;
-        for (it = st->symbols.begin(); it != st->symbols.end(); ++it)
-        {
-            Symbol * s = (*it).second;
-            std::cout << "name: " << s->name << " ";
-            std::cout << "size: " << s->size << " ";
-            std::cout << "stor: " << s->storage_class << " ";
-            std::cout << "type: " << s->typestring << " ";
-            if (strcmp(s->typestring, "label") == 0)
-                std::cout << "val:  " << (int)s->pvalue << "\n";
-            else if (strcmp(s->typestring, "dim3") == 0)
-                std::cout << "val:  " << ((dim3*)s->pvalue)->x
-                << " " << ((dim3*)s->pvalue)->y
-                << " " << ((dim3*)s->pvalue)->z
-                << "\n";
-            else if (strcmp(s->typestring, ".pred") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->pred << "\n";
-            else if (strcmp(s->typestring, ".u8") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
-            else if (strcmp(s->typestring, ".u16") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
-            else if (strcmp(s->typestring, ".u32") == 0)
-            {
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
-                std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
-                std::cout << std::dec << "\n";
-            }
-            else if (strcmp(s->typestring, ".u64") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
-            else if (strcmp(s->typestring, ".s8") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->s8 << "\n";
-            else if (strcmp(s->typestring, ".s16") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->s16 << "\n";
-            else if (strcmp(s->typestring, ".s32") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->s32 << "\n";
-            else if (strcmp(s->typestring, ".s64") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->s64 << "\n";
-            else if (strcmp(s->typestring, ".b8") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u8 << "\n";
-            else if (strcmp(s->typestring, ".b16") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u16 << "\n";
-            else if (strcmp(s->typestring, ".b32") == 0)
-            {
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u32 << " ";
-                std::cout << std::hex << ((TYPES*)s->pvalue)->u32;
-                std::cout << std::dec << "\n";
-            }
-            else if (strcmp(s->typestring, ".b64") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->u64 << "\n";
-            else if (strcmp(s->typestring, ".f32") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->f32 << "\n";
-            else if (strcmp(s->typestring, ".f64") == 0)
-                std::cout << "val:  " << ((TYPES*)s->pvalue)->f64 << "\n";
-            else assert(false);
-        }
-    }
-    std::cout.flush();
-}
-
-
-CUDA_EMULATOR::Symbol * CUDA_EMULATOR::SymbolTable::FindSymbol(char * name)
-{
-    SymbolTable * st = this;
-    while (st)
-    {
-        std::map<char*, Symbol*, ltstr>::iterator it = st->symbols.find(name);
-        if (it != st->symbols.end())
-        {
-            return it->second;
-        }
-        st = st->parent_block_symbol_table;
-    }
-    return 0;
-}
 
 void CUDA_EMULATOR::CreateSymbol(SymbolTable * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
 {
@@ -968,253 +807,12 @@ TREE * CUDA_EMULATOR::GetChild(TREE * node, int n)
 }
 
 
-char * CUDA_EMULATOR::StringTable::Entry(char * text)
-{
-    char * result = 0;
-    std::map<char *, char*, ltstr>::iterator it = this->table.find(text);
-    if (it == this->table.end())
-    {
-        std::pair<char *, char*> p;
-        char * the_text = strdup(text);
-        p.first = the_text;
-        p.second = the_text;
-        this->table.insert(p);
-        result = the_text;
-    }
-    else
-    {
-        result = it->second;
-    }
-    return result;
-}
-
 char * CUDA_EMULATOR::StringTableEntry(char * text)
 {
     return this->string_table->Entry(text);
 }
 
-int CUDA_EMULATOR::THREAD::Dispatch(TREE * inst)
-{
-    if (this->emulator->trace_level > 0)
-    {
-        this->emulator->PrintName(inst);
-        if (this->emulator->trace_level > 1)
-            this->emulator->Print(inst, 0);
-    }
-    
-    TREE * i = (TREE *)inst->GetChild(0);
-    int inst_type = i->GetType();
-    if (inst_type == TREE_PRED)
-    {
-        // Predicate preceeds the instruction.
-        TREE * pred = i;
-        i = (TREE *)inst->GetChild(1);
-        inst_type = i->GetType();
-
-        // Check if pred is true.  If false, ignore instruction with this predicate.
-        int i = 0;
-        bool not = false;
-        TREE * tsym = 0;
-        for (;; ++i)
-        {
-            TREE * t = pred->GetChild(i);
-            if (t == 0)
-                break;
-            int gt = t->GetType();
-            if (gt == T_NOT)
-                not = true;
-            else if (gt == T_WORD)
-                tsym = t;
-            else assert(false);
-        }
-        assert(tsym != 0);
-        Symbol * sym = this->root->FindSymbol(tsym->GetText());
-        assert(sym != 0);
-        TYPES * s = (TYPES*)sym->pvalue;
-
-        bool test = s->pred;
-        if (not)
-            test = ! test;
-        if (! test)
-        {
-            if (this->emulator->trace_level > 1)
-                std::cout << "Skipping instruction because guard predicate is false\n";
-            return 0; // continue.
-        }
-    }
-    try {
-        switch (inst_type)
-        {
-            case KI_ABS:
-                return DoAbs(inst);
-            case KI_ADD:
-                return DoAdd(inst);
-            case KI_ADDC:
-                return DoAddc(inst);
-            case KI_AND:
-                return DoAnd(inst);
-            case KI_ATOM:
-                return DoAtom(inst);
-            case KI_BAR:
-                return DoBar(inst);
-            case KI_BFE:
-                return DoBfe(inst);
-            case KI_BFI:
-                return DoBfi(inst);
-            case KI_BFIND:
-                return DoBfind(inst);
-            case KI_BRA:
-                return DoBra(inst);
-            case KI_BREV:
-                return DoBrev(inst);
-            case KI_BRKPT:
-                return DoBrkpt(inst);
-            case KI_CALL:
-                return DoCall(inst);
-            case KI_CLZ:
-                return DoClz(inst);
-            case KI_CNOT:
-                return DoCnot(inst);
-            case KI_COPYSIGN:
-                return DoCopysign(inst);
-            case KI_COS:
-                return DoCos(inst);
-            case KI_CVT:
-                return DoCvt(inst);
-            case KI_CVTA:
-                return DoCvta(inst);
-            case KI_DIV:
-                return DoDiv(inst);
-            case KI_EX2:
-                return DoEx2(inst);
-            case KI_EXIT:
-                return DoExit(inst);
-            case KI_FMA:
-                return DoFma(inst);
-            case KI_ISSPACEP:
-                return DoIsspacep(inst);
-            case KI_LD:
-                return DoLd(inst);
-            case KI_LDU:
-                return DoLdu(inst);
-            case KI_LG2:
-                return DoLg2(inst);
-            case KI_MAD:
-                return DoMad(inst);
-            case KI_MAD24:
-                return DoMad24(inst);
-            case KI_MAX:
-                return DoMax(inst);
-            case KI_MEMBAR:
-                return DoMembar(inst);
-            case KI_MIN:
-                return DoMin(inst);
-            case KI_MOV:
-                return DoMov(inst);
-            case KI_MUL24:
-                return DoMul24(inst);
-            case KI_MUL:
-                return DoMul(inst);
-            case KI_NEG:
-                return DoNeg(inst);
-            case KI_NOT:
-                return DoNot(inst);
-            case KI_OR:
-                return DoOr(inst);
-            case KI_PMEVENT:
-                return DoPmevent(inst);
-            case KI_POPC:
-                return DoPopc(inst);
-            case KI_PREFETCH:
-                return DoPrefetch(inst);
-            case KI_PREFETCHU:
-                return DoPrefetchu(inst);
-            case KI_PRMT:
-                return DoPrmt(inst);
-            case KI_RCP:
-                return DoRcp(inst);
-            case KI_RED:
-                return DoRed(inst);
-            case KI_REM:
-                return DoRem(inst);
-            case KI_RET:
-                return DoRet(inst);
-            case KI_RSQRT:
-                return DoRsqrt(inst);
-            case KI_SAD:
-                return DoSad(inst);
-            case KI_SELP:
-                return DoSelp(inst);
-            case KI_SET:
-                return DoSet(inst);
-            case KI_SETP:
-                return DoSetp(inst);
-            case KI_SHL:
-                return DoShl(inst);
-            case KI_SHR:
-                return DoShr(inst);
-            case KI_SIN:
-                return DoSin(inst);
-            case KI_SLCT:
-                return DoSlct(inst);
-            case KI_SQRT:
-                return DoSqrt(inst);
-            case KI_ST:
-                return DoSt(inst);
-            case KI_SUB:
-                return DoSub(inst);
-            case KI_SUBC:
-                return DoSubc(inst);
-            case KI_SULD:
-                return DoSuld(inst);
-            case KI_SUQ:
-                return DoSuq(inst);
-            case KI_SURED:
-                return DoSured(inst);
-            case KI_SUST:
-                return DoSust(inst);
-            case KI_TESTP:
-                return DoTestp(inst);
-            case KI_TEX:
-                return DoTex(inst);
-            case KI_TRAP:
-                return DoTrap(inst);
-            case KI_TXQ:
-                return DoTxq(inst);
-            case KI_VABSDIFF:
-                return DoVabsdiff(inst);
-            case KI_VADD:
-                return DoVadd(inst);
-            case KI_VMAD:
-                return DoVmad(inst);
-            case KI_VMAX:
-                return DoVmax(inst);
-            case KI_VMIN:
-                return DoVmin(inst);
-            case KI_VOTE:
-                return DoVote(inst);
-            case KI_VSET:
-                return DoVset(inst);
-            case KI_VSHL:
-                return DoVshl(inst);
-            case KI_VSHR:
-                return DoVshr(inst);
-            case KI_VSUB:
-                return DoVsub(inst);
-            case KI_XOR:
-                return DoXor(inst);
-            default:
-                assert(false);
-        }
-    } catch (Unimplemented * u)
-    {
-        std::cout << u->ShowReason() << "\n";
-        delete u;
-    }
-    return -1; // end.
-}
-
-CUDA_EMULATOR::Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
+Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
 {
     // Perform bottom-up evaluation of a constant expression.
     Constant result;

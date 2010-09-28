@@ -84,11 +84,20 @@
     <ClCompile Include="cuda.cpp" />
     <ClCompile Include="emulator.cpp" />
     <ClCompile Include="instructions.cpp" />
+    <ClCompile Include="symbol-table.cpp" />
+    <ClCompile Include="symbol.cpp" />
+    <ClCompile Include="thread.cpp" />
     <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constant.h" />
     <ClInclude Include="emulator.h" />
+    <ClInclude Include="string-table.h" />
+    <ClInclude Include="symbol-table.h" />
+    <ClInclude Include="symbol.h" />
+    <ClInclude Include="thread.h" />
     <ClInclude Include="tree.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />

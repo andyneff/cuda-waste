@@ -1,8 +1,12 @@
 #include "emulator.h"
 #include <assert.h>
 #include <iostream>
+#include "thread.h"
+#include "symbol.h"
+#include "symbol-table.h"
+#include "constant.h"
 
-int CUDA_EMULATOR::THREAD::DoAbs(TREE * inst)
+int THREAD::DoAbs(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -62,10 +66,10 @@ int CUDA_EMULATOR::THREAD::DoAbs(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -95,7 +99,7 @@ int CUDA_EMULATOR::THREAD::DoAbs(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_S16:
@@ -141,7 +145,7 @@ int CUDA_EMULATOR::THREAD::DoAbs(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
+int THREAD::DoAdd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -216,15 +220,15 @@ int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
-    TYPES value3;
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types value3;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
     // used for carry out calculation.
-    TYPES * temp = &value3;
+    TYPES::Types * temp = &value3;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -263,7 +267,7 @@ int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_U16:
@@ -332,7 +336,7 @@ int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_U16:
@@ -461,7 +465,7 @@ int CUDA_EMULATOR::THREAD::DoAdd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
+int THREAD::DoAddc(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -523,15 +527,15 @@ int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
-    TYPES value3;
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types value3;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
     // used for carry out calculation.
-    TYPES * temp = &value3;
+    TYPES::Types * temp = &value3;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -552,7 +556,7 @@ int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_U32:
@@ -585,7 +589,7 @@ int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_U32:
@@ -623,7 +627,7 @@ int CUDA_EMULATOR::THREAD::DoAddc(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
+int THREAD::DoAnd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -682,12 +686,12 @@ int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -714,7 +718,7 @@ int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -759,7 +763,7 @@ int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_B16:
@@ -799,12 +803,12 @@ int CUDA_EMULATOR::THREAD::DoAnd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoAtom(TREE * inst)
+int THREAD::DoAtom(TREE * inst)
 {
-    throw new Unimplemented("ATOM unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("ATOM unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoBar(TREE * inst)
+int THREAD::DoBar(TREE * inst)
 {
     // ONLY VERY SIMPLE SYNCHRONIZATION IMPLEMENTED!!!
     int start = 0;
@@ -865,9 +869,9 @@ int CUDA_EMULATOR::THREAD::DoBar(TREE * inst)
     int type = K_U32;
     TREE * src1 = osrc1->GetChild(0);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * s1 = &value1;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -886,7 +890,7 @@ int CUDA_EMULATOR::THREAD::DoBar(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_U32:
@@ -904,27 +908,27 @@ int CUDA_EMULATOR::THREAD::DoBar(TREE * inst)
     return -KI_BAR;
 }
 
-int CUDA_EMULATOR::THREAD::DoBfe(TREE * inst)
+int THREAD::DoBfe(TREE * inst)
 {
-    throw new Unimplemented("BFE unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("BFE unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoBfi(TREE * inst)
+int THREAD::DoBfi(TREE * inst)
 {
-    throw new Unimplemented("BFI unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("BFI unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoBfind(TREE * inst)
+int THREAD::DoBfind(TREE * inst)
 {
-    throw new Unimplemented("BFIND unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("BFIND unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoBrev(TREE * inst)
+int THREAD::DoBrev(TREE * inst)
 {
-    throw new Unimplemented("BREV unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("BREV unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoBra(TREE * inst)
+int THREAD::DoBra(TREE * inst)
 {
     int start = 0;
     for (;;)
@@ -943,12 +947,12 @@ int CUDA_EMULATOR::THREAD::DoBra(TREE * inst)
     return (int)sdst->pvalue;
 }
 
-int CUDA_EMULATOR::THREAD::DoBrkpt(TREE * inst)
+int THREAD::DoBrkpt(TREE * inst)
 {
-    throw new Unimplemented("BRKPT unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("BRKPT unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoCall(TREE * inst)
+int THREAD::DoCall(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -981,7 +985,7 @@ int CUDA_EMULATOR::THREAD::DoCall(TREE * inst)
     // Call of vprintf only thing supported...
     if (strcmp(tfunc->GetText(), "vprintf") != 0)
     {
-        throw new Unimplemented("Only CALL of vprintf implemented.\n");
+        throw new CUDA_EMULATOR::Unimplemented("Only CALL of vprintf implemented.\n");
     }
 
     bool uni = false;
@@ -1011,12 +1015,12 @@ int CUDA_EMULATOR::THREAD::DoCall(TREE * inst)
             if (u->GetType() == T_UNDERSCORE)
                 once++;
             else
-                throw new Unimplemented("CALL non-underscore return unimplemented.");
+                throw new CUDA_EMULATOR::Unimplemented("CALL non-underscore return unimplemented.");
         } else
             break;
     }
     if (once != 1)
-        throw new Unimplemented("CALL with multiple returns unimplemented.");
+        throw new CUDA_EMULATOR::Unimplemented("CALL with multiple returns unimplemented.");
 
     std::vector<Symbol*> stack;
     for (;; ++start_params)
@@ -1056,35 +1060,35 @@ int CUDA_EMULATOR::THREAD::DoCall(TREE * inst)
 //        switch (s->type)
 //        {
 //        case K_U32:
-//            va_assign(out, unsigned __int32, ((TYPES*)s->pvalue)->u32);
+//            va_assign(out, unsigned __int32, ((TYPES::Types*)s->pvalue)->u32);
 //            break;
 //        case K_S32:
-//            va_assign(out, signed __int32, ((TYPES*)s->pvalue)->u32);
+//            va_assign(out, signed __int32, ((TYPES::Types*)s->pvalue)->u32);
 //            break;
 //        case K_F32:
-//            va_assign(out, float, ((TYPES*)s->pvalue)->f32);
+//            va_assign(out, float, ((TYPES::Types*)s->pvalue)->f32);
 //            break;
 //        case K_F64:
-//            va_assign(out, double, ((TYPES*)s->pvalue)->f64);
+//            va_assign(out, double, ((TYPES::Types*)s->pvalue)->f64);
 //            break;
 //        default:
-//            throw new Unimplemented("Unimplemented type for vprintf\n");
+//            throw new CUDA_EMULATOR::Unimplemented("CUDA_EMULATOR::Unimplemented type for vprintf\n");
 //            break;
 //        }
 //    }
 
-    vprintf( (char*)(((TYPES*)stack[0]->pvalue)->u32), (va_list) ((TYPES*)stack[1]->pvalue)->u32);
+    vprintf( (char*)(((TYPES::Types*)stack[0]->pvalue)->u32), (va_list) ((TYPES::Types*)stack[1]->pvalue)->u32);
 //    va_end(out);
 
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoClz(TREE * inst)
+int THREAD::DoClz(TREE * inst)
 {
-    throw new Unimplemented("CLZ unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("CLZ unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoCnot(TREE * inst)
+int THREAD::DoCnot(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild( start)->GetType() == TREE_PRED)
@@ -1137,10 +1141,10 @@ int CUDA_EMULATOR::THREAD::DoCnot(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -1167,7 +1171,7 @@ int CUDA_EMULATOR::THREAD::DoCnot(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -1207,17 +1211,17 @@ int CUDA_EMULATOR::THREAD::DoCnot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoCopysign(TREE * inst)
+int THREAD::DoCopysign(TREE * inst)
 {
-    throw new Unimplemented("COPYSIGN unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("COPYSIGN unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoCos(TREE * inst)
+int THREAD::DoCos(TREE * inst)
 {
-    throw new Unimplemented("COS unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("COS unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
+int THREAD::DoCvt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -1286,8 +1290,8 @@ int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
         }
     }
 
-    TYPES * dst_value;
-    TYPES * src_value;
+    TYPES::Types * dst_value;
+    TYPES::Types * src_value;
 
     TREE * o1 = inst->GetChild(start++);
     assert(o1->GetType() == TREE_OPR);
@@ -1301,7 +1305,7 @@ int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
     Symbol * s2 = this->root->FindSymbol(o2->GetChild(0)->GetText());
     assert(s2 != 0);
 
-    dst_value = (TYPES*)s1->pvalue;
+    dst_value = (TYPES::Types*)s1->pvalue;
 
     // handle .x, .y, .z stuff.
     if (strcmp(s2->typestring, "dim3") == 0)
@@ -1312,16 +1316,16 @@ int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
         int qual = tqual->GetType();
         if (qual == K_X)
         {
-            src_value = (TYPES*) &(((dim3*)s2->pvalue)->x);
+            src_value = (TYPES::Types*) &(((dim3*)s2->pvalue)->x);
         } else if (qual == K_Y)
         {
-            src_value = (TYPES*) &(((dim3*)s2->pvalue)->y);
+            src_value = (TYPES::Types*) &(((dim3*)s2->pvalue)->y);
         } else if (qual == K_Z)
         {
-            src_value = (TYPES*) &(((dim3*)s2->pvalue)->z);
+            src_value = (TYPES::Types*) &(((dim3*)s2->pvalue)->z);
         } else assert(false);
     } else
-        src_value = (TYPES*)s2->pvalue;
+        src_value = (TYPES::Types*)s2->pvalue;
 
     switch (src_type)
     {
@@ -1703,7 +1707,7 @@ int CUDA_EMULATOR::THREAD::DoCvt(TREE * inst)
 }
 
 
-int CUDA_EMULATOR::THREAD::DoCvta(TREE * inst)
+int THREAD::DoCvta(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -1760,12 +1764,12 @@ int CUDA_EMULATOR::THREAD::DoCvta(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES * d;
-    TYPES * s;
-    TYPES value;
+    TYPES::Types * d;
+    TYPES::Types * s;
+    TYPES::Types value;
     char * dummy;
 
-    d = (TYPES*)sdst->pvalue;
+    d = (TYPES::Types*)sdst->pvalue;
 
     // different semantics depending on if register, global, etc.
     if (src->GetType() == T_WORD)
@@ -1782,12 +1786,12 @@ int CUDA_EMULATOR::THREAD::DoCvta(TREE * inst)
             case K_CONST:
                 // names in instructions refer to the address of the
                 // variable, not the contents.
-                s = (TYPES*)&ssrc->pvalue;
+                s = (TYPES::Types*)&ssrc->pvalue;
                 break;
             case K_REG:
                 // names in instructions refer to the contents of the
                 // register.
-                s = (TYPES*)ssrc->pvalue;
+                s = (TYPES::Types*)ssrc->pvalue;
                 break;
         }
     }
@@ -1806,7 +1810,7 @@ int CUDA_EMULATOR::THREAD::DoCvta(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
+int THREAD::DoDiv(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -1872,11 +1876,11 @@ int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    TYPES * pdst_value;
-    TYPES * psrc1_value;
-    TYPES * psrc2_value;
-    TYPES src1_value;// used if literal
-    TYPES src2_value;// used if literal
+    TYPES::Types * pdst_value;
+    TYPES::Types * psrc1_value;
+    TYPES::Types * psrc2_value;
+    TYPES::Types src1_value;// used if literal
+    TYPES::Types src2_value;// used if literal
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
@@ -1885,11 +1889,11 @@ int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -1927,7 +1931,7 @@ int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -1966,7 +1970,7 @@ int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     switch (type)
@@ -2001,7 +2005,7 @@ int CUDA_EMULATOR::THREAD::DoDiv(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoEx2(TREE * inst)
+int THREAD::DoEx2(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2064,10 +2068,10 @@ int CUDA_EMULATOR::THREAD::DoEx2(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -2088,7 +2092,7 @@ int CUDA_EMULATOR::THREAD::DoEx2(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_F32:
@@ -2116,12 +2120,12 @@ int CUDA_EMULATOR::THREAD::DoEx2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoExit(TREE * inst)
+int THREAD::DoExit(TREE * inst)
 {
     return -KI_EXIT;
 }
 
-int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
+int THREAD::DoFma(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -2201,13 +2205,13 @@ int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES value3; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
-    TYPES * s3 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types value3; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
+    TYPES::Types * s3 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -2227,7 +2231,7 @@ int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -2248,7 +2252,7 @@ int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
@@ -2269,7 +2273,7 @@ int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
     {
         ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
-        s3 = (TYPES*)ssrc3->pvalue;
+        s3 = (TYPES::Types*)ssrc3->pvalue;
     } else assert(false);
 
     switch (type)
@@ -2286,12 +2290,12 @@ int CUDA_EMULATOR::THREAD::DoFma(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoIsspacep(TREE * inst)
+int THREAD::DoIsspacep(TREE * inst)
 {
-    throw new Unimplemented("ISSPACEP unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("ISSPACEP unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoLd(TREE * inst)
+int THREAD::DoLd(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2375,7 +2379,7 @@ int CUDA_EMULATOR::THREAD::DoLd(TREE * inst)
         times = 4;
 
     // Different semantics for different storage classes.
-    TYPES * s = 0;
+    TYPES::Types * s = 0;
     unsigned char * addr = 0;
     switch (ssrc->storage_class)
     {
@@ -2451,9 +2455,9 @@ int CUDA_EMULATOR::THREAD::DoLd(TREE * inst)
         assert(dst->GetType() == T_WORD);
         sdst = this->root->FindSymbol(dst->GetText());
         assert(sdst != 0);
-        TYPES * d = (TYPES*)sdst->pvalue;
+        TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-        TYPES * s = (TYPES*)addr;
+        TYPES::Types * s = (TYPES::Types*)addr;
 
         // For targets that are register, we may widen to the size of the register.
         if (sdst->storage_class == K_REG)
@@ -2864,7 +2868,7 @@ int CUDA_EMULATOR::THREAD::DoLd(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoLdu(TREE * inst)
+int THREAD::DoLdu(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -2945,46 +2949,46 @@ int CUDA_EMULATOR::THREAD::DoLdu(TREE * inst)
         value = this->emulator->Eval(K_S32, const_expr);
     }
 
-    TYPES * d = (TYPES*)sdst->pvalue;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
     // Unfortunately, different semantics for different storage classes.
-    TYPES * s = 0;
+    TYPES::Types * s = 0;
     if (ssrc->storage_class != K_REG)
-        s = (TYPES*)ssrc->pvalue;
+        s = (TYPES::Types*)ssrc->pvalue;
     else if (plus != 0)
     {
         void * addr = *(void**)ssrc->pvalue;
         switch (value.type)
         {
         case K_U8:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u8);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.u8);
             break;
         case K_U16:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u16);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.u16);
             break;
         case K_U32:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u32);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.u32);
             break;
         case K_U64:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.u64);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.u64);
             break;
         case K_S8:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s8);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.s8);
             break;
         case K_S16:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s16);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.s16);
             break;
         case K_S32:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s32);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.s32);
             break;
         case K_S64:
-            s = (TYPES*)(((unsigned char *)addr) + value.value.s64);
+            s = (TYPES::Types*)(((unsigned char *)addr) + value.value.s64);
             break;
         default:
             assert(false);
         }
     }
     else
-        s = (TYPES*)ssrc->pvalue;
+        s = (TYPES::Types*)ssrc->pvalue;
     
     switch (type)
     {
@@ -3024,7 +3028,7 @@ int CUDA_EMULATOR::THREAD::DoLdu(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoLg2(TREE * inst)
+int THREAD::DoLg2(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -3087,10 +3091,10 @@ int CUDA_EMULATOR::THREAD::DoLg2(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -3111,7 +3115,7 @@ int CUDA_EMULATOR::THREAD::DoLg2(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_F32:
@@ -3139,7 +3143,7 @@ int CUDA_EMULATOR::THREAD::DoLg2(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
+int THREAD::DoMad(TREE * inst)
 {
     // Multiply+add register and/or constants, and store in a register.
     int start = 0;
@@ -3228,13 +3232,13 @@ int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES value3; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
-    TYPES * s3 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types value3; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
+    TYPES::Types * s3 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -3266,7 +3270,7 @@ int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -3299,7 +3303,7 @@ int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
@@ -3332,7 +3336,7 @@ int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
     {
         ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
-        s3 = (TYPES*)ssrc3->pvalue;
+        s3 = (TYPES::Types*)ssrc3->pvalue;
     } else assert(false);
 
     switch (type)
@@ -3385,27 +3389,27 @@ int CUDA_EMULATOR::THREAD::DoMad(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoMad24(TREE * inst)
+int THREAD::DoMad24(TREE * inst)
 {
-    throw new Unimplemented("MAD24 unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("MAD24 unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoMax(TREE * inst)
+int THREAD::DoMax(TREE * inst)
 {
-    throw new Unimplemented("MAX unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("MAX unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoMembar(TREE * inst)
+int THREAD::DoMembar(TREE * inst)
 {
-    throw new Unimplemented("MEMBAR unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("MEMBAR unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoMin(TREE * inst)
+int THREAD::DoMin(TREE * inst)
 {
-    throw new Unimplemented("MIN unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("MIN unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
+int THREAD::DoMov(TREE * inst)
 {
     // Assign source to destination.
     int start = 0;
@@ -3462,12 +3466,12 @@ int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES * d;
-    TYPES * s;
-    TYPES value;
+    TYPES::Types * d;
+    TYPES::Types * s;
+    TYPES::Types value;
     char * dummy;
 
-    d = (TYPES*)sdst->pvalue;
+    d = (TYPES::Types*)sdst->pvalue;
     s = &value;
 
     if (src->GetType() == TREE_CONSTANT_EXPR)
@@ -3516,12 +3520,12 @@ int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
             case K_CONST:
                 // names in instructions refer to the address of the
                 // variable, not the contents.
-                s = (TYPES*)&ssrc->pvalue;
+                s = (TYPES::Types*)&ssrc->pvalue;
                 break;
             case K_REG:
                 // names in instructions refer to the contents of the
                 // register.
-                s = (TYPES*)ssrc->pvalue;
+                s = (TYPES::Types*)ssrc->pvalue;
                 break;
         }
         if (strcmp(ssrc->typestring, "dim3") == 0)
@@ -3532,13 +3536,13 @@ int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
             int qual = tqual->GetType();
             if (qual == K_X)
             {
-                s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
+                s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->x;
             } else if (qual == K_Y)
             {
-                s = (TYPES*)& ((dim3*)ssrc->pvalue)->y;
+                s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->y;
             } else if (qual == K_Z)
             {
-                s = (TYPES*)& ((dim3*)ssrc->pvalue)->z;
+                s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->z;
             }
             else assert(false);
         }
@@ -3576,7 +3580,7 @@ int CUDA_EMULATOR::THREAD::DoMov(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
+int THREAD::DoMul(TREE * inst)
 {
     // Multiply register and/or constants, and store in a register.
     int start = 0;
@@ -3655,11 +3659,11 @@ int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -3685,7 +3689,7 @@ int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -3712,7 +3716,7 @@ int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     switch (type)
@@ -3779,7 +3783,7 @@ int CUDA_EMULATOR::THREAD::DoMul(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
+int THREAD::DoMul24(TREE * inst)
 {
     // Multiply 24-bit integer numbers, in register and/or constants,
     // and store in a register.
@@ -3848,11 +3852,11 @@ int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -3872,7 +3876,7 @@ int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -3893,7 +3897,7 @@ int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     switch (type)
@@ -3918,7 +3922,7 @@ int CUDA_EMULATOR::THREAD::DoMul24(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoNeg(TREE * inst)
+int THREAD::DoNeg(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -3978,10 +3982,10 @@ int CUDA_EMULATOR::THREAD::DoNeg(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4011,7 +4015,7 @@ int CUDA_EMULATOR::THREAD::DoNeg(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_S16:
@@ -4057,7 +4061,7 @@ int CUDA_EMULATOR::THREAD::DoNeg(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoNot(TREE * inst)
+int THREAD::DoNot(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4110,10 +4114,10 @@ int CUDA_EMULATOR::THREAD::DoNot(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4140,7 +4144,7 @@ int CUDA_EMULATOR::THREAD::DoNot(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -4180,7 +4184,7 @@ int CUDA_EMULATOR::THREAD::DoNot(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
+int THREAD::DoOr(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4239,12 +4243,12 @@ int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4271,7 +4275,7 @@ int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -4316,7 +4320,7 @@ int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_B16:
@@ -4356,32 +4360,32 @@ int CUDA_EMULATOR::THREAD::DoOr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoPmevent(TREE * inst)
+int THREAD::DoPmevent(TREE * inst)
 {
-    throw new Unimplemented("PMEVENT unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("PMEVENT unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoPopc(TREE * inst)
+int THREAD::DoPopc(TREE * inst)
 {
-    throw new Unimplemented("POPC unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("POPC unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoPrefetch(TREE * inst)
+int THREAD::DoPrefetch(TREE * inst)
 {
-    throw new Unimplemented("PREFETCH unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("PREFETCH unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoPrefetchu(TREE * inst)
+int THREAD::DoPrefetchu(TREE * inst)
 {
-    throw new Unimplemented("PREFETCHU unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("PREFETCHU unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoPrmt(TREE * inst)
+int THREAD::DoPrmt(TREE * inst)
 {
-    throw new Unimplemented("PRMT unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("PRMT unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoRcp(TREE * inst)
+int THREAD::DoRcp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4444,10 +4448,10 @@ int CUDA_EMULATOR::THREAD::DoRcp(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
+    TYPES::Types value1;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4468,7 +4472,7 @@ int CUDA_EMULATOR::THREAD::DoRcp(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_F32:
@@ -4496,12 +4500,12 @@ int CUDA_EMULATOR::THREAD::DoRcp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoRed(TREE * inst)
+int THREAD::DoRed(TREE * inst)
 {
-    throw new Unimplemented("RED unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("RED unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
+int THREAD::DoRem(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4555,11 +4559,11 @@ int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    TYPES * pdst_value;
-    TYPES * psrc1_value;
-    TYPES * psrc2_value;
-    TYPES src1_value;// used if literal
-    TYPES src2_value;// used if literal
+    TYPES::Types * pdst_value;
+    TYPES::Types * psrc1_value;
+    TYPES::Types * psrc2_value;
+    TYPES::Types src1_value;// used if literal
+    TYPES::Types src2_value;// used if literal
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
@@ -4568,11 +4572,11 @@ int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES value2; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types value1; // used if literal
+    TYPES::Types value2; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4604,7 +4608,7 @@ int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -4637,7 +4641,7 @@ int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
 
     switch (type)
@@ -4666,22 +4670,22 @@ int CUDA_EMULATOR::THREAD::DoRem(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoRet(TREE * inst)
+int THREAD::DoRet(TREE * inst)
 {
-    throw new Unimplemented("RET unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("RET unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoRsqrt(TREE * inst)
+int THREAD::DoRsqrt(TREE * inst)
 {
-    throw new Unimplemented("RSQRT unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("RSQRT unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSad(TREE * inst)
+int THREAD::DoSad(TREE * inst)
 {
-    throw new Unimplemented("SAD unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SAD unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
+int THREAD::DoSelp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -4752,12 +4756,12 @@ int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES value1;
-    TYPES value2;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
-    TYPES * s3 = 0;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
+    TYPES::Types * s3 = 0;
     char * dummy;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
@@ -4806,7 +4810,7 @@ int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_S16:
@@ -4893,7 +4897,7 @@ int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_S16:
@@ -4939,7 +4943,7 @@ int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
         Symbol * ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
 // FIX      assert(strcmp(ssrc3->type, ".pred") == 0);
-        s3 = (TYPES*)ssrc3->pvalue;
+        s3 = (TYPES::Types*)ssrc3->pvalue;
         assert(s3 != 0);
     } else assert(false);
 
@@ -4984,12 +4988,12 @@ int CUDA_EMULATOR::THREAD::DoSelp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoSet(TREE * inst)
+int THREAD::DoSet(TREE * inst)
 {
-    throw new Unimplemented("SET unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SET unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSetp(TREE * inst)
+int THREAD::DoSetp(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5074,23 +5078,23 @@ int CUDA_EMULATOR::THREAD::DoSetp(TREE * inst)
     Symbol * sdst1 = 0;
     Symbol * ssrc1 = 0;
     Symbol * ssrc2 = 0;
-    TYPES value1;
-    TYPES value2;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (dst1->GetType() == T_WORD)
     {
         sdst1 = this->root->FindSymbol(dst1->GetText());
     } else assert(false);
 
-    TYPES * d = (TYPES*)sdst1->pvalue;
+    TYPES::Types * d = (TYPES::Types*)sdst1->pvalue;
 
     if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
         assert(s1 != 0);
     }
     else if (src1->GetType() == TREE_CONSTANT_EXPR)
@@ -5141,7 +5145,7 @@ int CUDA_EMULATOR::THREAD::DoSetp(TREE * inst)
     {
         ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        s2 = (TYPES*)ssrc2->pvalue;
+        s2 = (TYPES::Types*)ssrc2->pvalue;
         assert(s2 != 0);
     }
     else if (src2->GetType() == TREE_CONSTANT_EXPR)
@@ -5465,7 +5469,7 @@ int CUDA_EMULATOR::THREAD::DoSetp(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
+int THREAD::DoShl(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5524,12 +5528,12 @@ int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5553,7 +5557,7 @@ int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -5592,7 +5596,7 @@ int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_B16:
@@ -5626,7 +5630,7 @@ int CUDA_EMULATOR::THREAD::DoShl(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
+int THREAD::DoShr(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5687,12 +5691,12 @@ int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5734,7 +5738,7 @@ int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -5809,7 +5813,7 @@ int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_B16:
@@ -5879,17 +5883,17 @@ int CUDA_EMULATOR::THREAD::DoShr(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoSin(TREE * inst)
+int THREAD::DoSin(TREE * inst)
 {
-    throw new Unimplemented("SIN unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SIN unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSlct(TREE * inst)
+int THREAD::DoSlct(TREE * inst)
 {
-    throw new Unimplemented("SLCT unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SLCT unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
+int THREAD::DoSqrt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -5946,9 +5950,9 @@ int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    TYPES * pdst_value;
-    TYPES * psrc1_value;
-    TYPES src1_value;// used if literal
+    TYPES::Types * pdst_value;
+    TYPES::Types * psrc1_value;
+    TYPES::Types src1_value;// used if literal
 
     Symbol * sdst = 0;
     Symbol * ssrc1 = 0;
@@ -5956,9 +5960,9 @@ int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
 
-    TYPES value1; // used if literal
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
+    TYPES::Types value1; // used if literal
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5978,7 +5982,7 @@ int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
     {
         ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        s1 = (TYPES*)ssrc1->pvalue;
+        s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
 
     switch (type)
@@ -5995,7 +5999,7 @@ int CUDA_EMULATOR::THREAD::DoSqrt(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
+int THREAD::DoSt(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -6070,7 +6074,7 @@ int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
         value = this->emulator->Eval(K_S32, const_expr);
     }
 
-    TYPES * d = 0;
+    TYPES::Types * d = 0;
     unsigned char * addr = 0;
     switch (sdst->storage_class)
     {
@@ -6148,10 +6152,10 @@ int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
 
     for (int i = 0; i < times; ++i)
     {
-        TYPES * d = (TYPES*)addr;
+        TYPES::Types * d = (TYPES::Types*)addr;
         
         TREE * src = osrc->GetChild( i);
-        TYPES * s = 0;
+        TYPES::Types * s = 0;
         Symbol * ssrc = 0;
         if (src->GetType() == TREE_CONSTANT_EXPR)
         {
@@ -6173,12 +6177,12 @@ int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
                 case K_CONST:
                 // names in instructions refer to the address of the
                 // variable, not the contents.
-                    s = (TYPES*)&ssrc->pvalue;
+                    s = (TYPES::Types*)&ssrc->pvalue;
                     break;
                 case K_REG:
                 // names in instructions refer to the contents of the
                 // register.
-                    s = (TYPES*)ssrc->pvalue;
+                    s = (TYPES::Types*)ssrc->pvalue;
                     break;
             }
             if (strcmp(ssrc->typestring, "dim3") == 0)
@@ -6189,13 +6193,13 @@ int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
                 int qual = tqual->GetType();
                 if (qual == K_X)
                 {
-                    s = (TYPES*)& ((dim3*)ssrc->pvalue)->x;
+                    s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->x;
                 } else if (qual == K_Y)
                 {
-                    s = (TYPES*)& ((dim3*)ssrc->pvalue)->y;
+                    s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->y;
                 } else if (qual == K_Z)
                 {
-                    s = (TYPES*)& ((dim3*)ssrc->pvalue)->z;
+                    s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->z;
                 }
                 else assert(false);
             }
@@ -6255,7 +6259,7 @@ int CUDA_EMULATOR::THREAD::DoSt(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
+int THREAD::DoSub(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -6329,15 +6333,15 @@ int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
-    TYPES value3;
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types value3;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
     // used for carry out calculation.
-    TYPES * temp = &value3;
+    TYPES::Types * temp = &value3;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -6376,7 +6380,7 @@ int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_U16:
@@ -6445,7 +6449,7 @@ int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_U16:
@@ -6574,102 +6578,102 @@ int CUDA_EMULATOR::THREAD::DoSub(TREE * inst)
     return 0;
 }
 
-int CUDA_EMULATOR::THREAD::DoSubc(TREE * inst)
+int THREAD::DoSubc(TREE * inst)
 {
-    throw new Unimplemented("SUBC unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SUBC unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSuld(TREE * inst)
+int THREAD::DoSuld(TREE * inst)
 {
-    throw new Unimplemented("SULD unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SULD unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSuq(TREE * inst)
+int THREAD::DoSuq(TREE * inst)
 {
-    throw new Unimplemented("SUQ unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SUQ unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSured(TREE * inst)
+int THREAD::DoSured(TREE * inst)
 {
-    throw new Unimplemented("SURED unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SURED unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoSust(TREE * inst)
+int THREAD::DoSust(TREE * inst)
 {
-    throw new Unimplemented("SUST unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("SUST unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoTestp(TREE * inst)
+int THREAD::DoTestp(TREE * inst)
 {
-    throw new Unimplemented("TESTP unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("TESTP unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoTex(TREE * inst)
+int THREAD::DoTex(TREE * inst)
 {
-    throw new Unimplemented("TEX unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("TEX unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoTrap(TREE * inst)
+int THREAD::DoTrap(TREE * inst)
 {
-    throw new Unimplemented("TRAP unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("TRAP unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoTxq(TREE * inst)
+int THREAD::DoTxq(TREE * inst)
 {
-    throw new Unimplemented("TXQ unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("TXQ unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVabsdiff(TREE * inst)
+int THREAD::DoVabsdiff(TREE * inst)
 {
-    throw new Unimplemented("VABSDIFF unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VABSDIFF unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVadd(TREE * inst)
+int THREAD::DoVadd(TREE * inst)
 {
-    throw new Unimplemented("Vadd unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("Vadd unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVmad(TREE * inst)
+int THREAD::DoVmad(TREE * inst)
 {
-    throw new Unimplemented("VMAD unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VMAD unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVmax(TREE * inst)
+int THREAD::DoVmax(TREE * inst)
 {
-    throw new Unimplemented("VMAX unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VMAX unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVmin(TREE * inst)
+int THREAD::DoVmin(TREE * inst)
 {
-    throw new Unimplemented("VMIN unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VMIN unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVote(TREE * inst)
+int THREAD::DoVote(TREE * inst)
 {
-    throw new Unimplemented("VOTE unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VOTE unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVset(TREE * inst)
+int THREAD::DoVset(TREE * inst)
 {
-    throw new Unimplemented("VSET unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VSET unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVshl(TREE * inst)
+int THREAD::DoVshl(TREE * inst)
 {
-    throw new Unimplemented("VSHL unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VSHL unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVshr(TREE * inst)
+int THREAD::DoVshr(TREE * inst)
 {
-    throw new Unimplemented("VSHR unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VSHR unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoVsub(TREE * inst)
+int THREAD::DoVsub(TREE * inst)
 {
-    throw new Unimplemented("VSUB unimplemented");
+    throw new CUDA_EMULATOR::Unimplemented("VSUB unimplemented");
 }
 
-int CUDA_EMULATOR::THREAD::DoXor(TREE * inst)
+int THREAD::DoXor(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -6728,12 +6732,12 @@ int CUDA_EMULATOR::THREAD::DoXor(TREE * inst)
         sdst = this->root->FindSymbol(dst->GetText());
     } else assert(false);
 
-    TYPES value1;
-    TYPES value2;
+    TYPES::Types value1;
+    TYPES::Types value2;
     char * dummy;
-    TYPES * d = (TYPES*)sdst->pvalue;
-    TYPES * s1 = &value1;
-    TYPES * s2 = &value2;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -6760,7 +6764,7 @@ int CUDA_EMULATOR::THREAD::DoXor(TREE * inst)
         Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
-        TYPES * psrc1_value = (TYPES*)ssrc1->pvalue;
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
             case K_B16:
@@ -6805,7 +6809,7 @@ int CUDA_EMULATOR::THREAD::DoXor(TREE * inst)
         Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
-        TYPES * psrc2_value = (TYPES*)ssrc2->pvalue;
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
             case K_B16:

@@ -5,10 +5,15 @@
 #include <list>
 #include <map>
 #include "../ptxp/PtxLexer.h"
-//#include "../ptxp/PtxParser.h"
 #include "tree.h"
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
+#include "constant.h"
+
+class SymbolTable;
+class StringTable;
+class Symbol;
+class TYPES;
 
 class CUDA_EMULATOR
 {
@@ -21,74 +26,11 @@ private:
         }
     };
 
-    typedef union TYPES {
-        signed __int64 s64;
-        signed __int32 s32;
-        signed __int16 s16;;
-        signed __int8 s8;
-        unsigned __int64 u64;
-        unsigned __int32 u32;
-        unsigned __int16 u16;
-        unsigned __int8 u8;
-        unsigned __int64 b64;
-        unsigned __int32 b32;
-        unsigned __int16 b16;
-        unsigned __int8 b8;
-        float f16;  // not really supported.
-        float f32;
-        double f64;
-        bool pred;
-        void * pvoid;
-    } TYPES;
-
-    class Symbol
-    {
-    public:
-        char * name;
-        void * pvalue;
-        size_t size;
-        char * typestring;
-        int type;
-        bool array;
-        size_t index_max;
-        int storage_class;
-        CUDA_EMULATOR * emulator;
-        ~Symbol()
-        {
-            // Do not free here if this is shared memory.
-            if (emulator->extern_memory_buffer != (TYPES*)this->pvalue)
-                free(this->pvalue);
-        }
-    };
-
-    class SymbolTable
-    {
-        public:
-            std::map<char*, Symbol*, ltstr> symbols;
-            SymbolTable * parent_block_symbol_table;
-            SymbolTable() {}
-            ~SymbolTable()
-            {
-                std::map<char*, Symbol*, ltstr>::iterator it = this->symbols.begin();
-                for ( ; it != this->symbols.end(); ++it)
-                {
-                    delete it->second;
-                }
-            }
-            Symbol * FindSymbol(char * name);
-    };
-
-    class StringTable
-    {
-        public:
-            char * Entry(char * node);
-        private:
-            std::map<char *, char*, ltstr> table;
-    };
-
     StringTable * string_table;
 
     char * device;
+
+public:
 
     int trace_level;
 
@@ -114,127 +56,7 @@ private:
         int pc;
         SymbolTable * root;
     };
-
-    class Constant
-    {
-        public:
-            int type;
-            TYPES value;
-            Constant(int i)
-            {
-                type = K_S32;
-                value.s32 = i;
-            }
-            Constant()
-            {
-                memset(&this->value, 0, sizeof(value));
-            }
-    };
-
-    class THREAD
-    {
-        public:
-            THREAD(CUDA_EMULATOR * emulator, TREE * block, int pc, SymbolTable * root);
-            ~THREAD();
-            static unsigned int __stdcall WinThreadExecute(void * thr); // THREAD * thread
-            void Execute();
-            bool Finished();
-            void Reset();
-            bool Waiting();
-            HANDLE hThread;
-        private:
-            TREE * block;
-            int pc;
-            bool finished;
-            bool wait;
-            SymbolTable * root;
-            int carry;
-            CUDA_EMULATOR * emulator;
-        public:
-            void Dump(char * comment, int pc, TREE * inst);
-            int Dispatch(TREE * inst);
-            int DoAbs(TREE * inst);
-            int DoAdd(TREE * inst);
-            int DoAddc(TREE * inst);
-            int DoAnd(TREE * inst);
-            int DoAtom(TREE * inst);
-            int DoBar(TREE * inst);
-            int DoBfe(TREE * inst);
-            int DoBfi(TREE * inst);
-            int DoBfind(TREE * inst);
-            int DoBra(TREE * inst);
-            int DoBrev(TREE * inst);
-            int DoBrkpt(TREE * inst);
-            int DoCall(TREE * inst);
-            int DoClz(TREE * inst);
-            int DoCnot(TREE * inst);
-            int DoCopysign(TREE * inst);
-            int DoCos(TREE * inst);
-            int DoCvt(TREE * inst);
-            int DoCvta(TREE * inst);
-            int DoDiv(TREE * inst);
-            int DoEx2(TREE * inst);
-            int DoExit(TREE * inst);
-            int DoFma(TREE * inst);
-            int DoIsspacep(TREE * inst);
-            int DoLd(TREE * inst);
-            int DoLdu(TREE * inst);
-            int DoLg2(TREE * inst);
-            int DoMad(TREE * inst);
-            int DoMad24(TREE * inst);
-            int DoMax(TREE * inst);
-            int DoMembar(TREE * inst);
-            int DoMin(TREE * inst);
-            int DoMov(TREE * inst);
-            int DoMul(TREE * inst);
-            int DoMul24(TREE * inst);
-            int DoNeg(TREE * inst);
-            int DoNot(TREE * inst);
-            int DoOr(TREE * inst);
-            int DoPmevent(TREE * inst);
-            int DoPopc(TREE * inst);
-            int DoPrefetch(TREE * inst);
-            int DoPrefetchu(TREE * inst);
-            int DoPrmt(TREE * inst);
-            int DoRcp(TREE * inst);
-            int DoRed(TREE * inst);
-            int DoRem(TREE * inst);
-            int DoRet(TREE * inst);
-            int DoRsqrt(TREE * inst);
-            int DoSad(TREE * inst);
-            int DoSelp(TREE * inst);
-            int DoSet(TREE * inst);
-            int DoSetp(TREE * inst);
-            int DoShl(TREE * inst);
-            int DoShr(TREE * inst);
-            int DoSin(TREE * inst);
-            int DoSlct(TREE * inst);
-            int DoSqrt(TREE * inst);
-            int DoSt(TREE * inst);
-            int DoSub(TREE * inst);
-            int DoSubc(TREE * inst);
-            int DoSuld(TREE * inst);
-            int DoSuq(TREE * inst);
-            int DoSured(TREE * inst);
-            int DoSust(TREE * inst);
-            int DoTestp(TREE * inst);
-            int DoTex(TREE * inst);
-            int DoTrap(TREE * inst);
-            int DoTxq(TREE * inst);
-            int DoVabsdiff(TREE * inst);
-            int DoVadd(TREE * inst);
-            int DoVmad(TREE * inst);
-            int DoVmax(TREE * inst);
-            int DoVmin(TREE * inst);
-            int DoVote(TREE * inst);
-            int DoVset(TREE * inst);
-            int DoVshl(TREE * inst);
-            int DoVshr(TREE * inst);
-            int DoVsub(TREE * inst);
-            int DoXor(TREE * inst);
-
-    };
-
+public:
     class Unimplemented {
     private:
         char * the_reason;
@@ -260,7 +82,8 @@ private:
     CUDA_EMULATOR();
     ~CUDA_EMULATOR();
     static CUDA_EMULATOR * singleton;
-    TREE * FindBlock(TREE * node);
+public:
+	TREE * FindBlock(TREE * node);
     TREE * GetInst(TREE * block, int pc);
     void SetupParams(SymbolTable * symbol_table, TREE * entry);
     void SetupVariables(SymbolTable * symbol_table, TREE * block, int * desired_storage_classes);
@@ -301,7 +124,7 @@ private:
     void Extract_From_Tree(TREE * node);
     void SetupSingleVar(SymbolTable * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
 
-public:
+
     static CUDA_EMULATOR * Singleton();
     
     // Parse
