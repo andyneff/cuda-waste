@@ -85,7 +85,7 @@ void EMULATOR::Extract_From_Tree(TREE * node)
     if (node->GetType() == TREE_ENTRY)
     {
         // First child will be name node.
-        TREE * word = GetChild(node, 0);
+        TREE * word = node->GetChild(0);
         char * name = word->GetText();
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
@@ -94,7 +94,7 @@ void EMULATOR::Extract_From_Tree(TREE * node)
     }
     else if (node->GetType() == TREE_FUNC)
     {
-        TREE * word = GetChild(node, 0);
+        TREE * word = node->GetChild(0);
         char * name = word->GetText();
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
@@ -122,10 +122,10 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
         for (int i = 0; i < argc; ++i, ++ia)
         {
             // Get to the parameter in the AST.
-            TREE * param = GetChild(param_list, i);
-            TREE * name = GetChild(param, 0);
+            TREE * param = param_list->GetChild(i);
+            TREE * name = param->GetChild(0);
             char * n = name->GetText();
-            TREE * type = GetChild(GetChild(param, 1), 0);
+            TREE * type = param->GetChild(1)->GetChild(0);
             char * t = type->GetText();
             // Get to the argument in the set up list.
             arg * a = *ia;
@@ -181,11 +181,6 @@ size_t EMULATOR::Sizeof(int type)
     return 0;
 }
 
-int EMULATOR::GetType(TREE * c)
-{
-    return c->GetType();
-}
-
 int EMULATOR::GetSize(TREE * tree_par_register)
 {
     TREE * c = (TREE *)tree_par_register->GetChild(0);
@@ -230,11 +225,11 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
     for (int j = 0; j < (int)var->GetChildCount(); ++j)
     {
         TREE * c = var->GetChild(j);
-        int ct = GetType(c);
+        int ct = c->GetType();
         if (ct == TREE_SPACE)
         {
-            TREE * chi = GetChild(c, 0);
-            storage_class = GetType(chi);
+            TREE * chi = c->GetChild(0);
+            storage_class = chi->GetType();
             // no need to continue if wrong storage class.
             for (int k = 0; desired_storage_classes[k] != 0; ++k)
             {
@@ -248,9 +243,9 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             // Nothing to do.
         } else if (ct == TREE_TYPE)
         {
-            ttype = GetChild(c, 0);
+            ttype = c->GetChild(0);
             type = ttype->GetText();
-            int t = GetType(ttype);
+            int t = ttype->GetType();
             size = Sizeof(t);
         } else if (ct == T_WORD)
         {
@@ -268,25 +263,25 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             total = 1;
             for (int a = 0; ; ++a)
             {
-                TREE * t = GetChild(tarray, a);
+                TREE * t = tarray->GetChild(a);
                 if (t == 0)
                     break;
-                int gt = GetType(t);
+                int gt = t->GetType();
                 // Look at size information if not external.
                 if (externed == false && gt == T_OB)
                 {
                     ++a;
-                    TREE * n = GetChild(tarray, a);
+                    TREE * n = tarray->GetChild(a);
                     assert(n != 0);
-                    if (GetType(n) == T_DEC_LITERAL)
+                    if (n->GetType() == T_DEC_LITERAL)
                     {
                         int sz = atoi(n->GetText());
                         total = total * sz;
                     }
                     ++a;
-                    TREE * t2 = GetChild(tarray, a);
+                    TREE * t2 = tarray->GetChild(a);
                     assert(t2 != 0);
-                    assert(GetType(t2) == T_CB);
+                    assert(t2->GetType() == T_CB);
                     ++a;
                 }
                 else if (externed != 0)
@@ -369,13 +364,13 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             unsigned char * mptr = (unsigned char *)ptr;
             for (int a = 0; ; ++a)
             {
-                TREE * t = GetChild(tinitializer_values, a);
+                TREE * t = tinitializer_values->GetChild(a);
                 if (t == 0)
                 break;
-                int gt = GetType(t);
+                int gt = t->GetType();
                 if (gt == TREE_CONSTANT_EXPR)
                 {
-                    TREE * n = GetChild(t, 0);
+                    TREE * n = t->GetChild(0);
                     int type = ttype->GetType();
                     CONSTANT c = Eval(type, n);
                     TYPES::Types * s1 = (TYPES::Types*)mptr;
@@ -571,11 +566,11 @@ bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
     bool result = false;
     for (int i = 0; i < (int)code->GetChildCount(); ++i)
     {
-        TREE * child = (TREE *)GetChild(code, i);
-        if (GetType(child) == TREE_INST)
+        TREE * child = (TREE *)code->GetChild(i);
+        if (child->GetType() == TREE_INST)
         {
             TREE * inst = child;
-            TREE * i = (TREE *)GetChild(inst, 0);
+            TREE * i = inst->GetChild(0);
             int inst_type = i->GetType();
             if (inst_type == TREE_PRED)
             {
@@ -734,9 +729,9 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
 void EMULATOR::PrintName(TREE * inst)
 {
     int start = 0;
-    if (GetType(GetChild(inst, start)) == TREE_PRED)
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    std::cout << GetChild(inst, start)->GetText() << "\n";
+    std::cout << inst->GetChild(start)->GetText() << "\n";
 } 
 
 void EMULATOR::Print(TREE * node, int level)
@@ -815,13 +810,6 @@ TREE * EMULATOR::GetInst(TREE * block, int pc)
 }
 
 
-TREE * EMULATOR::GetChild(TREE * node, int n)
-{
-    TREE * c = (TREE *)node->GetChild(n);
-    return c;
-}
-
-
 char * EMULATOR::StringTableEntry(char * text)
 {
     return this->string_table->Entry(text);
@@ -834,7 +822,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
     result.type = expected_type;
     char * dummy;
     char * text = const_expr->GetText();
-    if (GetType(const_expr) == T_DEC_LITERAL)
+    if (const_expr->GetType() == T_DEC_LITERAL)
     {
         switch (expected_type)
         {
@@ -877,7 +865,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_HEX_LITERAL)
+    } else if (const_expr->GetType() == T_HEX_LITERAL)
     {
         text += 2;
         switch (expected_type)
@@ -921,7 +909,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_FLT_LITERAL)
+    } else if (const_expr->GetType() == T_FLT_LITERAL)
     {
         // Three cases:
         // "0F...", or "0f..." (hex 32-bit float)
@@ -970,10 +958,10 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
                     assert(false);
             }
         }
-    } else if (GetType(const_expr) == T_QUESTION)
+    } else if (const_expr->GetType() == T_QUESTION)
     {
         throw new Unimplemented("Question operator in constant expression not supported.\n");
-    } else if (GetType(const_expr) == T_OROR)
+    } else if (const_expr->GetType() == T_OROR)
     {
         // Perform boolean OR.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1019,7 +1007,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_ANDAND)
+    } else if (const_expr->GetType() == T_ANDAND)
     {
         // Perform boolean AND.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1065,7 +1053,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_OR)
+    } else if (const_expr->GetType() == T_OR)
     {
         // Perform bit OR.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1111,7 +1099,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_XOR)
+    } else if (const_expr->GetType() == T_XOR)
     {
         // Perform bit XOR.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1157,7 +1145,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_AND)
+    } else if (const_expr->GetType() == T_AND)
     {
         // Perform bit OR.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1203,7 +1191,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_EQEQ)
+    } else if (const_expr->GetType() == T_EQEQ)
     {
         // Perform EQ.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1249,7 +1237,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_NOTEQ)
+    } else if (const_expr->GetType() == T_NOTEQ)
     {
         // Perform bit !=.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1295,7 +1283,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_LE)
+    } else if (const_expr->GetType() == T_LE)
     {
         // Perform bit LE.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1341,7 +1329,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_GE)
+    } else if (const_expr->GetType() == T_GE)
     {
         // Perform bit GE
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1387,7 +1375,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_LT)
+    } else if (const_expr->GetType() == T_LT)
     {
         // Perform bit <.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1433,7 +1421,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_GT)
+    } else if (const_expr->GetType() == T_GT)
     {
         // Perform bit OR.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1479,7 +1467,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_LTLT)
+    } else if (const_expr->GetType() == T_LTLT)
     {
         // Perform bit <<
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1525,7 +1513,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_GTGT)
+    } else if (const_expr->GetType() == T_GTGT)
     {
         // Perform bit >>
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1571,7 +1559,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_PLUS && const_expr->GetChild(1) != 0)
+    } else if (const_expr->GetType() == T_PLUS && const_expr->GetChild(1) != 0)
     {
         // Perform bit '+'.
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1617,7 +1605,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_MINUS && const_expr->GetChild(1) != 0)
+    } else if (const_expr->GetType() == T_MINUS && const_expr->GetChild(1) != 0)
     {
         // Perform bit '-'
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1663,7 +1651,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_STAR)
+    } else if (const_expr->GetType() == T_STAR)
     {
         // Perform bit '*'
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1709,7 +1697,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_SLASH)
+    } else if (const_expr->GetType() == T_SLASH)
     {
         // Perform bit '/'
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1755,7 +1743,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_PERCENT)
+    } else if (const_expr->GetType() == T_PERCENT)
     {
         // Perform bit '%'
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1801,7 +1789,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_PLUS)
+    } else if (const_expr->GetType() == T_PLUS)
     {
         // Perform bit >>
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1846,7 +1834,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_MINUS)
+    } else if (const_expr->GetType() == T_MINUS)
     {
         // Perform bit >>
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1891,7 +1879,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_TILDE)
+    } else if (const_expr->GetType() == T_TILDE)
     {
         // Perform bit >>
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
@@ -1936,7 +1924,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
             default:
                 assert(false);
         }
-    } else if (GetType(const_expr) == T_NOT)
+    } else if (const_expr->GetType() == T_NOT)
     {
         // Perform !
         CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));

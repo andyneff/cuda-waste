@@ -33,6 +33,11 @@ class TYPES;
 class EMULATOR
 {
 private:
+    EMULATOR();
+    ~EMULATOR();
+    static EMULATOR * singleton;
+
+private:
     struct ltstr
     {
         bool operator()(const char* s1, const char* s2) const
@@ -71,6 +76,7 @@ public:
         int pc;
         SYMBOL_TABLE * root;
     };
+
 public:
     class Unimplemented {
     private:
@@ -92,20 +98,15 @@ public:
             return the_reason;
         }
     };
-
-private:
-    EMULATOR();
-    ~EMULATOR();
-    static EMULATOR * singleton;
+    void unimplemented(bool condition, char * text);
+    void unimplemented(char * text);
 public:
     TREE * FindBlock(TREE * node);
     TREE * GetInst(TREE * block, int pc);
     void SetupParams(SYMBOL_TABLE * symbol_table, TREE * entry);
     void SetupVariables(SYMBOL_TABLE * symbol_table, TREE * block, int * desired_storage_classes);
     size_t Sizeof(int type);
-    int GetType(TREE * tree_type);
     int GetSize(TREE * tree_par_register);
-    TREE * GetChild(TREE * node, int n);
     void SetupDimensionLocals();
     void SetupPredefined(SYMBOL_TABLE * symbol_table, dim3 tid, dim3 bid);
     void CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class);
@@ -132,8 +133,6 @@ public:
     void ExecuteBlocks(bool do_thread_synch, TREE * code);
     void ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
-    void unimplemented(bool condition, char * text);
-    void unimplemented(char * text);
 
     void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
     void Extract_From_Tree(TREE * node);

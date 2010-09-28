@@ -1373,7 +1373,7 @@ void** CUDA_WRAPPER::_cudaRegisterFatBinary(void *fatCubin)
             char * profile = ptx->gpuProfileName;
             char * code = ptx->ptx;
             EMULATOR * emulator = EMULATOR::Singleton();
-            emulator->Extract_From_Source(profile, code);
+            emulator->Parse(profile, code);
         }
 
         // ELF contains just in time code for every PTX.
