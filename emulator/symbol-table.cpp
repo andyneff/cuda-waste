@@ -16,29 +16,29 @@
 #include "symbol-table.h"
 
 
-SymbolTable::SymbolTable()
+SYMBOL_TABLE::SYMBOL_TABLE()
 {
 }
 
-SymbolTable::~SymbolTable()
+SYMBOL_TABLE::~SYMBOL_TABLE()
 {
-	std::map<char*, Symbol*, ltstr>::iterator it = this->symbols.begin();
+	std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
 	for ( ; it != this->symbols.end(); ++it)
 	{
 		delete it->second;
 	}
 }
 
-void SymbolTable::Dump()
+void SYMBOL_TABLE::Dump()
 {
 	int level = 0;
-	for (SymbolTable * st = this; st != 0; st = st->parent_block_symbol_table, level++)
+	for (SYMBOL_TABLE * st = this; st != 0; st = st->parent_block_symbol_table, level++)
 	{
 		std::cout << "---- Level " << level << " ----\n";
-		std::map<char*, Symbol*, ltstr>::iterator it;
+		std::map<char*, SYMBOL*, ltstr>::iterator it;
 		for (it = st->symbols.begin(); it != st->symbols.end(); ++it)
 		{
-			Symbol * s = (*it).second;
+			SYMBOL * s = (*it).second;
 			std::cout << "name: " << s->name << " ";
 			std::cout << "size: " << s->size << " ";
 			std::cout << "stor: " << s->storage_class << " ";
@@ -95,12 +95,12 @@ void SymbolTable::Dump()
 }
 
 
-Symbol * SymbolTable::FindSymbol(char * name)
+SYMBOL * SYMBOL_TABLE::FindSymbol(char * name)
 {
-	SymbolTable * st = this;
+	SYMBOL_TABLE * st = this;
 	while (st)
 	{
-		std::map<char*, Symbol*, ltstr>::iterator it = st->symbols.find(name);
+		std::map<char*, SYMBOL*, ltstr>::iterator it = st->symbols.find(name);
 		if (it != st->symbols.end())
 		{
 			return it->second;

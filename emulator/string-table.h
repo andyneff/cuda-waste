@@ -11,7 +11,7 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
 
-class StringTable
+class STRING_TABLE
 {
 public:
     char * Entry(char * text)

@@ -10,7 +10,7 @@
 #include "symbol-table.h"
 
 
-THREAD::THREAD(CUDA_EMULATOR * emulator, TREE * block, int pc, SymbolTable * root)
+THREAD::THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root)
 {
 	this->emulator = emulator;
 	this->block = block;
@@ -127,7 +127,7 @@ int THREAD::Dispatch(TREE * inst)
 			else assert(false);
 		}
 		assert(tsym != 0);
-		Symbol * sym = this->root->FindSymbol(tsym->GetText());
+		SYMBOL * sym = this->root->FindSymbol(tsym->GetText());
 		assert(sym != 0);
 		TYPES::Types * s = (TYPES::Types*)sym->pvalue;
 
@@ -305,7 +305,7 @@ int THREAD::Dispatch(TREE * inst)
 			default:
 				assert(false);
 		}
-	} catch (CUDA_EMULATOR::Unimplemented * u)
+	} catch (EMULATOR::Unimplemented * u)
 	{
 		std::cout << u->ShowReason() << "\n";
 		delete u;

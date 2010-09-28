@@ -11,7 +11,7 @@
 #include "symbol.h"
 #include "emulator.h"
 
-Symbol::~Symbol()
+SYMBOL::~SYMBOL()
 {
     // Do not free here if this is shared memory.
     if (this->emulator->extern_memory_buffer != (TYPES::Types*)this->pvalue)

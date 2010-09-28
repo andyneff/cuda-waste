@@ -339,7 +339,7 @@ CUresult CUDAAPI _CUDA::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
         return (*proc)(pctx, flags);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuCtxAttach(pctx, flags);
     }
 }
@@ -353,7 +353,7 @@ CUresult CUDAAPI _CUDA::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevi
         return (*proc)(pctx, flags, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuCtxCreate(pctx, flags, dev);
     }
 }
@@ -367,7 +367,7 @@ CUresult CUDAAPI _CUDA::_cuCtxCreate_v2(CUcontext *pctx, unsigned int flags, CUd
 		return (*proc)(pctx, flags, dev);
 	} else
 	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuCtxCreate(pctx, flags, dev);
 	}
 }
@@ -381,7 +381,7 @@ CUresult CUDAAPI _CUDA::_cuCtxDestroy( CUcontext ctx )
         return (*proc)( ctx );
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuCtxDestroy(ctx);
     }
 }
@@ -395,7 +395,7 @@ CUresult CUDAAPI _CUDA::_cuCtxDetach(CUcontext ctx)
         return (*proc)(ctx);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuCtxDetach(ctx);
     }
 }
@@ -493,7 +493,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceComputeCapability(int *major, int *minor, CUdev
         return (*proc)(major, minor, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceComputeCapability(major, minor, dev);
     }
 }
@@ -507,7 +507,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceGet(CUdevice *device, int ordinal)
         return (*proc)(device, ordinal);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceGet(device, ordinal);
     }
 }
@@ -521,7 +521,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib
         return (*proc)(pi, attrib, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceGetAttribute(pi, attrib, dev);
     }
 }
@@ -549,7 +549,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceGetName(char *name, int len, CUdevice dev)
         return (*proc)(name, len, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceGetName(name, len, dev);
     }
 }
@@ -563,7 +563,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
         return (*proc)(prop, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceGetProperties(prop, dev);
     }
 }
@@ -577,7 +577,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
         return (*proc)(bytes, dev);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceTotalMem(bytes, dev);
     }
 }
@@ -591,7 +591,7 @@ CUresult CUDAAPI _CUDA::_cuDeviceTotalMem_v2(unsigned int *bytes, CUdevice dev)
 		return (*proc)(bytes, dev);
 	} else
 	{
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDeviceTotalMem(bytes, dev);
 	}
 }
@@ -605,7 +605,7 @@ CUresult CUDAAPI _CUDA::_cuDriverGetVersion(int *driverVersion)
         return (*proc)(driverVersion);
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuDriverGetVersion(driverVersion);
     }
 }
@@ -718,7 +718,7 @@ CUresult CUDAAPI _CUDA::_cuFuncSetBlockShape (CUfunction hfunc, int x, int y, in
         return (*proc)(hfunc, x, y, z);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         dim3 blockDim(x,y,z);
         emulator->ConfigureBlock(blockDim);
         return CUDA_SUCCESS;
@@ -762,7 +762,7 @@ CUresult CUDAAPI _CUDA::_cuGetExportTable( const void **ppExportTable, const CUu
         return (*proc)( ppExportTable, pExportTableId );
     } else
     {
-		CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+		EMULATOR * emulator = EMULATOR::Singleton();
 		return emulator->_cuGetExportTable(ppExportTable, pExportTableId);
     }
 }
@@ -905,7 +905,7 @@ CUresult CUDAAPI _CUDA::_cuLaunchGrid (CUfunction f, int grid_width, int grid_he
         return (*proc)(f, grid_width, grid_height);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         return emulator->_cuLaunchGrid(f, grid_width, grid_height);
     }
 }
@@ -1859,7 +1859,7 @@ CUresult CUDAAPI _CUDA::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, c
         return (*proc)(hfunc, hmod, name);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         return emulator->_cuModuleGetFunction(hfunc, hmod, name);
     }
 }
@@ -1929,7 +1929,7 @@ CUresult CUDAAPI _CUDA::_cuModuleLoad(CUmodule *module, const char *fname)
         return (*proc)(module, fname);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         return emulator->_cuModuleLoad(module, fname);
     }
 }
@@ -2027,7 +2027,7 @@ CUresult CUDAAPI _CUDA::_cuParamSetSize (CUfunction hfunc, unsigned int numbytes
         return (*proc)(hfunc, numbytes);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         emulator->_cuParamSetSize(hfunc, numbytes);
         return CUDA_SUCCESS;
     }
@@ -2056,7 +2056,7 @@ CUresult CUDAAPI _CUDA::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, un
         return (*proc)(hfunc, offset, ptr, numbytes);
     } else
     {
-        CUDA_EMULATOR * emulator = CUDA_EMULATOR::Singleton();
+        EMULATOR * emulator = EMULATOR::Singleton();
         emulator->_cuParamSetv(hfunc, offset, ptr, numbytes);
         return CUDA_SUCCESS;
     }

@@ -10,9 +10,9 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
-class Symbol;
+class SYMBOL;
 
-class SymbolTable
+class SYMBOL_TABLE
 {
 private:
     struct ltstr
@@ -24,11 +24,11 @@ private:
     };
 
 public:
-    std::map<char *, Symbol *, ltstr> symbols;
-    SymbolTable * parent_block_symbol_table;
-    SymbolTable();
-    ~SymbolTable();
+    std::map<char *, SYMBOL *, ltstr> symbols;
+    SYMBOL_TABLE * parent_block_symbol_table;
+    SYMBOL_TABLE();
+    ~SYMBOL_TABLE();
 	void Dump();
-    Symbol * FindSymbol(char * name);
+    SYMBOL * FindSymbol(char * name);
 };
 

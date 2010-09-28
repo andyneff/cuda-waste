@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class Symbol;
+class SYMBOL;
 
 class TREE
 {
@@ -15,14 +15,14 @@ public:
 	void SetText(char * text);
 	void SetType(int type);
 	void AddChild(TREE * child);
-	Symbol * GetSymbol();
-	void SetSymbol(Symbol * symbol);
+	SYMBOL * GetSymbol();
+	void SetSymbol(SYMBOL * symbol);
 	TREE * GetParent();
 	void SetParent(TREE * parent);
 private:
 	std::vector<TREE*> children;
 	int type;
 	char * text;
-	Symbol * symbol;
+	SYMBOL * symbol;
 	TREE * parent;
 };

@@ -9,7 +9,7 @@
 TREE * convert(pANTLR3_BASE_TREE node)
 {
     TREE * result = new TREE();
-    char * text = CUDA_EMULATOR::Singleton()->StringTableEntry((char*)node->getText(node)->chars);
+    char * text = EMULATOR::Singleton()->StringTableEntry((char*)node->getText(node)->chars);
     result->SetText(text);
     int type = node->getType(node);
     result->SetType(type);

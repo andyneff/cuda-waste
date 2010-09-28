@@ -10,9 +10,9 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
-class CUDA_EMULATOR;
+class EMULATOR;
 
-class Symbol
+class SYMBOL
 {
 public:
     char * name;
@@ -23,7 +23,7 @@ public:
     bool array;
     size_t index_max;
     int storage_class;
-    CUDA_EMULATOR * emulator;
-    ~Symbol();
+    EMULATOR * emulator;
+    ~SYMBOL();
 };
 

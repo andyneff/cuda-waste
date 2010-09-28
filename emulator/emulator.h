@@ -10,12 +10,12 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "constant.h"
 
-class SymbolTable;
-class StringTable;
-class Symbol;
+class SYMBOL_TABLE;
+class STRING_TABLE;
+class SYMBOL;
 class TYPES;
 
-class CUDA_EMULATOR
+class EMULATOR
 {
 private:
     struct ltstr
@@ -26,7 +26,7 @@ private:
         }
     };
 
-    StringTable * string_table;
+    STRING_TABLE * string_table;
 
     char * device;
 
@@ -54,7 +54,7 @@ public:
     {
         // context information for location of thread in code.
         int pc;
-        SymbolTable * root;
+        SYMBOL_TABLE * root;
     };
 public:
     class Unimplemented {
@@ -79,22 +79,22 @@ public:
     };
 
 private:
-    CUDA_EMULATOR();
-    ~CUDA_EMULATOR();
-    static CUDA_EMULATOR * singleton;
+    EMULATOR();
+    ~EMULATOR();
+    static EMULATOR * singleton;
 public:
 	TREE * FindBlock(TREE * node);
     TREE * GetInst(TREE * block, int pc);
-    void SetupParams(SymbolTable * symbol_table, TREE * entry);
-    void SetupVariables(SymbolTable * symbol_table, TREE * block, int * desired_storage_classes);
+    void SetupParams(SYMBOL_TABLE * symbol_table, TREE * entry);
+    void SetupVariables(SYMBOL_TABLE * symbol_table, TREE * block, int * desired_storage_classes);
     size_t Sizeof(int type);
     int GetType(TREE * tree_type);
     int GetSize(TREE * tree_par_register);
     TREE * GetChild(TREE * node, int n);
     void SetupDimensionLocals();
-    void SetupPredefined(SymbolTable * symbol_table, dim3 tid, dim3 bid);
-    void CreateSymbol(SymbolTable * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class);
-    void SetupGotos(SymbolTable * symbol_table, TREE * block);
+    void SetupPredefined(SYMBOL_TABLE * symbol_table, dim3 tid, dim3 bid);
+    void CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class);
+    void SetupGotos(SYMBOL_TABLE * symbol_table, TREE * block);
     void Print(TREE * node, int level);
     void PrintName(TREE * node);
 
@@ -102,7 +102,7 @@ public:
     std::map<char*, TREE *, ltstr> func;
     std::map<void*, char*> fun_to_name;
     std::list<TREE *> modules;
-//    std::list<Symbol*> symbol_table;
+//    std::list<SYMBOL*> symbol_table;
     std::list<arg*> arguments;
     config conf;
     void * extern_memory_buffer;
@@ -111,21 +111,21 @@ public:
     void ProcessThreadQueue();
     
     int FindFirstInst(TREE * block, int first);
-    Constant Eval(int expected_type, TREE * const_expr);
+    CONSTANT Eval(int expected_type, TREE * const_expr);
 
-    SymbolTable * PushSymbolTable(SymbolTable * parent);
+    SYMBOL_TABLE * PushSymbolTable(SYMBOL_TABLE * parent);
     void ExecuteBlocks(bool do_thread_synch, TREE * code);
-    void ExecuteSingleBlock(SymbolTable * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
+    void ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
     void unimplemented(bool condition, char * text);
     void unimplemented(char * text);
 
-    void SetupExternShared(SymbolTable * symbol_table, TREE * code);
+    void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
     void Extract_From_Tree(TREE * node);
-    void SetupSingleVar(SymbolTable * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
+    void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
 
 
-    static CUDA_EMULATOR * Singleton();
+    static EMULATOR * Singleton();
     
     // Parse
     TREE * Extract_From_Source(char * module_name, char * source);

@@ -10,12 +10,12 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
-class CUDA_EMULATOR;
+class EMULATOR;
 
 class THREAD
 {
 	public:
-		THREAD(CUDA_EMULATOR * emulator, TREE * block, int pc, SymbolTable * root);
+		THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root);
 		~THREAD();
 		static unsigned int __stdcall WinThreadExecute(void * thr); // THREAD * thread
 		void Execute();
@@ -28,9 +28,9 @@ class THREAD
 		int pc;
 		bool finished;
 		bool wait;
-		SymbolTable * root;
+		SYMBOL_TABLE * root;
 		int carry;
-		CUDA_EMULATOR * emulator;
+		EMULATOR * emulator;
 	public:
 		void Dump(char * comment, int pc, TREE * inst);
 		int Dispatch(TREE * inst);

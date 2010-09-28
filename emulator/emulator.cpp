@@ -12,25 +12,25 @@
 #include "constant.h"
 #include "types.h"
 
-CUDA_EMULATOR * CUDA_EMULATOR::singleton;
+EMULATOR * EMULATOR::singleton;
 
-CUDA_EMULATOR * CUDA_EMULATOR::Singleton()
+EMULATOR * EMULATOR::Singleton()
 {
     if (singleton)
         return singleton;
-    singleton = new CUDA_EMULATOR();
+    singleton = new EMULATOR();
     return singleton;
 }
 
-CUDA_EMULATOR::CUDA_EMULATOR()
+EMULATOR::EMULATOR()
 {
     this->device = "compute_20";
-    this->string_table = new StringTable();
+    this->string_table = new STRING_TABLE();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
 }
 
-void CUDA_EMULATOR::SetTrace(int level)
+void EMULATOR::SetTrace(int level)
 {
     this->trace_level = level;
 }
@@ -38,7 +38,7 @@ void CUDA_EMULATOR::SetTrace(int level)
 // In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
-TREE * CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
+TREE * EMULATOR::Extract_From_Source(char * module_name, char * source)
 {
     // Pick modules of only one type.
     if (strstr(module_name, this->device) == 0)
@@ -64,7 +64,7 @@ TREE * CUDA_EMULATOR::Extract_From_Source(char * module_name, char * source)
     return mod;
 }
 
-void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
+void EMULATOR::Extract_From_Tree(TREE * node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->GetType() == TREE_ENTRY)
@@ -93,10 +93,10 @@ void CUDA_EMULATOR::Extract_From_Tree(TREE * node)
     }
 } 
 
-void CUDA_EMULATOR::SetupParams(SymbolTable * symbol_table, TREE * e)
+void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
 {
     // Create a new symbol table block for the parameters.
-    //SymbolTable * symbol_table = this->root;
+    //SYMBOL_TABLE * symbol_table = this->root;
     // For each parameter, create a symbol table entry, bind the arguments.
     // To do this, walk down both the AST and the setup argument list, and
     // associate each entry with the other in a symbol table entry.
@@ -115,7 +115,7 @@ void CUDA_EMULATOR::SetupParams(SymbolTable * symbol_table, TREE * e)
             // Get to the argument in the set up list.
             arg * a = *ia;
             // Create a symbol table entry.
-            Symbol * s = new Symbol();
+            SYMBOL * s = new SYMBOL();
             s->emulator = this;
             s->pvalue = (void*)a->argument;
             s->name = n;
@@ -126,7 +126,7 @@ void CUDA_EMULATOR::SetupParams(SymbolTable * symbol_table, TREE * e)
             s->type = type->GetType();
             s->storage_class = K_PARAM;
             // Add the entry into the symbol table.
-            std::pair<char*, Symbol*> sym;
+            std::pair<char*, SYMBOL*> sym;
             sym.first = n;
             sym.second = s;
             symbol_table->symbols.insert(sym);
@@ -141,7 +141,7 @@ void CUDA_EMULATOR::SetupParams(SymbolTable * symbol_table, TREE * e)
     this->arguments.clear();
 }
 
-size_t CUDA_EMULATOR::Sizeof(int type)
+size_t EMULATOR::Sizeof(int type)
 {
     switch (type)
     {
@@ -166,25 +166,25 @@ size_t CUDA_EMULATOR::Sizeof(int type)
     return 0;
 }
 
-int CUDA_EMULATOR::GetType(TREE * c)
+int EMULATOR::GetType(TREE * c)
 {
     return c->GetType();
 }
 
-int CUDA_EMULATOR::GetSize(TREE * tree_par_register)
+int EMULATOR::GetSize(TREE * tree_par_register)
 {
     TREE * c = (TREE *)tree_par_register->GetChild(0);
     return (int)atoi(c->GetText());
 }
 
-SymbolTable * CUDA_EMULATOR::PushSymbolTable(SymbolTable * parent)
+SYMBOL_TABLE * EMULATOR::PushSymbolTable(SYMBOL_TABLE * parent)
 {
-    SymbolTable * symbol_table = new SymbolTable();
+    SYMBOL_TABLE * symbol_table = new SYMBOL_TABLE();
     symbol_table->parent_block_symbol_table = parent;
     return symbol_table;
 }
 
-void CUDA_EMULATOR::SetupVariables(SymbolTable * symbol_table, TREE * code, int * desired_storage_classes)
+void EMULATOR::SetupVariables(SYMBOL_TABLE * symbol_table, TREE * code, int * desired_storage_classes)
 {
     // Go through the block and create entries in the symbol table for each variable declared.
     for (int i = 0; i < code->GetChildCount(); ++i)
@@ -197,7 +197,7 @@ void CUDA_EMULATOR::SetupVariables(SymbolTable * symbol_table, TREE * code, int 
     }
 }
 
-void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int * desired_storage_classes, bool externed)
+void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed)
 {
     // Got variable declaration.
     // Now extract info out of variable declaration.
@@ -303,7 +303,7 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
             char full_name[1000];
             sprintf(full_name, "%s%d", name, k);
             // Create a symbol table entry.
-            Symbol * s = new Symbol();
+            SYMBOL * s = new SYMBOL();
             s->emulator = this;
             s->name = this->string_table->Entry(full_name);
             s->size = size;
@@ -314,14 +314,14 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
             s->array = false;
             s->index_max = 0;
             // Add the entry into the symbol table.
-            std::pair<char*, Symbol*> sym;
+            std::pair<char*, SYMBOL*> sym;
             sym.first = s->name;
             sym.second = s;
             symbol_table->symbols.insert(sym);
         }
     } else {
         // Create a symbol table entry.
-        Symbol * s = new Symbol();
+        SYMBOL * s = new SYMBOL();
         s->emulator = this;
         s->name = this->string_table->Entry(name);
         s->size = size;
@@ -362,7 +362,7 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
                 {
                     TREE * n = GetChild(t, 0);
                     int type = ttype->GetType();
-                    Constant c = Eval(type, n);
+                    CONSTANT c = Eval(type, n);
                     TYPES::Types * s1 = (TYPES::Types*)mptr;
                     switch (type)
                     {
@@ -420,7 +420,7 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
         s->type = ttype->GetType();
         s->storage_class = storage_class;
         // Add the entry into the symbol table.
-        std::pair<char*, Symbol*> sym;
+        std::pair<char*, SYMBOL*> sym;
         sym.first = s->name;
         sym.second = s;
         symbol_table->symbols.insert(sym);
@@ -428,7 +428,7 @@ void CUDA_EMULATOR::SetupSingleVar(SymbolTable * symbol_table, TREE * var, int *
 }
 
 
-void CUDA_EMULATOR::SetupGotos(SymbolTable * symbol_table, TREE * code)
+void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
 {
     // Scan ahead and find all labels.  Enter them into the symbol
     // table.
@@ -439,7 +439,7 @@ void CUDA_EMULATOR::SetupGotos(SymbolTable * symbol_table, TREE * code)
         {
             TREE * label = child->GetChild(0);
             char * name = label->GetText();
-            Symbol * s = new Symbol();
+            SYMBOL * s = new SYMBOL();
             s->emulator = this;
             s->name = this->string_table->Entry(name);
             s->typestring = "label";
@@ -450,7 +450,7 @@ void CUDA_EMULATOR::SetupGotos(SymbolTable * symbol_table, TREE * code)
             s->array = false;
             s->index_max = 0;
             // Add the entry into the symbol table.
-            std::pair<char*, Symbol*> sym;
+            std::pair<char*, SYMBOL*> sym;
             sym.first = s->name;
             sym.second = s;
             symbol_table->symbols.insert(sym);
@@ -458,7 +458,7 @@ void CUDA_EMULATOR::SetupGotos(SymbolTable * symbol_table, TREE * code)
     }
 }
 
-void CUDA_EMULATOR::SetupExternShared(SymbolTable * symbol_table, TREE * code)
+void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
 {
     // No need to resolve anything if no shared memory to set up.
     if (this->conf.sharedMem == 0)
@@ -489,33 +489,33 @@ void CUDA_EMULATOR::SetupExternShared(SymbolTable * symbol_table, TREE * code)
     }
 }
 
-void CUDA_EMULATOR::ConfigureGrid(dim3 dim)
+void EMULATOR::ConfigureGrid(dim3 dim)
 {
     this->conf.gridDim = dim;
 }
 
-void CUDA_EMULATOR::ConfigureBlock(dim3 dim)
+void EMULATOR::ConfigureBlock(dim3 dim)
 {
     this->conf.blockDim = dim;
 }
 
-void CUDA_EMULATOR::ConfigureSharedMemory(size_t sharedMem)
+void EMULATOR::ConfigureSharedMemory(size_t sharedMem)
 {
     conf.sharedMem = sharedMem;
 }
 
-void CUDA_EMULATOR::ConfigureStream(cudaStream_t stream)
+void EMULATOR::ConfigureStream(cudaStream_t stream)
 {
     conf.stream = stream;
 }
 
-void CUDA_EMULATOR::Execute(TREE * entry)
+void EMULATOR::Execute(TREE * entry)
 {
     // Get function block.
     TREE * code = FindBlock(entry);
 
     // Create symbol table for outer blocks.
-    SymbolTable * obst = PushSymbolTable(0);
+    SYMBOL_TABLE * obst = PushSymbolTable(0);
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
         int sc[] = { K_GLOBAL, 0};
@@ -523,7 +523,7 @@ void CUDA_EMULATOR::Execute(TREE * entry)
     }
 
     // Create symbol table for this block.
-    SymbolTable * block_symbol_table = PushSymbolTable(obst);
+    SYMBOL_TABLE * block_symbol_table = PushSymbolTable(obst);
     int sc[] = { K_GLOBAL, K_CONST, K_TEX, 0};
     SetupVariables(block_symbol_table, code, sc);
     SetupGotos(block_symbol_table, code);
@@ -551,7 +551,7 @@ void CUDA_EMULATOR::Execute(TREE * entry)
     }
 }
 
-bool CUDA_EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
+bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
 {
     bool result = false;
     for (int i = 0; i < (int)code->GetChildCount(); ++i)
@@ -582,7 +582,7 @@ bool CUDA_EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
     return false;
 }
 
-void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
+void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
     //_CrtMemState state_begin;
     //_CrtMemCheckpoint(&state_begin);
@@ -592,7 +592,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
 
     // Keep track of symbol table root to restore later.  This is because of the awful
     // use of root on a per-thread basis.
-    SymbolTable * save = symbol_table;
+    SYMBOL_TABLE * save = symbol_table;
 
     // Two ways to do this.  If there is no thread synchronization,
     // then threads can run serially, one after another.  In this case,
@@ -602,7 +602,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
     // then create the local symbols for each thread.
     // This test is just for performance enhancement.
     // Create a new symbol table and add the block index variables.
-    SymbolTable * block_symbol_table = PushSymbolTable(symbol_table);
+    SYMBOL_TABLE * block_symbol_table = PushSymbolTable(symbol_table);
     dim3 bid(bidx, bidy, bidz);
     CreateSymbol(symbol_table, "%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
 
@@ -628,7 +628,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
         {
             for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
             {
-                SymbolTable * root = PushSymbolTable(symbol_table);
+                SYMBOL_TABLE * root = PushSymbolTable(symbol_table);
                 dim3 tid(tidx, tidy, tidz);
                 CreateSymbol(root, "%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
                 if (do_thread_synch)
@@ -716,7 +716,7 @@ void CUDA_EMULATOR::ExecuteSingleBlock(SymbolTable * symbol_table, bool do_threa
     //_CrtMemDumpAllObjectsSince(&state_begin);
 }
 
-void CUDA_EMULATOR::PrintName(TREE * inst)
+void EMULATOR::PrintName(TREE * inst)
 {
     int start = 0;
     if (GetType(GetChild(inst, start)) == TREE_PRED)
@@ -724,7 +724,7 @@ void CUDA_EMULATOR::PrintName(TREE * inst)
     std::cout << GetChild(inst, start)->GetText() << "\n";
 } 
 
-void CUDA_EMULATOR::Print(TREE * node, int level)
+void EMULATOR::Print(TREE * node, int level)
 {
     for (int i = 0; i < level; ++i)
         std::cout << "   ";
@@ -740,10 +740,10 @@ void CUDA_EMULATOR::Print(TREE * node, int level)
 } 
 
 
-void CUDA_EMULATOR::CreateSymbol(SymbolTable * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
+void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
 {
     // First find it.
-    Symbol * s = symbol_table->FindSymbol(name);
+    SYMBOL * s = symbol_table->FindSymbol(name);
     if (s)
     {
         assert(s->size == size);
@@ -752,7 +752,7 @@ void CUDA_EMULATOR::CreateSymbol(SymbolTable * symbol_table, char * name, char *
         return;
     }
     // Create a symbol table entry.
-    s = new Symbol();
+    s = new SYMBOL();
     s->emulator = this;
     s->name = this->string_table->Entry(name);
     s->typestring = this->string_table->Entry(typestring);
@@ -764,13 +764,13 @@ void CUDA_EMULATOR::CreateSymbol(SymbolTable * symbol_table, char * name, char *
     s->index_max = 0;
     memcpy(s->pvalue, value, size);
     // Add the entry into the symbol table.
-    std::pair<char*, Symbol*> sym;
+    std::pair<char*, SYMBOL*> sym;
     sym.first = s->name;
     sym.second = s;
     symbol_table->symbols.insert(sym);
 }
 
-TREE * CUDA_EMULATOR::FindBlock(TREE * node)
+TREE * EMULATOR::FindBlock(TREE * node)
 {
     for (int i = 0; i < (int)node->GetChildCount(); ++i)
     {
@@ -781,7 +781,7 @@ TREE * CUDA_EMULATOR::FindBlock(TREE * node)
     return 0;
 }
 
-int CUDA_EMULATOR::FindFirstInst(TREE * block, int first)
+int EMULATOR::FindFirstInst(TREE * block, int first)
 {
     for (int i = first; i < (int)block->GetChildCount(); ++i)
     {
@@ -792,7 +792,7 @@ int CUDA_EMULATOR::FindFirstInst(TREE * block, int first)
     return -1;
 }
 
-TREE * CUDA_EMULATOR::GetInst(TREE * block, int pc)
+TREE * EMULATOR::GetInst(TREE * block, int pc)
 {
     assert(block->GetType() == TREE_BLOCK);
     TREE * inst = (TREE *)block->GetChild(pc);
@@ -800,22 +800,22 @@ TREE * CUDA_EMULATOR::GetInst(TREE * block, int pc)
 }
 
 
-TREE * CUDA_EMULATOR::GetChild(TREE * node, int n)
+TREE * EMULATOR::GetChild(TREE * node, int n)
 {
     TREE * c = (TREE *)node->GetChild(n);
     return c;
 }
 
 
-char * CUDA_EMULATOR::StringTableEntry(char * text)
+char * EMULATOR::StringTableEntry(char * text)
 {
     return this->string_table->Entry(text);
 }
 
-Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
+CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
 {
     // Perform bottom-up evaluation of a constant expression.
-    Constant result;
+    CONSTANT result;
     result.type = expected_type;
     char * dummy;
     char * text = const_expr->GetText();
@@ -961,8 +961,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_OROR)
     {
         // Perform boolean OR.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1007,8 +1007,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_ANDAND)
     {
         // Perform boolean AND.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1053,8 +1053,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_OR)
     {
         // Perform bit OR.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1099,8 +1099,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_XOR)
     {
         // Perform bit XOR.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1145,8 +1145,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_AND)
     {
         // Perform bit OR.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1191,8 +1191,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_EQEQ)
     {
         // Perform EQ.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1237,8 +1237,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_NOTEQ)
     {
         // Perform bit !=.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1283,8 +1283,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_LE)
     {
         // Perform bit LE.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1329,8 +1329,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_GE)
     {
         // Perform bit GE
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1375,8 +1375,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_LT)
     {
         // Perform bit <.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1421,8 +1421,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_GT)
     {
         // Perform bit OR.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1467,8 +1467,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_LTLT)
     {
         // Perform bit <<
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1513,8 +1513,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_GTGT)
     {
         // Perform bit >>
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1559,8 +1559,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_PLUS && const_expr->GetChild(1) != 0)
     {
         // Perform bit '+'.
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1605,8 +1605,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_MINUS && const_expr->GetChild(1) != 0)
     {
         // Perform bit '-'
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1651,8 +1651,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_STAR)
     {
         // Perform bit '*'
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1697,8 +1697,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_SLASH)
     {
         // Perform bit '/'
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1743,8 +1743,8 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_PERCENT)
     {
         // Perform bit '%'
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
-        Constant rhs = Eval(expected_type, const_expr->GetChild(1));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT rhs = Eval(expected_type, const_expr->GetChild(1));
         switch (expected_type)
         {
             case K_U8:
@@ -1789,7 +1789,7 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_PLUS)
     {
         // Perform bit >>
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
         switch (expected_type)
         {
             case K_U8:
@@ -1834,7 +1834,7 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_MINUS)
     {
         // Perform bit >>
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
         switch (expected_type)
         {
             case K_U8:
@@ -1879,7 +1879,7 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_TILDE)
     {
         // Perform bit >>
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
         switch (expected_type)
         {
             case K_U8:
@@ -1924,7 +1924,7 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     } else if (GetType(const_expr) == T_NOT)
     {
         // Perform !
-        Constant lhs = Eval(expected_type, const_expr->GetChild(0));
+        CONSTANT lhs = Eval(expected_type, const_expr->GetChild(0));
         switch (expected_type)
         {
             case K_U8:
@@ -1972,7 +1972,7 @@ Constant CUDA_EMULATOR::Eval(int expected_type, TREE * const_expr)
     return result;
 }
 
-void CUDA_EMULATOR::unimplemented(bool condition, char * text)
+void EMULATOR::unimplemented(bool condition, char * text)
 {
     if (condition)
     {
@@ -1980,13 +1980,13 @@ void CUDA_EMULATOR::unimplemented(bool condition, char * text)
     }
 }
 
-void CUDA_EMULATOR::unimplemented(char * text)
+void EMULATOR::unimplemented(char * text)
 {
     throw new Unimplemented(text);
 }
 
 
-void CUDA_EMULATOR::RunDevice(char * device)
+void EMULATOR::RunDevice(char * device)
 {
     this->device = this->string_table->Entry(device);
 }

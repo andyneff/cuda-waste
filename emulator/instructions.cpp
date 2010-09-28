@@ -60,7 +60,7 @@ int THREAD::DoAbs(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -73,7 +73,7 @@ int THREAD::DoAbs(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -96,7 +96,7 @@ int THREAD::DoAbs(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -214,7 +214,7 @@ int THREAD::DoAdd(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -232,7 +232,7 @@ int THREAD::DoAdd(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -264,7 +264,7 @@ int THREAD::DoAdd(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -301,7 +301,7 @@ int THREAD::DoAdd(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -333,7 +333,7 @@ int THREAD::DoAdd(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -521,7 +521,7 @@ int THREAD::DoAddc(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -539,7 +539,7 @@ int THREAD::DoAddc(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -553,7 +553,7 @@ int THREAD::DoAddc(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -572,7 +572,7 @@ int THREAD::DoAddc(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -586,7 +586,7 @@ int THREAD::DoAddc(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -680,7 +680,7 @@ int THREAD::DoAnd(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -695,7 +695,7 @@ int THREAD::DoAnd(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -715,7 +715,7 @@ int THREAD::DoAnd(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -740,7 +740,7 @@ int THREAD::DoAnd(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -760,7 +760,7 @@ int THREAD::DoAnd(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -805,7 +805,7 @@ int THREAD::DoAnd(TREE * inst)
 
 int THREAD::DoAtom(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("ATOM unimplemented");
+    throw new EMULATOR::Unimplemented("ATOM unimplemented");
 }
 
 int THREAD::DoBar(TREE * inst)
@@ -875,7 +875,7 @@ int THREAD::DoBar(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -887,7 +887,7 @@ int THREAD::DoBar(TREE * inst)
         this->emulator->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -910,22 +910,22 @@ int THREAD::DoBar(TREE * inst)
 
 int THREAD::DoBfe(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("BFE unimplemented");
+    throw new EMULATOR::Unimplemented("BFE unimplemented");
 }
 
 int THREAD::DoBfi(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("BFI unimplemented");
+    throw new EMULATOR::Unimplemented("BFI unimplemented");
 }
 
 int THREAD::DoBfind(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("BFIND unimplemented");
+    throw new EMULATOR::Unimplemented("BFIND unimplemented");
 }
 
 int THREAD::DoBrev(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("BREV unimplemented");
+    throw new EMULATOR::Unimplemented("BREV unimplemented");
 }
 
 int THREAD::DoBra(TREE * inst)
@@ -942,14 +942,14 @@ int THREAD::DoBra(TREE * inst)
     TREE * opr = inst->GetChild(start);
     TREE * dst = opr->GetChild(0);
     assert(dst->GetType() == T_WORD);
-    Symbol * sdst = this->root->FindSymbol(dst->GetText());
+    SYMBOL * sdst = this->root->FindSymbol(dst->GetText());
     assert (sdst != 0);
     return (int)sdst->pvalue;
 }
 
 int THREAD::DoBrkpt(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("BRKPT unimplemented");
+    throw new EMULATOR::Unimplemented("BRKPT unimplemented");
 }
 
 int THREAD::DoCall(TREE * inst)
@@ -985,7 +985,7 @@ int THREAD::DoCall(TREE * inst)
     // Call of vprintf only thing supported...
     if (strcmp(tfunc->GetText(), "vprintf") != 0)
     {
-        throw new CUDA_EMULATOR::Unimplemented("Only CALL of vprintf implemented.\n");
+        throw new EMULATOR::Unimplemented("Only CALL of vprintf implemented.\n");
     }
 
     bool uni = false;
@@ -1015,14 +1015,14 @@ int THREAD::DoCall(TREE * inst)
             if (u->GetType() == T_UNDERSCORE)
                 once++;
             else
-                throw new CUDA_EMULATOR::Unimplemented("CALL non-underscore return unimplemented.");
+                throw new EMULATOR::Unimplemented("CALL non-underscore return unimplemented.");
         } else
             break;
     }
     if (once != 1)
-        throw new CUDA_EMULATOR::Unimplemented("CALL with multiple returns unimplemented.");
+        throw new EMULATOR::Unimplemented("CALL with multiple returns unimplemented.");
 
-    std::vector<Symbol*> stack;
+    std::vector<SYMBOL*> stack;
     for (;; ++start_params)
     {
         TREE * t = inst->GetChild( start_params);
@@ -1035,7 +1035,7 @@ int THREAD::DoCall(TREE * inst)
             if (u->GetType() == T_WORD)
             {
                 // load value into stack...
-                Symbol * param = this->root->FindSymbol(u->GetText());
+                SYMBOL * param = this->root->FindSymbol(u->GetText());
                 assert(param != 0);
                 this->emulator->unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
                 stack.push_back(param);
@@ -1056,7 +1056,7 @@ int THREAD::DoCall(TREE * inst)
 //    va_start_assign(out, aligned[0]);
 //    for (int i = 1; i < stack.size(); ++i)
 //    {
-//        Symbol * s = stack[i];
+//        SYMBOL * s = stack[i];
 //        switch (s->type)
 //        {
 //        case K_U32:
@@ -1072,7 +1072,7 @@ int THREAD::DoCall(TREE * inst)
 //            va_assign(out, double, ((TYPES::Types*)s->pvalue)->f64);
 //            break;
 //        default:
-//            throw new CUDA_EMULATOR::Unimplemented("CUDA_EMULATOR::Unimplemented type for vprintf\n");
+//            throw new EMULATOR::Unimplemented("EMULATOR::Unimplemented type for vprintf\n");
 //            break;
 //        }
 //    }
@@ -1085,7 +1085,7 @@ int THREAD::DoCall(TREE * inst)
 
 int THREAD::DoClz(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("CLZ unimplemented");
+    throw new EMULATOR::Unimplemented("CLZ unimplemented");
 }
 
 int THREAD::DoCnot(TREE * inst)
@@ -1135,7 +1135,7 @@ int THREAD::DoCnot(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -1148,7 +1148,7 @@ int THREAD::DoCnot(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -1168,7 +1168,7 @@ int THREAD::DoCnot(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -1213,12 +1213,12 @@ int THREAD::DoCnot(TREE * inst)
 
 int THREAD::DoCopysign(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("COPYSIGN unimplemented");
+    throw new EMULATOR::Unimplemented("COPYSIGN unimplemented");
 }
 
 int THREAD::DoCos(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("COS unimplemented");
+    throw new EMULATOR::Unimplemented("COS unimplemented");
 }
 
 int THREAD::DoCvt(TREE * inst)
@@ -1300,9 +1300,9 @@ int THREAD::DoCvt(TREE * inst)
     assert(o2->GetType() == TREE_OPR);
     assert(o2->GetChild(0)->GetType() == T_WORD);
 
-    Symbol * s1 = this->root->FindSymbol(o1->GetChild(0)->GetText());
+    SYMBOL * s1 = this->root->FindSymbol(o1->GetChild(0)->GetText());
     assert(s1 != 0);
-    Symbol * s2 = this->root->FindSymbol(o2->GetChild(0)->GetText());
+    SYMBOL * s2 = this->root->FindSymbol(o2->GetChild(0)->GetText());
     assert(s2 != 0);
 
     dst_value = (TYPES::Types*)s1->pvalue;
@@ -1757,8 +1757,8 @@ int THREAD::DoCvta(TREE * inst)
     int type = ttype->GetType();
     TREE * dst = odst->GetChild( 0);
     TREE * src = osrc->GetChild(0);
-    Symbol * sdst = 0;
-    Symbol * ssrc = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -1882,9 +1882,9 @@ int THREAD::DoDiv(TREE * inst)
     TYPES::Types src1_value;// used if literal
     TYPES::Types src2_value;// used if literal
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -1897,7 +1897,7 @@ int THREAD::DoDiv(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -1936,7 +1936,7 @@ int THREAD::DoDiv(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -2062,7 +2062,7 @@ int THREAD::DoEx2(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -2075,7 +2075,7 @@ int THREAD::DoEx2(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2089,7 +2089,7 @@ int THREAD::DoEx2(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -2197,10 +2197,10 @@ int THREAD::DoFma(TREE * inst)
     TREE * src2 = osrc2->GetChild(0);
     TREE * src3 = osrc3->GetChild(0);
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
-    Symbol * ssrc3 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
+    SYMBOL * ssrc3 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -2215,7 +2215,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2236,7 +2236,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2257,7 +2257,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src3->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2292,7 +2292,7 @@ int THREAD::DoFma(TREE * inst)
 
 int THREAD::DoIsspacep(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("ISSPACEP unimplemented");
+    throw new EMULATOR::Unimplemented("ISSPACEP unimplemented");
 }
 
 int THREAD::DoLd(TREE * inst)
@@ -2355,13 +2355,13 @@ int THREAD::DoLd(TREE * inst)
 
     // Get two operands, assign source to destination.
     TREE * src = osrc->GetChild( 0);
-    Symbol * ssrc = 0;
+    SYMBOL * ssrc = 0;
     
     assert(src->GetType() == T_WORD);
     ssrc = this->root->FindSymbol(src->GetText());
     assert(ssrc != 0);
     TREE * plus = osrc->GetChild( 1);
-    Constant value(0);
+    CONSTANT value(0);
     if (plus != 0)
     {
         TREE * const_expr_tree = osrc->GetChild( 2);
@@ -2451,7 +2451,7 @@ int THREAD::DoLd(TREE * inst)
     for (int i = 0; i < times; ++i)
     {
         TREE * dst = odst->GetChild( i);
-        Symbol * sdst = 0;
+        SYMBOL * sdst = 0;
         assert(dst->GetType() == T_WORD);
         sdst = this->root->FindSymbol(dst->GetText());
         assert(sdst != 0);
@@ -2930,15 +2930,15 @@ int THREAD::DoLdu(TREE * inst)
     // Get two operands, assign source to destination.
     TREE * dst = odst->GetChild( 0);
     TREE * src = osrc->GetChild( 0);
-    Symbol * sdst = 0;
-    Symbol * ssrc = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     
     assert(src->GetType() == T_WORD);
     ssrc = this->root->FindSymbol(src->GetText());
     TREE * plus = osrc->GetChild( 1);
-    Constant value(0);
+    CONSTANT value(0);
     if (plus != 0)
     {
         TREE * const_expr_tree = osrc->GetChild( 2);
@@ -3085,7 +3085,7 @@ int THREAD::DoLg2(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -3098,7 +3098,7 @@ int THREAD::DoLg2(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -3112,7 +3112,7 @@ int THREAD::DoLg2(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -3224,10 +3224,10 @@ int THREAD::DoMad(TREE * inst)
     TREE * src2 = osrc2->GetChild(0);
     TREE * src3 = osrc3->GetChild(0);
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
-    Symbol * ssrc3 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
+    SYMBOL * ssrc3 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -3242,7 +3242,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -3275,7 +3275,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3308,7 +3308,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src3->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3391,22 +3391,22 @@ int THREAD::DoMad(TREE * inst)
 
 int THREAD::DoMad24(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("MAD24 unimplemented");
+    throw new EMULATOR::Unimplemented("MAD24 unimplemented");
 }
 
 int THREAD::DoMax(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("MAX unimplemented");
+    throw new EMULATOR::Unimplemented("MAX unimplemented");
 }
 
 int THREAD::DoMembar(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("MEMBAR unimplemented");
+    throw new EMULATOR::Unimplemented("MEMBAR unimplemented");
 }
 
 int THREAD::DoMin(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("MIN unimplemented");
+    throw new EMULATOR::Unimplemented("MIN unimplemented");
 }
 
 int THREAD::DoMov(TREE * inst)
@@ -3459,8 +3459,8 @@ int THREAD::DoMov(TREE * inst)
     int type = ttype->GetType();
     TREE * dst = odst->GetChild( 0);
     TREE * src = osrc->GetChild(0);
-    Symbol * sdst = 0;
-    Symbol * ssrc = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -3476,7 +3476,7 @@ int THREAD::DoMov(TREE * inst)
 
     if (src->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3652,9 +3652,9 @@ int THREAD::DoMul(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -3667,7 +3667,7 @@ int THREAD::DoMul(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -3694,7 +3694,7 @@ int THREAD::DoMul(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3845,9 +3845,9 @@ int THREAD::DoMul24(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -3860,7 +3860,7 @@ int THREAD::DoMul24(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U32:
@@ -3881,7 +3881,7 @@ int THREAD::DoMul24(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -3976,7 +3976,7 @@ int THREAD::DoNeg(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -3989,7 +3989,7 @@ int THREAD::DoNeg(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -4012,7 +4012,7 @@ int THREAD::DoNeg(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4108,7 +4108,7 @@ int THREAD::DoNot(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -4121,7 +4121,7 @@ int THREAD::DoNot(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4141,7 +4141,7 @@ int THREAD::DoNot(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4237,7 +4237,7 @@ int THREAD::DoOr(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -4252,7 +4252,7 @@ int THREAD::DoOr(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4272,7 +4272,7 @@ int THREAD::DoOr(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4297,7 +4297,7 @@ int THREAD::DoOr(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -4317,7 +4317,7 @@ int THREAD::DoOr(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -4362,27 +4362,27 @@ int THREAD::DoOr(TREE * inst)
 
 int THREAD::DoPmevent(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("PMEVENT unimplemented");
+    throw new EMULATOR::Unimplemented("PMEVENT unimplemented");
 }
 
 int THREAD::DoPopc(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("POPC unimplemented");
+    throw new EMULATOR::Unimplemented("POPC unimplemented");
 }
 
 int THREAD::DoPrefetch(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("PREFETCH unimplemented");
+    throw new EMULATOR::Unimplemented("PREFETCH unimplemented");
 }
 
 int THREAD::DoPrefetchu(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("PREFETCHU unimplemented");
+    throw new EMULATOR::Unimplemented("PREFETCHU unimplemented");
 }
 
 int THREAD::DoPrmt(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("PRMT unimplemented");
+    throw new EMULATOR::Unimplemented("PRMT unimplemented");
 }
 
 int THREAD::DoRcp(TREE * inst)
@@ -4442,7 +4442,7 @@ int THREAD::DoRcp(TREE * inst)
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -4455,7 +4455,7 @@ int THREAD::DoRcp(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -4469,7 +4469,7 @@ int THREAD::DoRcp(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4502,7 +4502,7 @@ int THREAD::DoRcp(TREE * inst)
 
 int THREAD::DoRed(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("RED unimplemented");
+    throw new EMULATOR::Unimplemented("RED unimplemented");
 }
 
 int THREAD::DoRem(TREE * inst)
@@ -4565,9 +4565,9 @@ int THREAD::DoRem(TREE * inst)
     TYPES::Types src1_value;// used if literal
     TYPES::Types src2_value;// used if literal
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -4580,7 +4580,7 @@ int THREAD::DoRem(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -4613,7 +4613,7 @@ int THREAD::DoRem(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -4672,17 +4672,17 @@ int THREAD::DoRem(TREE * inst)
 
 int THREAD::DoRet(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("RET unimplemented");
+    throw new EMULATOR::Unimplemented("RET unimplemented");
 }
 
 int THREAD::DoRsqrt(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("RSQRT unimplemented");
+    throw new EMULATOR::Unimplemented("RSQRT unimplemented");
 }
 
 int THREAD::DoSad(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SAD unimplemented");
+    throw new EMULATOR::Unimplemented("SAD unimplemented");
 }
 
 int THREAD::DoSelp(TREE * inst)
@@ -4750,7 +4750,7 @@ int THREAD::DoSelp(TREE * inst)
     TREE * src2 = osrc2->GetChild(0);
     TREE * src3 = osrc3->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -4766,7 +4766,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -4807,7 +4807,7 @@ int THREAD::DoSelp(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4853,7 +4853,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -4894,7 +4894,7 @@ int THREAD::DoSelp(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -4940,7 +4940,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src3->GetType() == T_WORD)
     {
-        Symbol * ssrc3 = this->root->FindSymbol(src3->GetText());
+        SYMBOL * ssrc3 = this->root->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
 // FIX      assert(strcmp(ssrc3->type, ".pred") == 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
@@ -4990,7 +4990,7 @@ int THREAD::DoSelp(TREE * inst)
 
 int THREAD::DoSet(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SET unimplemented");
+    throw new EMULATOR::Unimplemented("SET unimplemented");
 }
 
 int THREAD::DoSetp(TREE * inst)
@@ -5075,9 +5075,9 @@ int THREAD::DoSetp(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst1 = 0;
-    Symbol * ssrc1 = 0;
-    Symbol * ssrc2 = 0;
+    SYMBOL * sdst1 = 0;
+    SYMBOL * ssrc1 = 0;
+    SYMBOL * ssrc2 = 0;
     TYPES::Types value1;
     TYPES::Types value2;
     TYPES::Types * s1 = &value1;
@@ -5099,7 +5099,7 @@ int THREAD::DoSetp(TREE * inst)
     }
     else if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5150,7 +5150,7 @@ int THREAD::DoSetp(TREE * inst)
     }
     else if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5522,7 +5522,7 @@ int THREAD::DoShl(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -5537,7 +5537,7 @@ int THREAD::DoShl(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5554,7 +5554,7 @@ int THREAD::DoShl(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -5576,7 +5576,7 @@ int THREAD::DoShl(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5593,7 +5593,7 @@ int THREAD::DoShl(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -5685,7 +5685,7 @@ int THREAD::DoShr(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -5700,7 +5700,7 @@ int THREAD::DoShr(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -5735,7 +5735,7 @@ int THREAD::DoShr(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -5775,7 +5775,7 @@ int THREAD::DoShr(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -5810,7 +5810,7 @@ int THREAD::DoShr(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -5885,12 +5885,12 @@ int THREAD::DoShr(TREE * inst)
 
 int THREAD::DoSin(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SIN unimplemented");
+    throw new EMULATOR::Unimplemented("SIN unimplemented");
 }
 
 int THREAD::DoSlct(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SLCT unimplemented");
+    throw new EMULATOR::Unimplemented("SLCT unimplemented");
 }
 
 int THREAD::DoSqrt(TREE * inst)
@@ -5954,8 +5954,8 @@ int THREAD::DoSqrt(TREE * inst)
     TYPES::Types * psrc1_value;
     TYPES::Types src1_value;// used if literal
 
-    Symbol * sdst = 0;
-    Symbol * ssrc1 = 0;
+    SYMBOL * sdst = 0;
+    SYMBOL * ssrc1 = 0;
     assert(dst->GetType() == T_WORD);
     sdst = this->root->FindSymbol(dst->GetText());
     char * dummy;
@@ -5966,7 +5966,7 @@ int THREAD::DoSqrt(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -6060,10 +6060,10 @@ int THREAD::DoSt(TREE * inst)
 
     TREE * dst = odst->GetChild( 0);
     assert(dst->GetType() == T_WORD);
-    Symbol * sdst = this->root->FindSymbol(dst->GetText());
+    SYMBOL * sdst = this->root->FindSymbol(dst->GetText());
     assert(sdst != 0);
     TREE * plus = odst->GetChild( 1);
-    Constant value(0);
+    CONSTANT value(0);
     if (plus != 0)
     {
         TREE * const_expr_tree = odst->GetChild( 2);
@@ -6156,12 +6156,12 @@ int THREAD::DoSt(TREE * inst)
         
         TREE * src = osrc->GetChild( i);
         TYPES::Types * s = 0;
-        Symbol * ssrc = 0;
+        SYMBOL * ssrc = 0;
         if (src->GetType() == TREE_CONSTANT_EXPR)
         {
             // cannot do both store from constant and to vector.
             assert(i == 0);
-            Constant c = this->emulator->Eval(type, src->GetChild(0));
+            CONSTANT c = this->emulator->Eval(type, src->GetChild(0));
             s = &c.value;
         } else if (src->GetType() == T_WORD)
         {
@@ -6327,7 +6327,7 @@ int THREAD::DoSub(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -6345,7 +6345,7 @@ int THREAD::DoSub(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -6377,7 +6377,7 @@ int THREAD::DoSub(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -6414,7 +6414,7 @@ int THREAD::DoSub(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -6446,7 +6446,7 @@ int THREAD::DoSub(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -6580,97 +6580,97 @@ int THREAD::DoSub(TREE * inst)
 
 int THREAD::DoSubc(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SUBC unimplemented");
+    throw new EMULATOR::Unimplemented("SUBC unimplemented");
 }
 
 int THREAD::DoSuld(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SULD unimplemented");
+    throw new EMULATOR::Unimplemented("SULD unimplemented");
 }
 
 int THREAD::DoSuq(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SUQ unimplemented");
+    throw new EMULATOR::Unimplemented("SUQ unimplemented");
 }
 
 int THREAD::DoSured(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SURED unimplemented");
+    throw new EMULATOR::Unimplemented("SURED unimplemented");
 }
 
 int THREAD::DoSust(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("SUST unimplemented");
+    throw new EMULATOR::Unimplemented("SUST unimplemented");
 }
 
 int THREAD::DoTestp(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("TESTP unimplemented");
+    throw new EMULATOR::Unimplemented("TESTP unimplemented");
 }
 
 int THREAD::DoTex(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("TEX unimplemented");
+    throw new EMULATOR::Unimplemented("TEX unimplemented");
 }
 
 int THREAD::DoTrap(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("TRAP unimplemented");
+    throw new EMULATOR::Unimplemented("TRAP unimplemented");
 }
 
 int THREAD::DoTxq(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("TXQ unimplemented");
+    throw new EMULATOR::Unimplemented("TXQ unimplemented");
 }
 
 int THREAD::DoVabsdiff(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VABSDIFF unimplemented");
+    throw new EMULATOR::Unimplemented("VABSDIFF unimplemented");
 }
 
 int THREAD::DoVadd(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("Vadd unimplemented");
+    throw new EMULATOR::Unimplemented("Vadd unimplemented");
 }
 
 int THREAD::DoVmad(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VMAD unimplemented");
+    throw new EMULATOR::Unimplemented("VMAD unimplemented");
 }
 
 int THREAD::DoVmax(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VMAX unimplemented");
+    throw new EMULATOR::Unimplemented("VMAX unimplemented");
 }
 
 int THREAD::DoVmin(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VMIN unimplemented");
+    throw new EMULATOR::Unimplemented("VMIN unimplemented");
 }
 
 int THREAD::DoVote(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VOTE unimplemented");
+    throw new EMULATOR::Unimplemented("VOTE unimplemented");
 }
 
 int THREAD::DoVset(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VSET unimplemented");
+    throw new EMULATOR::Unimplemented("VSET unimplemented");
 }
 
 int THREAD::DoVshl(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VSHL unimplemented");
+    throw new EMULATOR::Unimplemented("VSHL unimplemented");
 }
 
 int THREAD::DoVshr(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VSHR unimplemented");
+    throw new EMULATOR::Unimplemented("VSHR unimplemented");
 }
 
 int THREAD::DoVsub(TREE * inst)
 {
-    throw new CUDA_EMULATOR::Unimplemented("VSUB unimplemented");
+    throw new EMULATOR::Unimplemented("VSUB unimplemented");
 }
 
 int THREAD::DoXor(TREE * inst)
@@ -6726,7 +6726,7 @@ int THREAD::DoXor(TREE * inst)
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
-    Symbol * sdst = 0;
+    SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
         sdst = this->root->FindSymbol(dst->GetText());
@@ -6741,7 +6741,7 @@ int THREAD::DoXor(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -6761,7 +6761,7 @@ int THREAD::DoXor(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        Symbol * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -6786,7 +6786,7 @@ int THREAD::DoXor(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        Constant c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -6806,7 +6806,7 @@ int THREAD::DoXor(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        Symbol * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->emulator->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
