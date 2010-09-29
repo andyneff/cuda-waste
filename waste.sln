@@ -11,8 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptxp", "ptxp\ptxp.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "emulator\emulator.vcxproj", "{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nvcuda", "nvcuda\nvcuda.vcxproj", "{72CF074A-835D-41FA-90E1-BE377FF6CEAA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,10 +35,6 @@ Global
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.Debug|Win32.Build.0 = Debug|Win32
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.Release|Win32.ActiveCfg = Release|Win32
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.Release|Win32.Build.0 = Release|Win32
-		{72CF074A-835D-41FA-90E1-BE377FF6CEAA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{72CF074A-835D-41FA-90E1-BE377FF6CEAA}.Debug|Win32.Build.0 = Debug|Win32
-		{72CF074A-835D-41FA-90E1-BE377FF6CEAA}.Release|Win32.ActiveCfg = Release|Win32
-		{72CF074A-835D-41FA-90E1-BE377FF6CEAA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
