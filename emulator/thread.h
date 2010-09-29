@@ -29,6 +29,37 @@ class EMULATOR;
 
 class THREAD
 {
+    private:
+        // Root of AST that thread is executing.
+        TREE * block;
+
+        // Current program counter. If "n", then the current
+        // instruction is just block->GetChild(n).
+        int pc;
+
+        // Boolean to denote if the thread has executed the EXIT
+        // instruction.
+        bool finished;
+
+        // Boolean to dentoe if teh thread is at a BAR instruction and
+        // is back in the wait state.
+        bool wait;
+
+        // Points to the topmost symbol table, e.g., registers, that
+        // the thread uses.
+        SYMBOL_TABLE * root;
+
+        // The "carry" bit.  Generally inaccessible, execept for some
+        // ADD and SUB instructions.
+        int carry;
+
+        // The owner of the thread.
+        EMULATOR * emulator;
+
+        // The Windows HANDLE for the thread.  Threads are executed
+        // concurrently.
+        HANDLE hThread;
+        
     public:
         THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root);
         ~THREAD();
@@ -37,17 +68,9 @@ class THREAD
         bool Finished();
         void Reset();
         bool Waiting();
-        HANDLE hThread;
-    private:
-        TREE * block;
-        int pc;
-        bool finished;
-        bool wait;
-        SYMBOL_TABLE * root;
-        int carry;
-        EMULATOR * emulator;
-    public:
         void Dump(char * comment, int pc, TREE * inst);
+        void SetHandle(HANDLE handle);
+        HANDLE GetHandle();
         int Dispatch(TREE * inst);
         int DoAbs(TREE * inst);
         int DoAdd(TREE * inst);

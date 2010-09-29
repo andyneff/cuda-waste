@@ -339,3 +339,12 @@ void THREAD::Dump(char * comment, int pc, TREE * inst)
     std::cout.flush();
 }
 
+void THREAD::SetHandle(HANDLE handle)
+{
+    this->hThread = handle;
+}
+
+HANDLE THREAD::GetHandle()
+{
+    return this->hThread;
+}

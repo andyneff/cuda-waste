@@ -19,13 +19,20 @@
 class CONSTANT
 {
     public:
+        // Constants in PTX are represented using this class.  The type
+        // of the constant is one of K_B8, K_B16, ..., which are values
+        // defined by the PTX grammar.
         int type;
+
+        // The actual value of the contant is store here.
         TYPES::Types value;
+
         CONSTANT(int i)
         {
             type = K_S32;
             value.s32 = i;
         }
+
         CONSTANT()
         {
             memset(&this->value, 0, sizeof(value));

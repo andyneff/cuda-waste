@@ -667,7 +667,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
                 HANDLE hThread = (HANDLE) _beginthreadex(0, 0, THREAD::WinThreadExecute, (void*)thread, CREATE_SUSPENDED, 0);
                 if (hThread)
                 {
-                    thread->hThread = hThread;
+                    thread->SetHandle(hThread);
                     ResumeThread(hThread);
                     active_queue.push(thread);
                 }
@@ -686,8 +686,8 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         {
             THREAD * thread = active_queue.front();
             active_queue.pop();
-            WaitForSingleObject( thread->hThread, INFINITE );
-            thread->hThread = 0;
+            WaitForSingleObject(thread->GetHandle(), INFINITE );
+            thread->SetHandle(0);
             // Check the status of the threads.
             if (! thread->Finished())
             {
