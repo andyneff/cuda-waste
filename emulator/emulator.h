@@ -68,15 +68,15 @@ public:
         size_t sharedMem;
         cudaStream_t stream;
     };
+    std::map<char*, TREE *, ltstr> entry;
+    std::map<char*, TREE *, ltstr> func;
+    std::map<void*, char*> fun_to_name;
+    std::list<TREE *> modules;
+    std::list<arg*> arguments;
+    config conf;
+    void * extern_memory_buffer;
+
     
-
-    class ThreadQueue
-    {
-        // context information for location of thread in code.
-        int pc;
-        SYMBOL_TABLE * root;
-    };
-
 public:
     class Unimplemented {
     private:
@@ -113,35 +113,18 @@ public:
     void SetupGotos(SYMBOL_TABLE * symbol_table, TREE * block);
     void Print(TREE * node, int level);
     void PrintName(TREE * node);
-
-    std::map<char*, TREE *, ltstr> entry;
-    std::map<char*, TREE *, ltstr> func;
-    std::map<void*, char*> fun_to_name;
-    std::list<TREE *> modules;
-//    std::list<SYMBOL*> symbol_table;
-    std::list<arg*> arguments;
-    config conf;
-    void * extern_memory_buffer;
-
     void SetupThreadQueue();
     void ProcessThreadQueue();
-    
     int FindFirstInst(TREE * block, int first);
     CONSTANT Eval(int expected_type, TREE * const_expr);
-
     SYMBOL_TABLE * PushSymbolTable(SYMBOL_TABLE * parent);
     void ExecuteBlocks(bool do_thread_synch, TREE * code);
     void ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
-
     void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
     void Extract_From_Tree(TREE * node);
     void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
-
-
     static EMULATOR * Singleton();
-    
-    // Parse
     TREE * Parse(char * module_name, char * source);
     
     // cuda_runtime.h equivalents.
@@ -184,6 +167,7 @@ public:
     void ConfigureStream(cudaStream_t stream);
     void Execute(TREE * entry);
 
+    // Options for emulator.
     void SetTrace(int level);
     char * StringTableEntry(char * text);
     void RunDevice(char * device);
