@@ -51,7 +51,7 @@ private:
 public:
     HookManager * hook_manager;
 
-	size_t padding_size;
+        size_t padding_size;
     unsigned char padding_byte;
     bool device_pointer_to_first_byte_in_block;
     std::ostream * output_stream;
@@ -66,7 +66,7 @@ public:
     static char * Context(int lines = 1);
     char * global_context;
     char * device; // device to run.
-	_CUDA * _cuda;
+        _CUDA * _cuda;
 
     typedef cudaError_t (CUDARTAPI *typePtrCudaMalloc3D)(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent);
     typedef cudaError_t (CUDARTAPI *typePtrCudaMalloc3DArray)(struct cudaArray** arrayPtr, const struct cudaChannelFormatDesc* desc, struct cudaExtent extent, unsigned int flags __dv(0));
@@ -196,7 +196,7 @@ public:
     static cudaError_t CUDARTAPI _cudaStreamDestroy(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaStreamSynchronize(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaStreamQuery(cudaStream_t stream);
-	static cudaError_t CUDARTAPI _cudaChooseDevice(int *device, const struct cudaDeviceProp *prop);
+        static cudaError_t CUDARTAPI _cudaChooseDevice(int *device, const struct cudaDeviceProp *prop);
 
     enum return_type {
         NOT_OK = 0,
@@ -210,6 +210,7 @@ public:
     static return_type CUDARTAPI SetTraceAllCalls(bool b);
     static return_type CUDARTAPI SetQuitOnError(bool b);
     static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
+    static void CUDARTAPI SetEmulationMode(int yes_no);
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
     static return_type CUDARTAPI RunDevice(char * device);
     static void CUDARTAPI SetTrace(int level);

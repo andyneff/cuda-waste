@@ -88,7 +88,7 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     cu->global_context = 0;
     cu->hook_manager = 0;
     cu->do_debug_halt = false;
-	cu->_cuda = new _CUDA();
+    cu->_cuda = new _CUDA();
 }
 
 void CUDA_WRAPPER::Unimplemented()
@@ -178,7 +178,7 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
 {
     // There are two API sets that could be substituted, one for
     // the cuda runtime library (cudart*.dll), and the other for cuda
-    // driver (cuda*.dll).  If we recognize any, all hooks should be
+    // driver (nvcuda.dll).  If we recognize any, all hooks should be
     // defined.  Otherwise, there will be odd behavior.
     this->_cuda->WrapModule();
 
@@ -549,6 +549,15 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::SetTraceAllCalls(bool b)
     return OK;
 }
 
+void CUDA_WRAPPER::SetEmulationMode(int yes_no)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (yes_no)
+        cu->do_emulation = true;
+    else
+        cu->do_emulation = false;
+}
+
 CUDA_WRAPPER::return_type CUDA_WRAPPER::SetQuitOnError(bool b)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
@@ -669,7 +678,8 @@ cudaError_t CUDARTAPI CUDA_WRAPPER::Malloc(void ** ptr, size_t size)
     typePtrCudaMalloc proc;
     if (! cu->do_emulation)
     {
-        cudaError_t e1 = (*ptrCudaMalloc)((void**)&local, size + 2 * cu->padding_size);
+        typePtrCudaMalloc proc = (typePtrCudaMalloc)cu->hook_manager->FindOriginal((PROC)CUDA_WRAPPER::Malloc);
+        cudaError_t e1 = (*proc)((void**)&local, size + 2 * cu->padding_size);
         if (e1 != 0)
         {
             (*cu->output_stream) << "cudaMalloc failed."
