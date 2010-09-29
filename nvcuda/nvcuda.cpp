@@ -5,9 +5,14 @@
 extern "C"
 {
 
-// Stupid cuda.h does not define dllexport, so I have to duplicate most of it here modified.
+// cuda.h does not define dllexport, so I have to duplicate most of it
+// here modified, since this DLL is exporting an API equivalent to the
+// CUDA driver API.  Why?  If you do not have an Nvidia GPU installed,
+// you cannot install the Nvidia drivers, which contain the CUDA driver
+// API.  And, if you don't have the drivers installed, you cannot do
+// emulation because your application program won't even load.
 
-#define CUDA_FORCE_API_VERSION 3010
+#define __CUDA_API_VERSION_INTERNAL
 
 /*
  * Copyright 1993-2010 NVIDIA Corporation.  All rights reserved.
@@ -6336,18 +6341,124 @@ CUresult CUDAAPI cuGraphicsResourceGetMappedPointer(CUdeviceptr *pDevPtr, unsign
 ///////////////////////////////////////////////////////////////////////////////
 
 #define DllExport    __declspec( dllexport ) 
-	
-DllExport CUresult CUDAAPI cuInit(unsigned int Flags)
+
+DllExport CUresult CUDAAPI cuArray3DCreate( CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuDriverGetVersion(int *driverVersion)
+DllExport CUresult CUDAAPI cuArray3DCreate_v2( CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArray3DGetDescriptor( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArray3DGetDescriptor_v2( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArrayCreate( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArrayCreate_v2( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArrayDestroy( CUarray hArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArrayGetDescriptor( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuArrayGetDescriptor_v2( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxAttach(CUcontext *pctx, unsigned int flags)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxCreate_v2(CUcontext *pctx, unsigned int flags, CUdevice dev )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxDestroy( CUcontext ctx )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxDetach(CUcontext ctx)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxGetDevice(CUdevice *device)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxGetLimit(size_t *pvalue, CUlimit limit)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxPopCurrent( CUcontext *pctx )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxPushCurrent( CUcontext ctx )
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxSetLimit(CUlimit limit, size_t value)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuCtxSynchronize(void)
+{
+    return CUDA_SUCCESS;
+}
+
+// CHECK CHECK CHECK
+DllExport CUresult CUDAAPI cuCtxSetCacheConfig(CUfunc_cache config)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
 {
     return CUDA_SUCCESS;
 }
 
 DllExport CUresult CUDAAPI cuDeviceGet(CUdevice *device, int ordinal)
+{
+    return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
 {
     return CUDA_SUCCESS;
 }
@@ -6362,7 +6473,7 @@ DllExport CUresult CUDAAPI cuDeviceGetName(char *name, int len, CUdevice dev)
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
+DllExport CUresult CUDAAPI cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 {
     return CUDA_SUCCESS;
 }
@@ -6372,277 +6483,42 @@ DllExport CUresult CUDAAPI cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
+DllExport CUresult CUDAAPI cuDeviceTotalMem_v2(unsigned int *bytes, CUdevice dev)
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
+DllExport CUresult CUDAAPI cuDriverGetVersion(int *driverVersion)
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
+DllExport CUresult CUDAAPI cuEventCreate( CUevent *phEvent, unsigned int Flags )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxDestroy( CUcontext ctx )
+DllExport CUresult CUDAAPI cuEventDestroy( CUevent hEvent )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxAttach(CUcontext *pctx, unsigned int flags)
+DllExport CUresult CUDAAPI cuEventElapsedTime( float *pMilliseconds, CUevent hStart, CUevent hEnd )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxDetach(CUcontext ctx)
+DllExport CUresult CUDAAPI cuEventQuery( CUevent hEvent )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxPushCurrent( CUcontext ctx )
+DllExport CUresult CUDAAPI cuEventRecord( CUevent hEvent, CUstream hStream )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuCtxPopCurrent( CUcontext *pctx )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuCtxGetDevice(CUdevice *device)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuCtxSynchronize(void)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleLoad(CUmodule *module, const char *fname)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleLoadData(CUmodule *module, const void *image)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleLoadDataEx(CUmodule *module, const void *image, unsigned int numOptions, CUjit_option *options, void **optionValues)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleLoadFatBinary(CUmodule *module, const void *fatCubin)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleUnload(CUmodule hmod)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleGetGlobal(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleGetTexRef(CUtexref *pTexRef, CUmodule hmod, const char *name)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuModuleGetSurfRef(CUsurfref *pSurfRef, CUmodule hmod, const char *name)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemGetInfo(unsigned int *free, unsigned int *total)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemAlloc( CUdeviceptr *dptr, unsigned int bytesize)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemAllocPitch( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemFree(CUdeviceptr dptr)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemGetAddressRange( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemAllocHost(void **pp, unsigned int bytesize)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemFreeHost(void *p)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemHostAlloc(void **pp, size_t bytesize, unsigned int Flags )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemHostGetDevicePointer( CUdeviceptr *pdptr, void *p, unsigned int Flags )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemHostGetFlags( unsigned int *pFlags, void *p )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyHtoD (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyDtoH (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyDtoD (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyDtoA ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyAtoD ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyHtoA( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyAtoH( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyAtoA( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpy2D( const CUDA_MEMCPY2D *pCopy )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpy2DUnaligned( const CUDA_MEMCPY2D *pCopy )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpy3D( const CUDA_MEMCPY3D *pCopy )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyDtoHAsync (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyDtoDAsync (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyHtoAAsync( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpyAtoHAsync( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpy2DAsync( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemcpy3DAsync( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD8( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD16( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD32( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD2D8( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD2D16( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuMemsetD2D32( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuFuncSetBlockShape (CUfunction hfunc, int x, int y, int z)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuFuncSetSharedSize (CUfunction hfunc, unsigned int bytes)
+DllExport CUresult CUDAAPI cuEventSynchronize( CUevent hEvent )
 {
     return CUDA_SUCCESS;
 }
@@ -6652,142 +6528,62 @@ DllExport CUresult CUDAAPI cuFuncGetAttribute (int *pi, CUfunction_attribute att
     return CUDA_SUCCESS;
 }
 
+DllExport CUresult CUDAAPI cuFuncSetBlockShape (CUfunction hfunc, int x, int y, int z)
+{
+    return CUDA_SUCCESS;
+}
+
 DllExport CUresult CUDAAPI cuFuncSetCacheConfig(CUfunction hfunc, CUfunc_cache config)
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuArrayCreate( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
+DllExport CUresult CUDAAPI cuFuncSetSharedSize (CUfunction hfunc, unsigned int bytes)
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuArrayGetDescriptor( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+DllExport CUresult CUDAAPI cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuArrayDestroy( CUarray hArray )
+DllExport CUresult CUDAAPI cuGraphicsMapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuArray3DCreate( CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray )
+DllExport CUresult CUDAAPI cuGraphicsResourceGetMappedPointer( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuArray3DGetDescriptor( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
+DllExport CUresult CUDAAPI cuGraphicsResourceGetMappedPointer_v2( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuTexRefCreate( CUtexref *pTexRef )
+DllExport CUresult CUDAAPI cuGraphicsResourceSetMapFlags( CUgraphicsResource resource, unsigned int flags )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuTexRefDestroy( CUtexref hTexRef )
+DllExport CUresult CUDAAPI cuGraphicsSubResourceGetMappedArray( CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, unsigned int Flags )
+DllExport CUresult CUDAAPI cuGraphicsUnmapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuTexRefSetAddress( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
+DllExport CUresult CUDAAPI cuGraphicsUnregisterResource(CUgraphicsResource resource)
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuTexRefSetAddress2D( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int NumPackedComponents )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefSetAddressMode( CUtexref hTexRef, int dim, CUaddress_mode am )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mode fm )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flags )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetAddress( CUdeviceptr *pdptr, CUtexref hTexRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetArray( CUarray *phArray, CUtexref hTexRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetAddressMode( CUaddress_mode *pam, CUtexref hTexRef, int dim )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetFilterMode( CUfilter_mode *pfm, CUtexref hTexRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetFormat( CUarray_format *pFormat, int *pNumChannels, CUtexref hTexRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuTexRefGetFlags( unsigned int *pFlags, CUtexref hTexRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuSurfRefSetArray( CUsurfref hSurfRef, CUarray hArray, unsigned int Flags )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuSurfRefGetArray( CUarray *phArray, CUsurfref hSurfRef )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuParamSetSize (CUfunction hfunc, unsigned int numbytes)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuParamSeti    (CUfunction hfunc, int offset, unsigned int value)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuParamSetf    (CUfunction hfunc, int offset, float value)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuParamSetv    (CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuParamSetTexRef(CUfunction hfunc, int texunit, CUtexref hTexRef)
+DllExport CUresult CUDAAPI cuInit(unsigned int Flags)
 {
     return CUDA_SUCCESS;
 }
@@ -6807,106 +6603,524 @@ DllExport CUresult CUDAAPI cuLaunchGridAsync( CUfunction f, int grid_width, int 
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventCreate( CUevent *phEvent, unsigned int Flags )
+DllExport CUresult CUDAAPI cuMemAlloc( CUdeviceptr *dptr, unsigned int bytesize)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventRecord( CUevent hEvent, CUstream hStream )
+DllExport CUresult CUDAAPI cuMemAlloc_v2( CUdeviceptr *dptr, unsigned int bytesize)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventQuery( CUevent hEvent )
+DllExport CUresult CUDAAPI cuMemAllocHost(void **pp, unsigned int bytesize)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventSynchronize( CUevent hEvent )
+DllExport CUresult CUDAAPI cuMemAllocHost_v2(void **pp, unsigned int bytesize)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventDestroy( CUevent hEvent )
+DllExport CUresult CUDAAPI cuMemAllocPitch( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuEventElapsedTime( float *pMilliseconds, CUevent hStart, CUevent hEnd )
+DllExport CUresult CUDAAPI cuMemAllocPitch_v2( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2D( const CUDA_MEMCPY2D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2D_v2( const CUDA_MEMCPY2D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2DAsync( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2DAsync_v2( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2DUnaligned( const CUDA_MEMCPY2D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy2DUnaligned_v2( const CUDA_MEMCPY2D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy3D( const CUDA_MEMCPY3D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy3D_v2( const CUDA_MEMCPY3D *pCopy )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy3DAsync( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpy3DAsync_v2( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoA( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoA_v2( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoD ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoD_v2 ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoH( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoH_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoHAsync( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyAtoHAsync_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoA ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoA_v2 ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoD (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoD_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoDAsync (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoDAsync_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoH (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoH_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoHAsync (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyDtoHAsync_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoA( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoA_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoAAsync( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoAAsync_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoD (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoD_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemcpyHtoDAsync_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemFree(CUdeviceptr dptr)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemFree_v2(CUdeviceptr dptr)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemFreeHost(void *p)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemGetAddressRange( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemGetAddressRange_v2( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemGetInfo(unsigned int *free, unsigned int *total)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemGetInfo_v2(unsigned int *free, unsigned int *total)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemHostAlloc(void **pp, size_t bytesize, unsigned int Flags )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemHostGetDevicePointer( CUdeviceptr *pdptr, void *p, unsigned int Flags )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemHostGetDevicePointer_v2( CUdeviceptr *pdptr, void *p, unsigned int Flags )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemHostGetFlags( unsigned int *pFlags, void *p )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD16( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD16_v2( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D16( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D16_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D32( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D32_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D8( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD2D8_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD32( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD32_v2( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD8( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuMemsetD8_v2( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleGetGlobal(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleGetGlobal_v2(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleGetSurfRef(CUsurfref *pSurfRef, CUmodule hmod, const char *name)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleGetTexRef(CUtexref *pTexRef, CUmodule hmod, const char *name)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleLoad(CUmodule *module, const char *fname)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleLoadData(CUmodule *module, const void *image)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleLoadDataEx(CUmodule *module, const void *image, unsigned int numOptions, CUjit_option *options, void **optionValues)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleLoadFatBinary(CUmodule *module, const void *fatCubin)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuModuleUnload(CUmodule hmod)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuParamSetf    (CUfunction hfunc, int offset, float value)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuParamSeti    (CUfunction hfunc, int offset, unsigned int value)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuParamSetSize (CUfunction hfunc, unsigned int numbytes)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuParamSetTexRef(CUfunction hfunc, int texunit, CUtexref hTexRef)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuParamSetv    (CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
+{
+	return CUDA_SUCCESS;
 }
 
 DllExport CUresult CUDAAPI cuStreamCreate( CUstream *phStream, unsigned int Flags )
 {
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuStreamQuery( CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuStreamSynchronize( CUstream hStream )
-{
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
 DllExport CUresult CUDAAPI cuStreamDestroy( CUstream hStream )
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuGraphicsUnregisterResource(CUgraphicsResource resource)
+DllExport CUresult CUDAAPI cuStreamQuery( CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuStreamSynchronize( CUstream hStream )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuSurfRefGetArray( CUarray *phArray, CUsurfref hSurfRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuSurfRefSetArray( CUsurfref hSurfRef, CUarray hArray, unsigned int Flags )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefCreate( CUtexref *pTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefDestroy( CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetAddress( CUdeviceptr *pdptr, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetAddress_v2( CUdeviceptr *pdptr, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetAddressMode( CUaddress_mode *pam, CUtexref hTexRef, int dim )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetArray( CUarray *phArray, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetFilterMode( CUfilter_mode *pfm, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetFlags( unsigned int *pFlags, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefGetFormat( CUarray_format *pFormat, int *pNumChannels, CUtexref hTexRef )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetAddress( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetAddress_v2( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetAddress2D( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetAddress2D_v2( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetAddressMode( CUtexref hTexRef, int dim, CUaddress_mode am )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, unsigned int Flags )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuGraphicsSubResourceGetMappedArray( CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel )
+DllExport CUresult CUDAAPI cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mode fm )
+{
+	return CUDA_SUCCESS;
+}
+
+DllExport CUresult CUDAAPI cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flags )
 {
     return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuGraphicsResourceGetMappedPointer( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
+DllExport CUresult CUDAAPI cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int NumPackedComponents )
 {
-    return CUDA_SUCCESS;
+	return CUDA_SUCCESS;
 }
 
-DllExport CUresult CUDAAPI cuGraphicsResourceSetMapFlags( CUgraphicsResource resource, unsigned int flags )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuGraphicsMapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuGraphicsUnmapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuCtxSetLimit(CUlimit limit, size_t value)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuCtxGetLimit(size_t *pvalue, CUlimit limit)
-{
-    return CUDA_SUCCESS;
-}
-
-DllExport CUresult CUDAAPI cuCtxSetCacheConfig(CUfunc_cache config)
-{
-    return CUDA_SUCCESS;
-}
-
-
-
-}
+} //extern "C"
