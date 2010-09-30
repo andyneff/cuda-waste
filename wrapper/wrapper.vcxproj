@@ -118,6 +118,7 @@
     <ClCompile Include="lock-mgr.cpp" />
     <ClCompile Include="process-mgr.cpp" />
     <ClCompile Include="_cuda.cpp" />
+    <ClCompile Include="_cuda_runtime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="call-stack-info.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="_cuda.h" />
+    <ClInclude Include="_cuda_runtime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
