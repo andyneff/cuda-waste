@@ -35,6 +35,12 @@ SYMBOL_TABLE::SYMBOL_TABLE()
 {
 }
 
+SYMBOL_TABLE::SYMBOL_TABLE(const SYMBOL_TABLE & original)
+{
+    this->symbols = original.symbols;
+    this->parent_block_symbol_table = original.parent_block_symbol_table;
+}
+
 SYMBOL_TABLE::~SYMBOL_TABLE()
 {
     std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
@@ -124,3 +130,13 @@ SYMBOL * SYMBOL_TABLE::FindSymbol(char * name)
     }
     return 0;
 }
+
+void SYMBOL_TABLE::EnterSymbol(SYMBOL * s)
+{
+    // Add the entry into the symbol table.
+    std::pair<char*, SYMBOL*> sym;
+    sym.first = s->name;
+    sym.second = s;
+    this->symbols.insert(sym);
+}
+

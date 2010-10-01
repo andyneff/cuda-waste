@@ -13,6 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include "emulator.h"
 #include <assert.h>
 #include <fstream>
@@ -140,11 +143,7 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
             s->index_max = 0;
             s->type = type->GetType();
             s->storage_class = K_PARAM;
-            // Add the entry into the symbol table.
-            std::pair<char*, SYMBOL*> sym;
-            sym.first = n;
-            sym.second = s;
-            symbol_table->symbols.insert(sym);
+            symbol_table->EnterSymbol(s);
         }
     }
     // erase arg list for next launch.
@@ -323,11 +322,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             s->storage_class = storage_class;
             s->array = false;
             s->index_max = 0;
-            // Add the entry into the symbol table.
-            std::pair<char*, SYMBOL*> sym;
-            sym.first = s->name;
-            sym.second = s;
-            symbol_table->symbols.insert(sym);
+            symbol_table->EnterSymbol(s);
         }
     } else {
         // Create a symbol table entry.
@@ -430,10 +425,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         s->type = ttype->GetType();
         s->storage_class = storage_class;
         // Add the entry into the symbol table.
-        std::pair<char*, SYMBOL*> sym;
-        sym.first = s->name;
-        sym.second = s;
-        symbol_table->symbols.insert(sym);
+        symbol_table->EnterSymbol(s);
     }
 }
 
@@ -460,10 +452,7 @@ void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
             s->array = false;
             s->index_max = 0;
             // Add the entry into the symbol table.
-            std::pair<char*, SYMBOL*> sym;
-            sym.first = s->name;
-            sym.second = s;
-            symbol_table->symbols.insert(sym);
+            symbol_table->EnterSymbol(s);
         }
     }
 }
@@ -594,8 +583,8 @@ bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
 
 void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
-    //_CrtMemState state_begin;
-    //_CrtMemCheckpoint(&state_begin);
+    _CrtMemState state_begin;
+    _CrtMemCheckpoint(&state_begin);
     
     std::queue<THREAD *> wait_queue;
     std::queue<THREAD *> active_queue;
@@ -614,23 +603,23 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
     // Create a new symbol table and add the block index variables.
     SYMBOL_TABLE * block_symbol_table = PushSymbolTable(symbol_table);
     dim3 bid(bidx, bidy, bidz);
-    CreateSymbol(symbol_table, "%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
+    CreateSymbol(block_symbol_table, "%ctaid", "dim3", K_V4, &bid, sizeof(bid), K_LOCAL);
 
     if (do_thread_synch)
     {
         // Add to this symbol table any explicit shared memory
         // variables.
         int sc[] = { K_SHARED, 0 };
-        SetupVariables(symbol_table, code, sc);
+        SetupVariables(block_symbol_table, code, sc);
     } else
     {
         int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
-        SetupVariables(symbol_table, code, sc);
+        SetupVariables(block_symbol_table, code, sc);
     }
 
     // Add to this symbol table any extern declared shared memory
     // variables.
-    SetupExternShared(symbol_table, code);
+    SetupExternShared(block_symbol_table, code);
 
     for (int tidx = 0; tidx < conf.blockDim.x; ++tidx)
     {
@@ -652,6 +641,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         }
     }
 
+    bool spawn = true;
     int max_threads = 2;
     int num_waiting_threads = 0;
     while (! wait_queue.empty())
@@ -664,14 +654,28 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
             wait_queue.pop();
             if (! thread->Waiting())
             {
-                HANDLE hThread = (HANDLE) _beginthreadex(0, 0, THREAD::WinThreadExecute, (void*)thread, CREATE_SUSPENDED, 0);
-                if (hThread)
+                if (spawn)
                 {
-                    thread->SetHandle(hThread);
-                    ResumeThread(hThread);
-                    active_queue.push(thread);
+                    HANDLE hThread = (HANDLE) _beginthreadex(0, 0, THREAD::WinThreadExecute, (void*)thread, CREATE_SUSPENDED, 0);
+                    if (hThread)
+                    {
+                        thread->SetHandle(hThread);
+                        ResumeThread(hThread);
+                        active_queue.push(thread);
+                    }
+                    else printf("error in thread spawn\n");
                 }
-                else printf("error in thread spawn\n");
+                else
+                {
+                    thread->Execute();
+                    if (! thread->Finished())
+                    {
+                        wait_queue.push(thread);
+                        num_waiting_threads++;
+                    }
+                    else
+                        delete thread;
+                }
             }
             else if (! thread->Finished())
             {
@@ -720,10 +724,10 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         delete this->extern_memory_buffer;
     this->extern_memory_buffer = 0;
 
-    //_CrtMemState state_end;
-    //_CrtMemCheckpoint(&state_end);
+    _CrtMemState state_end;
+    _CrtMemCheckpoint(&state_end);
 
-    //_CrtMemDumpAllObjectsSince(&state_begin);
+    _CrtMemDumpAllObjectsSince(&state_begin);
 }
 
 void EMULATOR::PrintName(TREE * inst)
@@ -774,10 +778,7 @@ void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typ
     s->index_max = 0;
     memcpy(s->pvalue, value, size);
     // Add the entry into the symbol table.
-    std::pair<char*, SYMBOL*> sym;
-    sym.first = s->name;
-    sym.second = s;
-    symbol_table->symbols.insert(sym);
+    symbol_table->EnterSymbol(s);
 }
 
 TREE * EMULATOR::FindBlock(TREE * node)

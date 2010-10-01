@@ -45,5 +45,7 @@ public:
     ~SYMBOL_TABLE();
     void Dump();
     SYMBOL * FindSymbol(char * name);
+    void EnterSymbol(SYMBOL * sym);
+    SYMBOL_TABLE(const SYMBOL_TABLE & original);
 };
 
