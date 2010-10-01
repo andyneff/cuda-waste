@@ -627,7 +627,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         {
             for (int tidz = 0; tidz < conf.blockDim.z; ++tidz)
             {
-                SYMBOL_TABLE * root = PushSymbolTable(symbol_table);
+                SYMBOL_TABLE * root = PushSymbolTable(block_symbol_table);
                 dim3 tid(tidx, tidy, tidz);
                 CreateSymbol(root, "%tid", "dim3", K_V4, &tid, sizeof(tid), K_LOCAL);
                 if (do_thread_synch)
