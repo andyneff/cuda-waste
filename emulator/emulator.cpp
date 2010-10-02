@@ -29,6 +29,7 @@
 #include "symbol.h"
 #include "constant.h"
 #include "types.h"
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 EMULATOR * EMULATOR::singleton;
 
@@ -127,7 +128,7 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
             // Get to the parameter in the AST.
             TREE * param = param_list->GetChild(i);
             TREE * name = param->GetChild(0);
-            char * n = name->GetText();
+            char * n = this->StringTableEntry(name->GetText());
             TREE * type = param->GetChild(1)->GetChild(0);
             char * t = type->GetText();
             // Get to the argument in the set up list.
@@ -146,13 +147,6 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
             symbol_table->EnterSymbol(s);
         }
     }
-    // erase arg list for next launch.
-    {
-        std::list<arg*>::iterator ia = this->arguments.begin();
-        arg * a = *ia;
-        delete a;
-    }
-    this->arguments.clear();
 }
 
 size_t EMULATOR::Sizeof(int type)
@@ -314,10 +308,10 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             // Create a symbol table entry.
             SYMBOL * s = new SYMBOL();
             s->emulator = this;
-            s->name = this->string_table->Entry(full_name);
+			s->name = this->StringTableEntry(full_name);
             s->size = size;
             s->pvalue = (void*)malloc(size);
-            s->typestring = this->string_table->Entry(type);
+            s->typestring = this->StringTableEntry(type);
             s->type = ttype->GetType();
             s->storage_class = storage_class;
             s->array = false;
@@ -328,7 +322,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         // Create a symbol table entry.
         SYMBOL * s = new SYMBOL();
         s->emulator = this;
-        s->name = this->string_table->Entry(name);
+		s->name = this->StringTableEntry(name);
         s->size = size;
         // array flag helps in printing, but it works like any other
         // storage.
@@ -421,7 +415,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
                 mptr += size;
             }
         }
-        s->typestring = this->string_table->Entry(type);
+        s->typestring = this->StringTableEntry(type);
         s->type = ttype->GetType();
         s->storage_class = storage_class;
         // Add the entry into the symbol table.
@@ -443,8 +437,8 @@ void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
             char * name = label->GetText();
             SYMBOL * s = new SYMBOL();
             s->emulator = this;
-            s->name = this->string_table->Entry(name);
-            s->typestring = "label";
+            s->name = this->StringTableEntry(name);
+            s->typestring = this->StringTableEntry("label");
             s->type = label->GetType();
             s->size = 0;
             s->pvalue = (void*)i;
@@ -508,13 +502,28 @@ void EMULATOR::ConfigureStream(cudaStream_t stream)
     conf.stream = stream;
 }
 
+void EMULATOR::ResetArgs()
+{
+	for (std::list<arg*>::iterator ia = this->arguments.begin();
+		ia != this->arguments.end(); ++ia)
+	{
+		delete *ia;
+	}
+	this->arguments.clear();
+}
+
+
 void EMULATOR::Execute(TREE * entry)
 {
-    // Get function block.
+    _CrtMemState state_begin;
+    _CrtMemCheckpoint(&state_begin);
+
+	//// Get function block.
     TREE * code = FindBlock(entry);
 
     // Create symbol table for outer blocks.
     SYMBOL_TABLE * obst = PushSymbolTable(0);
+
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
         int sc[] = { K_GLOBAL, 0};
@@ -548,6 +557,18 @@ void EMULATOR::Execute(TREE * entry)
             }
         }
     }
+	delete block_symbol_table;
+	delete obst;
+	delete this->string_table;
+
+	_CrtCheckMemory();
+	_CrtMemState state_end;
+    _CrtMemCheckpoint(&state_end);
+	_CrtMemState diff;
+    _CrtMemDumpAllObjectsSince(&state_end);
+	_CrtMemDumpAllObjectsSince(&state_begin);
+	this->string_table = new STRING_TABLE();
+	this->ResetArgs();
 }
 
 bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
@@ -583,9 +604,6 @@ bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
 
 void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
-    _CrtMemState state_begin;
-    _CrtMemCheckpoint(&state_begin);
-    
     std::queue<THREAD *> wait_queue;
     std::queue<THREAD *> active_queue;
 
@@ -641,7 +659,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         }
     }
 
-    bool spawn = true;
+    bool spawn = false;
     int max_threads = 2;
     int num_waiting_threads = 0;
     while (! wait_queue.empty())
@@ -691,6 +709,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
             THREAD * thread = active_queue.front();
             active_queue.pop();
             WaitForSingleObject(thread->GetHandle(), INFINITE );
+			CloseHandle(thread->GetHandle()); // _endthreadex(0); does not free resources.  Call Closehandle to free.
             thread->SetHandle(0);
             // Check the status of the threads.
             if (! thread->Finished())
@@ -723,11 +742,6 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
     if (this->extern_memory_buffer)
         delete this->extern_memory_buffer;
     this->extern_memory_buffer = 0;
-
-    _CrtMemState state_end;
-    _CrtMemCheckpoint(&state_end);
-
-    _CrtMemDumpAllObjectsSince(&state_begin);
 }
 
 void EMULATOR::PrintName(TREE * inst)
@@ -760,16 +774,14 @@ void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typ
     SYMBOL * s = symbol_table->FindSymbol(name);
     if (s)
     {
-        assert(s->size == size);
-        // Update value.
-        memcpy(s->pvalue, value, size);
+		assert(false);
         return;
     }
     // Create a symbol table entry.
     s = new SYMBOL();
     s->emulator = this;
-    s->name = this->string_table->Entry(name);
-    s->typestring = this->string_table->Entry(typestring);
+    s->name = this->StringTableEntry(name);
+    s->typestring = this->StringTableEntry(typestring);
     s->type = type;
     s->size = size;
     s->pvalue = (void*)malloc(size);

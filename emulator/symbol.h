@@ -22,6 +22,7 @@ class SYMBOL
 public:
     char * name;
     void * pvalue;
+	void * cache;//for debugging.
     size_t size;
     char * typestring;
     int type;

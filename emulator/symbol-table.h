@@ -47,5 +47,7 @@ public:
     SYMBOL * FindSymbol(char * name);
     void EnterSymbol(SYMBOL * sym);
     SYMBOL_TABLE(const SYMBOL_TABLE & original);
+	void CachePvalues();
+    void CheckCachedPvalues();
 };
 

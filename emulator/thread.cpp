@@ -26,7 +26,7 @@
 #include "thread.h"
 #include "symbol.h"
 #include "symbol-table.h"
-
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 THREAD::THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root)
 {
@@ -70,7 +70,16 @@ void THREAD::Execute()
         if (this->emulator->trace_level > 3)
             this->Dump("before", pc, inst);
 
+		// if debug, check if pvalues in each symbol was changed.  It
+		// should have not!
+		if (this->emulator->trace_level > 0)
+			this->root->CachePvalues();
+
         int next = this->Dispatch(inst);
+
+		if (this->emulator->trace_level > 0)
+			this->root->CheckCachedPvalues();
+
         if (next > 0)
             pc = next;
         else if (next == -KI_EXIT)

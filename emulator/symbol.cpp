@@ -25,10 +25,16 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "symbol.h"
 #include "emulator.h"
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 SYMBOL::~SYMBOL()
 {
     // Do not free here if this is shared memory.
-    if (this->emulator->extern_memory_buffer != (TYPES::Types*)this->pvalue)
+    if (this->emulator->extern_memory_buffer == (TYPES::Types*)this->pvalue)
+		;
+	else if (this->size == 0 && this->storage_class == 0)
+		;
+	else
         free(this->pvalue);
+	this->pvalue = 0;
 }

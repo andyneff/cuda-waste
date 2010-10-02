@@ -56,7 +56,7 @@ public:
 
     struct arg
     {
-        const void * argument;
+        void * argument;
         size_t size;
         size_t offset;
     };
@@ -126,7 +126,8 @@ public:
     void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
     static EMULATOR * Singleton();
     TREE * Parse(char * module_name, char * source);
-    
+    void ResetArgs();
+
     // cuda_runtime.h equivalents.
     void ** _cudaRegisterFunction(void * fun, char * name);
     cudaError_t _cudaSetupArgument(const void *arg, size_t size, size_t offset);

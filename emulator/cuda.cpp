@@ -13,12 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include "emulator.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
 #include <queue>
 #include "tree.h"
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

@@ -13,6 +13,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include <assert.h>
 #include <iostream>
 #include "emulator.h"
@@ -20,6 +23,7 @@
 #include "symbol.h"
 #include "symbol-table.h"
 #include "constant.h"
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 int THREAD::DoAbs(TREE * inst)
 {

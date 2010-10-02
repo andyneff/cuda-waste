@@ -5,11 +5,14 @@
 #include "PtxParser.h"
 #include "../emulator/tree.h"
 #include "../emulator/emulator.h"
+#include "../emulator/string-table.h"
+
+static STRING_TABLE * string_table;
 
 TREE * convert(pANTLR3_BASE_TREE node)
 {
     TREE * result = new TREE();
-    char * text = EMULATOR::Singleton()->StringTableEntry((char*)node->getText(node)->chars);
+    char * text = string_table->Entry((char*)node->getText(node)->chars);
     result->SetText(text);
     int type = node->getType(node);
     result->SetType(type);
@@ -64,6 +67,8 @@ TREE * parse(char * ptx_module)
     }
     else
     {
+		string_table = new STRING_TABLE();
+
         // Convert Antlr tree into AST tree.
         TREE * result = convert(langAST.tree);
 

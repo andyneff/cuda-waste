@@ -14,6 +14,9 @@
    limitations under the License.
 */
 #pragma once
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include "types.h"
 
 class CONSTANT

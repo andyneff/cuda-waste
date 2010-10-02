@@ -14,27 +14,37 @@
    limitations under the License.
 */
 #pragma once
-#include <map>
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#include <set>
 
 class STRING_TABLE
 {
 public:
+	STRING_TABLE() {};
+	~STRING_TABLE()
+	{
+		for (std::set<char *, ltstr>::iterator it = this->table.begin();
+			it != this->table.end(); ++it)
+		{
+			free(*it);
+		}
+		this->table.clear();
+	}
     char * Entry(char * text)
     {
         char * result = 0;
-        std::map<char *, char*, ltstr>::iterator it = this->table.find(text);
+        std::set<char *, ltstr>::iterator it = this->table.find(text);
         if (it == this->table.end())
         {
-            std::pair<char *, char*> p;
             char * the_text = strdup(text);
-            p.first = the_text;
-            p.second = the_text;
-            this->table.insert(p);
+            this->table.insert(the_text);
             result = the_text;
         }
         else
         {
-            result = it->second;
+            result = *it;
         }
         return result;
     }
@@ -48,6 +58,6 @@ private:
         }
     };
 
-    std::map<char *, char*, ltstr> table;
+    std::set<char *, ltstr> table;
 };
 
