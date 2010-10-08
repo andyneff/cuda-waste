@@ -51,6 +51,9 @@ BOOL CUDA_WRAPPER::WrapCuda()
     return TRUE;
 }
 
+// NOTE: "It is not safe to call LoadLibrary from DllMain."  Don't wrap
+// the API here because it will want to load the CUDA API's in order to
+// do the hooking.
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     BOOL bResult = TRUE;

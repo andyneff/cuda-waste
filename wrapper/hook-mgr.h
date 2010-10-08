@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-
+#include <windows.h>
 #include <map>
 #include <string>
 #include <list>
@@ -34,21 +34,24 @@ class HookedFunction;
 
 class HookManager  
 {
-public:
+private:
     HookManager();
     virtual ~HookManager();
+	static HookManager * singleton;
 public:
+	static HookManager * Singleton();
     PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag);
     HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
     HookedFunction * FindHook(void * iat);
     PROC FindOriginal(PROC wrapper_function);
+	HMODULE GetModule(char * mod_name);
     BOOL UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName);
     bool HookSystemFuncs();
     void UnHookAllFuncs();
     BOOL AreThereHookedFunctions();
 private:
     friend class HookedFunction;
-	friend class _CUDA;
+    friend class _CUDA;
     static CriticalSection sm_CritSec;
     HMODULE m_hmodThisInstance;
     static HookedFunctions* sm_pHookedFunctions;

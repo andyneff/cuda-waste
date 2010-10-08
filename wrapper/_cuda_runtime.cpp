@@ -52,6 +52,10 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
     bool complain = false;
     if (hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)_CUDA_RUNTIME::Unimplemented, false))
     {
+        if (this->did_wrap)
+            return;
+        this->did_wrap = true;
+        this->hModule = hook_manager->GetModule(cuda_module_name);
         bool complain = false;
         // Hook cudart library.
         // Any unknown after this should be flagged.

@@ -90,7 +90,7 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     cu->hook_manager = 0;
     cu->do_debug_halt = false;
     cu->_cuda = new _CUDA();
-	cu->_cuda_runtime = new _CUDA_RUNTIME();
+    cu->_cuda_runtime = new _CUDA_RUNTIME();
 }
 
 
@@ -112,7 +112,7 @@ void CUDA_WRAPPER::DoInit()
         if (cu->quit_on_error)
             exit(1);
     }
-    HookManager * hm = new HookManager();
+    HookManager * hm = HookManager::Singleton();
     cu->hook_manager = hm;
     // Force load of CUDA driver API, so it can be hooked.
     LoadLibraryA("nvcuda.dll");
@@ -127,9 +127,7 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
     // driver (nvcuda.dll).  If we recognize any, all hooks should be
     // defined.  Otherwise, there will be odd behavior.
     this->_cuda->WrapModule();
-
     this->_cuda_runtime->WrapModule(cuda_module_name);
-
     return true;
 }
 
@@ -400,6 +398,27 @@ void CUDA_WRAPPER::SetEmulationMode(int yes_no)
         cu->do_emulation = true;
     else
         cu->do_emulation = false;
+// With the cuda runtime library loaded, I can't seem to get this thing
+// to stop chewing up memory.  There is a memory leak that occurs with
+// thread spawning.  On a hunch, if emulation is desired, unload the
+// cuda runtime and cuda driver api's.
+//    if (cu->do_emulation)
+//    {
+//      HMODULE hModule_runtime = cu->_cuda_runtime->hModule;
+//      for (int i = 0; i < 10000; ++i)
+//      {
+//          BOOL b = ::FreeLibrary(hModule_runtime);
+//          printf ("%d ", b);
+//      }
+//      printf ("\n");
+//      HMODULE hModule_driver = cu->_cuda->hModule;
+//      for (int i = 0; i < 1000; ++i)
+//      {
+//          BOOL b = ::FreeLibrary(hModule_driver);
+//          printf ("%d ", b);
+//      }
+//      printf ("\n");
+//   }
 }
 
 CUDA_WRAPPER::return_type CUDA_WRAPPER::SetQuitOnError(bool b)
@@ -465,21 +484,16 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
 void CUDA_WRAPPER::SetTrace(int level)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (level >= 10)
-    {
-        cu->do_debug_halt = true;
-        level -= 10;
-    }
-
-    if (cu->do_debug_halt)
-    {
-        printf("Halting to invoke debugger...\n");
-        _asm {
-            int 3;
-        }
-    }
-
     EMULATOR * emulator = EMULATOR::Singleton();
     emulator->SetTrace(level);
+}
+
+void CUDA_WRAPPER::StartDebugger()
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    printf("Halting to invoke debugger...\n");
+    _asm {
+        int 3;
+    }
 }
 

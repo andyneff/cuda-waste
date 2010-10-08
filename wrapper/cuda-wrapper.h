@@ -82,18 +82,18 @@ public:
         OK = 1
     };
     static return_type CheckOverwrite();
-    static return_type CUDARTAPI SetPaddingSize(size_t s);
-    static return_type CUDARTAPI SetPaddingByte(unsigned char b);
-    static return_type CUDARTAPI SetDevicePointerToFirstByteInBlock(bool b);
-    static return_type CUDARTAPI SetOutputStream(std::ostream * fp);
-    static return_type CUDARTAPI SetTraceAllCalls(bool b);
-    static return_type CUDARTAPI SetQuitOnError(bool b);
-    static return_type CUDARTAPI SetDoNotCallCudaAfterSanityCheckFail(bool b);
-    static void CUDARTAPI SetEmulationMode(int yes_no);
+    static return_type __stdcall SetPaddingSize(size_t s);
+    static return_type __stdcall SetPaddingByte(unsigned char b);
+    static return_type __stdcall SetDevicePointerToFirstByteInBlock(bool b);
+    static return_type __stdcall SetOutputStream(std::ostream * fp);
+    static return_type __stdcall SetTraceAllCalls(bool b);
+    static return_type __stdcall SetQuitOnError(bool b);
+    static return_type __stdcall SetDoNotCallCudaAfterSanityCheckFail(bool b);
+    static void __stdcall SetEmulationMode(int yes_no);
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
-    static return_type CUDARTAPI RunDevice(char * device);
-    static void CUDARTAPI SetTrace(int level);
-
+    static return_type __stdcall RunDevice(char * device);
+    static void __stdcall SetTrace(int level);
+	static void __stdcall StartDebugger();
     static return_type CheckSinglePtrOverwrite(const data * d);
     static bool IsBadPointer(const void * ptr);
     static int FindAllocatedBlock(const void * pointer);

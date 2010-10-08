@@ -15,6 +15,7 @@
 */
 #pragma once
 
+#include <Windows.h>
 #include <vector>
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
@@ -35,7 +36,12 @@ class HookManager;
 
 class DLL_API _CUDA
 {
+private:
+    bool did_wrap;
 public:
+	HMODULE hModule;
+public:
+	_CUDA() { did_wrap = false; }
     void _CUDA::WrapModule();
     // Driver API.
 	typedef CUresult (CUDAAPI * ptr_cuArray3DCreate)(CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray);

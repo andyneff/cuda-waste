@@ -14,7 +14,7 @@
    limitations under the License.
 */
 #pragma once
-
+#include <Windows.h>
 #include <vector>
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
@@ -35,6 +35,11 @@ class HookManager;
 
 class DLL_API _CUDA_RUNTIME
 {
+private:
+    bool did_wrap;
+public:
+	HMODULE hModule;
+    _CUDA_RUNTIME() { did_wrap = false; }
 public:
     void WrapModule(char * cuda_module_name);
     // CUDA C Runtime API.
@@ -135,15 +140,15 @@ public:
     typedef void (CUDARTAPI *typePtrCudaRegisterTexture)(void **fatCubinHandle, const struct textureReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int norm, int ext);
     typedef void (CUDARTAPI *typePtrCudaRegisterSurface)(void **fatCubinHandle, const struct surfaceReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int ext);
     typedef void (CUDARTAPI *typePtrCudaRegisterFunction)(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize);
-	
-	static cudaError_t CUDARTAPI Malloc(void ** ptr, size_t size);
+    
+    static cudaError_t CUDARTAPI Malloc(void ** ptr, size_t size);
     static cudaError_t CUDARTAPI Free(void *);
     static cudaError_t CUDARTAPI HostAlloc(void ** ptr, size_t size, unsigned int flags);
     static cudaError_t CUDARTAPI FreeHost(void *);
     static cudaError_t CUDARTAPI HostGetDevicePointer(void ** pDevice, void * pHost, unsigned int flags);
     static cudaError_t CUDARTAPI Memcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind);    
     static cudaError_t CUDARTAPI Memset(void * devPtr, int value, size_t count);          
-	static cudaError_t CUDARTAPI ThreadExit();
+    static cudaError_t CUDARTAPI ThreadExit();
     static cudaError_t CUDARTAPI _cudaGetLastError();
     static void** CUDARTAPI _cudaRegisterFatBinary(void *fatCubin);
     static cudaError_t CUDARTAPI _cudaLaunch(const char *entry);
@@ -161,6 +166,6 @@ public:
     static cudaError_t CUDARTAPI _cudaStreamSynchronize(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaStreamQuery(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaChooseDevice(int *device, const struct cudaDeviceProp *prop);
-	static void Unimplemented();
+    static void Unimplemented();
 
 };

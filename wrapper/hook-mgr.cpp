@@ -53,12 +53,20 @@ bool ExtractModuleFileName(char* pszFullFileName)
 
 HookedFunctions* HookManager::sm_pHookedFunctions = NULL;
 CriticalSection        HookManager::sm_CritSec;
+HookManager * HookManager::singleton;
 
 HookManager::HookManager()
 {
     m_hmodThisInstance   = ModuleFromAddress(HookManager::MyGetProcAddress);
     m_bSystemFuncsHooked = false;
-    sm_pHookedFunctions  = new HookedFunctions(this); 
+    sm_pHookedFunctions  = new HookedFunctions(this);
+}
+
+HookManager * HookManager::Singleton()
+{
+	if (HookManager::singleton == 0)
+		singleton = new HookManager();
+	return singleton;
 }
 
 HookManager::~HookManager()
@@ -75,7 +83,7 @@ bool HookManager::HookSystemFuncs()
         HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HookManager::MyLoadLibraryExA, true);
         HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HookManager::MyLoadLibraryExW, true);
         HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA, true);
-		HookImport("Kernel32.dll", "GetProcAddress", (PROC) HookManager::MyGetProcAddress, true);
+        HookImport("Kernel32.dll", "GetProcAddress", (PROC) HookManager::MyGetProcAddress, true);
         m_bSystemFuncsHooked = true;
     }
     return m_bSystemFuncsHooked;
@@ -103,7 +111,6 @@ BOOL HookManager::AreThereHookedFunctions()
     return (sm_pHookedFunctions->size() > 0);
 }
 
-
 PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag)
 {
     LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
@@ -112,15 +119,15 @@ PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfn
     PROC                  pfnOrig = NULL;
     try
     {
-		HMODULE hModule = ::GetModuleHandleA(pszCalleeModName);
-		HANDLE  hProcess = GetCurrentProcess();
-		char    szModuleName[MAX_PATH];
-		BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hModule, szModuleName, sizeof(szModuleName));
-		if (! rv_gmfn)
-		{
-			CloseHandle(hProcess);
-			return pfnOrig;
-		}
+        HMODULE hModule = ::GetModuleHandleA(pszCalleeModName);
+        HANDLE  hProcess = GetCurrentProcess();
+        char    szModuleName[MAX_PATH];
+        BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hModule, szModuleName, sizeof(szModuleName));
+        if (! rv_gmfn)
+        {
+            CloseHandle(hProcess);
+            return pfnOrig;
+        }
         if (!sm_pHookedFunctions->GetHookedFunction(
                 hModule, 
                 pszFuncName
@@ -201,6 +208,11 @@ PROC HookManager::FindOriginal(PROC wrapper_function)
     return 0;
 }
 
+HMODULE HookManager::GetModule(char * mod_name)
+{
+	return ::LoadLibraryA(mod_name);
+}
+
 BOOL HookManager::UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName)
 {
     LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
@@ -233,8 +245,11 @@ BOOL HookManager::AddHook(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnOri
             pfnOrig,
             pfnHook
             );
-        pHook->HookImport();
         bResult = sm_pHookedFunctions->AddHook(pHook);
+        BOOL bResult2 = pHook->HookImport();
+		if (! bResult2)
+			sm_pHookedFunctions->RemoveHook(pHook);
+		bResult |= bResult2;
     }
     return bResult;
 }
@@ -324,8 +339,8 @@ FARPROC WINAPI HookManager::MyGetProcAddress(HMODULE hmod, PCSTR pszProcName)
             );
     if (NULL != pFuncHook)
     {
-		pfn = pFuncHook->Get_pfnHook();
-	}
+        pfn = pFuncHook->Get_pfnHook();
+    }
     return pfn;
 }
 
@@ -445,37 +460,37 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
         if (pImportDesc == NULL)
             __leave;  
         while (pImportDesc->Name)
-		{
+        {
             PSTR pszModName = (PSTR)((PBYTE) hmodCaller + pImportDesc->Name);
-			char import_mod_name[4000];
-			for (int i = 0; ; i++)
-			{
-				import_mod_name[i] = tolower(pszModName[i]);
-				if (pszModName[i] == '\0')
-					break;
-			}
+            char import_mod_name[4000];
+            for (int i = 0; ; i++)
+            {
+                import_mod_name[i] = tolower(pszModName[i]);
+                if (pszModName[i] == '\0')
+                    break;
+            }
 
-			char import_callee_mod_name[4000];
-			for (int i = 0; ; i++)
-			{
-				import_callee_mod_name[i] = tolower(pszCalleeModName[i]);
-				if (pszCalleeModName[i] == '\0')
-					break;
-			}
+            char import_callee_mod_name[4000];
+            for (int i = 0; ; i++)
+            {
+                import_callee_mod_name[i] = tolower(pszCalleeModName[i]);
+                if (pszCalleeModName[i] == '\0')
+                    break;
+            }
 
-//			std::cout << "pszModName " << import_mod_name << " pszCalleeModName " << import_callee_mod_name << "\n";
+//          std::cout << "pszModName " << import_mod_name << " pszCalleeModName " << import_callee_mod_name << "\n";
             if (stricmp(import_mod_name, import_callee_mod_name) == 0) 
                 break;   // Found
-			if (stricmp(import_callee_mod_name, import_mod_name) == 0) 
-				break;   // Found
+            if (stricmp(import_callee_mod_name, import_mod_name) == 0) 
+                break;   // Found
             if (strstr(import_callee_mod_name, import_mod_name) != 0)
-				break;   // Found
-			if (strstr(import_mod_name, import_callee_mod_name) != 0)
-				break;   // Found
+                break;   // Found
+            if (strstr(import_mod_name, import_callee_mod_name) != 0)
+                break;   // Found
             pImportDesc++;
         }
         if (pImportDesc->Name == 0)
-			__leave;
+            __leave;
         // Get caller's IAT 
         PIMAGE_THUNK_DATA pThunk = 
             (PIMAGE_THUNK_DATA)( (PBYTE) hmodCaller + pImportDesc->FirstThunk );
@@ -488,21 +503,37 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
                 MEMORY_BASIC_INFORMATION mbi;
         
                 ::VirtualQuery(ppfn, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+
+                //if (FALSE == ::VirtualProtect(
+                //    mbi.BaseAddress,
+                //    mbi.RegionSize,
+                //    PAGE_READWRITE,
+                //    &mbi.Protect)
+                //    )
+                //    __leave;
+                DWORD dwOldProtect;
                 if (FALSE == ::VirtualProtect(
-                    mbi.BaseAddress,
-                    mbi.RegionSize,
+                    ppfn,
+                    4,
                     PAGE_READWRITE,
-                    &mbi.Protect)
+                    &dwOldProtect)
                     )
                     __leave;
+
                 *ppfn = *pfnNew;
                 bResult = TRUE;
-                DWORD dwOldProtect;
+                //::VirtualProtect(
+                //    mbi.BaseAddress,
+                //    mbi.RegionSize,
+                //    mbi.Protect,
+                //    &dwOldProtect
+                //    );
+                DWORD dwTemp;
                 ::VirtualProtect(
-                    mbi.BaseAddress,
-                    mbi.RegionSize,
-                    mbi.Protect,
-                    &dwOldProtect
+                    ppfn,
+                    4,
+                    dwOldProtect,
+                    &dwTemp
                     );
                 this->m_iatList.push_back(ppfn);
 
@@ -536,19 +567,19 @@ BOOL HookedFunction::DoHook(BOOL bHookOrRestore, PROC pfnCurrent, PROC pfnNew)
 
 HookedFunction* HookedFunctions::GetHookedFunction(HMODULE hmodOriginal, PCSTR pszFuncName)
 {
-	char szFileName[MAX_PATH];
-	// Hmm, does not seem to get full path name.
+    char szFileName[MAX_PATH];
+    // Hmm, does not seem to get full path name.
     ::GetModuleFileNameA(hmodOriginal, szFileName, MAX_PATH);
     ExtractModuleFileName(szFileName);
-	// Get full path.
-	HANDLE  hProcess = GetCurrentProcess();
-	char    szModuleName[MAX_PATH];
-	BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hmodOriginal, szModuleName, sizeof(szModuleName));
-	if (! rv_gmfn)
-	{
-		CloseHandle(hProcess);
-		return FALSE;
-	}
+    // Get full path.
+    HANDLE  hProcess = GetCurrentProcess();
+    char    szModuleName[MAX_PATH];
+    BOOL rv_gmfn = ::GetModuleFileNameExA(hProcess, hmodOriginal, szModuleName, sizeof(szModuleName));
+    if (! rv_gmfn)
+    {
+        CloseHandle(hProcess);
+        return FALSE;
+    }
     return GetHookedFunction(szModuleName, pszFuncName);
 }
 
@@ -639,12 +670,18 @@ HookedFunction* HookedFunctions::GetHookedFunction(PCSTR pszCalleeModName, PCSTR
     if (strlen(szFuncName) > 0)
     {
         char szKey[MAX_PATH];
-        sprintf(
-            szKey, 
-            "<%s><%s>", 
-            pszCalleeModName,
-            szFuncName
-            );
+		// This routine could be called during an exit thread event.  Calling the C runtime causes the buffers
+		// to be reallocated, and get possibly confused, because the C runtime should be killed on exit thread.
+		// Just use normal concatenation instead of sprintf.
+        //sprintf(
+        //    szKey, 
+        //    "<%s><%s>", 
+        //    pszCalleeModName,
+        //    szFuncName
+        //    );
+		strcpy(szKey, pszCalleeModName);
+		strcat(szKey, "|");
+		strcat(szKey, szFuncName);
         HookedFunctions::const_iterator citr = find( szKey );
         if ( citr != end() )
             pHook = citr->second;
@@ -660,12 +697,16 @@ BOOL HookedFunctions::AddHook(HookedFunction* pHook)
     if (NULL != pHook)
     {
         char szKey[MAX_PATH];
-        sprintf(
-            szKey, 
-            "<%s><%s>", 
-            pHook->Get_CalleeModName(),
-            pHook->Get_FuncName()
-            );
+        //sprintf(
+        //    szKey, 
+        //    "<%s><%s>", 
+        //    pHook->Get_CalleeModName(),
+        //    pHook->Get_FuncName()
+        //    );
+		strcpy(szKey, pHook->Get_CalleeModName());
+		strcat(szKey, "|");
+		strcat(szKey, pHook->Get_FuncName());
+
         HookedFunctions::iterator lb = lower_bound(szKey);
         insert( lb, value_type(szKey, pHook) );
         bResult = TRUE;
@@ -681,12 +722,16 @@ BOOL HookedFunctions::RemoveHook(HookedFunction* pHook)
         if (NULL != pHook)
         {
             char szKey[MAX_PATH];
-            sprintf(
-                szKey, 
-                "<%s><%s>", 
-                pHook->Get_CalleeModName(),
-                pHook->Get_FuncName()
-                );
+            //sprintf(
+            //    szKey, 
+            //    "<%s><%s>", 
+            //    pHook->Get_CalleeModName(),
+            //    pHook->Get_FuncName()
+            //    );
+			strcpy(szKey, pHook->Get_CalleeModName());
+			strcat(szKey, "|");
+			strcat(szKey, pHook->Get_FuncName());
+
             HookedFunctions::iterator itr = find(szKey);
             if (itr != end())
             {

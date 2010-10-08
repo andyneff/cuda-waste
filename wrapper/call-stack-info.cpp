@@ -259,6 +259,18 @@ char * CallStackInfo::Context(int lines)
     return strdup(buffer);
 }
 
+void * * CallStackInfo::AddressContext(int lines)
+{
+    typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
+    CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
+    const int kMaxCallers = 62; 
+    static void* callers[kMaxCallers];
+	for (int i = 0; i < kMaxCallers; ++i)
+		callers[i] = 0;
+    int count = (func)(0, kMaxCallers, callers, NULL);
+	return callers;
+}
+
 void CallStackInfo::ClassifyAsPrefix(char * file)
 {
     // Add file name to list of files that you want to remove from call stack context string.

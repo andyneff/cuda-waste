@@ -116,6 +116,7 @@
     <ClCompile Include="dll-main.cpp" />
     <ClCompile Include="hook-mgr.cpp" />
     <ClCompile Include="lock-mgr.cpp" />
+    <ClCompile Include="memdbg.cpp" />
     <ClCompile Include="process-mgr.cpp" />
     <ClCompile Include="_cuda.cpp" />
     <ClCompile Include="_cuda_runtime.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="cuda-wrapper.h" />
     <ClInclude Include="hook-mgr.h" />
     <ClInclude Include="lock-mgr.h" />
+    <ClInclude Include="memdbg.h" />
     <ClInclude Include="process-mgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
