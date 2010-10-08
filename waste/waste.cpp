@@ -19,6 +19,7 @@ Options:\n\
   -q, --quit-on-error               Quit program on error detection.\n\
   -k, --skip-on-error               Skip over CUDA call when the usage is invalid.\n\
   -n, --non-standard-ptr            Allow computed pointers.\n\
+  -x                                Start debugger.\n\
 ";
     exit(1);
 }
@@ -73,6 +74,7 @@ char * str_set_device = "?RunDevice@CUDA_WRAPPER@@SG?AW4return_type@1@PAD@Z";
 char * str_set_trace = "?SetTrace@CUDA_WRAPPER@@SGXH@Z";
 char * str_wrap_cuda = "?WrapCuda@CUDA_WRAPPER@@SGHXZ";
 char * str_set_emulator_mode = "?SetEmulationMode@CUDA_WRAPPER@@SGXH@Z";
+char * str_start_debugger = "?StartDebugger@CUDA_WRAPPER@@SGXXZ";
 
 int main(int argc, char * argv[])
 {
@@ -100,6 +102,7 @@ int main(int argc, char * argv[])
     bool set_emulator_mode = false;
     bool set_nonemulator_mode = false;
     bool set_device = false;
+    bool start_debugger = false;
     char * device;
     int level = 0;
 
@@ -113,15 +116,15 @@ int main(int argc, char * argv[])
                 set_trace_all_calls = true;
                 trace_all_calls = true;
                 level = atoi(3+*argv);
-	    }
-	    else if (strcmp("-e", *argv) == 0)
-	    {
-		    set_emulator_mode = true;
-	    }
-	    else if (strcmp("-ne", *argv) == 0)
-	    {
-		    set_nonemulator_mode = true;
-	    }
+            }
+            else if (strcmp("-e", *argv) == 0)
+            {
+                set_emulator_mode = true;
+            }
+            else if (strcmp("-ne", *argv) == 0)
+            {
+                set_nonemulator_mode = true;
+            }
             else if (strncmp("-s=", *argv, 3) == 0)
             {
                 set_padding_size = true;
@@ -162,6 +165,10 @@ int main(int argc, char * argv[])
                 set_device = true;
                 argc--; argv++;
                 device = *argv;
+            }
+            else if (strcmp("-x", *argv) == 0)
+            {
+                start_debugger = true;
             }
             else
                 Help();
@@ -235,16 +242,52 @@ int main(int argc, char * argv[])
 #define JmpAbsoluteAddress( ptr, offset, addr ) *((LPVOID *) &ptr[offset]) = (LPVOID)( (DWORD_PTR)(addr) )
 #define JmpRelativeAddressBased( ptr, offset, addr, base, add_subtract ) *((LPVOID *) &ptr[offset]) = (LPVOID)( (DWORD_PTR)(addr) - (DWORD_PTR)(base) - (DWORD_PTR) (offset + 4 + add_subtract) )
 
-    // Save ALL registers.
-    AddBytes(code, 0x9c);   // pushfd
-    AddBytes(code, 0x60);   // pushad
 
-    // Inject cuda-memory-debug wrapper library target (load the library into this program).
-    AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-    JmpAbsoluteAddress(code, size-4, pszCMD);   // patch with actual string address.
+    // Add code to load wrapper library.
+    {
+        AddBytes(code, 0x9c);   // pushfd
+        AddBytes(code, 0x60);   // pushad
+
+        // Inject cuda-memory-debug wrapper library target (load the library into this program).
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);   // patch with actual string address.
     
-    AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-    JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0); // patch with actual function address.
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0); // patch with actual function address.
+    }
+
+    // Add code to invoke debugger right away.
+    if (start_debugger)
+    {
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_start_debugger, strlen(str_start_debugger) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_start_debugger
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
+
+    // Add hooks to cuda api.
+    {
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_wrap_cuda, strlen(str_wrap_cuda) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_wrap_cuda
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
 
     // No way to set an option directly until the dll is loaded.
     // Instead, load pointer to function for modifying an option, then
@@ -367,40 +410,24 @@ int main(int argc, char * argv[])
         JmpAbsoluteAddress(code, size-4, pszDevice);
         AddBytes(code, 0xff, 0xd0); // call eax
     }
-    if (set_nonemulator_mode || set_emulator_mode)
+    // Force emulation or no emulation.
     {
-	    LPVOID psz = VirtualAllocEx(hProcess, NULL, strlen(str_set_emulator_mode) + 1, MEM_COMMIT, PAGE_READWRITE);
-	    BOOL rv_wpw = WriteProcessMemory(hProcess, psz, (LPVOID) str_set_emulator_mode, strlen(str_set_emulator_mode) + 1, &written);
-	    AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-	    JmpAbsoluteAddress(code, size-4, pszCMD);
-	    AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-	    JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-		AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetEmulatorMode"
-	    JmpAbsoluteAddress(code, size-4, psz);
-	    AddBytes(code, 0x50); // push eax
-	    AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-	    JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-	    AddBytes(code, 0x68, 0, 0, 0, 0); // push true/false (as 1 or 0 int).
-		if (set_nonemulator_mode && ! set_emulator_mode)
-			JmpAbsoluteAddress(code, size-1, 0);
-		else
-			JmpAbsoluteAddress(code, size-1, 1);
-	    AddBytes(code, 0xff, 0xd0); // call eax
-    }
-
-    // Add hooks.
-    {
-        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
-        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_wrap_cuda, strlen(str_wrap_cuda) + 1, &written);
+        LPVOID psz = VirtualAllocEx(hProcess, NULL, strlen(str_set_emulator_mode) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw = WriteProcessMemory(hProcess, psz, (LPVOID) str_set_emulator_mode, strlen(str_set_emulator_mode) + 1, &written);
         AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
         JmpAbsoluteAddress(code, size-4, pszCMD);
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
         JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_wrap_cuda
-        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetEmulatorMode"
+        JmpAbsoluteAddress(code, size-4, psz);
         AddBytes(code, 0x50); // push eax
         AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
         JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0x68, 0, 0, 0, 0); // push true/false (as 1 or 0 int).
+        if (set_nonemulator_mode && ! set_emulator_mode)
+            JmpAbsoluteAddress(code, size-1, 0);
+        else
+            JmpAbsoluteAddress(code, size-1, 1);
         AddBytes(code, 0xff, 0xd0); // call eax
     }
 
