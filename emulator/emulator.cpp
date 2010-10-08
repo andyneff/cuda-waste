@@ -29,6 +29,8 @@
 #include "symbol.h"
 #include "constant.h"
 #include "types.h"
+#include "../wrapper/memdbg.h"
+
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 EMULATOR * EMULATOR::singleton;
@@ -308,7 +310,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             // Create a symbol table entry.
             SYMBOL * s = new SYMBOL();
             s->emulator = this;
-			s->name = this->StringTableEntry(full_name);
+            s->name = this->StringTableEntry(full_name);
             s->size = size;
             s->pvalue = (void*)malloc(size);
             s->typestring = this->StringTableEntry(type);
@@ -322,7 +324,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         // Create a symbol table entry.
         SYMBOL * s = new SYMBOL();
         s->emulator = this;
-		s->name = this->StringTableEntry(name);
+        s->name = this->StringTableEntry(name);
         s->size = size;
         // array flag helps in printing, but it works like any other
         // storage.
@@ -504,21 +506,21 @@ void EMULATOR::ConfigureStream(cudaStream_t stream)
 
 void EMULATOR::ResetArgs()
 {
-	for (std::list<arg*>::iterator ia = this->arguments.begin();
-		ia != this->arguments.end(); ++ia)
-	{
-		delete *ia;
-	}
-	this->arguments.clear();
+    for (std::list<arg*>::iterator ia = this->arguments.begin();
+        ia != this->arguments.end(); ++ia)
+    {
+        delete *ia;
+    }
+    this->arguments.clear();
 }
 
 
 void EMULATOR::Execute(TREE * entry)
 {
-    _CrtMemState state_begin;
-    _CrtMemCheckpoint(&state_begin);
+//    _CrtMemState state_begin;
+//    _CrtMemCheckpoint(&state_begin);
 
-	//// Get function block.
+    //// Get function block.
     TREE * code = FindBlock(entry);
 
     // Create symbol table for outer blocks.
@@ -557,18 +559,18 @@ void EMULATOR::Execute(TREE * entry)
             }
         }
     }
-	delete block_symbol_table;
-	delete obst;
-	delete this->string_table;
+    delete block_symbol_table;
+    delete obst;
+    delete this->string_table;
 
-	_CrtCheckMemory();
-	_CrtMemState state_end;
-    _CrtMemCheckpoint(&state_end);
-	_CrtMemState diff;
-    _CrtMemDumpAllObjectsSince(&state_end);
-	_CrtMemDumpAllObjectsSince(&state_begin);
-	this->string_table = new STRING_TABLE();
-	this->ResetArgs();
+//  _CrtCheckMemory();
+//  _CrtMemState state_end;
+//    _CrtMemCheckpoint(&state_end);
+//  _CrtMemState diff;
+//    _CrtMemDumpAllObjectsSince(&state_end);
+//  _CrtMemDumpAllObjectsSince(&state_begin);
+    this->string_table = new STRING_TABLE();
+    this->ResetArgs();
 }
 
 bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
@@ -659,7 +661,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         }
     }
 
-    bool spawn = false;
+    bool spawn = true;
     int max_threads = 2;
     int num_waiting_threads = 0;
     while (! wait_queue.empty())
@@ -674,6 +676,8 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
             {
                 if (spawn)
                 {
+                    //MEMDBG * mem = MEMDBG::Singleton();
+                    //mem->WrapModules();
                     HANDLE hThread = (HANDLE) _beginthreadex(0, 0, THREAD::WinThreadExecute, (void*)thread, CREATE_SUSPENDED, 0);
                     if (hThread)
                     {
@@ -709,7 +713,10 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
             THREAD * thread = active_queue.front();
             active_queue.pop();
             WaitForSingleObject(thread->GetHandle(), INFINITE );
-			CloseHandle(thread->GetHandle()); // _endthreadex(0); does not free resources.  Call Closehandle to free.
+            CloseHandle(thread->GetHandle()); // _endthreadex(0); does not free resources.  Call Closehandle to free.
+            //MEMDBG * mem = MEMDBG::Singleton();
+            //mem->UnwrapModules();
+            //mem->Output();
             thread->SetHandle(0);
             // Check the status of the threads.
             if (! thread->Finished())
@@ -774,7 +781,7 @@ void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typ
     SYMBOL * s = symbol_table->FindSymbol(name);
     if (s)
     {
-		assert(false);
+        assert(false);
         return;
     }
     // Create a symbol table entry.
