@@ -708,11 +708,27 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
                 delete thread;
         }
         // Wait for all active threads to stop.
+        if (! active_queue.empty())
+        {
+            HANDLE arr[20];
+            for (int i = 0; i < active_queue.size(); ++i)
+            {
+                THREAD * thread = active_queue.front();
+                active_queue.pop();
+                arr[i] = thread->GetHandle();
+                active_queue.push(thread);
+            }
+            ::WaitForMultipleObjects(
+                active_queue.size(),
+                arr,
+                TRUE,
+                INFINITE);
+        }
         while (! active_queue.empty())
         {
             THREAD * thread = active_queue.front();
             active_queue.pop();
-            WaitForSingleObject(thread->GetHandle(), INFINITE );
+//            WaitForSingleObject(thread->GetHandle(), INFINITE );
             CloseHandle(thread->GetHandle()); // _endthreadex(0); does not free resources.  Call Closehandle to free.
             //MEMDBG * mem = MEMDBG::Singleton();
             //mem->UnwrapModules();

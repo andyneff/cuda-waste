@@ -22,16 +22,18 @@
 class STRING_TABLE
 {
 public:
-	STRING_TABLE() {};
-	~STRING_TABLE()
-	{
-		for (std::set<char *, ltstr>::iterator it = this->table.begin();
-			it != this->table.end(); ++it)
-		{
-			free(*it);
-		}
-		this->table.clear();
-	}
+    STRING_TABLE() {};
+
+    ~STRING_TABLE()
+    {
+        for (std::set<char *, ltstr>::iterator it = this->table.begin();
+            it != this->table.end(); ++it)
+        {
+            free(*it);
+        }
+        this->table.clear();
+    }
+
     char * Entry(char * text)
     {
         char * result = 0;
