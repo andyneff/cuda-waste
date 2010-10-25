@@ -908,11 +908,12 @@ void** _CUDA_RUNTIME::_cudaRegisterFatBinary(void *fatCubin)
 
         // ELF contains just in time code for every PTX.
         // Execution will depend on picking which one for the device.
-        //__cudaFatElfEntry * elf = fcb->elf;
-        //for ( ; elf; elf = elf->next)
-        //{
-        //char * code = elf->elf;
-        //}
+        __cudaFatElfEntry * elf = fcb->elf;
+        for ( ; elf; elf = elf->next)
+        {
+            unsigned char * code = (unsigned char *)elf->elf;
+            int x = 1;
+        }
     }
     if (! cu->do_emulation)
     {

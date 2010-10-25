@@ -46,6 +46,7 @@ void _CUDA::WrapModule()
     // Add Driver API hooking.
     if (did_wrap)
         return;
+    did_wrap = true;
     char * cuda_module_name = "nvcuda.dll";
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     HookManager * hook_manager = cu->hook_manager;
