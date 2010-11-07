@@ -40,5 +40,7 @@ class CONSTANT
         {
             memset(&this->value, 0, sizeof(value));
         }
+
+		CONSTANT Eval(int expected_type, TREE * const_expr);
 };
 

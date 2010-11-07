@@ -70,15 +70,15 @@ void THREAD::Execute()
         if (this->emulator->trace_level > 3)
             this->Dump("before", pc, inst);
 
-		// if debug, check if pvalues in each symbol was changed.  It
-		// should have not!
-		if (this->emulator->trace_level > 0)
-			this->root->CachePvalues();
+        // if debug, check if pvalues in each symbol was changed.  It
+        // should have not!
+        if (this->emulator->trace_level > 0)
+            this->root->CachePvalues();
 
         int next = this->Dispatch(inst);
 
-		if (this->emulator->trace_level > 0)
-			this->root->CheckCachedPvalues();
+        if (this->emulator->trace_level > 0)
+            this->root->CheckCachedPvalues();
 
         if (next > 0)
             pc = next;

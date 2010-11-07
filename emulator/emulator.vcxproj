@@ -80,6 +80,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="constant.cpp" />
     <ClCompile Include="cuda-runtime.cpp" />
     <ClCompile Include="cuda.cpp" />
     <ClCompile Include="emulator.cpp" />
