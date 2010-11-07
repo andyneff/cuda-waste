@@ -21,7 +21,7 @@
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 
-class HookManager;
+class HOOK_MANAGER;
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -50,7 +50,7 @@ private:
     CUDA_WRAPPER();
     static CUDA_WRAPPER * singleton;
 public:
-    HookManager * hook_manager;
+    HOOK_MANAGER * hook_manager;
 
         size_t padding_size;
     unsigned char padding_byte;

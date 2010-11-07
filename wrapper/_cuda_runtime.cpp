@@ -48,7 +48,7 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
 {
     // Add Driver API hooking.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    HookManager * hook_manager = cu->hook_manager;
+    HOOK_MANAGER * hook_manager = cu->hook_manager;
     bool complain = false;
     if (hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)_CUDA_RUNTIME::Unimplemented, false))
     {
@@ -1156,7 +1156,7 @@ void _CUDA_RUNTIME::Unimplemented()
     // 1) Go up call stack to caller of this function.  Call stack includes
     // CallTree, Unimplemented, then the caller.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    CallStackInfo * csi = CallStackInfo::Singleton();
+    CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     std::list<void*> * call_stack = csi->CallTree();
     std::list<void*>::iterator it = call_stack->begin();
     ++it;
@@ -1192,7 +1192,7 @@ void _CUDA_RUNTIME::Unimplemented()
             // Abs jmp.
             iat = (void*)( *(int*)(jmp + 2));
         }
-        HookManager * hm = cu->hook_manager;
+        HOOK_MANAGER * hm = cu->hook_manager;
         HookedFunction * hf = hm->FindHook(iat);
         if (hf)
         {

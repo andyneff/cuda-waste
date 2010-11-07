@@ -19,7 +19,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
-class HookManager;
+class HOOK_MANAGER;
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)

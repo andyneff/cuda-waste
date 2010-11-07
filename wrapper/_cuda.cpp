@@ -49,7 +49,7 @@ void _CUDA::WrapModule()
     did_wrap = true;
     char * cuda_module_name = "nvcuda.dll";
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    HookManager * hook_manager = cu->hook_manager;
+    HOOK_MANAGER * hook_manager = cu->hook_manager;
     bool complain = false;
     PROC proc = hook_manager->HookImport(cuda_module_name, "cuArray3DCreate", (PROC)_CUDA::_cuArray3DCreate, complain);
     if (proc)

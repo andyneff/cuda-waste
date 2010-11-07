@@ -43,11 +43,11 @@ typedef BOOL (WINAPI * PFNENUMPROCESSMODULES)(HANDLE hProcess, HMODULE *lphModul
 typedef DWORD (WINAPI * PFNGETMODULEFILENAMEEXA)(HANDLE hProcess, HMODULE hModule, LPSTR lpFilename, DWORD nSize);
 
 
-class ProcessManager  
+class PROCESS_MANAGER  
 {
 public:
-    ProcessManager();
-    virtual ~ProcessManager();
+    PROCESS_MANAGER();
+    virtual ~PROCESS_MANAGER();
     BOOL Populate(BOOL bPopulateModules);
     BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
     DWORD GetProcessCount() const;

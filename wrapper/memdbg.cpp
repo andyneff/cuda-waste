@@ -37,7 +37,7 @@ MEMDBG * MEMDBG::singleton;
 
 MEMDBG::MEMDBG()
 {
-	this->hook_manager = HookManager::Singleton();
+	this->hook_manager = HOOK_MANAGER::Singleton();
 	this->is_wrapped = false;
 	this->current_alloc = 0;
 	this->allocation_number = 1;
@@ -137,7 +137,7 @@ PVOID WINAPI MEMDBG::_RtlAllocateHeap(
 			d->size = Size;
 			d->allocation_number = memdbg->allocation_number;
 			d->type = data::is_RtlAllocateHeap;
-			CallStackInfo * csi = CallStackInfo::Singleton();
+			CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
 			void ** addresses = csi->AddressContext(memdbg->max_context);
 			for (int i = 0; i < memdbg->max_context; ++i)
 				d->context[i] = addresses[i];
@@ -183,7 +183,7 @@ BOOLEAN WINAPI MEMDBG::_RtlFreeHeap(
 			d->size = 0;
 			d->allocation_number = memdbg->allocation_number;
 			d->type = data::is_RtlFreeHeap;
-			CallStackInfo * csi = CallStackInfo::Singleton();
+			CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
 			void ** addresses = csi->AddressContext(memdbg->max_context);
 			for (int i = 0; i < memdbg->max_context; ++i)
 				d->context[i] = addresses[i];
@@ -229,7 +229,7 @@ PVOID WINAPI MEMDBG::_HeapAlloc(
 			d->size = Size;
 			d->allocation_number = memdbg->allocation_number;
 			d->type = data::is_HeapAlloc;
-//			CallStackInfo * csi = CallStackInfo::Singleton();
+//			CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
 //			void ** addresses = csi->AddressContext(memdbg->max_context);
 //			for (int i = 0; i < memdbg->max_context; ++i)
 //				d->context[i] = addresses[i];
@@ -275,7 +275,7 @@ BOOL WINAPI MEMDBG::_HeapFree(
 			d->size = 0;
 			d->allocation_number = memdbg->allocation_number;
 			d->type = data::is_HeapFree;
-//			CallStackInfo * csi = CallStackInfo::Singleton();
+//			CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
 //			void ** addresses = csi->AddressContext(memdbg->max_context);
 //			for (int i = 0; i < memdbg->max_context; ++i)
 //				d->context[i] = addresses[i];

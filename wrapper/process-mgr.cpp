@@ -22,37 +22,37 @@
 #include "stdafx.h"
 #include "process-mgr.h"
 
-ProcessManager::ProcessManager():
+PROCESS_MANAGER::PROCESS_MANAGER():
     m_pLibHandler(NULL)
 {
     m_pProcesses = new CRunningProcesses();
     m_pLibHandler = new CPsapiHandler(m_pProcesses);
 }
 
-ProcessManager::~ProcessManager()
+PROCESS_MANAGER::~PROCESS_MANAGER()
 {
     delete m_pLibHandler;
     delete m_pProcesses;
 }
 
-BOOL ProcessManager::Populate(BOOL bPopulateModules)
+BOOL PROCESS_MANAGER::Populate(BOOL bPopulateModules)
 {
     m_pProcesses->ReleaseAll();
     return m_pLibHandler->PopulateProcesses(bPopulateModules); 
 }
 
-BOOL ProcessManager::PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules)
+BOOL PROCESS_MANAGER::PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules)
 {
     m_pProcesses->ReleaseAll();
     return m_pLibHandler->PopulateProcess(dwProcessId, bPopulateModules); 
 }
 
-DWORD ProcessManager::GetProcessCount() const
+DWORD PROCESS_MANAGER::GetProcessCount() const
 {
     return m_pProcesses->GetCount();
 }
 
-ExecutableModule* ProcessManager::GetProcessById(DWORD dwProcessId)
+ExecutableModule* PROCESS_MANAGER::GetProcessById(DWORD dwProcessId)
 {
     return static_cast<ExecutableModule*>
         (m_pProcesses->GetProcessById(dwProcessId));

@@ -100,7 +100,7 @@ void CUDA_WRAPPER::DoInit()
     // This routine is static, so get the singleton for the cuda
     // wrapper.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    CallStackInfo * csi = CallStackInfo::Singleton();
+    CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     csi->ClassifyAsPrefix("call-stack-info.cpp");
     csi->ClassifyAsPrefix("cuda-wrapper.cpp");
     if (atexit(CUDA_WRAPPER::ExitHandler))
@@ -112,7 +112,7 @@ void CUDA_WRAPPER::DoInit()
         if (cu->quit_on_error)
             exit(1);
     }
-    HookManager * hm = HookManager::Singleton();
+    HOOK_MANAGER * hm = HOOK_MANAGER::Singleton();
     cu->hook_manager = hm;
     // Force load of CUDA driver API, so it can be hooked.
     LoadLibraryA("nvcuda.dll");
@@ -151,7 +151,7 @@ void CUDA_WRAPPER::ExitHandler()
 CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckSinglePtrOverwrite(const data * d)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    CallStackInfo * csi = CallStackInfo::Singleton();
+    CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     if (! d->is_host)
     {
         unsigned char * hostbuffer = (unsigned char *)malloc(d->size);
@@ -293,7 +293,7 @@ char * CUDA_WRAPPER::Context(int lines)
     if (cu->global_context && *cu->global_context)
         return cu->global_context;
 
-    CallStackInfo * csi = CallStackInfo::Singleton();
+    CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     char * context = csi->Context(lines);
     return context;
 }

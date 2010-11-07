@@ -21,7 +21,7 @@
 
 extern char * file_name_tail(char * file_name);
 
-CallStackInfo::CallStackInfo()
+CALL_STACK_INFO::CALL_STACK_INFO()
 {
 #define BUFFERSIZE 50000
     char lpszPath[BUFFERSIZE];
@@ -38,17 +38,17 @@ CallStackInfo::CallStackInfo()
     SymInitialize(GetCurrentProcess(), lpszPath, TRUE);
 }
 
-CallStackInfo * CallStackInfo::Singleton()
+CALL_STACK_INFO * CALL_STACK_INFO::Singleton()
 {
-    static CallStackInfo * singleton = 0;
+    static CALL_STACK_INFO * singleton = 0;
     if (singleton)
         return singleton;
-    singleton = new CallStackInfo();
+    singleton = new CALL_STACK_INFO();
     return singleton;
 }
 
 // Find the module name from the ip
-bool CallStackInfo::GetModuleNameFromAddress(void * address, char * lpszModule)
+bool CALL_STACK_INFO::GetModuleNameFromAddress(void * address, char * lpszModule)
 {
     BOOL              ret = FALSE;
     IMAGEHLP_MODULE   moduleInfo;
@@ -69,7 +69,7 @@ bool CallStackInfo::GetModuleNameFromAddress(void * address, char * lpszModule)
 }
 
 // Get function prototype and parameter info from ip address and stack address
-bool CallStackInfo::GetFunctionInfoFromAddresses( void * fnAddress, void * stackAddress, char * lpszSymbol )
+bool CALL_STACK_INFO::GetFunctionInfoFromAddresses( void * fnAddress, void * stackAddress, char * lpszSymbol )
 {
     return FALSE;
 #ifdef XXX
@@ -168,7 +168,7 @@ bool CallStackInfo::GetFunctionInfoFromAddresses( void * fnAddress, void * stack
 // The output format is: "sourcefile(linenumber)" or
 //                       "modulename!address" or
 //                       "address"
-bool CallStackInfo::GetSourceInfoFromAddress( void * address, char * lpszSourceInfo, char * full_file_name )
+bool CALL_STACK_INFO::GetSourceInfoFromAddress( void * address, char * lpszSourceInfo, char * full_file_name )
 {
     bool           ret = FALSE;
     IMAGEHLP_LINE  lineInfo;
@@ -203,7 +203,7 @@ bool CallStackInfo::GetSourceInfoFromAddress( void * address, char * lpszSourceI
     return ret;
 }
 
-char * CallStackInfo::Context(int lines)
+char * CALL_STACK_INFO::Context(int lines)
 {
     char buffer[BUFFERSIZE];
     strcpy(buffer, "");
@@ -259,7 +259,7 @@ char * CallStackInfo::Context(int lines)
     return strdup(buffer);
 }
 
-void * * CallStackInfo::AddressContext(int lines)
+void * * CALL_STACK_INFO::AddressContext(int lines)
 {
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
@@ -271,13 +271,13 @@ void * * CallStackInfo::AddressContext(int lines)
 	return callers;
 }
 
-void CallStackInfo::ClassifyAsPrefix(char * file)
+void CALL_STACK_INFO::ClassifyAsPrefix(char * file)
 {
     // Add file name to list of files that you want to remove from call stack context string.
     ignore_files.push_back(file);
 }
 
-std::list<void*> * CallStackInfo::CallTree()
+std::list<void*> * CALL_STACK_INFO::CallTree()
 {
     std::list<void*> * result = new std::list<void*>();
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);

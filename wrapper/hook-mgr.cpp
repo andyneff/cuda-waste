@@ -51,45 +51,45 @@ bool ExtractModuleFileName(char* pszFullFileName)
 }
 
 
-HookedFunctions* HookManager::sm_pHookedFunctions = NULL;
-CriticalSection        HookManager::sm_CritSec;
-HookManager * HookManager::singleton;
+HookedFunctions* HOOK_MANAGER::sm_pHookedFunctions = NULL;
+CRIT_SECTION        HOOK_MANAGER::sm_CritSec;
+HOOK_MANAGER * HOOK_MANAGER::singleton;
 
-HookManager::HookManager()
+HOOK_MANAGER::HOOK_MANAGER()
 {
-    m_hmodThisInstance   = ModuleFromAddress(HookManager::MyGetProcAddress);
+    m_hmodThisInstance   = ModuleFromAddress(HOOK_MANAGER::MyGetProcAddress);
     m_bSystemFuncsHooked = false;
     sm_pHookedFunctions  = new HookedFunctions(this);
 }
 
-HookManager * HookManager::Singleton()
+HOOK_MANAGER * HOOK_MANAGER::Singleton()
 {
-	if (HookManager::singleton == 0)
-		singleton = new HookManager();
+	if (HOOK_MANAGER::singleton == 0)
+		singleton = new HOOK_MANAGER();
 	return singleton;
 }
 
-HookManager::~HookManager()
+HOOK_MANAGER::~HOOK_MANAGER()
 {
     UnHookAllFuncs();
     delete sm_pHookedFunctions;
 }
 
-bool HookManager::HookSystemFuncs()
+bool HOOK_MANAGER::HookSystemFuncs()
 {
     if (! m_bSystemFuncsHooked)
     {
-        HookImport("Kernel32.dll", "LoadLibraryW", (PROC) HookManager::MyLoadLibraryW, true);
-        HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HookManager::MyLoadLibraryExA, true);
-        HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HookManager::MyLoadLibraryExW, true);
-        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HookManager::MyLoadLibraryA, true);
-        HookImport("Kernel32.dll", "GetProcAddress", (PROC) HookManager::MyGetProcAddress, true);
+        HookImport("Kernel32.dll", "LoadLibraryW", (PROC) HOOK_MANAGER::MyLoadLibraryW, true);
+        HookImport("Kernel32.dll", "LoadLibraryExA", (PROC) HOOK_MANAGER::MyLoadLibraryExA, true);
+        HookImport("Kernel32.dll", "LoadLibraryExW", (PROC) HOOK_MANAGER::MyLoadLibraryExW, true);
+        HookImport("Kernel32.dll", "LoadLibraryA", (PROC) HOOK_MANAGER::MyLoadLibraryA, true);
+        HookImport("Kernel32.dll", "GetProcAddress", (PROC) HOOK_MANAGER::MyGetProcAddress, true);
         m_bSystemFuncsHooked = true;
     }
     return m_bSystemFuncsHooked;
 }
 
-void HookManager::UnHookAllFuncs()
+void HOOK_MANAGER::UnHookAllFuncs()
 {
     if (m_bSystemFuncsHooked)
     {
@@ -106,14 +106,14 @@ void HookManager::UnHookAllFuncs()
     }
 }
 
-BOOL HookManager::AreThereHookedFunctions()
+BOOL HOOK_MANAGER::AreThereHookedFunctions()
 {
     return (sm_pHookedFunctions->size() > 0);
 }
 
-PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag)
+PROC HOOK_MANAGER::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag)
 {
-    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
 
     BOOL                  bResult = FALSE;
     PROC                  pfnOrig = NULL;
@@ -166,9 +166,9 @@ PROC HookManager::HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfn
     return pfnOrig;
 }
 
-HookedFunction* HookManager::FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
+HookedFunction* HOOK_MANAGER::FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
 {
-    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
     HookedFunction * result = 0;
     try
     {
@@ -181,9 +181,9 @@ HookedFunction* HookManager::FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
     return result;
 }
 
-HookedFunction * HookManager::FindHook(void * iat)
+HookedFunction * HOOK_MANAGER::FindHook(void * iat)
 {
-    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
     HookedFunction * result = 0;
     try
     {
@@ -195,7 +195,7 @@ HookedFunction * HookManager::FindHook(void * iat)
 
 
 
-PROC HookManager::FindOriginal(PROC wrapper_function)
+PROC HOOK_MANAGER::FindOriginal(PROC wrapper_function)
 {
     HookedFunction* pHook;
     HookedFunctions::const_iterator itr;
@@ -208,14 +208,14 @@ PROC HookManager::FindOriginal(PROC wrapper_function)
     return 0;
 }
 
-HMODULE HookManager::GetModule(char * mod_name)
+HMODULE HOOK_MANAGER::GetModule(char * mod_name)
 {
 	return ::LoadLibraryA(mod_name);
 }
 
-BOOL HookManager::UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName)
+BOOL HOOK_MANAGER::UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName)
 {
-    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
 
     BOOL bResult = TRUE;
     try
@@ -228,7 +228,7 @@ BOOL HookManager::UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName)
     return bResult;
 }
 
-BOOL HookManager::AddHook(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnOrig, PROC pfnHook)
+BOOL HOOK_MANAGER::AddHook(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnOrig, PROC pfnHook)
 {
     BOOL             bResult = FALSE;
     HookedFunction* pHook   = NULL;
@@ -254,7 +254,7 @@ BOOL HookManager::AddHook(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnOri
     return bResult;
 }
 
-BOOL HookManager::RemoveHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
+BOOL HOOK_MANAGER::RemoveHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
 {
     BOOL             bResult = FALSE;
     HookedFunction *pHook   = NULL;
@@ -276,11 +276,11 @@ BOOL HookManager::RemoveHook(PCSTR pszCalleeModName, PCSTR pszFuncName)
     return bResult;
 }
 
-void WINAPI HookManager::HackModuleOnLoad(HMODULE hmod, DWORD dwFlags)
+void WINAPI HOOK_MANAGER::HackModuleOnLoad(HMODULE hmod, DWORD dwFlags)
 {
     if ((hmod != NULL) && ((dwFlags & LOAD_LIBRARY_AS_DATAFILE) == 0)) 
     {
-        LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+        LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
         
         HookedFunction* pHook;
         HookedFunctions::const_iterator itr;
@@ -299,7 +299,7 @@ void WINAPI HookManager::HackModuleOnLoad(HMODULE hmod, DWORD dwFlags)
     }
 }
 
-HMODULE WINAPI HookManager::MyLoadLibraryA(PCSTR pszModuleName)
+HMODULE WINAPI HOOK_MANAGER::MyLoadLibraryA(PCSTR pszModuleName)
 {
     HMODULE hmod = ::LoadLibraryA(pszModuleName);
     HackModuleOnLoad(hmod, 0);
@@ -307,30 +307,30 @@ HMODULE WINAPI HookManager::MyLoadLibraryA(PCSTR pszModuleName)
     return hmod;
 }
 
-HMODULE WINAPI HookManager::MyLoadLibraryW(PCWSTR pszModuleName)
+HMODULE WINAPI HOOK_MANAGER::MyLoadLibraryW(PCWSTR pszModuleName)
 {
     HMODULE hmod = ::LoadLibraryW(pszModuleName);
     HackModuleOnLoad(hmod, 0);
     return hmod;
 }
 
-HMODULE WINAPI HookManager::MyLoadLibraryExA(PCSTR pszModuleName, HANDLE hFile, DWORD dwFlags)
+HMODULE WINAPI HOOK_MANAGER::MyLoadLibraryExA(PCSTR pszModuleName, HANDLE hFile, DWORD dwFlags)
 {
     HMODULE hmod = ::LoadLibraryExA(pszModuleName, hFile, dwFlags);
     HackModuleOnLoad(hmod, 0);
     return hmod;
 }
 
-HMODULE WINAPI HookManager::MyLoadLibraryExW(PCWSTR pszModuleName, HANDLE hFile, DWORD dwFlags)
+HMODULE WINAPI HOOK_MANAGER::MyLoadLibraryExW(PCWSTR pszModuleName, HANDLE hFile, DWORD dwFlags)
 {
     HMODULE hmod = ::LoadLibraryExW(pszModuleName, hFile, dwFlags);
     HackModuleOnLoad(hmod, 0);
     return hmod;
 }
 
-FARPROC WINAPI HookManager::MyGetProcAddress(HMODULE hmod, PCSTR pszProcName)
+FARPROC WINAPI HOOK_MANAGER::MyGetProcAddress(HMODULE hmod, PCSTR pszProcName)
 {
-    LockManager<CriticalSection>  lockMgr(sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(sm_CritSec, TRUE);
     FARPROC pfn = GetProcAddressWindows(hmod, pszProcName);
     HookedFunction* pFuncHook = 
         sm_pHookedFunctions->GetHookedFunction(
@@ -344,7 +344,7 @@ FARPROC WINAPI HookManager::MyGetProcAddress(HMODULE hmod, PCSTR pszProcName)
     return pfn;
 }
 
-FARPROC WINAPI HookManager::GetProcAddressWindows(HMODULE hmod, PCSTR pszProcName)
+FARPROC WINAPI HOOK_MANAGER::GetProcAddressWindows(HMODULE hmod, PCSTR pszProcName)
 {
     return ::GetProcAddress(hmod, pszProcName);
 }
@@ -414,7 +414,7 @@ BOOL HookedFunction::ReplaceInAllModules(
     {
         BOOL                bReplace  = FALSE;
         ExecutableModule  *pProcess = NULL;
-        ProcessManager        process_mgr; 
+        PROCESS_MANAGER        process_mgr; 
         Module     *pModule;
         process_mgr.PopulateProcess(::GetCurrentProcessId(), TRUE);
         pProcess = process_mgr.GetProcessById(::GetCurrentProcessId());
@@ -423,7 +423,7 @@ BOOL HookedFunction::ReplaceInAllModules(
             for (int i = 0; i < pProcess->GetModuleCount(); i++)
             {
                 pModule = pProcess->GetModuleByIndex(i);
-                bReplace = (pModule->Get_Module() != ModuleFromAddress(HookManager::MyLoadLibraryA)); 
+                bReplace = (pModule->Get_Module() != ModuleFromAddress(HOOK_MANAGER::MyLoadLibraryA)); 
                 if (bReplace)
                     bResult = ReplaceInOneModule(
                         pszCalleeModName, 

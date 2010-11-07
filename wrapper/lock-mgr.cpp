@@ -22,23 +22,23 @@
 #include "stdafx.h"
 #include "lock-mgr.h"
 
-CriticalSection::CriticalSection()
+CRIT_SECTION::CRIT_SECTION()
 {
     ::InitializeCriticalSection( &m_cs );
 }
 
-CriticalSection::~CriticalSection()
+CRIT_SECTION::~CRIT_SECTION()
 {
     ::DeleteCriticalSection( &m_cs );
 }
 
 
-void CriticalSection::Enter()
+void CRIT_SECTION::Enter()
 {
     ::EnterCriticalSection( &m_cs );
 }
 
-void CriticalSection::Leave()
+void CRIT_SECTION::Leave()
 {
     ::LeaveCriticalSection( &m_cs );
 }

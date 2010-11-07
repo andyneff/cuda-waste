@@ -15,7 +15,7 @@
 */
 #pragma once
 
-class HookManager;
+class HOOK_MANAGER;
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -39,7 +39,7 @@ public:
 			is_HeapAlloc,
 			is_HeapFree } type;
     };
-    HookManager * hook_manager;
+    HOOK_MANAGER * hook_manager;
 	size_t max_allocs;
 	unsigned int current_alloc;
 	unsigned int allocation_number;

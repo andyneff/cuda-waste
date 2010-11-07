@@ -32,14 +32,14 @@ using namespace std;
 class HookedFunctions;
 class HookedFunction;
 
-class HookManager  
+class HOOK_MANAGER  
 {
 private:
-    HookManager();
-    virtual ~HookManager();
-	static HookManager * singleton;
+    HOOK_MANAGER();
+    virtual ~HOOK_MANAGER();
+	static HOOK_MANAGER * singleton;
 public:
-	static HookManager * Singleton();
+	static HOOK_MANAGER * Singleton();
     PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag);
     HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
     HookedFunction * FindHook(void * iat);
@@ -52,7 +52,7 @@ public:
 private:
     friend class HookedFunction;
     friend class _CUDA;
-    static CriticalSection sm_CritSec;
+    static CRIT_SECTION sm_CritSec;
     HMODULE m_hmodThisInstance;
     static HookedFunctions* sm_pHookedFunctions;
     bool m_bSystemFuncsHooked;
@@ -107,7 +107,7 @@ public:
 class HookedFunctions: public map<string, HookedFunction*, StringCompare>
 {
 public:
-    HookedFunctions(HookManager* pApiHookMgr) : m_pApiHookMgr(pApiHookMgr) {};
+    HookedFunctions(HOOK_MANAGER* pApiHookMgr) : m_pApiHookMgr(pApiHookMgr) {};
     virtual ~HookedFunctions() {};
 public:
     HookedFunction* GetHookedFunction(PCSTR pszCalleeModName, PCSTR pszFuncName);
@@ -118,5 +118,5 @@ public:
 private:
     BOOL GetFunctionNameFromExportSection(HMODULE hmodOriginal, DWORD dwFuncOrdinalNum, PSTR pszFuncName); 
     void GetFunctionNameByOrdinal(PCSTR pszCalleeModName, DWORD dwFuncOrdinalNum, PSTR pszFuncName);
-    HookManager* m_pApiHookMgr;
+    HOOK_MANAGER* m_pApiHookMgr;
 };

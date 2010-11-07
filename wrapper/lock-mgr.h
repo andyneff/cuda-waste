@@ -23,11 +23,11 @@
 
 #include <windows.h>
 
-class CriticalSection
+class CRIT_SECTION
 {
 public:
-    CriticalSection();
-    virtual ~CriticalSection();
+    CRIT_SECTION();
+    virtual ~CRIT_SECTION();
     void Enter();
     void Leave();
 private:
@@ -36,17 +36,17 @@ private:
 
 
 template <class T>
-class LockManager  
+class LOCK_MANAGER  
 {
 public:
-    LockManager(T& lockObject, bool bEnabled):
+    LOCK_MANAGER(T& lockObject, bool bEnabled):
         m_rLockObject(lockObject),
         m_bEnabled(bEnabled)
     {
         if (m_bEnabled)
             m_rLockObject.Enter();
     }
-    virtual ~LockManager()
+    virtual ~LOCK_MANAGER()
     {
         if (m_bEnabled)
             m_rLockObject.Leave();
