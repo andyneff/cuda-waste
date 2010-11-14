@@ -1161,7 +1161,7 @@ i_atom_type
     :
     (
         (
-            ( K_GLOBAL | K_SHARED )
+            ( K_GLOBAL | K_SHARED )?
             ( K_AND | K_OR | K_XOR | K_CAS | K_EXCH | K_ADD | K_INC | K_DEC | K_MIN | K_MAX )
             ( K_B32 | K_B64 | K_U32 | K_U64 | K_S32 | K_F32 )
         )
