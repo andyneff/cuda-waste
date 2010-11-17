@@ -37,14 +37,14 @@ class HOOK_MANAGER
 private:
     HOOK_MANAGER();
     virtual ~HOOK_MANAGER();
-	static HOOK_MANAGER * singleton;
+    static HOOK_MANAGER * singleton;
 public:
-	static HOOK_MANAGER * Singleton();
+    static HOOK_MANAGER * Singleton();
     PROC HookImport(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnHook, bool flag);
     HookedFunction* FindHook(PCSTR pszCalleeModName, PCSTR pszFuncName);
     HookedFunction * FindHook(void * iat);
     PROC FindOriginal(PROC wrapper_function);
-	HMODULE GetModule(char * mod_name);
+    HMODULE GetModule(char * mod_name);
     BOOL UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName);
     bool HookSystemFuncs();
     void UnHookAllFuncs();
