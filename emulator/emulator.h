@@ -24,6 +24,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "constant.h"
+#include "../wrapper/lock-mgr.h"
 
 class SYMBOL_TABLE;
 class STRING_TABLE;
@@ -36,6 +37,9 @@ private:
     EMULATOR();
     ~EMULATOR();
     static EMULATOR * singleton;
+
+public:
+    static CRIT_SECTION sm_CritSec;
 
 private:
     struct ltstr

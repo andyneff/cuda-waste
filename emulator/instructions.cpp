@@ -23,6 +23,7 @@
 #include "symbol.h"
 #include "symbol-table.h"
 #include "constant.h"
+#include "../wrapper/lock-mgr.h"
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 int THREAD::DoAbs(TREE * inst)
@@ -522,20 +523,20 @@ int THREAD::DoAddc(TREE * inst)
     assert(osrc1 != 0);
     assert(osrc2 != 0);
     bool cc = false;
+    int type = 0;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
         if (t == 0)
             break;
         int gt = t->GetType();
-        if (gt == K_U32 || gt == K_S32)
-            ttype = t;
+        if (gt == K_U32 || gt == K_S32 || gt == K_U64 || K_U16 )
+            type = gt;
         else if (gt == K_CC)
             cc = true;
         else assert(false);
     }
-    assert(ttype != 0);
-    int type = ttype->GetType();
+    assert(type != 0);
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
@@ -567,6 +568,12 @@ int THREAD::DoAddc(TREE * inst)
             case K_S32:
                 s1->s32 = c.value.s32;
                 break;
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_U64:
+                s1->s32 = c.value.u64;
+                break;
             default:
                 assert(false);
         }
@@ -584,6 +591,12 @@ int THREAD::DoAddc(TREE * inst)
             case K_S32:
                 s1->s32 = psrc1_value->s32;
                 break;
+            case K_U16:
+                s1->u16 = psrc1_value->u16;
+                break;
+            case K_U64:
+                s1->u64 = psrc1_value->u64;
+                break;
             default:
                 assert(false);
         }
@@ -599,6 +612,12 @@ int THREAD::DoAddc(TREE * inst)
                 break;
             case K_S32:
                 s2->s32 = c.value.s32;
+                break;
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
                 break;
             default:
                 assert(false);
@@ -617,6 +636,12 @@ int THREAD::DoAddc(TREE * inst)
             case K_S32:
                 s2->s32 = psrc2_value->s32;
                 break;
+            case K_U16:
+                s2->u16 = psrc2_value->u16;
+                break;
+            case K_U64:
+                s2->u64 = psrc2_value->u64;
+                break;
             default:
                 assert(false);
         }
@@ -631,6 +656,18 @@ int THREAD::DoAddc(TREE * inst)
             else
                 this->carry = 0;
             d->u32 = temp->u32;
+            break;
+        case K_U16:
+            temp->u32 = s1->u16 + (unsigned __int64)s2->u16 + this->carry;
+            if ((temp->u32 >> 16) && 0xffff)
+                this->carry = 1;
+            else
+                this->carry = 0;
+            d->u16 = temp->u32;
+            break;
+        case K_U64:
+            temp->u64 = s1->u64 + (unsigned __int64)s2->u64 + this->carry;
+            d->u64 = temp->u64;
             break;
         case K_S32:
             temp->s64 = s1->s32 + (signed __int64)s2->s32 + this->carry;
@@ -824,7 +861,365 @@ int THREAD::DoAnd(TREE * inst)
 
 int THREAD::DoAtom(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("ATOM unimplemented");
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(this->emulator->sm_CritSec, TRUE);
+    int start = 0;
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
+        start++;
+    assert(inst->GetChild(start)->GetType() == KI_ATOM);
+    start++;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
+    for (;; ++start)
+    {
+        TREE * t = inst->GetChild(start);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else if (osrc3 == 0)
+            {
+                osrc3 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    int op = 0;
+    int type = 0;
+    int storage_class = 0;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = ttype->GetChild(i);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == K_SHARED || gt == K_GLOBAL)
+            storage_class = gt;
+        else if (gt == K_B32 || gt == K_B64
+            || gt == K_U32 || gt == K_U64
+            || gt == K_S32)
+            type = gt;
+        else if (gt == K_F32)
+            type = gt;
+        else if (gt == K_AND || gt == K_OR || gt == K_XOR ||
+                 gt == K_CAS || gt == K_EXCH ||
+                 gt == K_ADD ||
+                 gt == K_INC || gt == K_DEC ||
+                 gt == K_MIN || gt == K_MAX)
+            op = gt;
+        else assert(false);
+    }
+    assert(op != 0);
+    assert(type != 0);
+
+    TREE * dst = odst->GetChild(0);
+    // Note src1 is not really only a source operand. It is a
+    // destination operand, too.
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+    TREE * src3 = osrc3 ? osrc3->GetChild(0) : 0;
+
+    assert(src1->GetType() == T_WORD);
+    SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+    assert(ssrc1 != 0);
+    TREE * plus = osrc1->GetChild(1);
+    CONSTANT value(0);
+    if (plus != 0)
+    {
+        TREE * const_expr_tree = osrc1->GetChild(2);
+        assert(const_expr_tree != 0);
+        assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
+        TREE * const_expr = const_expr_tree->GetChild(0);
+        assert(const_expr != 0);
+        value = this->emulator->Eval(K_S32, const_expr);
+    }
+
+    // Different semantics for different storage classes.
+    TYPES::Types * s = 0;
+    unsigned char * addr = 0;
+    switch (ssrc1->storage_class)
+    {
+        case K_GLOBAL:
+        case K_LOCAL:
+        case K_PARAM:
+        case K_SHARED:
+        case K_CONST:
+        {
+            addr = (unsigned char*)ssrc1->pvalue;
+        }
+        break;
+        case K_REG:
+        {
+            addr = *(unsigned char**)ssrc1->pvalue;
+        }
+        break;
+        default:
+            assert(false);
+    }
+    switch (value.type)
+    {
+        case K_U8:
+            addr = (addr + value.value.s32);
+            break;
+        case K_U16:
+            addr = (addr + value.value.s32);
+            break;
+        case K_U32:
+            addr = (addr + value.value.s32);
+            break;
+        case K_U64:
+            addr = (addr + value.value.s32);
+            break;
+        case K_S8:
+            addr = (addr + value.value.s32);
+            break;
+        case K_S16:
+            addr = (addr + value.value.s32);
+            break;
+        case K_S32:
+            addr = (addr + value.value.s32);
+            break;
+        case K_S64:
+            addr = (addr + value.value.s32);
+            break;
+        case K_B8:
+            addr = (addr + value.value.s32);
+            break;
+        case K_B16:
+            addr = (addr + value.value.s32);
+            break;
+        case K_B32:
+            addr = (addr + value.value.s32);
+            break;
+        case K_B64:
+            addr = (addr + value.value.s32);
+            break;
+        case K_F32:
+            addr = (addr + value.value.s32);
+            break;
+        case K_F64:
+            addr = (addr + value.value.s32);
+            break;
+        default:
+            assert(false);
+    }
+
+    SYMBOL * sdst = 0;
+    assert(dst->GetType() == T_WORD);
+    sdst = this->root->FindSymbol(dst->GetText());
+    assert(sdst != 0);
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = (TYPES::Types*)addr;
+    TYPES::Types value2;
+    TYPES::Types * s2 = &value2;
+
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        switch (type)
+        {
+            case K_B32:
+                s2->b32 = c.value.b32;
+                break;
+            case K_B64:
+                s2->b64 = c.value.b64;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_F32:
+                s2->f32 = c.value.f32;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src2->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        assert(ssrc2 != 0);
+        assert(ssrc2->size == this->emulator->Sizeof(type));
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
+        switch (type)
+        {
+            case K_B32:
+                s2->b32 = psrc2_value->b32;
+                break;
+            case K_B64:
+                s2->b64 = psrc2_value->b64;
+                break;
+            case K_U32:
+                s2->u32 = psrc2_value->u32;
+                break;
+            case K_U64:
+                s2->u64 = psrc2_value->u64;
+                break;
+            case K_S32:
+                s2->s32 = psrc2_value->s32;
+                break;
+            case K_F32:
+                s2->f32 = psrc2_value->f32;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_B32:
+            switch (op)
+            {
+                case K_AND:
+                    d->b32 = s1->b32;
+                    s1->b32 = s1->b32 & s2->b32;
+                    break;
+                case K_OR:
+                    d->b32 = s1->b32;
+                    s1->b32 = s1->b32 | s2->b32;
+                    break;
+                case K_XOR:
+                    d->b32 = s1->b32;
+                    s1->b32 = s1->b32 ^ s2->b32;
+                    break;
+                case K_ADD:
+                    d->b32 = s1->b32;
+                    s1->b32 = s1->b32 + s2->b32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_B64:
+            switch (op)
+            {
+                case K_AND:
+                    d->b64 = s1->b64;
+                    s1->b64 = s1->b64 & s2->b64;
+                    break;
+                case K_OR:
+                    d->b64 = s1->b64;
+                    s1->b64 = s1->b64 | s2->b64;
+                    break;
+                case K_XOR:
+                    d->b64 = s1->b64;
+                    s1->b64 = s1->b64 ^ s2->b64;
+                    break;
+                case K_ADD:
+                    d->b64 = s1->b64;
+                    s1->b64 = s1->b64 + s2->b64;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_U32:
+            switch (op)
+            {
+                case K_AND:
+                    d->u32 = s1->u32;
+                    s1->u32 = s1->u32 & s2->u32;
+                    break;
+                case K_OR:
+                    d->u32 = s1->u32;
+                    s1->u32 = s1->u32 | s2->u32;
+                    break;
+                case K_XOR:
+                    d->u32 = s1->u32;
+                    s1->u32 = s1->u32 ^ s2->u32;
+                    break;
+                case K_ADD:
+                    d->u32 = s1->u32;
+                    s1->u32 = s1->u32 + s2->u32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_U64:
+            switch (op)
+            {
+                case K_AND:
+                    d->u64 = s1->u64;
+                    s1->u64 = s1->u64 & s2->u64;
+                    break;
+                case K_OR:
+                    d->u64 = s1->u64;
+                    s1->u64 = s1->u64 | s2->u64;
+                    break;
+                case K_XOR:
+                    d->u64 = s1->u64;
+                    s1->u64 = s1->u64 ^ s2->u64;
+                    break;
+                case K_ADD:
+                    d->u64 = s1->u64;
+                    s1->u64 = s1->u64 + s2->u64;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_S32:
+            switch (op)
+            {
+                case K_AND:
+                    d->s32 = s1->s32;
+                    s1->s32 = s1->s32 & s2->s32;
+                    break;
+                case K_OR:
+                    d->s32 = s1->s32;
+                    s1->s32 = s1->s32 | s2->s32;
+                    break;
+                case K_XOR:
+                    d->s32 = s1->s32;
+                    s1->s32 = s1->s32 ^ s2->s32;
+                    break;
+                case K_ADD:
+                    d->s32 = s1->s32;
+                    s1->s32 = s1->s32 + s2->s32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        case K_F32:
+            switch (op)
+            {
+                case K_ADD:
+                    d->f32 = s1->f32;
+                    s1->f32 = s1->f32 + s2->f32;
+                    break;
+                default:
+                    assert(false);
+            }
+            break;
+        default:
+            assert(false);
+    }
+
+    return 0;
 }
 
 int THREAD::DoBar(TREE * inst)

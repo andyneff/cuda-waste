@@ -35,6 +35,8 @@
 
 EMULATOR * EMULATOR::singleton;
 
+CRIT_SECTION EMULATOR::sm_CritSec;
+
 EMULATOR * EMULATOR::Singleton()
 {
     if (singleton)
