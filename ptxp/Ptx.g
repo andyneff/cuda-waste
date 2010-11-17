@@ -1118,7 +1118,7 @@ i_addc
 i_addc_type:
     (
         (
-            K_CC? ( K_S32 | K_U32 | K_S16 | K_U16 )
+            K_CC? ( K_S32 | K_U32 | K_S16 | K_U16 | K_U64 )
         )
     )
     ;
