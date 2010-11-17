@@ -259,7 +259,13 @@ end:
 	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
 	.global .u64 __gl2_u32 = 0x0102030405060708;
 	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
+	.global .u32 __gl4_u32 = 0xffff0000;
+	.global .u32 __gl5_u32 = 0x7ffffff0;
+	.global .u32 __gl6_u32 = 0x00000001;
+	.global .u32 __gl7_u32 = 4294967295;
+	.global .u32 __gl8_u32 = 2;
 	.shared .v4 .u32 %sh_u32;
+
 
 	// Set up
 	ld.param.u32	%r0,[__results];
@@ -390,6 +396,158 @@ again:
 	st.global.b8	[%r0+13], %b0;
 	mov.u32		%r2, 14;
 
+	// SAD
+	mov.u32		%u32_0, 1;
+	mov.u32		%u32_1, 2;
+	mov.u32		%u32_2, 3;
+	sad.u32		%u32_3, %u32_2, %u32_1, %u32_0;	// 3>2 => 1 + 1
+	setp.eq.u32	%p1, %u32_3, 2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+14], %b1;
+	mov.u32		%r2, 15;
+
+	mov.u32		%u32_0, 1;
+	mov.u32		%u32_1, 2;
+	mov.u32		%u32_2, 3;
+	sad.u32		%u32_3, %u32_1, %u32_2, %u32_0;	// 3<2 => 1 + 1
+	setp.eq.u32	%p1, %u32_3, 2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+15], %b1;
+	mov.u32		%r2, 16;
+
+	mov.s32		%s32_0, 0;
+	mov.s32		%s32_1, -16;
+	mov.s32		%s32_2, 15;
+	sad.s32		%s32_3, %s32_2, %s32_1, %s32_0;
+	setp.eq.s32	%p1, %s32_3, 31;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+16], %b1;
+	mov.u32		%r2, 17;
+
+	addc.u16	%s16_1, 0, 0;	// Accepted, not documented.
+	addc.u32	%s32_1, 0, 0;
+	addc.u64	%s64_1, 0, 0;	// Acepted, not documented.
+
+//	addc.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	addc.cc.u32	%s32_1, 0, 0;
+//	addc.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+//	add.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	add.cc.u32	%s32_1, 0, 0;
+//	add.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+	subc.u16	%s16_1, 0, 0;	// Accepted, not documented.
+	subc.u32	%s32_1, 0, 0;
+	subc.u64	%s64_1, 0, 0;	// Accepted, not documented.
+
+//	subc.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	subc.cc.u32	%s32_1, 0, 0;
+//	subc.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+//	sub.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	sub.cc.u32	%s32_1, 0, 0;
+//	sub.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+	addc.u32	%s32_1, 0, 0;
+	mov.s32		%s32_0, 2147483647;
+	mov.s32		%s32_1, -16;
+	mov.s32		%s32_2, 15;
+//	sad.s32		%s32_3, %s32_2, %s32_1, %s32_0;
+//	setp.eq.s32	%p1, %s32_3, 0x8000001E;
+//	selp.b16	%b1, 1, 0, %p1;
+//	st.global.b8	[%r0+17], %b1;
+//	mov.u32		%r2, 18;
+
+	addc.u32	%s32_1, 0, 0;
+	mov.s32		%s32_2, 1;
+	addc.s32	%s32_2, %s32_2, 0;
+	setp.eq.s32	%p1, %s32_2, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+17], %b1;
+	mov.u32		%r2, 18;
+
+	addc.u32	%s32_1, 0, 0;
+	mov.s32		%s32_2, 15;
+	addc.s32	%s32_2, %s32_2, 0;
+	setp.eq.s32	%p1, %s32_2, 15;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+18], %b1;
+	mov.u32		%r2, 19;
+
+	// Test Condition code register preserved in straight line code, with instructions
+	// that should not affect it in between the generation and use.  Branching affects CC.
+	ld.global.u32	%u32_1, [__gl7_u32];
+	ld.global.u32	%u32_2, [__gl8_u32];
+	add.cc.u32	%u32_1, %u32_1, %u32_2;
+	add.u32		%u32_3, 0, 2;
+	st.shared.u32	[%sh_u32], %u32_1;
+	ld.shared.u32	%u32_1, [%sh_u32];
+	sad.s32		%s32_3, %s32_2, %s32_1, %s32_0;
+	addc.u32	%u32_2, 0, 0;
+	mad.lo.u32	%u32_2, %u32_1, %u32_3, %u32_2;
+	clz.b32		%u32_2, %u32_1;
+	addc.cc.u32	%u32_2, 0, 0;
+	setp.eq.u32	%p1, %u32_2, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+19],%b1;
+	mov.u32		%r2, 20;
+
+	// BFIND
+	ld.global.u32	%u32_1, [__gl4_u32];
+	bfind.u32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 31;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+20],%b1;
+	mov.u32		%r2, 21;
+	
+	ld.global.u32	%u32_1, [__gl5_u32];
+	bfind.u32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 30;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+21],%b1;
+	mov.u32		%r2, 22;
+	
+	ld.global.u32	%u32_1, [__gl6_u32];
+	bfind.u32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 0;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+22],%b1;
+	mov.u32		%r2, 23;
+	
+	ld.global.u32	%u32_1, [__gl4_u32];
+	bfind.s32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 15;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+23],%b1;
+	mov.u32		%r2, 24;
+	
+	ld.global.u32	%u32_1, [__gl5_u32];
+	bfind.s32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 30;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+24],%b1;
+	mov.u32		%r2, 25;
+	
+	ld.global.u32	%u32_1, [__gl6_u32];
+	bfind.s32	%u32_1, %u32_1;
+	setp.eq.u32	%p1, %u32_1, 0;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+25],%b1;
+	mov.u32		%r2, 26;
+	
+	// ATOM addition.
+	// 32 bits.
+	atom.global.add.u32	%u32_1, [__gl8_u32], 1;
+	setp.eq.u32	%p1, %u32_1, 2;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+26], %b1;
+	mov.u32		%r2, 27;
+	ld.global.u32	%u32_1, [__gl8_u32];
+	setp.eq.u32	%p1, %u32_1, 3;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+27], %b1;
+	mov.u32		%r2, 28;
+
 bra end;
 
 	// SUB - 16 bit (negative, unsigned!)
@@ -468,6 +626,85 @@ again:
 
 end:
 
+	// Pass back the number of tests performed.
+	ld.param.u32	%r1,[__N];
+	st.global.u32	[%r1], %r2;
+
+	exit;
+	}
+
+
+	.entry Test2 (
+		.param .u32 __results,
+		.param .u32 __N		// N*
+	)
+	{
+	.reg .u32 %r<5>;
+
+	.reg .u8 %u8_<3>;
+	.reg .u16 %u16_<3>;
+	.reg .u32 %u32_<4>;
+	.reg .u64 %u64_<3>;
+
+	.reg .s8 %s8_<3>;
+	.reg .s16 %s16_<3>;
+	.reg .s32 %s32_<4>;
+	.reg .s64 %s64_<3>;
+
+	.reg .f32 %f32_<5>;
+	.reg .f64 %f64_<3>;
+
+	.reg .b16 %b<3>;
+	.reg .pred %p<3>;
+
+	.global .u32 __gl_u32[10] = {1,2,3,4,5,6,7,8,9,10};
+	.global .u64 __gl2_u32 = 0x0102030405060708;
+	.global .u32 __gl3_u32[10] = {31,13,21,12,5,6,7,8,9,10};
+	.shared .v4 .u32 %sh_u32;
+
+	// Set up
+	ld.param.u32	%r0,[__results];
+
+	ld.param.s32	%s32_1, [__results];
+	add.cc.u32	%s32_1, %s32_1, %s32_1;
+	ld.param.s16	%s16_1, [__results];
+	addc.u16	%s16_1, %s16_1, %s16_1;	// Accepted, not documented.
+	setp.eq.u16	%p1, %u16_1, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+0],%b1;
+	mov.u32		%r2, 1;
+
+	ld.param.s32	%s32_1, [__results];
+	add.cc.u32	%s32_1, %s32_1, %s32_1;
+	addc.u32	%s32_1, %s32_1, %s32_1;	// Accepted, not documented.
+	setp.eq.u16	%p1, %u16_1, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+1],%b1;
+	mov.u32		%r2, 2;
+
+	ld.param.s32	%s32_1, [__results];
+	add.cc.u32	%s32_1, %s32_1, %s32_1;
+	ld.param.s64	%s64_1, [__results];
+	addc.u64	%s64_1, 0, 0;	// Acepted, not documented.
+	setp.eq.u16	%p1, %u16_1, 1;
+	selp.b16	%b1, 1, 0, %p1;
+	st.global.b8	[%r0+2],%b1;
+	mov.u32		%r2, 3;
+
+
+//	add.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	add.cc.u32	%s32_1, 0, 0;
+//	add.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+	subc.u16	%s16_1, 0, 0;	// Accepted, not documented.
+	subc.u32	%s32_1, 0, 0;
+	subc.u64	%s64_1, 0, 0;	// Accepted, not documented.
+
+//	sub.cc.u16	%s16_1, 0, 0;	// Not accepted.
+	sub.cc.u32	%s32_1, 0, 0;
+//	sub.cc.u64	%s64_1, 0, 0;	// Not accepted.
+
+end:
 	// Pass back the number of tests performed.
 	ld.param.u32	%r1,[__N];
 	st.global.u32	[%r1], %r2;
