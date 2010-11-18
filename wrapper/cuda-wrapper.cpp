@@ -497,3 +497,10 @@ void CUDA_WRAPPER::StartDebugger()
     }
 }
 
+void CUDA_WRAPPER::SetEmulationThreads(int i)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    EMULATOR * emulator = EMULATOR::Singleton();
+    emulator->SetEmulationThreads(i);
+}

@@ -75,6 +75,7 @@ char * str_set_trace = "?SetTrace@CUDA_WRAPPER@@SGXH@Z";
 char * str_wrap_cuda = "?WrapCuda@CUDA_WRAPPER@@SGHXZ";
 char * str_set_emulator_mode = "?SetEmulationMode@CUDA_WRAPPER@@SGXH@Z";
 char * str_start_debugger = "?StartDebugger@CUDA_WRAPPER@@SGXXZ";
+char * str_set_num_threads = "?SetEmulationThreads@CUDA_WRAPPER@@SGXH@Z";
 
 int main(int argc, char * argv[])
 {
@@ -103,6 +104,8 @@ int main(int argc, char * argv[])
     bool set_nonemulator_mode = false;
     bool set_device = false;
     bool start_debugger = false;
+	bool set_num_threads = false;
+	int num_threads = 0;
     char * device;
     int level = 0;
 
@@ -165,6 +168,11 @@ int main(int argc, char * argv[])
                 set_device = true;
                 argc--; argv++;
                 device = *argv;
+            }
+            else if (strncmp("-m=", *argv, 3) == 0)
+            {
+                set_num_threads = true;
+                num_threads = atoi(3+*argv);
             }
             else if (strcmp("-x", *argv) == 0)
             {
@@ -408,6 +416,23 @@ int main(int argc, char * argv[])
         JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
         AddBytes(code, 0x68, 0, 0, 0, 0); // push device
         JmpAbsoluteAddress(code, size-4, pszDevice);
+        AddBytes(code, 0xff, 0xd0); // call eax
+    }
+    if (set_num_threads)
+    {
+        LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_num_threads) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_num_threads, strlen(str_set_num_threads) + 1, &written);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+        JmpAbsoluteAddress(code, size-4, pszCMD);
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+        JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+        AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push SetEmulationThreads
+        JmpAbsoluteAddress(code, size-4, pszSetFunc);
+        AddBytes(code, 0x50); // push eax
+        AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+        JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+        AddBytes(code, 0x68, 0, 0, 0, 0); // push level
+        JmpAbsoluteAddress(code, size-4, num_threads);
         AddBytes(code, 0xff, 0xd0); // call eax
     }
     // Force emulation or no emulation.

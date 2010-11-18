@@ -89,6 +89,7 @@ public:
     static return_type __stdcall SetTraceAllCalls(bool b);
     static return_type __stdcall SetQuitOnError(bool b);
     static return_type __stdcall SetDoNotCallCudaAfterSanityCheckFail(bool b);
+	static void __stdcall SetEmulationThreads(int i);
     static void __stdcall SetEmulationMode(int yes_no);
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
     static return_type __stdcall RunDevice(char * device);

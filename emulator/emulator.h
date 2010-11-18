@@ -53,6 +53,7 @@ private:
     STRING_TABLE * string_table;
 
     char * device;
+	int num_threads;
 
 public:
 
@@ -176,4 +177,6 @@ public:
     void SetTrace(int level);
     char * StringTableEntry(char * text);
     void RunDevice(char * device);
+	void SetEmulationThreads(int i);
+
 };

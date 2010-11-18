@@ -51,6 +51,7 @@ EMULATOR::EMULATOR()
     this->string_table = new STRING_TABLE();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
+	this->num_threads = 2;
 }
 
 void EMULATOR::SetTrace(int level)
@@ -664,7 +665,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
     }
 
     bool spawn = true;
-    int max_threads = 2;
+    int max_threads = this->num_threads;
     int num_waiting_threads = 0;
     while (! wait_queue.empty())
     {
@@ -880,5 +881,9 @@ void EMULATOR::RunDevice(char * device)
     this->device = this->string_table->Entry(device);
 }
 
+void EMULATOR::SetEmulationThreads(int i)
+{
+	this->num_threads = i;
+}
 
 
