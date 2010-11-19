@@ -74,13 +74,23 @@ cudaError_t EMULATOR::_cudaLaunch(const char *hostfun)
     assert(i != this->fun_to_name.end());
     char * name = i->second;
 
-    // Now, given the name of the kernel function being called, find
-    // the entry for it.
-    std::map<char*, TREE *, ltstr>::iterator j = this->entry.find(name);
-    assert(j != this->entry.end());
-    TREE * entry = j->second;
-    this->Execute(entry);
-    return cudaSuccess;
+	// Go through all modules, look for current device.
+	for (std::list<MOD*>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
+	{
+		MOD * module = *it;
+		if (strcmp(this->device, module->module_name) == 0 ||
+			this->modules.size() == 1)
+		{
+			// Now, given the name of the kernel function being called, find
+			// the entry for it.
+			std::map<char*, TREE *, ltstr>::iterator j = module->entry.find(name);
+			assert(j != module->entry.end());
+			TREE * entry = j->second;
+			this->Execute(entry);
+			return cudaSuccess;
+		}
+	}
+	return cudaErrorInvalidDeviceFunction;
 }
 
 cudaError_t EMULATOR::_cudaGetDevice(int * device)

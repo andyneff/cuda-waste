@@ -51,7 +51,7 @@ EMULATOR::EMULATOR()
     this->string_table = new STRING_TABLE();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
-	this->num_threads = 2;
+    this->num_threads = 2;
 }
 
 void EMULATOR::SetTrace(int level)
@@ -62,12 +62,9 @@ void EMULATOR::SetTrace(int level)
 // In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
-TREE * EMULATOR::Parse(char * module_name, char * source)
+EMULATOR::MOD * EMULATOR::Parse(char * module_name, char * source)
 {
-    // Pick modules of only one type.
-    if (strstr(module_name, this->device) == 0)
-        return 0;
-
+    // parse all modules, regardless of module name selected.
     if (this->trace_level > 0)
     {
         std::cout << "====================================================\n";
@@ -81,14 +78,17 @@ TREE * EMULATOR::Parse(char * module_name, char * source)
     if (! mod)
     {
         std::cout << "Error: cannot parse PTX!\n";
-        assert(false);
+        return false;
     }
-    modules.push_back(mod);
-    Extract_From_Tree(mod);
-    return mod;
+    MOD * module = new MOD();
+    module->module_name = this->StringTableEntry(module_name);
+    module->tree = mod;
+    Extract_From_Tree(module, mod);
+    this->modules.push_back(module);
+    return module;
 }
 
-void EMULATOR::Extract_From_Tree(TREE * node)
+void EMULATOR::Extract_From_Tree(EMULATOR::MOD * module, TREE * node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->GetType() == TREE_ENTRY)
@@ -99,7 +99,7 @@ void EMULATOR::Extract_From_Tree(TREE * node)
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
         i.second = node;
-        this->entry.insert(i);
+        module->entry.insert(i);
     }
     else if (node->GetType() == TREE_FUNC)
     {
@@ -108,12 +108,12 @@ void EMULATOR::Extract_From_Tree(TREE * node)
         std::pair<char*, TREE *> i;
         i.first = (char*)name;
         i.second = node;
-        this->func.insert(i);
+        module->func.insert(i);
     }
     for (int i = 0; i < node->GetChildCount(); ++i)
     {
         TREE * child = node->GetChild(i);
-        Extract_From_Tree(child);
+        Extract_From_Tree(module, child);
     }
 } 
 
@@ -146,7 +146,7 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
             s->size = a->size;
             s->typestring = t;
             s->array = false;
-            s->index_max = 0;
+            s->total_size = 0;
             s->type = type->GetType();
             s->storage_class = K_PARAM;
             symbol_table->EnterSymbol(s);
@@ -200,12 +200,12 @@ void EMULATOR::SetupVariables(SYMBOL_TABLE * symbol_table, TREE * code, int * de
         TREE * var = code->GetChild(i);
         if (var->GetType() == TREE_VAR)
         {
-            SetupSingleVar(symbol_table, var, desired_storage_classes, false);
+            SetupSingleVar(symbol_table, var, desired_storage_classes, false, 0);
         }
     }
 }
 
-void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed)
+void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size)
 {
     // Got variable declaration.
     // Now extract info out of variable declaration.
@@ -320,7 +320,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             s->type = ttype->GetType();
             s->storage_class = storage_class;
             s->array = false;
-            s->index_max = 0;
+            s->total_size = total_size;
             symbol_table->EnterSymbol(s);
         }
     } else {
@@ -332,13 +332,13 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         // array flag helps in printing, but it works like any other
         // storage.
         s->array = false;
-        s->index_max = 0;
+        s->total_size = 0;
         void * ptr = 0;
         // Allocate array if declared as one.
         if (tarray != 0)
         {
             s->array = true;
-            s->index_max = total;
+            s->total_size = size * total;
             if (! externed)
                 ptr = (void*)malloc(size * total);
             else
@@ -422,7 +422,8 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         }
         s->typestring = this->StringTableEntry(type);
         s->type = ttype->GetType();
-        s->storage_class = storage_class;
+		s->storage_class = storage_class;
+		s->total_size = total_size;
         // Add the entry into the symbol table.
         symbol_table->EnterSymbol(s);
     }
@@ -449,7 +450,7 @@ void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
             s->pvalue = (void*)i;
             s->storage_class = 0;
             s->array = false;
-            s->index_max = 0;
+            s->total_size = 0;
             // Add the entry into the symbol table.
             symbol_table->EnterSymbol(s);
         }
@@ -481,7 +482,7 @@ void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
                 }
                 TREE * var = child->GetChild(0);
                 int sc[] = { K_SHARED, 0};
-                SetupSingleVar(symbol_table, var, sc, true);
+				SetupSingleVar(symbol_table, var, sc, true, conf.sharedMem);
             }
         }
     }
@@ -813,7 +814,7 @@ void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typ
     s->pvalue = (void*)malloc(size);
     s->storage_class = storage_class;
     s->array = false;
-    s->index_max = 0;
+    s->total_size = 0;
     memcpy(s->pvalue, value, size);
     // Add the entry into the symbol table.
     symbol_table->EnterSymbol(s);
@@ -858,7 +859,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
 {
     // Perform bottom-up evaluation of a constant expression.
     CONSTANT result;
-	result = result.Eval(expected_type, const_expr);
+    result = result.Eval(expected_type, const_expr);
     return result;
 }
 
@@ -883,7 +884,7 @@ void EMULATOR::RunDevice(char * device)
 
 void EMULATOR::SetEmulationThreads(int i)
 {
-	this->num_threads = i;
+    this->num_threads = i;
 }
 
 

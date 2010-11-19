@@ -22,12 +22,12 @@ class SYMBOL
 public:
     char * name;
     void * pvalue;
-	void * cache;//for debugging.
+    void * cache;//for debugging.
     size_t size;
     char * typestring;
     int type;
     bool array;
-    size_t index_max;
+    size_t total_size;
     int storage_class;
     EMULATOR * emulator;
     ~SYMBOL();

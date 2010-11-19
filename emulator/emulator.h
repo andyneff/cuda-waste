@@ -73,14 +73,21 @@ public:
         size_t sharedMem;
         cudaStream_t stream;
     };
-    std::map<char*, TREE *, ltstr> entry;
-    std::map<char*, TREE *, ltstr> func;
+
     std::map<void*, char*> fun_to_name;
-    std::list<TREE *> modules;
+
+    typedef struct MOD
+    {
+        char * module_name;
+        TREE * tree;
+        std::map<char*, TREE *, ltstr> entry;
+        std::map<char*, TREE *, ltstr> func;
+    } MOD;
+    std::list<MOD*> modules;
+
     std::list<arg*> arguments;
     config conf;
     void * extern_memory_buffer;
-
     
 public:
     class Unimplemented {
@@ -127,10 +134,10 @@ public:
     void ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
     void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
-    void Extract_From_Tree(TREE * node);
-    void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed);
+    void Extract_From_Tree(MOD * module, TREE * node);
+    void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size);
     static EMULATOR * Singleton();
-    TREE * Parse(char * module_name, char * source);
+    MOD * Parse(char * module_name, char * source);
     void ResetArgs();
 
     // cuda_runtime.h equivalents.

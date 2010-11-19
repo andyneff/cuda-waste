@@ -24,6 +24,8 @@
 #include "symbol-table.h"
 #include "constant.h"
 #include "../wrapper/lock-mgr.h"
+#include "../wrapper/cuda-wrapper.h"
+
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
 int THREAD::DoAbs(TREE * inst)
@@ -6618,6 +6620,28 @@ int THREAD::DoSt(TREE * inst)
                 else assert(false);
             }
         } else assert(false);
+
+        // Determine if there is a write in or out of bounds.
+        switch (ss)
+        {
+            case K_GLOBAL:
+            case K_LOCAL:
+            case K_PARAM:
+            case K_CONST:
+            case K_REG:
+                break;
+            case K_SHARED:
+                {
+                    // verify addr is within a pvalue with the given storage class.
+                    SYMBOL * ok = this->root->FindAddr(ss, addr);
+                    if (! ok)
+                    {
+                        CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+                        (*cu->output_stream) << "Out of bounds store in kernel.\n";
+                    }
+                }
+                break;
+        }
 
         switch (type)
         {

@@ -45,9 +45,10 @@ public:
     ~SYMBOL_TABLE();
     void Dump();
     SYMBOL * FindSymbol(char * name);
+    SYMBOL * FindAddr(int storage_class, void * addr);
     void EnterSymbol(SYMBOL * sym);
     SYMBOL_TABLE(const SYMBOL_TABLE & original);
-	void CachePvalues();
+        void CachePvalues();
     void CheckCachedPvalues();
 };
 

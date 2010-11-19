@@ -34,15 +34,16 @@ CUresult EMULATOR::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const 
 {
     // Now, given the name of the kernel function being called, find
     // the entry for it.
-    std::map<char*, TREE *, ltstr>::iterator j = this->entry.find((char*)name);
-    if (j == this->entry.end())
+	MOD * module = (MOD*)hmod;
+    std::map<char*, TREE *, ltstr>::iterator j = module->entry.find((char*)name);
+    if (j == module->entry.end())
         return CUDA_ERROR_NOT_FOUND;
     TREE * data = j->second;
     *hfunc = (CUfunction)data;
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuModuleLoad(CUmodule *module, const char *fname)
+CUresult EMULATOR::_cuModuleLoad(CUmodule * hmod, const char *fname)
 {
     int size = 1000000;
     char * buffer = (char *)malloc(size);
@@ -69,9 +70,9 @@ CUresult EMULATOR::_cuModuleLoad(CUmodule *module, const char *fname)
     }
     if (count == 0)
         return CUDA_ERROR_FILE_NOT_FOUND;
-    TREE * mod = this->Parse(this->device, (char*)buffer);
-    *module = (CUmodule) mod;
-    if (mod != 0)
+    MOD * module = this->Parse(this->device, (char*)buffer);
+    *hmod = (CUmodule)module;
+    if (module != 0)
         return CUDA_SUCCESS;
     else
         return CUDA_ERROR_INVALID_CONTEXT;

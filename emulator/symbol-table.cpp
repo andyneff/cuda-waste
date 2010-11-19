@@ -47,9 +47,12 @@ SYMBOL_TABLE::~SYMBOL_TABLE()
     std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
     for ( ; it != this->symbols.end(); ++it)
     {
-        delete it->second;
-	}
-	this->symbols.clear();
+        if (it->second)
+            delete it->second;
+        else
+            assert(false);
+    }
+    this->symbols.clear();
 }
 
 void SYMBOL_TABLE::Dump()
@@ -133,9 +136,34 @@ SYMBOL * SYMBOL_TABLE::FindSymbol(char * name)
     return 0;
 }
 
+SYMBOL * SYMBOL_TABLE::FindAddr(int storage_class, void * addr)
+{
+    SYMBOL_TABLE * st = this;
+    while (st)
+    {
+        std::map<char*, SYMBOL*, ltstr>::iterator it = st->symbols.begin();
+        for ( ; it != st->symbols.end(); ++it)
+        {
+            SYMBOL * s = it->second;
+            if (! s->storage_class)
+                continue;
+            unsigned char * ptr = (unsigned char *)s->pvalue;
+            if (! (ptr <= addr))
+                continue;
+            if (
+				((! s->array) && addr > ptr + s->size) ||
+				((  s->array) && addr > ptr + s->total_size))
+				continue;
+            return s;
+        }
+        st = st->parent_block_symbol_table;
+    }
+    return 0;
+}
+
 void SYMBOL_TABLE::EnterSymbol(SYMBOL * s)
 {
-	assert(FindSymbol(s->name) == 0);
+    assert(FindSymbol(s->name) == 0);
     // Add the entry into the symbol table.
     std::pair<char*, SYMBOL*> sym;
     sym.first = s->name;
@@ -146,28 +174,28 @@ void SYMBOL_TABLE::EnterSymbol(SYMBOL * s)
 
 void SYMBOL_TABLE::CachePvalues()
 {
-	// Cache pvalues in the symbol tables.
-	std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
-	for ( ; it != this->symbols.end(); ++it)
-	{
-		SYMBOL * s = it->second;
-		s->cache = s->pvalue;
-	}
-	if (this->parent_block_symbol_table)
-		this->parent_block_symbol_table->CachePvalues();
+    // Cache pvalues in the symbol tables.
+    std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
+    for ( ; it != this->symbols.end(); ++it)
+    {
+        SYMBOL * s = it->second;
+        s->cache = s->pvalue;
+    }
+    if (this->parent_block_symbol_table)
+        this->parent_block_symbol_table->CachePvalues();
 }
 
 void SYMBOL_TABLE::CheckCachedPvalues()
 {
-	// Cache pvalues in the symbol tables.
-	std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
-	for ( ; it != this->symbols.end(); ++it)
-	{
-		SYMBOL * s = it->second;
-		if (s->cache != s->pvalue)
-			throw new EMULATOR::Unimplemented("Cache overwrite!");
-	}
-	if (this->parent_block_symbol_table)
-		this->parent_block_symbol_table->CheckCachedPvalues();
+    // Cache pvalues in the symbol tables.
+    std::map<char*, SYMBOL*, ltstr>::iterator it = this->symbols.begin();
+    for ( ; it != this->symbols.end(); ++it)
+    {
+        SYMBOL * s = it->second;
+        if (s->cache != s->pvalue)
+            throw new EMULATOR::Unimplemented("Cache overwrite!");
+    }
+    if (this->parent_block_symbol_table)
+        this->parent_block_symbol_table->CheckCachedPvalues();
 }
 
