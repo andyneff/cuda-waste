@@ -145,7 +145,7 @@ SYMBOL * SYMBOL_TABLE::FindAddr(int storage_class, void * addr)
         for ( ; it != st->symbols.end(); ++it)
         {
             SYMBOL * s = it->second;
-            if (! s->storage_class)
+            if (s->storage_class != storage_class)
                 continue;
             unsigned char * ptr = (unsigned char *)s->pvalue;
             if (! (ptr <= addr))

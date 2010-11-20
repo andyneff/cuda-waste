@@ -332,22 +332,26 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         // array flag helps in printing, but it works like any other
         // storage.
         s->array = false;
-        s->total_size = 0;
         void * ptr = 0;
-        // Allocate array if declared as one.
         if (tarray != 0)
         {
             s->array = true;
-            s->total_size = size * total;
             if (! externed)
+            {
+                s->total_size = size * total;
                 ptr = (void*)malloc(size * total);
+            }
             else
+            {
                 // Each extern points to the same allocated array.
+                s->total_size = total_size;
                 ptr = this->extern_memory_buffer;
+            }
             s->pvalue = ptr;
         }
         else
         {
+            s->total_size = size;
             s->pvalue = (void*)malloc(size);
             ptr = s->pvalue;
         }
@@ -422,8 +426,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         }
         s->typestring = this->StringTableEntry(type);
         s->type = ttype->GetType();
-		s->storage_class = storage_class;
-		s->total_size = total_size;
+        s->storage_class = storage_class;
         // Add the entry into the symbol table.
         symbol_table->EnterSymbol(s);
     }
@@ -482,7 +485,7 @@ void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
                 }
                 TREE * var = child->GetChild(0);
                 int sc[] = { K_SHARED, 0};
-				SetupSingleVar(symbol_table, var, sc, true, conf.sharedMem);
+                SetupSingleVar(symbol_table, var, sc, true, conf.sharedMem);
             }
         }
     }
@@ -532,7 +535,7 @@ void EMULATOR::Execute(TREE * entry)
 
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
-        int sc[] = { K_GLOBAL, 0};
+        int sc[] = { K_GLOBAL, K_SHARED, 0};
         SetupVariables(obst, p, sc);
     }
 
