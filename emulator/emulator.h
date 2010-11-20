@@ -90,19 +90,19 @@ public:
     void * extern_memory_buffer;
     
 public:
-    class Unimplemented {
+    class EMU_ERROR {
     private:
         char * the_reason;
     public:
-        Unimplemented(char * reason)
+        EMU_ERROR(char * reason)
         {
             the_reason = strdup(reason);
         };
-        Unimplemented(const Unimplemented & r)
+        EMU_ERROR(const EMU_ERROR & r)
         {
             this->the_reason = r.the_reason;
         }
-        ~Unimplemented()
+        ~EMU_ERROR()
         {
            free(the_reason);
         };

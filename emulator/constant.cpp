@@ -179,7 +179,7 @@ CONSTANT CONSTANT::Eval(int expected_type, TREE * const_expr)
         }
     } else if (const_expr->GetType() == T_QUESTION)
     {
-        throw new EMULATOR::Unimplemented("Question operator in constant expression not supported.\n");
+        throw new EMULATOR::EMU_ERROR("Question operator in constant expression not supported.\n");
     } else if (const_expr->GetType() == T_OROR)
     {
         // Perform boolean OR.

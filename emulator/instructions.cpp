@@ -1326,22 +1326,22 @@ int THREAD::DoBar(TREE * inst)
 
 int THREAD::DoBfe(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("BFE unimplemented");
+    throw new EMULATOR::EMU_ERROR("BFE unimplemented");
 }
 
 int THREAD::DoBfi(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("BFI unimplemented");
+    throw new EMULATOR::EMU_ERROR("BFI unimplemented");
 }
 
 int THREAD::DoBfind(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("BFIND unimplemented");
+    throw new EMULATOR::EMU_ERROR("BFIND unimplemented");
 }
 
 int THREAD::DoBrev(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("BREV unimplemented");
+    throw new EMULATOR::EMU_ERROR("BREV unimplemented");
 }
 
 int THREAD::DoBra(TREE * inst)
@@ -1365,7 +1365,7 @@ int THREAD::DoBra(TREE * inst)
 
 int THREAD::DoBrkpt(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("BRKPT unimplemented");
+    throw new EMULATOR::EMU_ERROR("BRKPT unimplemented");
 }
 
 int THREAD::DoCall(TREE * inst)
@@ -1401,7 +1401,7 @@ int THREAD::DoCall(TREE * inst)
     // Call of vprintf only thing supported...
     if (strcmp(tfunc->GetText(), "vprintf") != 0)
     {
-        throw new EMULATOR::Unimplemented("Only CALL of vprintf implemented.\n");
+        throw new EMULATOR::EMU_ERROR("Only CALL of vprintf implemented.\n");
     }
 
     bool uni = false;
@@ -1431,12 +1431,12 @@ int THREAD::DoCall(TREE * inst)
             if (u->GetType() == T_UNDERSCORE)
                 once++;
             else
-                throw new EMULATOR::Unimplemented("CALL non-underscore return unimplemented.");
+                throw new EMULATOR::EMU_ERROR("CALL non-underscore return unimplemented.");
         } else
             break;
     }
     if (once != 1)
-        throw new EMULATOR::Unimplemented("CALL with multiple returns unimplemented.");
+        throw new EMULATOR::EMU_ERROR("CALL with multiple returns unimplemented.");
 
     std::vector<SYMBOL*> stack;
     for (;; ++start_params)
@@ -1488,7 +1488,7 @@ int THREAD::DoCall(TREE * inst)
 //            va_assign(out, double, ((TYPES::Types*)s->pvalue)->f64);
 //            break;
 //        default:
-//            throw new EMULATOR::Unimplemented("EMULATOR::Unimplemented type for vprintf\n");
+//            throw new EMULATOR::EMU_ERROR("EMULATOR::EMU_ERROR type for vprintf\n");
 //            break;
 //        }
 //    }
@@ -1501,7 +1501,7 @@ int THREAD::DoCall(TREE * inst)
 
 int THREAD::DoClz(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("CLZ unimplemented");
+    throw new EMULATOR::EMU_ERROR("CLZ unimplemented");
 }
 
 int THREAD::DoCnot(TREE * inst)
@@ -1629,12 +1629,12 @@ int THREAD::DoCnot(TREE * inst)
 
 int THREAD::DoCopysign(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("COPYSIGN unimplemented");
+    throw new EMULATOR::EMU_ERROR("COPYSIGN unimplemented");
 }
 
 int THREAD::DoCos(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("COS unimplemented");
+    throw new EMULATOR::EMU_ERROR("COS unimplemented");
 }
 
 int THREAD::DoCvt(TREE * inst)
@@ -2708,7 +2708,7 @@ int THREAD::DoFma(TREE * inst)
 
 int THREAD::DoIsspacep(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("ISSPACEP unimplemented");
+    throw new EMULATOR::EMU_ERROR("ISSPACEP unimplemented");
 }
 
 int THREAD::DoLd(TREE * inst)
@@ -3807,22 +3807,22 @@ int THREAD::DoMad(TREE * inst)
 
 int THREAD::DoMad24(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("MAD24 unimplemented");
+    throw new EMULATOR::EMU_ERROR("MAD24 unimplemented");
 }
 
 int THREAD::DoMax(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("MAX unimplemented");
+    throw new EMULATOR::EMU_ERROR("MAX unimplemented");
 }
 
 int THREAD::DoMembar(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("MEMBAR unimplemented");
+    throw new EMULATOR::EMU_ERROR("MEMBAR unimplemented");
 }
 
 int THREAD::DoMin(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("MIN unimplemented");
+    throw new EMULATOR::EMU_ERROR("MIN unimplemented");
 }
 
 int THREAD::DoMov(TREE * inst)
@@ -4778,27 +4778,27 @@ int THREAD::DoOr(TREE * inst)
 
 int THREAD::DoPmevent(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("PMEVENT unimplemented");
+    throw new EMULATOR::EMU_ERROR("PMEVENT unimplemented");
 }
 
 int THREAD::DoPopc(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("POPC unimplemented");
+    throw new EMULATOR::EMU_ERROR("POPC unimplemented");
 }
 
 int THREAD::DoPrefetch(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("PREFETCH unimplemented");
+    throw new EMULATOR::EMU_ERROR("PREFETCH unimplemented");
 }
 
 int THREAD::DoPrefetchu(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("PREFETCHU unimplemented");
+    throw new EMULATOR::EMU_ERROR("PREFETCHU unimplemented");
 }
 
 int THREAD::DoPrmt(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("PRMT unimplemented");
+    throw new EMULATOR::EMU_ERROR("PRMT unimplemented");
 }
 
 int THREAD::DoRcp(TREE * inst)
@@ -4918,7 +4918,7 @@ int THREAD::DoRcp(TREE * inst)
 
 int THREAD::DoRed(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("RED unimplemented");
+    throw new EMULATOR::EMU_ERROR("RED unimplemented");
 }
 
 int THREAD::DoRem(TREE * inst)
@@ -5088,17 +5088,17 @@ int THREAD::DoRem(TREE * inst)
 
 int THREAD::DoRet(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("RET unimplemented");
+    throw new EMULATOR::EMU_ERROR("RET unimplemented");
 }
 
 int THREAD::DoRsqrt(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("RSQRT unimplemented");
+    throw new EMULATOR::EMU_ERROR("RSQRT unimplemented");
 }
 
 int THREAD::DoSad(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SAD unimplemented");
+    throw new EMULATOR::EMU_ERROR("SAD unimplemented");
 }
 
 int THREAD::DoSelp(TREE * inst)
@@ -5406,7 +5406,7 @@ int THREAD::DoSelp(TREE * inst)
 
 int THREAD::DoSet(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SET unimplemented");
+    throw new EMULATOR::EMU_ERROR("SET unimplemented");
 }
 
 int THREAD::DoSetp(TREE * inst)
@@ -6301,12 +6301,12 @@ int THREAD::DoShr(TREE * inst)
 
 int THREAD::DoSin(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SIN unimplemented");
+    throw new EMULATOR::EMU_ERROR("SIN unimplemented");
 }
 
 int THREAD::DoSlct(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SLCT unimplemented");
+    throw new EMULATOR::EMU_ERROR("SLCT unimplemented");
 }
 
 int THREAD::DoSqrt(TREE * inst)
@@ -6636,8 +6636,7 @@ int THREAD::DoSt(TREE * inst)
                     SYMBOL * ok = this->root->FindAddr(ss, addr);
                     if (! ok)
                     {
-                        CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-                        (*cu->output_stream) << "Out of bounds store in kernel.\n";
+						throw new EMULATOR::EMU_ERROR("Out of bounds ST in kernel caught.");
                     }
                 }
                 break;
@@ -7018,97 +7017,97 @@ int THREAD::DoSub(TREE * inst)
 
 int THREAD::DoSubc(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SUBC unimplemented");
+    throw new EMULATOR::EMU_ERROR("SUBC unimplemented");
 }
 
 int THREAD::DoSuld(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SULD unimplemented");
+    throw new EMULATOR::EMU_ERROR("SULD unimplemented");
 }
 
 int THREAD::DoSuq(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SUQ unimplemented");
+    throw new EMULATOR::EMU_ERROR("SUQ unimplemented");
 }
 
 int THREAD::DoSured(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SURED unimplemented");
+    throw new EMULATOR::EMU_ERROR("SURED unimplemented");
 }
 
 int THREAD::DoSust(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("SUST unimplemented");
+    throw new EMULATOR::EMU_ERROR("SUST unimplemented");
 }
 
 int THREAD::DoTestp(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("TESTP unimplemented");
+    throw new EMULATOR::EMU_ERROR("TESTP unimplemented");
 }
 
 int THREAD::DoTex(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("TEX unimplemented");
+    throw new EMULATOR::EMU_ERROR("TEX unimplemented");
 }
 
 int THREAD::DoTrap(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("TRAP unimplemented");
+    throw new EMULATOR::EMU_ERROR("TRAP unimplemented");
 }
 
 int THREAD::DoTxq(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("TXQ unimplemented");
+    throw new EMULATOR::EMU_ERROR("TXQ unimplemented");
 }
 
 int THREAD::DoVabsdiff(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VABSDIFF unimplemented");
+    throw new EMULATOR::EMU_ERROR("VABSDIFF unimplemented");
 }
 
 int THREAD::DoVadd(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("Vadd unimplemented");
+    throw new EMULATOR::EMU_ERROR("Vadd unimplemented");
 }
 
 int THREAD::DoVmad(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VMAD unimplemented");
+    throw new EMULATOR::EMU_ERROR("VMAD unimplemented");
 }
 
 int THREAD::DoVmax(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VMAX unimplemented");
+    throw new EMULATOR::EMU_ERROR("VMAX unimplemented");
 }
 
 int THREAD::DoVmin(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VMIN unimplemented");
+    throw new EMULATOR::EMU_ERROR("VMIN unimplemented");
 }
 
 int THREAD::DoVote(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VOTE unimplemented");
+    throw new EMULATOR::EMU_ERROR("VOTE unimplemented");
 }
 
 int THREAD::DoVset(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VSET unimplemented");
+    throw new EMULATOR::EMU_ERROR("VSET unimplemented");
 }
 
 int THREAD::DoVshl(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VSHL unimplemented");
+    throw new EMULATOR::EMU_ERROR("VSHL unimplemented");
 }
 
 int THREAD::DoVshr(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VSHR unimplemented");
+    throw new EMULATOR::EMU_ERROR("VSHR unimplemented");
 }
 
 int THREAD::DoVsub(TREE * inst)
 {
-    throw new EMULATOR::Unimplemented("VSUB unimplemented");
+    throw new EMULATOR::EMU_ERROR("VSUB unimplemented");
 }
 
 int THREAD::DoXor(TREE * inst)

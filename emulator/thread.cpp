@@ -332,7 +332,7 @@ int THREAD::Dispatch(TREE * inst)
             default:
                 assert(false);
         }
-    } catch (EMULATOR::Unimplemented * u)
+    } catch (EMULATOR::EMU_ERROR * u)
     {
         std::cout << u->ShowReason() << "\n";
         delete u;

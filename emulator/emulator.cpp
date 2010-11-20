@@ -166,7 +166,7 @@ size_t EMULATOR::Sizeof(int type)
     case K_U16: return sizeof(unsigned __int16);
     case K_U32: return sizeof(unsigned __int32);
     case K_U64: return sizeof(unsigned __int64);
-    case K_F16: throw new Unimplemented("F16 unimplemented.\n"); return sizeof(float);
+    case K_F16: throw new EMU_ERROR("F16 unimplemented.\n"); return sizeof(float);
     case K_F32: return sizeof(float);
     case K_F64: return sizeof(double);
     case K_B8: return sizeof(unsigned __int8);
@@ -870,13 +870,13 @@ void EMULATOR::unimplemented(bool condition, char * text)
 {
     if (condition)
     {
-        throw new Unimplemented(text);
+        throw new EMU_ERROR(text);
     }
 }
 
 void EMULATOR::unimplemented(char * text)
 {
-    throw new Unimplemented(text);
+    throw new EMU_ERROR(text);
 }
 
 

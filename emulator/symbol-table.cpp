@@ -193,7 +193,7 @@ void SYMBOL_TABLE::CheckCachedPvalues()
     {
         SYMBOL * s = it->second;
         if (s->cache != s->pvalue)
-            throw new EMULATOR::Unimplemented("Cache overwrite!");
+            throw new EMULATOR::EMU_ERROR("Cache overwrite!");
     }
     if (this->parent_block_symbol_table)
         this->parent_block_symbol_table->CheckCachedPvalues();
