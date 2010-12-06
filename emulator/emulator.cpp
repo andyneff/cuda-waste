@@ -52,6 +52,7 @@ EMULATOR::EMULATOR()
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
     this->num_threads = 2;
+	this->max_instruction_thread = 100;
 }
 
 void EMULATOR::SetTrace(int level)
@@ -65,7 +66,7 @@ extern TREE * parse(char * source);
 EMULATOR::MOD * EMULATOR::Parse(char * module_name, char * source)
 {
     // parse all modules, regardless of module name selected.
-    if (this->trace_level > 0)
+    if (this->trace_level > 1)
     {
         std::cout << "====================================================\n";
         std::cout << "PROFILE = " << module_name << std::endl;
@@ -554,7 +555,7 @@ void EMULATOR::Execute(TREE * entry)
     // way to get this optimization working again.
     bool do_thread_synch = true;
     // = CodeRequiresThreadSynchronization(code);
-    if (this->trace_level > 0)
+    if (this->trace_level > 1)
         std::cout << "Thread synchronization " << (do_thread_synch ? "is" : "is not") << " required.\n";
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
     {
@@ -754,7 +755,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
         // thread synchronization assumes all threads wait.
         if (num_waiting_threads != 0 && num_waiting_threads == wait_queue.size())
         {
-            if (this->trace_level > 0)
+            if (this->trace_level > 1)
                 std::cout << "All " << num_waiting_threads << " threads synchronized!\n";
             // all threads waiting.  Reset all threads to not wait.
             for (int i = 0; i < num_waiting_threads; ++i)

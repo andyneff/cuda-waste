@@ -153,7 +153,7 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)_CUDA_RUNTIME::_cudaRegisterFatBinary, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)_CUDA_RUNTIME::_cudaUnregisterFatBinary, complain);
-        hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)_CUDA_RUNTIME::_cudaRegisterVar, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)_CUDA_RUNTIME::_cudaRegisterFunction, complain);
@@ -831,17 +831,48 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::Memset(void * dst, int value, size_t count)
 
     if (cu->CheckSinglePtrOverwrite(ddst) != CUDA_WRAPPER::OK)
     {
+        (*cu->output_stream) << "Destination block in Memset("
+            << "dst = " << dst
+            << ", ..., ...) is invalid -- overwritten.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in "
+            << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
             return cudaErrorMemoryAllocation;
     }
     // Perform copy.
-    typePtrCudaMemset proc = (typePtrCudaMemset)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::Memset);
-    cudaError_t err = (*proc)(dst, value, count);
+	cudaError_t err;
+    if (! cu->do_emulation)
+    {
+	    typePtrCudaMemset proc = (typePtrCudaMemset)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::Memset);
+		err = (*proc)(dst, value, count);
+        if (err != 0)
+        {
+            (*cu->output_stream) << "cudaMemset failed."
+                << " Return value = "
+                << err << ".\n";
+            (*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
+            if (cu->quit_on_error)
+                exit(1);
+            if (cu->do_not_call_cuda_after_sanity_check_fail)
+                return err;
+            return err;
+        }
+    } else
+    {
+        memset(dst, value, count);
+        err = cudaSuccess;
+    }
+
     // Perform overwrite check again.
     if (cu->CheckSinglePtrOverwrite(ddst) != CUDA_WRAPPER::OK)
     {
+        (*cu->output_stream) << "Destination block in Memset("
+            << "dst = " << dst
+            << ", ..., ...) is invalid -- overwritten.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in "
+            << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
         if (cu->do_not_call_cuda_after_sanity_check_fail)
@@ -879,6 +910,12 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::ThreadExit()
 cudaError_t _CUDA_RUNTIME::_cudaGetLastError()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaGetLastError called, " << context << ".\n\n";
+    }
+
     if (! cu->do_emulation)
     {
         typePtrCudaGetLastError proc = (typePtrCudaGetLastError)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaGetLastError);
@@ -927,6 +964,16 @@ void CUDARTAPI _CUDA_RUNTIME::_cudaUnregisterFatBinary(void **fatCubinHandle)
 {
     // Should probably do something like free the ast...
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaUnregisterFatBinary called, " << context << ".\n\n";
+    }
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaUnregisterFatBinary called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaUnregisterFatBinary proc = (typePtrCudaUnregisterFatBinary)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaUnregisterFatBinary);
@@ -934,9 +981,33 @@ void CUDARTAPI _CUDA_RUNTIME::_cudaUnregisterFatBinary(void **fatCubinHandle)
     }
 }
 
+void CUDARTAPI _CUDA_RUNTIME::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, char *deviceAddress, const char *deviceName, int ext, int size, int constant, int global)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaUnregisterFatBinary called, " << context << ".\n\n";
+    }
+    if (! cu->do_emulation)
+    {
+        typePtrCudaRegisterVar proc = (typePtrCudaRegisterVar)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaRegisterVar);
+        (*proc)(fatCubinHandle, hostVar, deviceAddress, deviceName, ext, size, constant, global);
+    }
+	else
+	{
+        // no op for now.
+	}
+}
+
 cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaLaunch(const char *entry)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaLaunch called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaLaunch proc = (typePtrCudaLaunch)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaLaunch);
@@ -952,6 +1023,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaLaunch(const char *entry)
 void CUDARTAPI _CUDA_RUNTIME::_cudaRegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaRegisterFunction called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaRegisterFunction proc = (typePtrCudaRegisterFunction)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaRegisterFunction);
@@ -967,6 +1043,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaConfigureCall(dim3 gridDim, dim3 block
 {
     // set up dimensions, shared memory, and stream for the kernel launch.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaConfigureCall called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaConfigureCall proc = (typePtrCudaConfigureCall)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaConfigureCall);
@@ -982,6 +1063,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaSetupArgument(const void *arg, size_t 
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaSetupArgument called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaSetupArgument proc = (typePtrCudaSetupArgument)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaSetupArgument);
@@ -997,6 +1083,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaThreadSynchronize(void)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaThreadSynchronize called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaThreadSynchronize proc = (typePtrCudaThreadSynchronize)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaThreadSynchronize);
@@ -1012,6 +1103,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaGetDevice(int *device)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaGetDevice called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaGetDevice proc = (typePtrCudaGetDevice)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaGetDevice);
@@ -1028,6 +1124,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaGetDeviceProperties(struct cudaDeviceP
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaGetDeviceProperties called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaGetDeviceProperties proc = (typePtrCudaGetDeviceProperties)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaGetDeviceProperties);
@@ -1043,6 +1144,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaGetDeviceCount(int *count)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaGetDeviceCount called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaGetDeviceCount proc = (typePtrCudaGetDeviceCount)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaGetDeviceCount);
@@ -1058,6 +1164,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaChooseDevice(int *device, const struct
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaChooseDevice called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         ptrCudaChooseDevice proc = (ptrCudaChooseDevice)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaChooseDevice);
@@ -1073,6 +1184,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaSetDevice(int device)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaSetDevice called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         typePtrCudaSetDevice proc = (typePtrCudaSetDevice)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaSetDevice);
@@ -1087,6 +1203,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamCreate(cudaStream_t *pStream)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaStreamCreate called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         ptrCudaStreamCreate proc = (ptrCudaStreamCreate)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaStreamCreate);
@@ -1102,6 +1223,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamDestroy(cudaStream_t stream)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaStreamDestroy called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         ptrCudaStreamDestroy proc = (ptrCudaStreamDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaStreamDestroy);
@@ -1117,6 +1243,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamSynchronize(cudaStream_t stream)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaStreamSynchronize called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         ptrCudaStreamSynchronize proc = (ptrCudaStreamSynchronize)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaStreamSynchronize);
@@ -1132,6 +1263,11 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamQuery(cudaStream_t stream)
 {
     // arg contains pointer to the argument for the function call.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaStreamQuery called, " << context << ".\n\n";
+    }
     if (! cu->do_emulation)
     {
         ptrCudaStreamQuery proc = (ptrCudaStreamQuery)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaStreamQuery);

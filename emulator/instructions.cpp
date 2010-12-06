@@ -2746,6 +2746,7 @@ int THREAD::DoLd(TREE * inst)
     int ss = 0;
     int cop = 0;
     int vec = 0;
+	int vol = 0;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
@@ -2763,6 +2764,8 @@ int THREAD::DoLd(TREE * inst)
             cop = gt;
         else if (gt == K_V2 || gt == K_V4)
             vec = gt;
+		else if (gt == K_VOLATILE)
+			vol = gt;
         else assert(false);
     }
     assert(ttype != 0);
@@ -6451,6 +6454,7 @@ int THREAD::DoSt(TREE * inst)
     int ss = 0;
     int cop = 0;
     int vec = 0;
+	int vol = 0;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
@@ -6468,6 +6472,8 @@ int THREAD::DoSt(TREE * inst)
             cop = gt;
         else if (gt == K_V2 || gt == K_V4)
             vec = gt;
+		else if (gt == K_VOLATILE)
+			vol = gt;
         else assert(false);
     }
     assert(ttype != 0);

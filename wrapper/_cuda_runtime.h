@@ -38,7 +38,7 @@ class DLL_API _CUDA_RUNTIME
 private:
     bool did_wrap;
 public:
-	HMODULE hModule;
+    HMODULE hModule;
     _CUDA_RUNTIME() { did_wrap = false; }
 public:
     void WrapModule(char * cuda_module_name);
@@ -157,6 +157,7 @@ public:
     static cudaError_t CUDARTAPI _cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0));
     static cudaError_t CUDARTAPI _cudaThreadSynchronize(void);
     static void CUDARTAPI _cudaUnregisterFatBinary(void **fatCubinHandle);
+    static void CUDARTAPI _cudaRegisterVar(void **fatCubinHandle, char *hostVar, char *deviceAddress, const char *deviceName, int ext, int size, int constant, int global);
     static cudaError_t CUDARTAPI _cudaGetDevice(int *device);
     static cudaError_t CUDARTAPI _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
     static cudaError_t CUDARTAPI _cudaGetDeviceCount(int *count);

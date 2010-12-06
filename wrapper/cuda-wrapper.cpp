@@ -103,6 +103,11 @@ void CUDA_WRAPPER::DoInit()
     CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     csi->ClassifyAsPrefix("call-stack-info.cpp");
     csi->ClassifyAsPrefix("cuda-wrapper.cpp");
+    csi->ClassifyAsPrefix("_cuda_runtime.cpp");
+    csi->ClassifyAsPrefix("_cuda_runtime.h");
+    csi->ClassifyAsPrefix("cuda_runtime.h");  // This is the include file for CUDA, but we want what calls it.
+    csi->ClassifyAsPrefix("_cuda.cpp");
+    csi->ClassifyAsPrefix("_cuda.h");
     if (atexit(CUDA_WRAPPER::ExitHandler))
     {
         char * context = cu->Context(3);

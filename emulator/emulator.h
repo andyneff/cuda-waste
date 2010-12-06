@@ -88,6 +88,7 @@ public:
     std::list<arg*> arguments;
     config conf;
     void * extern_memory_buffer;
+	int max_instruction_thread;
     
 public:
     class EMU_ERROR {
@@ -185,5 +186,4 @@ public:
     char * StringTableEntry(char * text);
     void RunDevice(char * device);
 	void SetEmulationThreads(int i);
-
 };
