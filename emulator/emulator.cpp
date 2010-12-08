@@ -52,7 +52,7 @@ EMULATOR::EMULATOR()
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
     this->num_threads = 2;
-	this->max_instruction_thread = 100;
+    this->max_instruction_thread = 100;
 }
 
 void EMULATOR::SetTrace(int level)
@@ -317,6 +317,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             s->name = this->StringTableEntry(full_name);
             s->size = size;
             s->pvalue = (void*)malloc(size);
+            memset(s->pvalue, 0, size);
             s->typestring = this->StringTableEntry(type);
             s->type = ttype->GetType();
             s->storage_class = storage_class;
@@ -341,6 +342,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
             {
                 s->total_size = size * total;
                 ptr = (void*)malloc(size * total);
+                memset(ptr, 0, size * total);
             }
             else
             {
@@ -354,6 +356,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
         {
             s->total_size = size;
             s->pvalue = (void*)malloc(size);
+            memset(s->pvalue, 0, size);
             ptr = s->pvalue;
         }
 
@@ -467,6 +470,7 @@ void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
     if (this->conf.sharedMem == 0)
         return;
     this->extern_memory_buffer = (void*)malloc(conf.sharedMem);
+    memset(this->extern_memory_buffer, 0, conf.sharedMem);
     for (TREE * p = code; p != 0; p = p->GetParent())
     {
         // Scan ahead and find all extern nodes.
