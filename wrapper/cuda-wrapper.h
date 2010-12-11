@@ -67,6 +67,8 @@ public:
     static char * Context(int lines = 1);
     char * global_context;
     char * device; // device to run.
+	int level;
+	bool do_debugger;
     _CUDA * _cuda;
 	_CUDA_RUNTIME * _cuda_runtime;
 
@@ -91,6 +93,7 @@ public:
     static return_type __stdcall SetDoNotCallCudaAfterSanityCheckFail(bool b);
 	static void __stdcall SetEmulationThreads(int i);
     static void __stdcall SetEmulationMode(int yes_no);
+	static void __stdcall SetStartDebugger();
     static return_type CopyOptions(CUDA_WRAPPER * ptr);
     static return_type __stdcall RunDevice(char * device);
     static void __stdcall SetTrace(int level);
@@ -98,6 +101,9 @@ public:
     static return_type CheckSinglePtrOverwrite(const data * d);
     static bool IsBadPointer(const void * ptr);
     static int FindAllocatedBlock(const void * pointer);
+	static unsigned int __stdcall WinThreadListener(void * wrapper);
+	void StartListener();
+	static HANDLE __stdcall StartProcess(char * command);
 
 };
 

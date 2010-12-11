@@ -1,0 +1,24 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+// File DoRPC.idl 
+[ 
+ // A unique identifier that distinguishes this 
+ // interface from other interfaces. 
+ uuid(F0C37BD0-0D1B-4513-8C51-EC0D699740C0),
+
+ // This is version 1.0 of this interface. 
+ version(1.0),
+
+ // This interface will use an implicit binding 
+ // handle named hDoRPCBinding. 
+ implicit_handle(handle_t hDoRPCBinding) 
+]
+
+interface DoRPC  // The interface is named DoRPC 
+{ 
+ // A function that takes a zero-terminated string. 
+int Here();
+}
+
+

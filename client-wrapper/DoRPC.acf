@@ -1,0 +1,8 @@
+// File DoRPC.acf
+[
+// This interface will use an implicit binding handle named hDoRPCBinding.
+implicit_handle(handle_t hDoRPCBinding)
+]
+interface DoRPC // The interface is named DoRPC
+{
+}

@@ -68,7 +68,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;antlr3cd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)ptxp.lib;antlr3cd.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -108,6 +108,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\client-wrapper\DoRPC_s.c" />
     <ClCompile Include="call-stack-info.cpp" />
     <ClCompile Include="cuda-wrapper.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
@@ -118,6 +119,7 @@
     <ClCompile Include="lock-mgr.cpp" />
     <ClCompile Include="memdbg.cpp" />
     <ClCompile Include="process-mgr.cpp" />
+    <ClCompile Include="server-wrapper.cpp" />
     <ClCompile Include="_cuda.cpp" />
     <ClCompile Include="_cuda_runtime.cpp" />
   </ItemGroup>
