@@ -41,6 +41,12 @@
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#define ZLIB_WINAPI 1
+#include "zlib.h"
+
 extern char * file_name_tail(char * file_name);
 
 
@@ -925,39 +931,197 @@ cudaError_t _CUDA_RUNTIME::_cudaGetLastError()
         return cudaSuccess;
 }
 
+
+//typedef struct __cudaFatCudaBinaryRec {
+//    unsigned long            magic;
+//    unsigned long            version;
+//    unsigned long            gpuInfoVersion;
+//    char*                   key;
+//    char*                   ident;
+//    char*                   usageMode;
+//    __cudaFatPtxEntry             *ptx;
+//    __cudaFatCubinEntry           *cubin;
+//    __cudaFatDebugEntry           *debug;
+//    void*                  debugInfo;
+//    unsigned int                   flags;
+//    __cudaFatSymbol               *exported;
+//    __cudaFatSymbol               *imported;
+//    struct __cudaFatCudaBinaryRec *dependends;
+//    unsigned int                   characteristic;
+//    __cudaFatElfEntry             *elf;
+//} __cudaFatCudaBinary;
+
+typedef struct __cudaFatCudaBinary2HeaderRec { 
+	unsigned int            magic;
+	unsigned int            version;
+	unsigned long long int  length;
+} __cudaFatCudaBinary2Header;
+
+enum FatBin2EntryType {
+	FATBIN_2_PTX = 0x1
+};
+
+typedef struct __cudaFatCudaBinary2EntryRec { 
+	unsigned int           type;
+	unsigned int           binary;
+	unsigned long long int binarySize;
+	unsigned int           unknown2;
+	unsigned int           kindOffset;
+	unsigned int           unknown3;
+	unsigned int           unknown4;
+	unsigned int           name;
+	unsigned int           nameSize;
+	unsigned long long int flags;
+	unsigned long long int unknown7;
+	unsigned long long int uncompressedBinarySize;
+} __cudaFatCudaBinary2Entry;
+
+#define COMPRESSED_PTX 0x0000000000001000LL
+
+typedef struct __cudaFatCudaBinaryRec2 {
+	int magic;
+	int version;
+	const unsigned long long* fatbinData;
+	char* f;
+} __cudaFatCudaBinary2;
+
+/*
+ * Magic numbers for fat bins, including previous versions.
+ */
+#define __cudaFatVERSION   0x00000004
+#define __cudaFatMAGIC     0x1ee55a01
+#define __cudaFatMAGIC2    0x466243b1
+#define __cudaFatMAGIC3    0xba55ed50
+
+
 void** _CUDA_RUNTIME::_cudaRegisterFatBinary(void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * profile = 0;
+    char * ptx = 0;
 
-    // std::cout << "NEW FATBIN\n";
-    // Get PTX code from the record.
-    __cudaFatCudaBinary * fcb = (__cudaFatCudaBinary *)fatCubin;
-    if (fcb)
+    if(*(int*)fatCubin == __cudaFatMAGIC)
     {
-        __cudaFatPtxEntry * ptx = fcb->ptx;
-        for ( ; ptx && ptx->gpuProfileName; ptx++)
-        {
-            char * profile = ptx->gpuProfileName;
-            char * code = ptx->ptx;
-            EMULATOR * emulator = EMULATOR::Singleton();
-            emulator->Parse(profile, code);
-        }
+	    (*cu->output_stream) << "Found old fat binary format!" << "\n";
+	    __cudaFatCudaBinary *binary = (__cudaFatCudaBinary *)fatCubin;
+	    profile = binary->ident;
 
-        // ELF contains just in time code for every PTX.
-        // Execution will depend on picking which one for the device.
-        __cudaFatElfEntry * elf = fcb->elf;
-        for ( ; elf; elf = elf->next)
-        {
-            unsigned char * code = (unsigned char *)elf->elf;
-            int x = 1;
-        }
+	    unsigned int ptxVersion = 0;
+
+		// Get the highest PTX version
+
+	    for (unsigned int i = 0; ; ++i)
+	    {
+		    if((binary->ptx[i].ptx) == 0)
+			    break;
+
+		    std::string computeCapability = binary->ptx[i].gpuProfileName;
+		    std::string versionString(computeCapability.begin() + 8,
+					      computeCapability.end());
+
+		    unsigned int thisVersion = 0;
+
+		    thisVersion = stoi(versionString);
+		    if(thisVersion > ptxVersion)
+		    {
+			    ptxVersion = thisVersion;
+			    ptx = binary->ptx[i].ptx;
+		    }
+	    }
+	    (*cu->output_stream) << " Selected version " << ptxVersion << "\n";
+
+	    EMULATOR * emulator = EMULATOR::Singleton();
+	    emulator->Parse(profile, ptx);
     }
+    else if (*(int*)fatCubin == __cudaFatMAGIC2) {
+	    (*cu->output_stream) << "Found new fat binary format!" << "\n";
+	    __cudaFatCudaBinary2* binary = (__cudaFatCudaBinary2*) fatCubin;
+	    __cudaFatCudaBinary2Header* header =
+						(__cudaFatCudaBinary2Header*) binary->fatbinData;
+
+	    (*cu->output_stream) << " binary size is: " << header->length << " bytes\n";
+
+	    char* base = (char*)(header + 1);
+	    long long unsigned int offset = 0;
+	    __cudaFatCudaBinary2EntryRec* entry = (__cudaFatCudaBinary2EntryRec*)(base);
+
+	    while (!(entry->type & FATBIN_2_PTX) && offset < header->length) {
+		    entry = (__cudaFatCudaBinary2EntryRec*)(base + offset);
+		    offset += entry->binary + entry->binarySize;
+	    }
+	    profile = (char*)entry + entry->name;		
+	    if (entry->type & FATBIN_2_PTX) {
+		    ptx  = (char*)entry + entry->binary;
+	    }
+	    else {
+		    ptx = 0;
+	    }
+
+	    if(entry->flags & COMPRESSED_PTX)
+	    {
+		    int ret, flush;
+		    unsigned have;
+		    z_stream strm;
+		    int size = entry->binarySize;
+		    unsigned char * in = (unsigned char*)ptx;
+		    int out_size = entry->uncompressedBinarySize * 2;
+		    unsigned char * out = (unsigned char*)malloc(out_size);
+			/* allocate inflate state */
+		    strm.zalloc = Z_NULL;
+		    strm.zfree = Z_NULL;
+		    strm.opaque = Z_NULL;
+		    strm.avail_in = 0;
+		    strm.next_in = Z_NULL;
+		    ret = inflateInit(&strm);
+		    if (ret != Z_OK)
+			    return 0;		
+			/* decompress until deflate stream ends or end of file */
+		    char * in_ptr = (char*)in;
+		    char * out_ptr = (char*)out;
+		    do {
+				// For now, take whole thing.
+			    int in_size = size;
+			    size -= in_size;
+			    strm.avail_in = in_size;
+			    if (strm.avail_in == 0)
+				    break;
+			    strm.next_in = (Bytef*) in_ptr;
+				/* run inflate() on input until output buffer not full */
+			    do {
+				    strm.avail_out = out_size;
+				    strm.next_out = (unsigned char*)out_ptr;
+				    ret = inflate(&strm, Z_NO_FLUSH);
+				    assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
+				    switch (ret) {
+					    case Z_NEED_DICT:
+						    ret = Z_DATA_ERROR;     /* and fall through */
+					    case Z_DATA_ERROR:
+					    case Z_MEM_ERROR:
+						    (void)inflateEnd(&strm);
+						    return 0;
+				    }
+				    have = in_size - strm.avail_out;
+				    out_ptr += have;
+			    } while (strm.avail_out == 0);
+				/* done when inflate() says it's done */
+		    } while (ret != Z_STREAM_END);
+			/* clean up and return */
+		    (void)inflateEnd(&strm);
+		    ptx = (char*)out;
+		    *(ptx + entry->uncompressedBinarySize) = 0;
+	    }
+
+	    EMULATOR * emulator = EMULATOR::Singleton();
+	    emulator->Parse(profile, ptx);
+
+    }
+
     if (! cu->do_emulation)
     {
-        typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaRegisterFatBinary);
-        return (*proc)(fatCubin);
+	    typePtrCudaRegisterFatBinary proc = (typePtrCudaRegisterFatBinary)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaRegisterFatBinary);
+	    return (*proc)(fatCubin);
     } else
-        return 0;
+	    return 0;
 }
 
 void CUDARTAPI _CUDA_RUNTIME::_cudaUnregisterFatBinary(void **fatCubinHandle)
