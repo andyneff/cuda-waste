@@ -21,6 +21,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_360E111D39054DD897A2C17117F3E550"
+        "OwnerKey" = "8:_22D269596EC24699BD47A9C9283CE6FC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_360E111D39054DD897A2C17117F3E550"
+        "OwnerKey" = "8:_957ECBF8F9B644C8AFFEBE7346E97A3F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_957ECBF8F9B644C8AFFEBE7346E97A3F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -28,6 +40,12 @@
         "Entry"
         {
         "MsmKey" = "8:_A87844805CAA69525A050241349FB417"
+        "OwnerKey" = "8:_957ECBF8F9B644C8AFFEBE7346E97A3F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6EE2EA87414B37561F82E8278070D89"
         "OwnerKey" = "8:_957ECBF8F9B644C8AFFEBE7346E97A3F"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -39,7 +57,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\waste-setup-r135-debug.msi"
+        "OutputFilename" = "8:Debug\\waste-setup-r138-debug.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -148,6 +166,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B6EE2EA87414B37561F82E8278070D89"
+            {
+            "SourcePath" = "8:RPCRT4.dll"
+            "TargetName" = "8:RPCRT4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_8E6A4FA09C6D4C5184F77D622BE3A9D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -205,7 +243,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:waste"
         "ProductCode" = "8:{52DCA1B5-2147-42C7-9865-A893AEF3F147}"
-        "PackageCode" = "8:{32517424-3389-4663-8DC3-2359BC232640}"
+        "PackageCode" = "8:{F9791A63-C061-447B-8514-4DAC8E624D4D}"
         "UpgradeCode" = "8:{DFCE871F-7619-47E0-A1A5-24AC794A6A68}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -721,12 +759,26 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_360E111D39054DD897A2C17117F3E550"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:Microsoft_VC100_DebugCRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_22D269596EC24699BD47A9C9283CE6FC"
             {
-            "SourcePath" = "8:..\\Debug\\waste.exe"
+            "SourcePath" = "8:\\\\gaz77xud3h-2012\\Personal\\ocelot\\cw\\Debug\\waste.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8E6A4FA09C6D4C5184F77D622BE3A9D9"
@@ -754,7 +806,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_957ECBF8F9B644C8AFFEBE7346E97A3F"
             {
-            "SourcePath" = "8:..\\Debug\\wrapper.dll"
+            "SourcePath" = "8:\\\\gaz77xud3h-2012\\Personal\\ocelot\\cw\\Debug\\wrapper.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8E6A4FA09C6D4C5184F77D622BE3A9D9"

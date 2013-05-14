@@ -30,6 +30,7 @@
 #include "constant.h"
 #include "types.h"
 #include "../wrapper/memdbg.h"
+#include "../waste/version.h"
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 

@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <iostream>
 #include "../wrapper/cuda-wrapper.h"
+#include "version.h"
 
 void Help()
 {
@@ -19,6 +20,7 @@ Options:\n\
   -q, --quit-on-error               Quit program on error detection.\n\
   -k, --skip-on-error               Skip over CUDA call when the usage is invalid.\n\
   -n, --non-standard-ptr            Allow computed pointers.\n\
+  -v, --version                     Print out version\n\
   -x                                Start debugger.\n\
 ";
     exit(1);
@@ -124,6 +126,10 @@ int main(int argc, char * argv[])
             else if (strcmp("-x", *argv) == 0)
             {
                 do_debugger = true;
+            }
+            else if (strcmp("-v", *argv) == 0 || strcmp("--non-standard-ptr", *argv) == 0)
+            {
+				std::cerr << "Version " << WASTE_VERSION << "\n";
             }
             else
                 Help();

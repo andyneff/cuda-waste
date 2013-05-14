@@ -40,7 +40,7 @@
 #include "../emulator/emulator.h"
 #include "_cuda.h"
 #include "_cuda_runtime.h"
-
+#include "../waste/version.h"
 
 static char temp_buffer[50000];
 

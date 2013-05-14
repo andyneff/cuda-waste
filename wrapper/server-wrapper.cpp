@@ -43,7 +43,7 @@
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 #include "../client-wrapper/DoRPC_h.h"
-
+#include <tchar.h> // for fucking _T().
 
 void CUDA_WRAPPER::StartListener()
 {
@@ -65,9 +65,9 @@ unsigned int __stdcall CUDA_WRAPPER::WinThreadListener(void * wrapper)
 		// Uses the protocol combined with the endpoint for receiving
 		// remote procedure calls.
 		status = RpcServerUseProtseqEp(
-			(unsigned char*)("ncacn_ip_tcp"),// Use TCP/IP protocol
+			(RPC_WSTR)_T("ncacn_ip_tcp"),// Use TCP/IP protocol
 			RPC_C_PROTSEQ_MAX_REQS_DEFAULT,    // Backlog q length for TCP/IP.
-			(unsigned char*)("9191"),    // TCP/IP port to use.
+			(RPC_WSTR)_T("9191"),    // TCP/IP port to use.
 			NULL);       // No security.
 
 		if(status)

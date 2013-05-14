@@ -6,6 +6,7 @@
 #include "../emulator/tree.h"
 #include "../emulator/emulator.h"
 #include "../emulator/string-table.h"
+#include "../waste/version.h"
 
 static STRING_TABLE * string_table;
 
