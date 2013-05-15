@@ -203,7 +203,7 @@ else
 	exit 1
 fi
 
-vsp=`cygpath --dos $VS_PATH`
+export VS_PATH=`cygpath --dos $VS_PATH`
 
 #############################################################
 #
@@ -219,5 +219,5 @@ vsp=`cygpath --dos $VS_PATH`
 export TMP="`cygpath --dos $tmp`"
 export TEMP="`cygpath --dos $tmp`"
 
-cmd /k "$vsp\vc\bin\vcvars32.bat" "&&" set CHERE_INVOKING=y "&&" "c:\cygwin\bin\bash.exe" "-i"
+cmd /k "$VS_PATH\vc\bin\vcvars32.bat" "&&" set CHERE_INVOKING=y "&&" "c:\cygwin\bin\bash.exe" "-i"
 
