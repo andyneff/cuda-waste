@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wrapper", "..\..\wrapper\v10\wrapper.vcxproj", "{2DB76C7E-DD3A-4922-9F47-9B2E19CCC6CA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wrapper", "..\..\wrapper\v11\wrapper.vcxproj", "{2DB76C7E-DD3A-4922-9F47-9B2E19CCC6CA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "waste", "..\..\waste\v10\waste.vcxproj", "{33B6C6DE-1AA4-4C9D-B62D-C1045AAB230B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "waste", "..\..\waste\v11\waste.vcxproj", "{33B6C6DE-1AA4-4C9D-B62D-C1045AAB230B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8} = {C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}
 		{6644F2CA-1A4D-4EF4-99F5-9458AB461010} = {6644F2CA-1A4D-4EF4-99F5-9458AB461010}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptxp", "..\..\ptxp\v10\ptxp.vcxproj", "{6644F2CA-1A4D-4EF4-99F5-9458AB461010}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptxp", "..\..\ptxp\v11\ptxp.vcxproj", "{6644F2CA-1A4D-4EF4-99F5-9458AB461010}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "..\..\emulator\v10\emulator.vcxproj", "{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "..\..\emulator\v11\emulator.vcxproj", "{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client-wrapper", "..\..\client-wrapper\v10\client-wrapper.vcxproj", "{F528AF9F-83A6-4431-913B-643A60371E18}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client-wrapper", "..\..\client-wrapper\v11\client-wrapper.vcxproj", "{F528AF9F-83A6-4431-913B-643A60371E18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

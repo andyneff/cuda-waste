@@ -108,12 +108,12 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ptxp\v10\ptxp.vcxproj">
+    <ProjectReference Include="..\..\ptxp\v11\ptxp.vcxproj">
       <Project>{6644f2ca-1a4d-4ef4-99f5-9458ab461010}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\emulator\v10\emulator.vcxproj">
+    <ProjectReference Include="..\..\emulator\v11\emulator.vcxproj">
       <Project>{c6320b81-ce1a-4e33-aa48-fe36a7a3a9b8}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
