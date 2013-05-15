@@ -12,7 +12,9 @@ clean:
 	rm -f waste.suo waste.sdf
 	rm -rf Debug Release
 
-	
+build:
+	MSBuild waste.sln /p:Configuration=Debug
+
 testd:
 	cd Debug; ../test/hw/Debug/hw.exe; ./waste -d compute_20 ../test/hw/Debug/hw.exe; ./waste -d compute_10 ../test/hw/Debug/hw.exe
 	cd Debug; ../test/hw/Debug/hw2.exe; ./waste -d compute_20 ../test/hw/Debug/hw2.exe; ./waste -d compute_10 ../test/hw/Debug/hw2.exe
