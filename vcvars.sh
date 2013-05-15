@@ -8,6 +8,7 @@ IFS=$(echo -en "\n\b")
 # Set up variables for CUDA Toolkit base, if not already set.
 #
 #############################################################
+
 if [ "$CUDA_PATH" == "" ]
 then
 	echo CUDA_PATH not set.
@@ -60,7 +61,6 @@ then
 	x=""
 	for p2 in $p
 	do
-		echo p2 = $p2
 		if [ -f "$p2" ]
 		then
 			x="$p2"
@@ -86,6 +86,47 @@ else
 fi
 
 ZLIB_PATH=`cygpath --dos $ZLIB_PATH`
+
+
+#############################################################
+# 
+# Set up path for Antlr runtime libraries and include files.
+#
+#############################################################
+
+if [ "$ANTLR_PATH" == "" ]
+then
+	echo ANTLR_PATH not set.
+	# well, let's try to find it.
+	p=`find . -name antlr3.h`
+	# now pick the last one.
+	x=""
+	for j in $p
+	do
+		j2=${j%%/include/antlr3.h}
+		if [ -d $j2 ]
+		then
+			x="$j2"
+			pushd "$x"
+			x="`pwd`"
+			popd
+		fi
+	done
+	if [ "$x" == "" ]
+	then
+		echo Cannot find Antlr3 C libraries.
+		exit 1
+	fi
+	export ANTLR_PATH="$x"
+fi
+
+if [ -d $ANTLR_PATH ]
+then
+	echo Antlr3 is in $ANTLR_PATH.
+else
+	echo Antlr3 does not exist.
+	exit 1
+fi
 
 
 #############################################################

@@ -63,7 +63,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,22 +77,22 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="../driver.cpp" />
-    <ClCompile Include="../PtxLexer.c" />
-    <ClCompile Include="../PtxParser.c" />
+    <ClCompile Include="..\driver.cpp" />
+    <ClCompile Include="..\PtxLexer.c" />
+    <ClCompile Include="..\PtxParser.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="../PtxLexer.h" />
-    <ClInclude Include="../PtxParser.h" />
+    <ClInclude Include="..\PtxLexer.h" />
+    <ClInclude Include="..\PtxParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -66,10 +66,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc10\x86\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)ptxp.lib;%ANTLR_PATH%\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc10\x86\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -86,7 +86,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -94,55 +94,55 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;antlr3c.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc10\x86\ZlibStatRelease\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)ptxp.lib;%ANTLR_PATH%\Release\antlr3c.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc10\x86\ZlibStatRelease\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ptxp\ptxp.vcxproj">
+    <ProjectReference Include="..\..\ptxp\v10\ptxp.vcxproj">
       <Project>{6644f2ca-1a4d-4ef4-99f5-9458ab461010}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\emulator\emulator.vcxproj">
+    <ProjectReference Include="..\..\emulator\v10\emulator.vcxproj">
       <Project>{c6320b81-ce1a-4e33-aa48-fe36a7a3a9b8}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\client-wrapper\DoRPC_s.c" />
-    <ClCompile Include="call-stack-info.cpp" />
-    <ClCompile Include="cuda-wrapper.cpp">
+    <ClCompile Include="..\..\client-wrapper\DoRPC_s.c" />
+    <ClCompile Include="..\call-stack-info.cpp" />
+    <ClCompile Include="..\cuda-wrapper.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
       <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessSuppressLineNumbers>
     </ClCompile>
-    <ClCompile Include="dll-main.cpp" />
-    <ClCompile Include="hook-mgr.cpp" />
-    <ClCompile Include="lock-mgr.cpp" />
-    <ClCompile Include="memdbg.cpp" />
-    <ClCompile Include="process-mgr.cpp" />
-    <ClCompile Include="server-wrapper.cpp" />
-    <ClCompile Include="_cuda.cpp" />
-    <ClCompile Include="_cuda_runtime.cpp" />
+    <ClCompile Include="..\dll-main.cpp" />
+    <ClCompile Include="..\hook-mgr.cpp" />
+    <ClCompile Include="..\lock-mgr.cpp" />
+    <ClCompile Include="..\memdbg.cpp" />
+    <ClCompile Include="..\process-mgr.cpp" />
+    <ClCompile Include="..\server-wrapper.cpp" />
+    <ClCompile Include="..\_cuda.cpp" />
+    <ClCompile Include="..\_cuda_runtime.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="call-stack-info.h" />
-    <ClInclude Include="cuda-memory-debug-defs.h" />
-    <ClInclude Include="cuda-memory-debug-undefs.h" />
-    <ClInclude Include="cuda-wrapper.h" />
-    <ClInclude Include="hook-mgr.h" />
-    <ClInclude Include="lock-mgr.h" />
-    <ClInclude Include="memdbg.h" />
-    <ClInclude Include="process-mgr.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="_cuda.h" />
-    <ClInclude Include="_cuda_runtime.h" />
+    <ClInclude Include="..\call-stack-info.h" />
+    <ClInclude Include="..\cuda-memory-debug-defs.h" />
+    <ClInclude Include="..\cuda-memory-debug-undefs.h" />
+    <ClInclude Include="..\cuda-wrapper.h" />
+    <ClInclude Include="..\hook-mgr.h" />
+    <ClInclude Include="..\lock-mgr.h" />
+    <ClInclude Include="..\memdbg.h" />
+    <ClInclude Include="..\process-mgr.h" />
+    <ClInclude Include="..\stdafx.h" />
+    <ClInclude Include="..\targetver.h" />
+    <ClInclude Include="..\_cuda.h" />
+    <ClInclude Include="..\_cuda_runtime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
