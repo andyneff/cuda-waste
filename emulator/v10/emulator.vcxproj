@@ -87,25 +87,25 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="constant.cpp" />
-    <ClCompile Include="cuda-runtime.cpp" />
-    <ClCompile Include="cuda.cpp" />
-    <ClCompile Include="emulator.cpp" />
-    <ClCompile Include="instructions.cpp" />
-    <ClCompile Include="symbol-table.cpp" />
-    <ClCompile Include="symbol.cpp" />
-    <ClCompile Include="thread.cpp" />
-    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="../constant.cpp" />
+    <ClCompile Include="../cuda-runtime.cpp" />
+    <ClCompile Include="../cuda.cpp" />
+    <ClCompile Include="../emulator.cpp" />
+    <ClCompile Include="../instructions.cpp" />
+    <ClCompile Include="../symbol-table.cpp" />
+    <ClCompile Include="../symbol.cpp" />
+    <ClCompile Include="../thread.cpp" />
+    <ClCompile Include="../tree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="constant.h" />
-    <ClInclude Include="emulator.h" />
-    <ClInclude Include="string-table.h" />
-    <ClInclude Include="symbol-table.h" />
-    <ClInclude Include="symbol.h" />
-    <ClInclude Include="thread.h" />
-    <ClInclude Include="tree.h" />
-    <ClInclude Include="types.h" />
+    <ClInclude Include="../constant.h" />
+    <ClInclude Include="../emulator.h" />
+    <ClInclude Include="../string-table.h" />
+    <ClInclude Include="../symbol-table.h" />
+    <ClInclude Include="../symbol.h" />
+    <ClInclude Include="../thread.h" />
+    <ClInclude Include="../tree.h" />
+    <ClInclude Include="../types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

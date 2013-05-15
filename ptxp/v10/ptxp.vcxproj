@@ -86,13 +86,13 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="driver.cpp" />
-    <ClCompile Include="PtxLexer.c" />
-    <ClCompile Include="PtxParser.c" />
+    <ClCompile Include="../driver.cpp" />
+    <ClCompile Include="../PtxLexer.c" />
+    <ClCompile Include="../PtxParser.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PtxLexer.h" />
-    <ClInclude Include="PtxParser.h" />
+    <ClInclude Include="../PtxLexer.h" />
+    <ClInclude Include="../PtxParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
