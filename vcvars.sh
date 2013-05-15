@@ -43,7 +43,7 @@ else
 	exit 1
 fi
 
-CUDA_PATH=`cygpath --dos $CUDA_PATH`
+export CUDA_PATH=`cygpath --dos $CUDA_PATH`
 
 
 #############################################################
@@ -85,7 +85,7 @@ else
 	exit 1
 fi
 
-ZLIB_PATH=`cygpath --dos $ZLIB_PATH`
+export ZLIB_PATH=`cygpath --dos $ZLIB_PATH`
 
 
 #############################################################
@@ -128,6 +128,8 @@ else
 	exit 1
 fi
 
+export ANTLR_PATH=`cygpath --dos $ANTLR_PATH`
+
 
 #############################################################
 # 
@@ -159,7 +161,6 @@ else
 	echo MSBuild.exe does not exist.
 	exit 1
 fi
-
 
 #############################################################
 # 
