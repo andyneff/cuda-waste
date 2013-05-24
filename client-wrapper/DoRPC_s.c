@@ -16,8 +16,8 @@
 */
 /* @@MIDL_FILE_HEADING(  ) */
 
-#if !defined(_M_IA64) && !defined(_M_AMD64)
-
+//#if !defined(_M_IA64) && !defined(_M_AMD64)
+#ifndef XXX
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 #if _MSC_VER >= 1200
@@ -91,9 +91,9 @@ RPC_IF_HANDLE DoRPC_v1_0_s_ifspec = (RPC_IF_HANDLE)& DoRPC___RpcServerInterface;
 extern const MIDL_STUB_DESC DoRPC_StubDesc;
 
 
-#if !defined(__RPC_WIN32__)
-#error  Invalid build platform for this stub.
-#endif
+//#if !defined(__RPC_WIN32__)
+//#error  Invalid build platform for this stub.
+//#endif
 
 #if !(TARGET_IS_NT50_OR_LATER)
 #error You need Windows 2000 or later to run this stub because it uses these features:

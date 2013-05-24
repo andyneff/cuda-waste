@@ -60,6 +60,7 @@ public:
     bool quit_on_error;
     bool do_not_call_cuda_after_sanity_check_fail;
     bool do_emulation;
+	bool do_hw_devices;
     bool do_debug_halt;
     bool init;
     static void ExitHandler();

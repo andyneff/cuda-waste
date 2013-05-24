@@ -149,6 +149,7 @@ public:
     static cudaError_t CUDARTAPI Memcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind);    
     static cudaError_t CUDARTAPI Memset(void * devPtr, int value, size_t count);          
     static cudaError_t CUDARTAPI ThreadExit();
+    static struct cudaChannelFormatDesc CUDARTAPI _cudaCreateChannelDesc(int x, int y, int z, int w, enum cudaChannelFormatKind e);
     static cudaError_t CUDARTAPI _cudaGetLastError();
     static void** CUDARTAPI _cudaRegisterFatBinary(void *fatCubin);
     static cudaError_t CUDARTAPI _cudaLaunch(const char *entry);
@@ -162,6 +163,9 @@ public:
     static cudaError_t CUDARTAPI _cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device);
     static cudaError_t CUDARTAPI _cudaGetDeviceCount(int *count);
     static cudaError_t CUDARTAPI _cudaSetDevice(int device);
+    static cudaError_t CUDARTAPI _cudaSetDeviceFlags(unsigned int flags);
+    static cudaError_t CUDARTAPI _cudaBindTexture(size_t *offset, const struct textureReference *texref, const void *devPtr,
+		const struct cudaChannelFormatDesc *desc, size_t size __dv(UINT_MAX));
     static cudaError_t CUDARTAPI _cudaStreamCreate(cudaStream_t *pStream);
     static cudaError_t CUDARTAPI _cudaStreamDestroy(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaStreamSynchronize(cudaStream_t stream);

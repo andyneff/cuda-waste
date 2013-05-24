@@ -57,7 +57,7 @@ cudaError_t EMULATOR::_cudaSetupArgument(const void *arg, size_t size, size_t of
 {
     // record argument, size, offset.
     EMULATOR::arg * a = new EMULATOR::arg();
-    assert(size == 4);
+    //assert(size == 4);
     a->argument = malloc(size);
     memcpy(const_cast<void*>(a->argument), arg, size);
     a->size = size;

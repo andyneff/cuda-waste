@@ -35,6 +35,25 @@ HMODULE ModuleFromAddress(PVOID pv)
             ? (HMODULE) mbi.AllocationBase : NULL);
 }
 
+char * __cdecl mstrrchr (
+        const char * string,
+        int ch
+        )
+{
+        char *start = (char *)string;
+
+        while (*string++)                       /* find end of string */
+                ;
+                                                /* search towards front */
+        while (--string != start && *string != (char)ch)
+                ;
+
+        if (*string == (char)ch)                /* char found ? */
+                return( (char *)string );
+
+        return(NULL);
+}
+
 bool ExtractModuleFileName(char* pszFullFileName)
 {
     bool  bResult = false;
@@ -42,7 +61,7 @@ bool ExtractModuleFileName(char* pszFullFileName)
     {
         char  *pdest;
         int   ch = '\\';
-        pdest = strrchr(pszFullFileName, ch);
+        pdest = mstrrchr(pszFullFileName, ch);
         if( pdest != NULL )
             strcpy(pszFullFileName, &pdest[1]);
         bResult = true;
@@ -444,6 +463,35 @@ BOOL HookedFunction::ReplaceInAllModules(
 }
 
 
+char * __cdecl mstrstr (
+        const char * str1,
+        const char * str2
+        )
+{
+        char *cp = (char *) str1;
+        char *s1, *s2;
+
+        if ( !*str2 )
+            return((char *)str1);
+
+        while (*cp)
+        {
+                s1 = cp;
+                s2 = (char *) str2;
+
+                while ( *s1 && *s2 && !(*s1-*s2) )
+                        s1++, s2++;
+
+                if (!*s2)
+                        return(cp);
+
+                cp++;
+        }
+
+        return(NULL);
+
+}
+
 BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew, HMODULE hmodCaller) 
 {
     BOOL bResult = FALSE;
@@ -483,9 +531,9 @@ BOOL HookedFunction::ReplaceInOneModule(PCSTR pszCalleeModName, PROC pfnCurrent,
                 break;   // Found
             if (stricmp(import_callee_mod_name, import_mod_name) == 0) 
                 break;   // Found
-            if (strstr(import_callee_mod_name, import_mod_name) != 0)
+            if (mstrstr(import_callee_mod_name, import_mod_name) != 0)
                 break;   // Found
-            if (strstr(import_mod_name, import_callee_mod_name) != 0)
+            if (mstrstr(import_mod_name, import_callee_mod_name) != 0)
                 break;   // Found
             pImportDesc++;
         }

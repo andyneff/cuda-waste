@@ -49,8 +49,7 @@ int main(int argc, char * argv[])
     int do_not_call_cuda_after_sanity_check_fail;
     bool set_device_pointer_to_first_byte_in_block = false;
     int device_pointer_to_first_byte_in_block;
-    bool set_emulator_mode = false;
-    bool set_nonemulator_mode = false;
+    bool set_emulator_mode = true;
     bool set_device = false;
     bool do_debugger = false;
 	bool set_num_threads = false;
@@ -75,7 +74,7 @@ int main(int argc, char * argv[])
             }
             else if (strcmp("-ne", *argv) == 0)
             {
-                set_nonemulator_mode = true;
+                set_emulator_mode = false;
             }
             else if (strncmp("-s=", *argv, 3) == 0)
             {
@@ -143,11 +142,11 @@ int main(int argc, char * argv[])
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
 	// Set options.
-	if (do_debugger)
-		cu->SetStartDebugger();
-
     if (set_trace_all_calls)
 		cu->SetTraceAllCalls(trace_all_calls);
+
+	if (do_debugger)
+		cu->SetStartDebugger();
 
 	if (level > 0)
 		cu->SetTrace(level);
@@ -170,10 +169,39 @@ int main(int argc, char * argv[])
     if (set_num_threads)
 		cu->SetEmulationThreads(num_threads);
 
-	cu->SetEmulationMode(set_nonemulator_mode);
+	cu->SetEmulationMode(set_emulator_mode);
+
+	if (argc == 0)
+	{
+		std::cout << "no program specified.\n";
+		return 0;
+	}
+
+
+	// combine rest of args into one string.
+	char * command;
+	int len = 0;
+	for (char ** av = argv; *av != 0; ++av)
+	{
+		len += strlen(*av) + 3;
+	}
+	command = (char *)malloc(len + 1);
+	for (char ** av = argv; *av != 0; ++av)
+	{
+		if (av == argv)
+			strcpy(command, *av);
+		else
+		{
+			strcat(command, " \"");
+			strcat(command, *av);
+			strcat(command, "\"");
+		}
+	}
+
+	std::cout << "Staring program " << command << "\n";
 
 	// Start process.
-	HANDLE hProcess = cu->StartProcess(*argv); // need to fix to add program args.
+	HANDLE hProcess = cu->StartProcess(command); // need to fix to add program args.
 
     // Wait for the program we spawned to finish.
     WaitForSingleObject( hProcess, INFINITE );

@@ -52,11 +52,12 @@ extern char * file_name_tail(char * file_name);
 
 void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
 {
+	//std::cout <<  "WRAPPING " << cuda_module_name << "\n";
     // Add Driver API hooking.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     HOOK_MANAGER * hook_manager = cu->hook_manager;
     bool complain = false;
-    if (hook_manager->HookImport(cuda_module_name, "cudaMalloc3D", (PROC)_CUDA_RUNTIME::Unimplemented, false))
+    if (hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)_CUDA_RUNTIME::Malloc, complain))
     {
         if (this->did_wrap)
             return;
@@ -108,8 +109,8 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
         hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)_CUDA_RUNTIME::_cudaSetDevice, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)_CUDA_RUNTIME::_cudaGetDevice, complain);
         hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)_CUDA_RUNTIME::_cudaSetDeviceFlags, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)_CUDA_RUNTIME::_cudaBindTexture, complain);
         hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
@@ -122,7 +123,7 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
     // (PROC)CUDA_WRAPPER::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)_CUDA_RUNTIME::_cudaCreateChannelDesc, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)_CUDA_RUNTIME::_cudaGetLastError, complain);
         hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
@@ -904,14 +905,77 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::ThreadExit()
     }
 
     cu->alloc_list.clear();
+	cudaError_t result = cudaSuccess;
     if (! cu->do_emulation)
     {
         typePtrCudaThreadExit proc = (typePtrCudaThreadExit)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::ThreadExit);
-        return (*proc)();
+		result = (*proc)();
+		if (cu->trace_all_calls)
+		{
+			(*cu->output_stream) << "cudaThreadExit returns " << result << ".\n\n";
+		}
     }
     else
-        return cudaSuccess;
+        result = cudaSuccess;
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "cudaThreadExit returns " << result << ".\n\n";
+	}
+    return result;
 }
+
+
+struct cudaChannelFormatDesc CUDARTAPI _CUDA_RUNTIME::_cudaCreateChannelDesc(int x, int y, int z, int w, enum cudaChannelFormatKind e)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaCreateChannelDesc called, " << context << ".\n\n";
+		(*cu->output_stream) << "cudaCreateChannelDesc parameters "
+			<< x
+			<< " "
+			<< y
+			<< " "
+			<< z
+			<< " "
+			<< w
+			<< " "
+			<< e
+			<< ".\n\n";
+    }
+	struct cudaChannelFormatDesc result;
+    if (! cu->do_emulation)
+    {
+        typePtrCudaCreateChannelDesc proc = (typePtrCudaCreateChannelDesc)cu->hook_manager->FindOriginal(
+				(PROC)_CUDA_RUNTIME::_cudaCreateChannelDesc);
+		result = (*proc)(x, y, z, w, e);
+    }
+    else
+	{
+		result.x = x;
+		result.y = y;
+		result.z = z;
+		result.w = w;
+		result.f = e;
+	}
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "cudaCreateChannelDesc returns "
+			<< result.x
+			<< " "
+			<< result.y
+			<< " "
+			<< result.z
+			<< " "
+			<< result.w
+			<< " "
+			<< result.f
+			<< ".\n\n";
+	}
+    return result;
+}
+
 
 cudaError_t _CUDA_RUNTIME::_cudaGetLastError()
 {
@@ -1362,6 +1426,46 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaSetDevice(int device)
         return cudaSuccess;
     }
 }
+
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaSetDeviceFlags(unsigned int flags)
+{
+    // arg contains pointer to the argument for the function call.
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "_cudaSetDeviceFlags called, " << context << ".\n\n";
+    }
+    if (! cu->do_emulation)
+    {
+        typePtrCudaSetDevice proc = (typePtrCudaSetDevice)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaSetDeviceFlags);
+        return (*proc)(flags);
+    } else
+    {
+        return cudaSuccess;
+    }
+}
+
+
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaBindTexture(size_t *offset, const struct textureReference *texref, const void *devPtr,
+													  const struct cudaChannelFormatDesc *desc, size_t size __dv(UINT_MAX))
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "_cudaBindTexture called, " << context << ".\n\n";
+    }
+    if (! cu->do_emulation)
+    {
+        typePtrCudaBindTexture proc = (typePtrCudaBindTexture)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::_cudaBindTexture);
+        return (*proc)(offset, texref, devPtr, desc, size);
+    } else
+    {
+        return cudaSuccess;
+    }
+}
+
 
 cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamCreate(cudaStream_t *pStream)
 {

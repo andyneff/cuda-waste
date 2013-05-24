@@ -20,11 +20,13 @@
 #include <stdio.h>
 
 extern char * file_name_tail(char * file_name);
+#define BUFFERSIZE 50000
+    char lpszPath[BUFFERSIZE];
 
 CALL_STACK_INFO::CALL_STACK_INFO()
 {
-#define BUFFERSIZE 50000
-    char lpszPath[BUFFERSIZE];
+#if defined(_WIN64)
+#elif defined(_WIN32)
     DWORD symOptions = SymGetOptions();
 
     symOptions |= SYMOPT_LOAD_LINES; 
@@ -36,6 +38,7 @@ CALL_STACK_INFO::CALL_STACK_INFO()
         strcpy(lpszPath, ".");
     }
     SymInitialize(GetCurrentProcess(), lpszPath, TRUE);
+#endif
 }
 
 CALL_STACK_INFO * CALL_STACK_INFO::Singleton()
@@ -51,6 +54,10 @@ CALL_STACK_INFO * CALL_STACK_INFO::Singleton()
 bool CALL_STACK_INFO::GetModuleNameFromAddress(void * address, char * lpszModule)
 {
     BOOL              ret = FALSE;
+#if defined(_WIN64)
+        // Not found :(
+        strcpy( lpszModule, "?");
+#elif defined(_WIN32)
     IMAGEHLP_MODULE   moduleInfo;
 
     ::ZeroMemory( &moduleInfo, sizeof(moduleInfo) );
@@ -64,7 +71,7 @@ bool CALL_STACK_INFO::GetModuleNameFromAddress(void * address, char * lpszModule
     else
         // Not found :(
         strcpy( lpszModule, "?");
-    
+#endif    
     return ret;
 }
 
@@ -180,6 +187,9 @@ bool CALL_STACK_INFO::GetSourceInfoFromAddress( void * address, char * lpszSourc
     strcpy(lpModuleInfo, "");
     strcpy(lpszSourceInfo, "?(?)");
 
+#if defined(_WIN64)
+#elif defined(_WIN32)
+
     ::ZeroMemory( &lineInfo, sizeof( lineInfo ) );
     lineInfo.SizeOfStruct = sizeof( lineInfo );
 
@@ -200,13 +210,17 @@ bool CALL_STACK_INFO::GetSourceInfoFromAddress( void * address, char * lpszSourc
             sprintf(lpszSourceInfo, "Module %s, Address 0x%08X", lpModuleInfo, address);
         ret = false;
     }
-    return ret;
+#endif
+	return ret;
 }
 
 char * CALL_STACK_INFO::Context(int lines)
 {
     char buffer[BUFFERSIZE];
     strcpy(buffer, "");
+
+#if defined(_WIN64)
+#elif defined(_WIN32)
 
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
@@ -255,12 +269,15 @@ char * CALL_STACK_INFO::Context(int lines)
     {
         strcat(buffer, "(no call stack available)");
     }
-
+#endif
     return strdup(buffer);
 }
 
 void * * CALL_STACK_INFO::AddressContext(int lines)
 {
+#if defined(_WIN64)
+	return 0;
+#elif defined(_WIN32)
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
     const int kMaxCallers = 62; 
@@ -269,6 +286,7 @@ void * * CALL_STACK_INFO::AddressContext(int lines)
 		callers[i] = 0;
     int count = (func)(0, kMaxCallers, callers, NULL);
 	return callers;
+#endif
 }
 
 void CALL_STACK_INFO::ClassifyAsPrefix(char * file)
@@ -280,6 +298,8 @@ void CALL_STACK_INFO::ClassifyAsPrefix(char * file)
 std::list<void*> * CALL_STACK_INFO::CallTree()
 {
     std::list<void*> * result = new std::list<void*>();
+#if defined(_WIN64)
+#elif defined(_WIN32)
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
     const int kMaxCallers = 62; 
@@ -289,5 +309,6 @@ std::list<void*> * CALL_STACK_INFO::CallTree()
     {
         result->push_back(callers[i]);
     }
-    return result;
+#endif
+	return result;
 }
