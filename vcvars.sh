@@ -1,7 +1,47 @@
 #
+echo "Setting and checking the environment for building CUDA Waste."
+echo "You can make this faster by setting up your environment manually."
+echo
 
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")	
+
+#############################################################
+#
+# Set up variables for JAVA/JAVAC.
+#
+#############################################################
+
+echo "Looking for javac.exe"
+javac &> /dev/null
+if [ "$?" -gt 1 ]
+then
+	echo javac.exe not found in path.
+	echo -n "Searching ... "
+	# well, let's try to find it.
+	p=`find "/cygdrive/c/" -iname javac.exe 2> /dev/null`
+	x=""
+	for p2 in $p
+	do
+		if [ -e "$p2" ]
+		then
+			x="$p2"
+		fi
+	done
+	if [ "$x" == "" ]
+	then
+		echo No javac.exe found. Please install JDK SE from Oracle.com.
+		exit 1
+	fi
+	# move up the tree to export the path.
+	y=${x%%/javac.exe}
+	echo "found in "$y
+	export PATH="$y:$PATH"
+	export CLASSPATH=".;"`cygpath --dos $x`
+else
+	echo javac.exe found.
+fi
+echo
 
 #############################################################
 #
@@ -9,11 +49,13 @@ IFS=$(echo -en "\n\b")
 #
 #############################################################
 
+echo "Checking whether CUDA_PATH is set."
 if [ "$CUDA_PATH" == "" ]
 then
 	echo CUDA_PATH not set.
+	echo -n "Searching for NVIDIA GPU Computing Toolkit (CUDA) ..."
 	# well, let's try to find it.
-	p=`find "/cygdrive/c/" -name 'NVIDIA GPU Computing Toolkit'`
+	p=`find "/cygdrive/c/" -name 'NVIDIA GPU Computing Toolkit' 2> /dev/null`
 	# now look for directory below that "v...", picking last one listed.
 	x=""
 	for p2 in $p/CUDA/v*
@@ -26,25 +68,28 @@ then
 	done
 	if [ "$x" == "" ]
 	then
-		echo No CUDA Toolkit found.
+		echo "No NVIDIA CUDA GPU Toolkit found. Please install the toolkit (http://www.nvidia.com/object/cuda_home_new.html)."
 		exit 1
 	fi
+	echo " found in "$x
 	export CUDA_PATH="$x"
+else
+	echo CUDA_PATH is set to "$CUDA_PATH"
 fi
 
-echo CUDA_PATH is "$CUDA_PATH"
 
 # check CUDA_PATH.
 if [ -e "$CUDA_PATH" -a -d "$CUDA_PATH" ]
 then
-	echo CUDA_PATH is set and exists.
+	echo CUDA_PATH is valid.
 else
-	echo CUDA_PATH is set, but does not exist.
+	echo CUDA_PATH is set, but does not look to be a directory that exists.
 	exit 1
 fi
 
 export CUDA_PATH=`cygpath --dos $CUDA_PATH`
 
+echo
 
 #############################################################
 # 
@@ -55,8 +100,9 @@ export CUDA_PATH=`cygpath --dos $CUDA_PATH`
 if [ "$ZLIB_PATH" == "" ]
 then
 	echo ZLIB_PATH not set.
+	echo -n "Looking ..."
 	# well, let's try to find it in downloads.
-	p=`find "$HOMEDRIVE/$HOMEPATH/Downloads" -name 'zlib.h'`
+	p=`find "$HOMEDRIVE/$HOMEPATH/Downloads" -name 'zlib.h' 2> /dev/null`
 	# now pick the last one.
 	x=""
 	for p2 in $p
@@ -71,7 +117,9 @@ then
 		echo Cannot find zlib.
 		exit 1
 	fi
-	export ZLIB_PATH="${x%%zlib.h}"
+	y="${x%%zlib.h}"
+	echo "Found in "$y
+	export ZLIB_PATH="$y"
 fi
 
 echo ZLIB_PATH is "$ZLIB_PATH"
@@ -87,6 +135,7 @@ fi
 
 export ZLIB_PATH=`cygpath --dos $ZLIB_PATH`
 
+echo
 
 #############################################################
 # 
@@ -97,8 +146,9 @@ export ZLIB_PATH=`cygpath --dos $ZLIB_PATH`
 if [ "$ANTLR_PATH" == "" ]
 then
 	echo ANTLR_PATH not set.
+	echo -n "Looking ..."
 	# well, let's try to find it.
-	p=`find . -name antlr3.h`
+	p=`find . -name antlr3.h 2> /dev/null`
 	# now pick the last one.
 	x=""
 	for j in $p
@@ -117,7 +167,9 @@ then
 		echo Cannot find Antlr3 C libraries.
 		exit 1
 	fi
+	echo "Found in "$x
 	export ANTLR_PATH="$x"
+	echo $ANTLR_PATH
 fi
 
 if [ -d $ANTLR_PATH ]
@@ -130,6 +182,11 @@ fi
 
 export ANTLR_PATH=`cygpath --dos $ANTLR_PATH`
 
+pwd=`pwd`
+export ANTLR_JAR=`cygpath --dos $pwd/ptxp/antlr-3.2.jar`
+export CLASSPATH="$ANTLR_JAR;$CLASSPATH"
+
+echo
 
 #############################################################
 # 
@@ -156,6 +213,7 @@ msbuild_dir=`cygpath --dos $msbuild_dir`
 if [ -d $msbuild_dir ]
 then
 	echo MSBuild.exe is in $msbuild_dir, and will be added to path.
+	echo
 	export PATH="$msbuild_dir:$PATH"
 else
 	echo MSBuild.exe does not exist.
@@ -173,8 +231,9 @@ fi
 if [ "$VS_PATH" == "" ]
 then
 	echo VS_PATH not set.
+	echo -n "Looking ..."
 	# well, let's try to find it.
-	p=`find "/cygdrive/c/Program Files (x86)" -name 'Microsoft Visual Studio*'`
+	p=`find "/cygdrive/c/Program Files (x86)" -name 'Microsoft Visual Studio*' 2> /dev/null`
 	# now look for directory below that "v...", picking last one listed.
 	x=""
 	for p2 in $p
@@ -189,6 +248,7 @@ then
 		echo Visual Studio not found.
 		exit 1
 	fi
+	echo "Found in "$x
 	export VS_PATH="$x"
 fi
 
@@ -204,6 +264,8 @@ else
 fi
 
 export VS_PATH=`cygpath --dos $VS_PATH`
+
+echo
 
 #############################################################
 #

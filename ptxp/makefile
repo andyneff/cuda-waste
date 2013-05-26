@@ -1,13 +1,13 @@
 java:
 	cat Ptx.g | sed 's/=C/=Java/' > newPtx.g
 	mv newPtx.g Ptx.g
-	java org.antlr.Tool Ptx.g
-	javac Doit.java PtxLexer.java PtxParser.java
+	java -jar antlr-3.2.jar Ptx.g
+	javac -classpath antlr-3.2.jar Doit.java PtxLexer.java PtxParser.java
 
 c:
 	cat Ptx.g | sed 's/=Java/=C/' > newPtx.g
 	mv newPtx.g Ptx.g
-	java org.antlr.Tool Ptx.g
+	java -jar antlr-3.2.jar Ptx.g
 	echo "Continue building in Visual Studio..."
 
 test:
