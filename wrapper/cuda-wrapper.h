@@ -70,6 +70,7 @@ public:
     char * device; // device to run.
 	int level;
 	bool do_debugger;
+	int stack_size;
     _CUDA * _cuda;
 	_CUDA_RUNTIME * _cuda_runtime;
 
@@ -93,6 +94,7 @@ public:
     static return_type __stdcall SetQuitOnError(bool b);
     static return_type __stdcall SetDoNotCallCudaAfterSanityCheckFail(bool b);
 	static void __stdcall SetEmulationThreads(int i);
+	static void __stdcall SetStackSize(int size);
     static void __stdcall SetEmulationMode(int yes_no);
 	static void __stdcall SetStartDebugger();
     static return_type CopyOptions(CUDA_WRAPPER * ptr);

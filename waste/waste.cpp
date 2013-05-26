@@ -56,6 +56,7 @@ int main(int argc, char * argv[])
 	int num_threads = 0;
     char * device;
     int level = 0;
+	int set_stack_size = 10 * 1024 * 1024;
 
     // Create a structure containing options for debug.
     while (argc > 0)
@@ -90,6 +91,10 @@ int main(int argc, char * argv[])
             {
                 set_padding_byte = true;
                 padding_byte = atoi(3+*argv);
+            }
+            else if (strncmp("-c=", *argv, 3) == 0)
+            {
+                set_stack_size = atoi(3+*argv);
             }
             else if (strncmp("--padding-byte=", *argv, 15) == 0)
             {
@@ -168,6 +173,8 @@ int main(int argc, char * argv[])
 
     if (set_num_threads)
 		cu->SetEmulationThreads(num_threads);
+
+	cu->SetStackSize(set_stack_size);
 
 	cu->SetEmulationMode(set_emulator_mode);
 

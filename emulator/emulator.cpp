@@ -31,6 +31,7 @@
 #include "types.h"
 #include "../wrapper/memdbg.h"
 #include "../waste/version.h"
+#include "../wrapper/cuda-wrapper.h"
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
@@ -66,8 +67,10 @@ extern TREE * parse(char * source);
 
 EMULATOR::MOD * EMULATOR::Parse(char * module_name, char * source)
 {
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+
     // parse all modules, regardless of module name selected.
-    if (this->trace_level > 1)
+	if (this->trace_level > 1 || cu->trace_all_calls)
     {
         std::cout << "====================================================\n";
         std::cout << "PROFILE = " << module_name << std::endl;
