@@ -52,11 +52,11 @@ int main(int argc, char * argv[])
     bool set_emulator_mode = true;
     bool set_device = false;
     bool do_debugger = false;
-	bool set_num_threads = false;
-	int num_threads = 0;
+    bool set_num_threads = false;
+    int num_threads = 0;
     char * device;
     int level = 0;
-	int set_stack_size = 10 * 1024 * 1024;
+    int set_stack_size = 10 * 1024 * 1024;
 
     // Create a structure containing options for debug.
     while (argc > 0)
@@ -133,7 +133,7 @@ int main(int argc, char * argv[])
             }
             else if (strcmp("-v", *argv) == 0 || strcmp("--non-standard-ptr", *argv) == 0)
             {
-				std::cerr << "Version " << WASTE_VERSION << "\n";
+                std::cerr << "Version " << WASTE_VERSION << "\n";
             }
             else
                 Help();
@@ -143,72 +143,73 @@ int main(int argc, char * argv[])
             break;
     }
 
-	// Create wrapper, used to collect options, and start the executable with the wrapper.
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    // Create wrapper, used to collect options, and start the executable with the wrapper.
 
-	// Set options.
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+
+    // Set options.
     if (set_trace_all_calls)
-		cu->SetTraceAllCalls(trace_all_calls);
+        cu->SetTraceAllCalls(trace_all_calls);
 
-	if (do_debugger)
-		cu->SetStartDebugger();
+    if (do_debugger)
+        cu->SetStartDebugger();
 
-	if (level > 0)
-		cu->SetTrace(level);
+    if (level > 0)
+        cu->SetTrace(level);
 
     if (set_quit_on_error)
-		cu->SetQuitOnError(quit_on_error);
+        cu->SetQuitOnError(quit_on_error);
 
     if (set_do_not_call_cuda_after_sanity_check_fail)
-		cu->SetDoNotCallCudaAfterSanityCheckFail(do_not_call_cuda_after_sanity_check_fail);
+        cu->SetDoNotCallCudaAfterSanityCheckFail(do_not_call_cuda_after_sanity_check_fail);
 
     if (set_device_pointer_to_first_byte_in_block)
-		cu->SetDevicePointerToFirstByteInBlock(device_pointer_to_first_byte_in_block);
+        cu->SetDevicePointerToFirstByteInBlock(device_pointer_to_first_byte_in_block);
 
     if (set_padding_byte)
-		cu->SetPaddingByte(padding_byte);
+        cu->SetPaddingByte(padding_byte);
 
     if (set_device)
-		cu->RunDevice(device);
+        cu->RunDevice(device);
 
     if (set_num_threads)
-		cu->SetEmulationThreads(num_threads);
+        cu->SetEmulationThreads(num_threads);
 
-	cu->SetStackSize(set_stack_size);
+    cu->SetStackSize(set_stack_size);
 
-	cu->SetEmulationMode(set_emulator_mode);
+    cu->SetEmulationMode(set_emulator_mode);
 
-	if (argc == 0)
-	{
-		std::cout << "no program specified.\n";
-		return 0;
-	}
+    if (argc == 0)
+    {
+        std::cout << "no program specified.\n";
+        return 0;
+    }
 
 
-	// combine rest of args into one string.
-	char * command;
-	int len = 0;
-	for (char ** av = argv; *av != 0; ++av)
-	{
-		len += strlen(*av) + 3;
-	}
-	command = (char *)malloc(len + 1);
-	for (char ** av = argv; *av != 0; ++av)
-	{
-		if (av == argv)
-			strcpy(command, *av);
-		else
-		{
-			strcat(command, " \"");
-			strcat(command, *av);
-			strcat(command, "\"");
-		}
-	}
+    // combine rest of args into one string.
+    char * command;
+    int len = 0;
+    for (char ** av = argv; *av != 0; ++av)
+    {
+        len += strlen(*av) + 3;
+    }
+    command = (char *)malloc(len + 1);
+    for (char ** av = argv; *av != 0; ++av)
+    {
+        if (av == argv)
+            strcpy(command, *av);
+        else
+        {
+            strcat(command, " \"");
+            strcat(command, *av);
+            strcat(command, "\"");
+        }
+    }
 
-	std::cout << "Staring program " << command << "\n";
+    std::cout << "Staring program " << command << "\n";
 
-	// Start process.
-	HANDLE hProcess = cu->StartProcess(command); // need to fix to add program args.
+    // Start process.
+    HANDLE hProcess = cu->StartProcess(command); // need to fix to add program args.
 
     // Wait for the program we spawned to finish.
     WaitForSingleObject( hProcess, INFINITE );

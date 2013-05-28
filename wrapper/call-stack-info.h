@@ -6,6 +6,7 @@ class CALL_STACK_INFO
     CALL_STACK_INFO();
     std::list<char*> ignore_files;
     int context_size;
+	static CALL_STACK_INFO * singleton;
 public:
     static CALL_STACK_INFO * Singleton();
     bool GetModuleNameFromAddress(/* in */ void * address, /* in-out */ char * lpszModule );

@@ -66,103 +66,103 @@ void _CUDA_RUNTIME::WrapModule(char * cuda_module_name)
         bool complain = false;
         // Hook cudart library.
         // Any unknown after this should be flagged.
-        hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMalloc3DArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMalloc3DArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemset3D", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemset3D, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy3D", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy3D, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy3DAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy3DAsync, complain);
         hook_manager->HookImport(cuda_module_name, "cudaMalloc", (PROC)_CUDA_RUNTIME::Malloc, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMallocHost", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMallocHost, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMallocPitch", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMallocPitch, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMallocArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMallocArray, complain);
         hook_manager->HookImport(cuda_module_name, "cudaFree", (PROC)_CUDA_RUNTIME::Free, complain);
         hook_manager->HookImport(cuda_module_name, "cudaFreeHost", (PROC)_CUDA_RUNTIME::FreeHost, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaFreeArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaFreeArray, complain);
         hook_manager->HookImport(cuda_module_name, "cudaHostAlloc", (PROC)_CUDA_RUNTIME::HostAlloc, complain);
         hook_manager->HookImport(cuda_module_name, "cudaHostGetDevicePointer", (PROC)_CUDA_RUNTIME::HostGetDevicePointer, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaHostGetFlags", (PROC)_CUDA_RUNTIME::Unimplemented_cudaHostGetFlags, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemGetInfo", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemGetInfo, complain);
         hook_manager->HookImport(cuda_module_name, "cudaMemcpy", (PROC)_CUDA_RUNTIME::Memcpy, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyToArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyFromArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyArrayToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyArrayToArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2D", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2D, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DToArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DFromArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DArrayToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DArrayToArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbol", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyToSymbol, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbol", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyFromSymbol, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyToArrayAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyFromArrayAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DToArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DToArrayAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpy2DFromArrayAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpy2DFromArrayAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyToSymbolAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyToSymbolAsync, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemcpyFromSymbolAsync", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemcpyFromSymbolAsync, complain);
         hook_manager->HookImport(cuda_module_name, "cudaMemset", (PROC)_CUDA_RUNTIME::Memset, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaMemset2D", (PROC)_CUDA_RUNTIME::Unimplemented_cudaMemset2D, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetSymbolAddress", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetSymbolAddress, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetSymbolSize", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetSymbolSize, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetDeviceCount", (PROC)_CUDA_RUNTIME::_cudaGetDeviceCount, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetDeviceProperties", (PROC)_CUDA_RUNTIME::_cudaGetDeviceProperties, complain);
         hook_manager->HookImport(cuda_module_name, "cudaChooseDevice", (PROC)_CUDA_RUNTIME::_cudaChooseDevice, complain);
         hook_manager->HookImport(cuda_module_name, "cudaSetDevice", (PROC)_CUDA_RUNTIME::_cudaSetDevice, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetDevice", (PROC)_CUDA_RUNTIME::_cudaGetDevice, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaSetValidDevices", (PROC)_CUDA_RUNTIME::Unimplemented_cudaSetValidDevices, complain);
         hook_manager->HookImport(cuda_module_name, "cudaSetDeviceFlags", (PROC)_CUDA_RUNTIME::_cudaSetDeviceFlags, complain);
         hook_manager->HookImport(cuda_module_name, "cudaBindTexture", (PROC)_CUDA_RUNTIME::_cudaBindTexture, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaBindTexture2D", (PROC)_CUDA_RUNTIME::Unimplemented_cudaBindTexture2D, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaBindTextureToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaBindTextureToArray, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaUnbindTexture", (PROC)_CUDA_RUNTIME::cudaUnbindTexture, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetTextureAlignmentOffset", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetTextureAlignmentOffset, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetTextureReference", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetTextureReference, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaBindSurfaceToArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaBindSurfaceToArray, complain);
     // not in library??????????
     // hook_manager->HookImport(cuda_module_name,
     // "cudaGetSurfaceAlignmentOffset",
     // (PROC)CUDA_WRAPPER::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetSurfaceReference", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetSurfaceReference, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetChannelDesc", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetChannelDesc, complain);
         hook_manager->HookImport(cuda_module_name, "cudaCreateChannelDesc", (PROC)_CUDA_RUNTIME::_cudaCreateChannelDesc, complain);
         hook_manager->HookImport(cuda_module_name, "cudaGetLastError", (PROC)_CUDA_RUNTIME::_cudaGetLastError, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaPeekAtLastError", (PROC)_CUDA_RUNTIME::Unimplemented_cudaPeekAtLastError, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetErrorString", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetErrorString, complain);
         hook_manager->HookImport(cuda_module_name, "cudaConfigureCall", (PROC)_CUDA_RUNTIME::_cudaConfigureCall, complain);
         hook_manager->HookImport(cuda_module_name, "cudaSetupArgument", (PROC)_CUDA_RUNTIME::_cudaSetupArgument, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaFuncSetCacheConfig", (PROC)_CUDA_RUNTIME::Unimplemented_cudaFuncSetCacheConfig, complain);
         hook_manager->HookImport(cuda_module_name, "cudaLaunch", (PROC)_CUDA_RUNTIME::_cudaLaunch, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaFuncGetAttributes", (PROC)_CUDA_RUNTIME::Unimplemented_cudaFuncGetAttributes, complain);
         hook_manager->HookImport(cuda_module_name, "cudaStreamCreate", (PROC)_CUDA_RUNTIME::_cudaStreamCreate, complain);
         hook_manager->HookImport(cuda_module_name, "cudaStreamDestroy", (PROC)_CUDA_RUNTIME::_cudaStreamDestroy, complain);
         hook_manager->HookImport(cuda_module_name, "cudaStreamSynchronize", (PROC)_CUDA_RUNTIME::_cudaStreamSynchronize, complain);
         hook_manager->HookImport(cuda_module_name, "cudaStreamQuery", (PROC)_CUDA_RUNTIME::_cudaStreamQuery, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventCreate", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventCreate, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventCreateWithFlags", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventCreateWithFlags, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventRecord", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventRecord, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventQuery", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventQuery, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventSynchronize", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventSynchronize, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventDestroy", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventDestroy, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaEventElapsedTime", (PROC)_CUDA_RUNTIME::Unimplemented_cudaEventElapsedTime, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForDevice", (PROC)_CUDA_RUNTIME::Unimplemented_cudaSetDoubleForDevice, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaSetDoubleForHost", (PROC)_CUDA_RUNTIME::Unimplemented_cudaSetDoubleForHost, complain);
         hook_manager->HookImport(cuda_module_name, "cudaThreadExit", (PROC)_CUDA_RUNTIME::ThreadExit, complain);
         hook_manager->HookImport(cuda_module_name, "cudaThreadSynchronize", (PROC)_CUDA_RUNTIME::_cudaThreadSynchronize, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaThreadSetLimit", (PROC)_CUDA_RUNTIME::Unimplemented_cudaThreadSetLimit, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaThreadGetLimit", (PROC)_CUDA_RUNTIME::Unimplemented_cudaThreadGetLimit, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaDriverGetVersion", (PROC)_CUDA_RUNTIME::Unimplemented_cudaDriverGetVersion, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaRuntimeGetVersion", (PROC)_CUDA_RUNTIME::Unimplemented_cudaRuntimeGetVersion, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGetExportTable", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGetExportTable, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnregisterResource", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsUnregisterResource, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceSetMapFlags", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsResourceSetMapFlags, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsMapResources", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsMapResources, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsUnmapResources", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsUnmapResources, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsResourceGetMappedPointer", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsResourceGetMappedPointer, complain);
+        hook_manager->HookImport(cuda_module_name, "cudaGraphicsSubResourceGetMappedArray", (PROC)_CUDA_RUNTIME::Unimplemented_cudaGraphicsSubResourceGetMappedArray, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterFatBinary", (PROC)_CUDA_RUNTIME::_cudaRegisterFatBinary, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaUnregisterFatBinary", (PROC)_CUDA_RUNTIME::_cudaUnregisterFatBinary, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterVar", (PROC)_CUDA_RUNTIME::_cudaRegisterVar, complain);
-        hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
-        hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)_CUDA_RUNTIME::Unimplemented, complain);
+        hook_manager->HookImport(cuda_module_name, "__cudaRegisterTexture", (PROC)_CUDA_RUNTIME::__cudaRegisterTexture, complain);
+        hook_manager->HookImport(cuda_module_name, "__cudaRegisterSurface", (PROC)_CUDA_RUNTIME::Unimplemented___cudaRegisterSurface, complain);
         hook_manager->HookImport(cuda_module_name, "__cudaRegisterFunction", (PROC)_CUDA_RUNTIME::_cudaRegisterFunction, complain);
     }
 }
@@ -186,6 +186,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::Malloc(void ** ptr, size_t size)
     if (cu->trace_all_calls)
     {
         (*cu->output_stream) << "cudaMalloc called, " << context << ".\n\n";
+		(*cu->output_stream).flush();
     }
             
     if (cu->IsBadPointer(ptr))
@@ -1548,6 +1549,52 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamQuery(cudaStream_t stream)
 }
 
 
+void CUDARTAPI _CUDA_RUNTIME::__cudaRegisterTexture(
+        void                    **fatCubinHandle,
+  const struct textureReference  *hostVar,
+  const void                    **deviceAddress,
+  const char                     *deviceName,
+        int                       dim,       
+        int                       norm,      
+        int                       ext        
+)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "__cudaRegisterTexture called, " << context << ".\n\n";
+    }
+    if (! cu->do_emulation)
+    {
+        typePtrCudaRegisterTexture proc = (typePtrCudaRegisterTexture)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::__cudaRegisterTexture);
+        (*proc)(fatCubinHandle, hostVar, deviceAddress, deviceName, dim, norm, ext);
+    } else
+    {
+    }
+}
+
+cudaError_t CUDARTAPI _CUDA_RUNTIME::cudaUnbindTexture(
+		const struct textureReference *texref)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "cudaUnbindTexture called, " << context << ".\n\n";
+    }
+    if (! cu->do_emulation)
+    {
+        typePtrCudaUnbindTexture proc = (typePtrCudaUnbindTexture)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::__cudaRegisterTexture);
+        return (*proc)(texref);
+    } else
+    {
+    }
+	return cudaSuccess;
+}
+
+
+
 
 void _CUDA_RUNTIME::Unimplemented()
 {
@@ -1563,47 +1610,435 @@ void _CUDA_RUNTIME::Unimplemented()
     CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
     std::list<void*> * call_stack = csi->CallTree();
     std::list<void*>::iterator it = call_stack->begin();
-    ++it;
-    ++it;
+	if (it != call_stack->end())
+		++it;
+	if (it != call_stack->end())
+		++it;
+	if (it != call_stack->end())
+		++it;
     // 2) The instruction at *it will be the instruction just after the call.
     // Assuming that the call function is relative, step back 4 bytes,
     // get the value to add to *it.  This is a jmp instruction.  Step forward
     // 2 bytes to get the address of the iat, which contains another jump
     // instruction.
-    unsigned char * p = (unsigned char *)*it;
-    // step back f bytes and get opcode.
-    unsigned char * pm5 = p - 5;
-    void * iat;
-    if (*pm5 == 0xe8)
-    {
-        // Relative call...
-        int del = *(int*)(p-4);
-        // Get call to.
-        unsigned char * jmp = p + del;
-        if (*jmp == 0xe9)
-        {
-            // Relative jmp...
-            void ** piat = 0;
-            unsigned char * jmp2 = (unsigned char *)(jmp + *(int*)(jmp + 1) + 5);
-            if (*jmp2 == 0xff && *(jmp2+1) == 0x25)
-            {
-                // Abs jmp.
-                iat = (void*)( *(int*)(jmp2 + 2));
-            }
-        }
-        else if (*jmp == 0xff && *(jmp+1) == 0x25)
-        {
-            // Abs jmp.
-            iat = (void*)( *(int*)(jmp + 2));
-        }
-        HOOK_MANAGER * hm = cu->hook_manager;
-        HookedFunction * hf = hm->FindHook(iat);
-        if (hf)
-        {
-            std::cout << "Function " << hf->Get_FuncName() << " needs to be implemented to debug this program.\n";
-        }
-    }
+	unsigned char * p = 0;
+	if (it != call_stack->end())
+	{
+		p = (unsigned char *)*it;
+		// step back f bytes and get opcode.
+		unsigned char * pm5 = p - 5;
+		void * iat = 0;
+		if (*pm5 == 0xe8)
+		{
+			// Relative call...
+			int del = *(int*)(p-4);
+			// Get call to.
+			unsigned char * jmp = p + del;
+			if (*jmp == 0xe9)
+			{
+				// Relative jmp...
+				void ** piat = 0;
+				unsigned char * jmp2 = (unsigned char *)(jmp + *(int*)(jmp + 1) + 5);
+				if (*jmp2 == 0xff && *(jmp2+1) == 0x25)
+				{
+					// Abs jmp.
+					iat = (void*)( *(int*)(jmp2 + 2));
+				}
+			}
+			else if (*jmp == 0xff && *(jmp+1) == 0x25)
+			{
+				// Abs jmp.
+				iat = (void*)( *(int*)(jmp + 2));
+			}
+			if (iat != 0)
+			{
+				HOOK_MANAGER * hm = cu->hook_manager;
+				HookedFunction * hf = hm->FindHook(iat);
+				if (hf)
+				{
+					std::cout << "Function " << hf->Get_FuncName() << " needs to be implemented to debug this program.\n";
+				}
+			}
+		}
+	}
     delete call_stack;
     exit(1);
 }
 
+void _CUDA_RUNTIME::Unimplemented_cudaMalloc3DArray()
+{
+	std::cout << "Function cudaMalloc3DArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemset3D()
+{
+	std::cout << "Function cudaMemset3D is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy3D()
+{
+	std::cout << "Function cudaMemcpy3D is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy3DAsync()
+{
+	std::cout << "Function cudaMemcpy3DAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMallocHost()
+{
+	std::cout << "Function cudaMallocHost is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMallocPitch()
+{
+	std::cout << "Function cudaMallocPitch is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMallocArray()
+{
+	std::cout << "Function cudaMallocArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaFreeArray()
+{
+	std::cout << "Function cudaFreeArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaHostGetFlags()
+{
+	std::cout << "Function cudaHostGetFlags is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemGetInfo()
+{
+	std::cout << "Function cudaMemGetInfo is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyToArray()
+{
+	std::cout << "Function cudaMemcpyToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyFromArray()
+{
+	std::cout << "Function cudaMemcpyFromArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyArrayToArray()
+{
+	std::cout << "Function cudaMemcpyArrayToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2D()
+{
+	std::cout << "Function cudaMemcpy2D is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DToArray()
+{
+	std::cout << "Function cudaMemcpy2DToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DFromArray()
+{
+	std::cout << "Function cudaMemcpy2DFromArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DArrayToArray()
+{
+	std::cout << "Function cudaMemcpy2DArrayToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyToSymbol()
+{
+	std::cout << "Function cudaMemcpyToSymbol is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyFromSymbol()
+{
+	std::cout << "Function cudaMemcpyFromSymbol is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyAsync()
+{
+	std::cout << "Function cudaMemcpyAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyToArrayAsync()
+{
+	std::cout << "Function cudaMemcpyToArrayAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyFromArrayAsync()
+{
+	std::cout << "Function cudaMemcpyFromArrayAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DAsync()
+{
+	std::cout << "Function cudaMemcpy2DAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DToArrayAsync()
+{
+	std::cout << "Function cudaMemcpy2DToArrayAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpy2DFromArrayAsync()
+{
+	std::cout << "Function cudaMemcpy2DFromArrayAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyToSymbolAsync()
+{
+	std::cout << "Function cudaMemcpyToSymbolAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemcpyFromSymbolAsync()
+{
+	std::cout << "Function cudaMemcpyFromSymbolAsync is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaMemset2D()
+{
+	std::cout << "Function cudaMemset2D is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetSymbolAddress()
+{
+	std::cout << "Function cudaGetSymbolAddress is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetSymbolSize()
+{
+	std::cout << "Function cudaGetSymbolSize is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaSetValidDevices()
+{
+	std::cout << "Function cudaSetValidDevices is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaBindTexture2D()
+{
+	std::cout << "Function cudaBindTexture2D is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaBindTextureToArray()
+{
+	std::cout << "Function cudaBindTextureToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetTextureAlignmentOffset()
+{
+	std::cout << "Function cudaGetTextureAlignmentOffset is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetTextureReference()
+{
+	std::cout << "Function cudaGetTextureReference is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaBindSurfaceToArray()
+{
+	std::cout << "Function cudaBindSurfaceToArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetSurfaceReference()
+{
+	std::cout << "Function cudaGetSurfaceReference is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetChannelDesc()
+{
+	std::cout << "Function cudaGetChannelDesc is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaPeekAtLastError()
+{
+	std::cout << "Function cudaPeekAtLastError is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetErrorString()
+{
+	std::cout << "Function cudaGetErrorString is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaFuncSetCacheConfig()
+{
+	std::cout << "Function cudaFuncSetCacheConfig is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaFuncGetAttributes()
+{
+	std::cout << "Function cudaFuncGetAttributes is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventCreate()
+{
+	std::cout << "Function cudaEventCreate is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventCreateWithFlags()
+{
+	std::cout << "Function cudaEventCreateWithFlags is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventRecord()
+{
+	std::cout << "Function cudaEventRecord is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventQuery()
+{
+	std::cout << "Function cudaEventQuery is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventSynchronize()
+{
+	std::cout << "Function cudaEventSynchronize is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventDestroy()
+{
+	std::cout << "Function cudaEventDestroy is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaEventElapsedTime()
+{
+	std::cout << "Function cudaEventElapsedTime is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaSetDoubleForDevice()
+{
+	std::cout << "Function cudaSetDoubleForDevice is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaSetDoubleForHost()
+{
+	std::cout << "Function cudaSetDoubleForHost is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaThreadSetLimit()
+{
+	std::cout << "Function cudaThreadSetLimit is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaThreadGetLimit()
+{
+	std::cout << "Function cudaThreadGetLimit is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaDriverGetVersion()
+{
+	std::cout << "Function cudaDriverGetVersion is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaRuntimeGetVersion()
+{
+	std::cout << "Function cudaRuntimeGetVersion is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGetExportTable()
+{
+	std::cout << "Function cudaGetExportTable is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsUnregisterResource()
+{
+	std::cout << "Function cudaGraphicsUnregisterResource is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsResourceSetMapFlags()
+{
+	std::cout << "Function cudaGraphicsResourceSetMapFlags is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsMapResources()
+{
+	std::cout << "Function cudaGraphicsMapResources is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsUnmapResources()
+{
+	std::cout << "Function cudaGraphicsUnmapResources is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsResourceGetMappedPointer()
+{
+	std::cout << "Function cudaGraphicsResourceGetMappedPointer is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented_cudaGraphicsSubResourceGetMappedArray()
+{
+	std::cout << "Function cudaGraphicsSubResourceGetMappedArray is not implemented.\n";
+	Unimplemented();
+}
+
+void _CUDA_RUNTIME::Unimplemented___cudaRegisterSurface()
+{
+	std::cout << "Function __cudaRegisterSurface is not implemented.\n";
+	Unimplemented();
+}

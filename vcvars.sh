@@ -19,7 +19,7 @@ then
 	echo javac.exe not found in path.
 	echo -n "Searching ... "
 	# well, let's try to find it.
-	p=`find "/cygdrive/c/" -iname javac.exe 2> /dev/null`
+	p=`find "/cygdrive/c/Program Files/Java" -iname javac.exe 2> /dev/null`
 	x=""
 	for p2 in $p
 	do

@@ -22,6 +22,11 @@
 BOOL CUDA_WRAPPER::WrapCuda()
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "WrapCuda called " << context << ".\n";
+    }
     cu->DoInit();
     HANDLE  hProcess = GetCurrentProcess();
     HMODULE hModuleArray[1024];
@@ -31,6 +36,8 @@ BOOL CUDA_WRAPPER::WrapCuda()
     if (! rv_epm)
     {
         CloseHandle(hProcess);
+    std::cerr << "WrapCuda failed\n";
+    std::cerr.flush();
         return FALSE;
     }
     nModules = cbNeeded / sizeof(hModuleArray[0]);
@@ -43,6 +50,8 @@ BOOL CUDA_WRAPPER::WrapCuda()
         if (! rv_gmfn)
         {
             CloseHandle(hProcess);
+    std::cerr << "WrapCuda failed\n";
+    std::cerr.flush();
             return FALSE;
         }
         // Regardless of which module, add wrapper API.

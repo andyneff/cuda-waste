@@ -24,6 +24,7 @@
 #include "hook-mgr.h"
 #include "lock-mgr.h"
 #include <Psapi.h>
+#include "cuda-wrapper.h"
 
 #pragma comment(lib, "imagehlp.lib")
 
@@ -83,9 +84,9 @@ HOOK_MANAGER::HOOK_MANAGER()
 
 HOOK_MANAGER * HOOK_MANAGER::Singleton()
 {
-	if (HOOK_MANAGER::singleton == 0)
-		singleton = new HOOK_MANAGER();
-	return singleton;
+    if (HOOK_MANAGER::singleton == 0)
+        singleton = new HOOK_MANAGER();
+    return singleton;
 }
 
 HOOK_MANAGER::~HOOK_MANAGER()
@@ -229,7 +230,7 @@ PROC HOOK_MANAGER::FindOriginal(PROC wrapper_function)
 
 HMODULE HOOK_MANAGER::GetModule(char * mod_name)
 {
-	return ::LoadLibraryA(mod_name);
+    return ::LoadLibraryA(mod_name);
 }
 
 BOOL HOOK_MANAGER::UnHookImport(PCSTR pszCalleeModName, PCSTR pszFuncName)
@@ -266,9 +267,9 @@ BOOL HOOK_MANAGER::AddHook(PCSTR pszCalleeModName, PCSTR pszFuncName, PROC pfnOr
             );
         bResult = sm_pHookedFunctions->AddHook(pHook);
         BOOL bResult2 = pHook->HookImport();
-		if (! bResult2)
-			sm_pHookedFunctions->RemoveHook(pHook);
-		bResult |= bResult2;
+        if (! bResult2)
+            sm_pHookedFunctions->RemoveHook(pHook);
+        bResult |= bResult2;
     }
     return bResult;
 }
@@ -409,6 +410,12 @@ PROC HookedFunction::Get_pfnOrig() const
 
 BOOL HookedFunction::HookImport()
 {
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "Hooking " << this->m_szFuncName << " " << this->m_pfnOrig << " " << this->m_pfnHook << "\n";
+    }
     m_bHooked = DoHook(TRUE, m_pfnOrig, m_pfnHook);
     return m_bHooked;
 }
@@ -718,18 +725,18 @@ HookedFunction* HookedFunctions::GetHookedFunction(PCSTR pszCalleeModName, PCSTR
     if (strlen(szFuncName) > 0)
     {
         char szKey[MAX_PATH];
-		// This routine could be called during an exit thread event.  Calling the C runtime causes the buffers
-		// to be reallocated, and get possibly confused, because the C runtime should be killed on exit thread.
-		// Just use normal concatenation instead of sprintf.
+        // This routine could be called during an exit thread event.  Calling the C runtime causes the buffers
+        // to be reallocated, and get possibly confused, because the C runtime should be killed on exit thread.
+        // Just use normal concatenation instead of sprintf.
         //sprintf(
         //    szKey, 
         //    "<%s><%s>", 
         //    pszCalleeModName,
         //    szFuncName
         //    );
-		strcpy(szKey, pszCalleeModName);
-		strcat(szKey, "|");
-		strcat(szKey, szFuncName);
+        strcpy(szKey, pszCalleeModName);
+        strcat(szKey, "|");
+        strcat(szKey, szFuncName);
         HookedFunctions::const_iterator citr = find( szKey );
         if ( citr != end() )
             pHook = citr->second;
@@ -751,9 +758,9 @@ BOOL HookedFunctions::AddHook(HookedFunction* pHook)
         //    pHook->Get_CalleeModName(),
         //    pHook->Get_FuncName()
         //    );
-		strcpy(szKey, pHook->Get_CalleeModName());
-		strcat(szKey, "|");
-		strcat(szKey, pHook->Get_FuncName());
+        strcpy(szKey, pHook->Get_CalleeModName());
+        strcat(szKey, "|");
+        strcat(szKey, pHook->Get_FuncName());
 
         HookedFunctions::iterator lb = lower_bound(szKey);
         insert( lb, value_type(szKey, pHook) );
@@ -776,9 +783,9 @@ BOOL HookedFunctions::RemoveHook(HookedFunction* pHook)
             //    pHook->Get_CalleeModName(),
             //    pHook->Get_FuncName()
             //    );
-			strcpy(szKey, pHook->Get_CalleeModName());
-			strcat(szKey, "|");
-			strcat(szKey, pHook->Get_FuncName());
+            strcpy(szKey, pHook->Get_CalleeModName());
+            strcat(szKey, "|");
+            strcat(szKey, pHook->Get_FuncName());
 
             HookedFunctions::iterator itr = find(szKey);
             if (itr != end())

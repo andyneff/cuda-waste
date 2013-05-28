@@ -48,13 +48,19 @@ CUDA_WRAPPER * CUDA_WRAPPER::singleton;
 typedef cudaError_t (*cfunc)(void **devPtr, size_t size);
 cudaError_t (*ptrCudaMalloc)(void **devPtr, size_t size);
 
+int mgetpid()
+{
+    return 0;
+}
+
+
 
 CUDA_WRAPPER * CUDA_WRAPPER::Singleton()
 {
-    if (singleton)
-        return singleton;
-    singleton = new CUDA_WRAPPER();
-    return singleton;
+    if (CUDA_WRAPPER::singleton)
+        return CUDA_WRAPPER::singleton;
+    CUDA_WRAPPER::singleton = new CUDA_WRAPPER();
+    return CUDA_WRAPPER::singleton;
 }
 
 char * file_name_tail(char * file_name)
@@ -86,15 +92,15 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     cu->trace_all_calls = false;
     cu->quit_on_error = false;
     cu->do_emulation = true;
-	cu->do_debugger = false;
+    cu->do_debugger = false;
     cu->global_context = 0;
     cu->hook_manager = 0;
     cu->do_debug_halt = false;
-	cu->level = 0;
-	cu->device = 0; // nothing specific.
+    cu->level = 0;
+    cu->device = 0; // nothing specific.
     cu->_cuda = new _CUDA();
     cu->_cuda_runtime = new _CUDA_RUNTIME();
-	cu->stack_size = 10 * 1024 * 1024;
+    cu->stack_size = 10 * 1024 * 1024;
 }
 
 
@@ -127,7 +133,7 @@ void CUDA_WRAPPER::DoInit()
     LoadLibraryA("nvcuda.dll");
     // Make sure no sneaky way to access nvcuda.
     hm->HookSystemFuncs();
-	//cu->StartListener();
+    //cu->StartListener();
 }
 
 bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
@@ -491,9 +497,15 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
     return OK;
 }
 
+
 void CUDA_WRAPPER::SetTrace(int lev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "SetTrace called, " << context << ".\n";
+    }
     EMULATOR * emulator = EMULATOR::Singleton();
     cu->level = lev;
     emulator->SetTrace(lev);
@@ -576,7 +588,7 @@ void AddBytes(byte * code, byte a, byte b, byte c, byte d, byte e)
 }
 
 void AddBytes(byte * code, byte a, byte b, byte c, byte d,
-			  byte e, byte f)
+              byte e, byte f)
 {
     code[size++] = a;
     code[size++] = b;
@@ -587,7 +599,7 @@ void AddBytes(byte * code, byte a, byte b, byte c, byte d,
 }
 
 void AddBytes(byte * code, byte a, byte b, byte c, byte d,
-			  byte e, byte f, byte g)
+              byte e, byte f, byte g)
 {
     code[size++] = a;
     code[size++] = b;
@@ -599,7 +611,7 @@ void AddBytes(byte * code, byte a, byte b, byte c, byte d,
 }
 
 void AddBytes(byte * code, byte a, byte b, byte c, byte d,
-			  byte e, byte f, byte g, byte h)
+              byte e, byte f, byte g, byte h)
 {
     code[size++] = a;
     code[size++] = b;
@@ -651,7 +663,7 @@ void ErrorExit(char * lpszFunction)
         (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR)); 
 
     std::cerr << lpszFunction << " failed " << dw << " " << lpMsgBuf << "\n"; 
-	wprintf(L"Formatted message: %s\n", lpMsgBuf);
+    wprintf(L"Formatted message: %s\n", lpMsgBuf);
 
     LocalFree(lpMsgBuf);
     LocalFree(lpDisplayBuf);
@@ -662,22 +674,22 @@ LPVOID gpa = 0;
 
 HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
 {
-	ll = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");;
-	gpa = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "GetProcAddress");
+    ll = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");;
+    gpa = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "GetProcAddress");
 
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
-	int trace_all_calls = cu->trace_all_calls;
-	int padding_size = cu->padding_size;
-	int padding_byte = cu->padding_byte;
-	int quit_on_error = cu->quit_on_error;
-	int do_not_call_cuda_after_sanity_check_fail = cu->do_not_call_cuda_after_sanity_check_fail;
-	int device_pointer_to_first_byte_in_block = cu->device_pointer_to_first_byte_in_block;
-	bool set_emulator_mode = cu->do_emulation;
-	bool do_debugger = cu->do_debugger;
-	bool set_num_threads = false;
-	int num_threads = 0;
-	char * device = cu->device;
+    int trace_all_calls = cu->trace_all_calls;
+    int padding_size = cu->padding_size;
+    int padding_byte = cu->padding_byte;
+    int quit_on_error = cu->quit_on_error;
+    int do_not_call_cuda_after_sanity_check_fail = cu->do_not_call_cuda_after_sanity_check_fail;
+    int device_pointer_to_first_byte_in_block = cu->device_pointer_to_first_byte_in_block;
+    bool set_emulator_mode = cu->do_emulation;
+    bool do_debugger = cu->do_debugger;
+    bool set_num_threads = false;
+    int num_threads = 0;
+    char * device = cu->device;
     int level = cu->level;
 
     ///////////////// Dll injection step 1 //////////////////////////////////////////////////
@@ -692,99 +704,99 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
     {
         std::cerr << "Program '" << command << "' could not be found.\n"
             << "Check the spelling and path for your program.\n";
-		return 0;
+        return 0;
     }
     DWORD process = processInformation.dwProcessId;
     HANDLE mainthread = processInformation.hThread;
     
-	for (;;) {
+    for (;;) {
 
-		///////////////// Dll injection step 2 //////////////////////////////////////////////////
-		// Adjust privileges of host process.
-		HANDLE hToken;
-		LUID luid;
-		TOKEN_PRIVILEGES tkprivs;
-		BOOL bRet;
-		ZeroMemory(&tkprivs, sizeof(TOKEN_PRIVILEGES));
-		BOOL rv_op = OpenProcessToken(GetCurrentProcess(), (TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY), &hToken);
-		if (rv_op == 0)
-		{
-			std::cerr << "Program '" << command << "' could not be found.\n"
-				<< "Check the spelling and path for your program.\n";
-			break;
-		}
-		BOOL rv_lp = LookupPrivilegeValue(0, SE_DEBUG_NAME, &luid);
-		if (rv_lp == 0)
-		{
-			ErrorExit("LookupPrivilegeValue");
-			break;
-		}
-		tkprivs.PrivilegeCount = 1;
-		tkprivs.Privileges[0].Luid = luid;
-		tkprivs.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-		BOOL rv_atp = AdjustTokenPrivileges(hToken, 0, &tkprivs, sizeof(TOKEN_PRIVILEGES), 0, 0);
-		if (rv_atp == 0)
-		{
-			ErrorExit("AdjustTokenPrivileges");
-			break;
-		}
-		CloseHandle(hToken);
+        ///////////////// Dll injection step 2 //////////////////////////////////////////////////
+        // Adjust privileges of host process.
+        HANDLE hToken;
+        LUID luid;
+        TOKEN_PRIVILEGES tkprivs;
+        BOOL bRet;
+        ZeroMemory(&tkprivs, sizeof(TOKEN_PRIVILEGES));
+        BOOL rv_op = OpenProcessToken(GetCurrentProcess(), (TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY), &hToken);
+        if (rv_op == 0)
+        {
+            std::cerr << "Program '" << command << "' could not be found.\n"
+                << "Check the spelling and path for your program.\n";
+            break;
+        }
+        BOOL rv_lp = LookupPrivilegeValue(0, SE_DEBUG_NAME, &luid);
+        if (rv_lp == 0)
+        {
+            ErrorExit("LookupPrivilegeValue");
+            break;
+        }
+        tkprivs.PrivilegeCount = 1;
+        tkprivs.Privileges[0].Luid = luid;
+        tkprivs.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+        BOOL rv_atp = AdjustTokenPrivileges(hToken, 0, &tkprivs, sizeof(TOKEN_PRIVILEGES), 0, 0);
+        if (rv_atp == 0)
+        {
+            ErrorExit("AdjustTokenPrivileges");
+            break;
+        }
+        CloseHandle(hToken);
 
-		///////////////// Dll injection step 3 //////////////////////////////////////////////////
-		// Get Eip register.  This is the address of the first byte of code
-		// for the main program.  We'll jump to this in code we'll set up
-		// later.
-		CONTEXT context = { 0 };
-		DWORD originalEip;
+        ///////////////// Dll injection step 3 //////////////////////////////////////////////////
+        // Get Eip register.  This is the address of the first byte of code
+        // for the main program.  We'll jump to this in code we'll set up
+        // later.
+        CONTEXT context = { 0 };
+        DWORD originalEip;
 
-		context.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
-		//| CONTEXT_CONTROL | CONTEXT_DEBUG_REGISTERS;
-		BOOL rv_gtc1 = GetThreadContext(mainthread, &context);
-		if (rv_gtc1 == 0)
-		{
-			ErrorExit("GetThreadContext");
-			break;
-		}
+        context.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
+        //| CONTEXT_CONTROL | CONTEXT_DEBUG_REGISTERS;
+        BOOL rv_gtc1 = GetThreadContext(mainthread, &context);
+        if (rv_gtc1 == 0)
+        {
+            ErrorExit("GetThreadContext");
+            break;
+        }
 #if defined(_WIN64)
-		originalEip = context.Rip;
+        originalEip = context.Rip;
 #elif defined(_WIN32)
-		originalEip = context.Eip;
+        originalEip = context.Eip;
 #endif
-		///////////////// Dll injection step 4 //////////////////////////////////////////////////
-		// Allocate some chunks of memory in client and write strings to that.
-		HANDLE hProcess;
-		SIZE_T written;
-		hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process);
+        ///////////////// Dll injection step 4 //////////////////////////////////////////////////
+        // Allocate some chunks of memory in client and write strings to that.
+        HANDLE hProcess;
+        SIZE_T written;
+        hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process);
 
-		LPVOID pszCMD;
-		pszCMD = VirtualAllocEx(hProcess, NULL, strlen(str_cuda_wrapper) + 1, MEM_COMMIT, PAGE_READWRITE);
-		BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszCMD, (LPVOID) str_cuda_wrapper, strlen(str_cuda_wrapper) + 1, &written);
-		if (rv_wpw1 == 0)
-		{
-			std::cerr << "WriteProcessMemory failed.\n";
-			break;
-		}
+        LPVOID pszCMD;
+        pszCMD = VirtualAllocEx(hProcess, NULL, strlen(str_cuda_wrapper) + 1, MEM_COMMIT, PAGE_READWRITE);
+        BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszCMD, (LPVOID) str_cuda_wrapper, strlen(str_cuda_wrapper) + 1, &written);
+        if (rv_wpw1 == 0)
+        {
+            std::cerr << "WriteProcessMemory failed.\n";
+            break;
+        }
 
-		LPVOID stack_page;
-		int stack_page_size = 10 * 1024 * 1024;
-		stack_page = VirtualAllocEx(hProcess, NULL, stack_page_size, MEM_COMMIT, PAGE_READWRITE);
-		if (stack_page == 0)
-		{
-			std::cerr << "VirtualAllocEx failed.\n";
-			break;
-		}
+        LPVOID stack_page;
+        int stack_page_size = 10 * 1024 * 1024;
+        stack_page = VirtualAllocEx(hProcess, NULL, stack_page_size, MEM_COMMIT, PAGE_READWRITE);
+        if (stack_page == 0)
+        {
+            std::cerr << "VirtualAllocEx failed.\n";
+            break;
+        }
 
-		///////////////// Dll injection step 4 //////////////////////////////////////////////////
-		// Set up memory containing instructions to load the Cuda memory debug dll
-		// then continue execution of the debugged program.  In addition,
-		// set up instructions to set options for the dll.
-	#define MAXCODESIZE 5000
-		LPVOID codePtr = VirtualAllocEx(hProcess, NULL, MAXCODESIZE, MEM_COMMIT, PAGE_READWRITE);
-		if (codePtr == 0)
-		{
-			std::cerr << "VirtualAllocEx failed.\n";
-			break;
-		}
+        ///////////////// Dll injection step 4 //////////////////////////////////////////////////
+        // Set up memory containing instructions to load the Cuda memory debug dll
+        // then continue execution of the debugged program.  In addition,
+        // set up instructions to set options for the dll.
+    #define MAXCODESIZE 5000
+        LPVOID codePtr = VirtualAllocEx(hProcess, NULL, MAXCODESIZE, MEM_COMMIT, PAGE_READWRITE);
+        if (codePtr == 0)
+        {
+            std::cerr << "VirtualAllocEx failed.\n";
+            break;
+        }
 
 #define JmpRelativeAddress( ptr, offset, addr ) *((LPVOID *) &ptr[offset]) = (LPVOID)( (DWORD_PTR)(addr) - (DWORD_PTR)(ptr) - (DWORD_PTR) (offset + 4) )
 #define JmpAbsoluteAddress( ptr, offset, addr ) *((LPVOID *) &ptr[offset]) = (LPVOID)( (DWORD_PTR)(addr) )
@@ -792,801 +804,801 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
 
 #define xxx(offset, addr, base, add_subtract ) (LPVOID)( (DWORD_PTR)(addr) - (DWORD_PTR)(base) - (DWORD_PTR) (offset + 4 + add_subtract) )
 
-		// NOTE: ALL THESE MACHINE CODE INSTRUCTIONS COME STRAIGHT OUT OF THE INTEL AND/OR AMD X86 X64 INSTRUCTION MANUALS.
-		// http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html
+        // NOTE: ALL THESE MACHINE CODE INSTRUCTIONS COME STRAIGHT OUT OF THE INTEL AND/OR AMD X86 X64 INSTRUCTION MANUALS.
+        // http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html
 
-		/* UNREAL! NO INLINE ASM IN VISUAL STUDIO FOR X64 TARGETS!
-		__asm {
-		}
-		*/
+        /* UNREAL! NO INLINE ASM IN VISUAL STUDIO FOR X64 TARGETS!
+        __asm {
+        }
+        */
 
-		// Let's pad the memory with NOP's since the Visual Studio disassembler freaks out very easily
-		// with invalid opcodes in previous memory.
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
-		AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        // Let's pad the memory with NOP's since the Visual Studio disassembler freaks out very easily
+        // with invalid opcodes in previous memory.
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
+        AddBytes(code, 0x90, 0x90, 0x90, 0x90);
 
-		// Add code to load wrapper.dll library.
-		{
+        // Add code to load wrapper.dll library.
+        {
 #if defined(_WIN64)
-			// int 3
-			//AddBytes(code, 0xcc);
+            // int 3
+            //AddBytes(code, 0xcc);
 
-			BOOL rv_wpw_stack = WriteProcessMemory(hProcess, stack_page, (LPVOID) context.Rsp,
-				sizeof(context.Rsp), &written);
+            BOOL rv_wpw_stack = WriteProcessMemory(hProcess, stack_page, (LPVOID) context.Rsp,
+                sizeof(context.Rsp), &written);
 
-			// Set new stack.
-			// mov rsp, 0x000000000 (immediate, with value of wrapper.dll string address)
-			AddBytes(code, 0x48, 0xbc);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, (DWORD)stack_page + stack_page_size - 1024); // -1024 for slack.
+            // Set new stack.
+            // mov rsp, 0x000000000 (immediate, with value of wrapper.dll string address)
+            AddBytes(code, 0x48, 0xbc);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, (DWORD)stack_page + stack_page_size - 1024); // -1024 for slack.
 
-			/*
-			0000000000090021 50                   push        rax  
-			0000000000090022 51                   push        rcx  
-			0000000000090023 52                   push        rdx  
-			0000000000090024 53                   push        rbx  
-			0000000000090025 54                   push        rsp  
-			0000000000090026 55                   push        rbp  
-			0000000000090027 56                   push        rsi  
-			0000000000090028 57                   push        rdi  
-			*/
-			AddBytes(code, 0x50);
-			AddBytes(code, 0x51);
-			AddBytes(code, 0x52);
-			AddBytes(code, 0x53);
-			AddBytes(code, 0x54);
-			AddBytes(code, 0x55);
-			AddBytes(code, 0x56);
-			AddBytes(code, 0x57);
+            /*
+            0000000000090021 50                   push        rax  
+            0000000000090022 51                   push        rcx  
+            0000000000090023 52                   push        rdx  
+            0000000000090024 53                   push        rbx  
+            0000000000090025 54                   push        rsp  
+            0000000000090026 55                   push        rbp  
+            0000000000090027 56                   push        rsi  
+            0000000000090028 57                   push        rdi  
+            */
+            AddBytes(code, 0x50);
+            AddBytes(code, 0x51);
+            AddBytes(code, 0x52);
+            AddBytes(code, 0x53);
+            AddBytes(code, 0x54);
+            AddBytes(code, 0x55);
+            AddBytes(code, 0x56);
+            AddBytes(code, 0x57);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// mov rac, 0x000000000 (immediate, with value of wrapper.dll string address)
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // mov rac, 0x000000000 (immediate, with value of wrapper.dll string address)
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Check top word, see if zero.
-			LPVOID bb = xxx(size-4, ll_page, codePtr, 0);
+            // Check top word, see if zero.
+            LPVOID bb = xxx(size-4, ll_page, codePtr, 0);
 #elif defined(_WIN32)
-			// int 3
-			//AddBytes(code, 0xcc);
+            // int 3
+            AddBytes(code, 0xcc);
 
-			AddBytes(code, 0x9c);   // pushfd
-			AddBytes(code, 0x60);   // pushad
+            AddBytes(code, 0x9c);   // pushfd
+            AddBytes(code, 0x60);   // pushad
 
-			// Inject cuda-memory-debug wrapper library target (load the library into this program).
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);   // patch with actual string address.
+            // Inject cuda-memory-debug wrapper library target (load the library into this program).
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);   // patch with actual string address.
     
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0); // patch with actual function address.
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0); // patch with actual function address.
 #endif
-		}
+        }
 
-		// Add code to set trace level.
-		{
+        // Add code to set trace level.
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?SetTrace@CUDA_WRAPPER@@SAXH@Z";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?SetTrace@CUDA_WRAPPER@@SAXH@Z";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of SetTrace string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of SetTrace string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of SetTrace on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of SetTrace on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Load level for SetTrace()
-			//  mov         cl,level  
-			AddBytes(code, 0xB1, level);
-			
-			// Call SetTrace
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Load level for SetTrace()
+            //  mov         cl,level  
+            AddBytes(code, 0xB1, level);
+            
+            // Call SetTrace
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_trace, strlen(str_set_trace) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTrace@CUDA_WRAPPER@@SAXH@Z"
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x68, 0, 0, 0, 0); // push level
-			JmpAbsoluteAddress(code, size-4, level);
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_trace, strlen(str_set_trace) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTrace@CUDA_WRAPPER@@SAXH@Z"
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x68, 0, 0, 0, 0); // push level
+            JmpAbsoluteAddress(code, size-4, level);
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
+        }
 
-		// Add code to invoke StartDebugger.
-		if (do_debugger)
-		{
+        // Add code to invoke StartDebugger.
+        if (do_debugger)
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?StartDebugger@CUDA_WRAPPER@@SAXXZ";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?StartDebugger@CUDA_WRAPPER@@SAXXZ";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of StartDebugger string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of StartDebugger string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of StartDebugger on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of StartDebugger on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Call StartDebugger
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Call StartDebugger
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_start_debugger, strlen(str_start_debugger) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_start_debugger
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_start_debugger, strlen(str_start_debugger) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_start_debugger
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
+        }
 
-		// Add code to call WrapCuda
-		{
+        // Add code to call WrapCuda
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?WrapCuda@CUDA_WRAPPER@@SAHXZ";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?WrapCuda@CUDA_WRAPPER@@SAHXZ";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of WrapCuda string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of WrapCuda string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of WrapCuda on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of WrapCuda on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Call WrapCuda
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Call WrapCuda
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_wrap_cuda, strlen(str_wrap_cuda) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_wrap_cuda
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_padding_size) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_wrap_cuda, strlen(str_wrap_cuda) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_wrap_cuda
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
+        }
 
-		if (trace_all_calls)
-		{
+        if (trace_all_calls)
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?SetTraceAllCalls@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?SetTraceAllCalls@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of "?SetTraceAllCalls@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z" string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of "?SetTraceAllCalls@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z" string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of SetTraceAllCalls on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of SetTraceAllCalls on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Load 1 for SetTraceAllCalls()
-			//  mov         cl,1  
-			AddBytes(code, 0xB1, trace_all_calls);
-			
-			// Call SetTraceAllCalls
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Load 1 for SetTraceAllCalls()
+            //  mov         cl,1  
+            AddBytes(code, 0xB1, trace_all_calls);
+            
+            // Call SetTraceAllCalls
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_trace_all_calls, strlen(str_trace_all_calls) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTraceAllCalls@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z"
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x6a, trace_all_calls); // push 1 or 0
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_trace_all_calls) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_trace_all_calls, strlen(str_trace_all_calls) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "?SetTraceAllCalls@CUDA_WRAPPER@@SG?AW4return_type@1@_N@Z"
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x6a, trace_all_calls); // push 1 or 0
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
+        }
 
-		if (quit_on_error)
-		{
+        if (quit_on_error)
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?SetQuitOnError@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?SetQuitOnError@CUDA_WRAPPER@@SA?AW4return_type@1@_N@Z";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of SetQuitOnError string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of SetQuitOnError string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of SetQuitOnError on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of SetQuitOnError on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Load quit_on_error for SetQuitOnError()
-			//  mov         cl,quit_on_error  
-			AddBytes(code, 0xB1, quit_on_error);
-			
-			// Call SetTraceAllCalls
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Load quit_on_error for SetQuitOnError()
+            //  mov         cl,quit_on_error  
+            AddBytes(code, 0xB1, quit_on_error);
+            
+            // Call SetTraceAllCalls
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_quit_on_error) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_quit_on_error, strlen(str_quit_on_error) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_quit_on_error
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x6a, quit_on_error); // push 1 or 0
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_quit_on_error) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_quit_on_error, strlen(str_quit_on_error) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_quit_on_error
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x6a, quit_on_error); // push 1 or 0
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
-		if (0)
-		{
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_do_not_call_cuda_after_sanity_check_fail, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_do_not_call_cuda_after_sanity_check_fail
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x6a, do_not_call_cuda_after_sanity_check_fail); // push 1 or 0
-			AddBytes(code, 0xff, 0xd0); // call eax
-		}
-		if (0)
-		{
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_device_pointer_to_first_byte_in_block) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_device_pointer_to_first_byte_in_block, strlen(str_device_pointer_to_first_byte_in_block) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_device_pointer_to_first_byte_in_block
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x6a, device_pointer_to_first_byte_in_block); // push 1 or 0
-			AddBytes(code, 0xff, 0xd0); // call eax
-		}
-		if (0)
-		{
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_pading_byte) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_pading_byte, strlen(str_pading_byte) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_pading_byte
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x68, 0, 0, 0, 0); // push padding_byte
-			JmpAbsoluteAddress(code, size-4, padding_byte);
-			AddBytes(code, 0xff, 0xd0); // call eax
-		}
-		if (device)
-		{
-			LPVOID pszDevice = VirtualAllocEx(hProcess, NULL, strlen(device) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "RunDevice"
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x68, 0, 0, 0, 0); // push device
-			JmpAbsoluteAddress(code, size-4, pszDevice);
-			AddBytes(code, 0xff, 0xd0); // call eax
-		}
-		if (0)
-		{
-			LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_num_threads) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_num_threads, strlen(str_set_num_threads) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push SetEmulationThreads
-			JmpAbsoluteAddress(code, size-4, pszSetFunc);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x68, 0, 0, 0, 0); // push level
-			JmpAbsoluteAddress(code, size-4, num_threads);
-			AddBytes(code, 0xff, 0xd0); // call eax
-		}
-		// Force emulation or no emulation.
-		if (set_emulator_mode)
-		{
+        }
+        if (0)
+        {
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_do_not_call_cuda_after_sanity_check_fail, strlen(str_do_not_call_cuda_after_sanity_check_fail) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_do_not_call_cuda_after_sanity_check_fail
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x6a, do_not_call_cuda_after_sanity_check_fail); // push 1 or 0
+            AddBytes(code, 0xff, 0xd0); // call eax
+        }
+        if (0)
+        {
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_device_pointer_to_first_byte_in_block) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_device_pointer_to_first_byte_in_block, strlen(str_device_pointer_to_first_byte_in_block) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_device_pointer_to_first_byte_in_block
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x6a, device_pointer_to_first_byte_in_block); // push 1 or 0
+            AddBytes(code, 0xff, 0xd0); // call eax
+        }
+        if (0)
+        {
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_pading_byte) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_pading_byte, strlen(str_pading_byte) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push str_pading_byte
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x68, 0, 0, 0, 0); // push padding_byte
+            JmpAbsoluteAddress(code, size-4, padding_byte);
+            AddBytes(code, 0xff, 0xd0); // call eax
+        }
+        if (device)
+        {
+            LPVOID pszDevice = VirtualAllocEx(hProcess, NULL, strlen(device) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw1 = WriteProcessMemory(hProcess, pszDevice, (LPVOID) device, strlen(device) + 1, &written);
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_device) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_device, strlen(str_set_device) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "RunDevice"
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x68, 0, 0, 0, 0); // push device
+            JmpAbsoluteAddress(code, size-4, pszDevice);
+            AddBytes(code, 0xff, 0xd0); // call eax
+        }
+        if (0)
+        {
+            LPVOID pszSetFunc = VirtualAllocEx(hProcess, NULL, strlen(str_set_num_threads) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, pszSetFunc, (LPVOID) str_set_num_threads, strlen(str_set_num_threads) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push SetEmulationThreads
+            JmpAbsoluteAddress(code, size-4, pszSetFunc);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x68, 0, 0, 0, 0); // push level
+            JmpAbsoluteAddress(code, size-4, num_threads);
+            AddBytes(code, 0xff, 0xd0); // call eax
+        }
+        // Force emulation or no emulation.
+        if (set_emulator_mode)
+        {
 #if defined(_WIN64)
-			// Make some temporary space.
-			// 	sub  rsp,0xC0h  
-			AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
+            // Make some temporary space.
+            //  sub  rsp,0xC0h  
+            AddBytes(code, 0x48, 0x81, 0xEC, 0xC0, 0x00, 0x00, 0x00);
 
-			// Allocate memory for the address of LoadLibraryA.
-			LPVOID ll_page;
-			int ll_page_size = sizeof(ll_page);
-			ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
-			if (ll_page == 0)
-			{
-				std::cerr << "VirtualAllocEx failed.\n";
-				break;
-			}
-			BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
-			if (rv_wpw2 == 0)
-			{
-				std::cerr << "WriteProcessMemory failed.\n";
-				break;
-			}
+            // Allocate memory for the address of LoadLibraryA.
+            LPVOID ll_page;
+            int ll_page_size = sizeof(ll_page);
+            ll_page = VirtualAllocEx(hProcess, NULL, ll_page_size, MEM_COMMIT, PAGE_READWRITE);
+            if (ll_page == 0)
+            {
+                std::cerr << "VirtualAllocEx failed.\n";
+                break;
+            }
+            BOOL rv_wpw2 = WriteProcessMemory(hProcess, ll_page, (LPVOID) &ll, sizeof(LPVOID), &written);
+            if (rv_wpw2 == 0)
+            {
+                std::cerr << "WriteProcessMemory failed.\n";
+                break;
+            }
 
-			// Load address of "wrapper.dll" string into rac.
-			// mov rac, 0x000000000
-			AddBytes(code, 0x48, 0xb9);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pszCMD);
+            // Load address of "wrapper.dll" string into rac.
+            // mov rac, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pszCMD);
 
-			// Call loadlibrarya.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
+            // Call loadlibrarya.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, ll_page, codePtr, 0);
 
-			// Store the returned HMODULE on the stack.
-			//  mov   qword ptr [rsp+8h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
+            // Store the returned HMODULE on the stack.
+            //  mov   qword ptr [rsp+8h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x08);
 
-			char * str = "?SetEmulationMode@CUDA_WRAPPER@@SAXH@Z";
-			LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
+            char * str = "?SetEmulationMode@CUDA_WRAPPER@@SAXH@Z";
+            LPVOID pstr = VirtualAllocEx(hProcess, NULL, strlen(str) + 1, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
-			// Load address of SetEmulationMode string into rad.
-			// mov rad, 0x000000000
-			AddBytes(code, 0x48, 0xba);
-			AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-			JmpAbsoluteAddress(code, size-8, pstr);
+            // Load address of SetEmulationMode string into rad.
+            // mov rad, 0x000000000
+            AddBytes(code, 0x48, 0xba);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, pstr);
 
-			// Get the returned HMODULE on the stack.
-			//  mov  rcx,qword ptr [rsp+8h]  
-			AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
+            // Get the returned HMODULE on the stack.
+            //  mov  rcx,qword ptr [rsp+8h]  
+            AddBytes(code, 0x48, 0x8b, 0x4c, 0x24, 0x08);
 
-			// Allocate memory for the address of GetProcAddress.
-			LPVOID gpa_page;
-			int gpa_page_size = sizeof(gpa_page);
-			gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
-			WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
+            // Allocate memory for the address of GetProcAddress.
+            LPVOID gpa_page;
+            int gpa_page_size = sizeof(gpa_page);
+            gpa_page = VirtualAllocEx(hProcess, NULL, gpa_page_size, MEM_COMMIT, PAGE_READWRITE);
+            WriteProcessMemory(hProcess, gpa_page, (LPVOID) &gpa, sizeof(LPVOID), &written);
 
-			// Call GetProcAddress.
-			AddBytes(code, 0xff, 0x15);
-			AddBytes(code, 0, 0, 0, 0);
-			JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
+            // Call GetProcAddress.
+            AddBytes(code, 0xff, 0x15);
+            AddBytes(code, 0, 0, 0, 0);
+            JmpRelativeAddressBased(code, size-4, gpa_page, codePtr, 0);
 
-			// Store the address of SetEmulationMode on the stack.
-			//  mov   qword ptr [rsp+10h],rax
-			AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
+            // Store the address of SetEmulationMode on the stack.
+            //  mov   qword ptr [rsp+10h],rax
+            AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
-			// Load set_emulator_mode for SetEmulationMode()
-			//  mov         cl,set_emulator_mode  
-			AddBytes(code, 0xB1, set_emulator_mode);
-			
-			// Call SetEmulationMode
-			// call        qword ptr [rsp+10h] 
-			AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
+            // Load set_emulator_mode for SetEmulationMode()
+            //  mov         cl,set_emulator_mode  
+            AddBytes(code, 0xB1, set_emulator_mode);
+            
+            // Call SetEmulationMode
+            // call        qword ptr [rsp+10h] 
+            AddBytes(code, 0xFF, 0x94, 0x24, 0x10, 0x00, 0x00, 0x00); 
 
-			// Remove temporary space.
-			// 	add rsp,0C0h
-			AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
+            // Remove temporary space.
+            //  add rsp,0C0h
+            AddBytes(code, 0x48, 0x81, 0xC4, 0xC0, 0x00, 0x00, 0x00);
 
 #elif defined(_WIN32)
-			LPVOID psz = VirtualAllocEx(hProcess, NULL, strlen(str_set_emulator_mode) + 1, MEM_COMMIT, PAGE_READWRITE);
-			BOOL rv_wpw = WriteProcessMemory(hProcess, psz, (LPVOID) str_set_emulator_mode, strlen(str_set_emulator_mode) + 1, &written);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
-			JmpAbsoluteAddress(code, size-4, pszCMD);
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
-			JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
-			AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetEmulatorMode"
-			JmpAbsoluteAddress(code, size-4, psz);
-			AddBytes(code, 0x50); // push eax
-			AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
-			JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
-			AddBytes(code, 0x68, 0, 0, 0, 0); // push true/false (as 1 or 0 int).
-			JmpAbsoluteAddress(code, size-1, set_emulator_mode);
-			AddBytes(code, 0xff, 0xd0); // call eax
+            LPVOID psz = VirtualAllocEx(hProcess, NULL, strlen(str_set_emulator_mode) + 1, MEM_COMMIT, PAGE_READWRITE);
+            BOOL rv_wpw = WriteProcessMemory(hProcess, psz, (LPVOID) str_set_emulator_mode, strlen(str_set_emulator_mode) + 1, &written);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "wrapper.dll"
+            JmpAbsoluteAddress(code, size-4, pszCMD);
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call LoadLibraryA
+            JmpRelativeAddressBased(code, size-4, &LoadLibraryA, codePtr, 0);
+            AddBytes(code, 0x68, 0x00, 0x00, 0x00, 0x00); // push "SetEmulatorMode"
+            JmpAbsoluteAddress(code, size-4, psz);
+            AddBytes(code, 0x50); // push eax
+            AddBytes(code, 0xE8, 0x00, 0x00, 0x00, 0x00); // call GetProcAddress
+            JmpRelativeAddressBased(code, size-4, &GetProcAddress, codePtr, 0);
+            AddBytes(code, 0x68, 0, 0, 0, 0); // push true/false (as 1 or 0 int).
+            JmpAbsoluteAddress(code, size-1, set_emulator_mode);
+            AddBytes(code, 0xff, 0xd0); // call eax
 #endif
-		}
+        }
 
 #if defined(_WIN64)
 
-		AddBytes(code, 0x5f, 0x5e, 0x5d, 0x5c, 0x5b, 0x5a, 0x59, 0x58);
+        AddBytes(code, 0x5f, 0x5e, 0x5d, 0x5c, 0x5b, 0x5a, 0x59, 0x58);
 
-		// Restore old stack.
-		// mov rsp, 0x000000000 (immediate, with value of wrapper.dll string address)
-		AddBytes(code, 0x48, 0xbc);
-		AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
-		JmpAbsoluteAddress(code, size-8, (DWORD)context.Rsp);
+        // Restore old stack.
+        // mov rsp, 0x000000000 (immediate, with value of wrapper.dll string address)
+        AddBytes(code, 0x48, 0xbc);
+        AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+        JmpAbsoluteAddress(code, size-8, (DWORD)context.Rsp);
 
 #elif defined(_WIN32)
-		// Restore registers and jump to original program entry.  Address
-		// patched below.
-		AddBytes(code, 0x61); // popad
-		AddBytes(code, 0x9D); // popfd
+        // Restore registers and jump to original program entry.  Address
+        // patched below.
+        AddBytes(code, 0x61); // popad
+        AddBytes(code, 0x9D); // popfd
 #endif
-	
-		AddBytes(code, 0xE9, 0x00, 0x00, 0x00, 0x00); // jmp originalEip
-		// original EIP address
-		JmpRelativeAddressBased(code, size-4, originalEip, codePtr, 0);
-		// Write assembly code
+    
+        AddBytes(code, 0xE9, 0x00, 0x00, 0x00, 0x00); // jmp originalEip
+        // original EIP address
+        JmpRelativeAddressBased(code, size-4, originalEip, codePtr, 0);
+        // Write assembly code
 
-		SIZE_T count;
-		if (!WriteProcessMemory(hProcess, codePtr, (LPVOID) code,
-			size, &count)) return FALSE;
+        SIZE_T count;
+        if (!WriteProcessMemory(hProcess, codePtr, (LPVOID) code,
+            size, &count)) return FALSE;
 
-		DWORD oldProtect;
-		if(!VirtualProtectEx(hProcess, codePtr, size, PAGE_EXECUTE, &oldProtect)) {
-			printf("Error: %d\n", GetLastError());
-		}
+        DWORD oldProtect;
+        if(!VirtualProtectEx(hProcess, codePtr, size, PAGE_EXECUTE, &oldProtect)) {
+            printf("Error: %d\n", GetLastError());
+        }
 
-		///////////////// Dll injection step 5 //////////////////////////////////////////////////
-		// Start up thread at the code we created.
+        ///////////////// Dll injection step 5 //////////////////////////////////////////////////
+        // Start up thread at the code we created.
 #if defined(_WIN64)
-		context.Rip = (DWORD) codePtr + 32;
+        context.Rip = (DWORD) codePtr + 32;
 #elif defined(_WIN32)
-		context.Eip = (DWORD) codePtr + 32;
+        context.Eip = (DWORD) codePtr + 32;
 #endif
-		SetThreadContext(mainthread, &context);
-		ResumeThread(mainthread);
+        SetThreadContext(mainthread, &context);
+        ResumeThread(mainthread);
 
-		return hProcess;
+        return hProcess;
 
-	}
+    }
 
-	return 0;
+    return 0;
 }

@@ -111,6 +111,7 @@ public:
     typedef cudaError_t (CUDARTAPI *ptrCudaStreamDestroy)(cudaStream_t stream);
     typedef cudaError_t (CUDARTAPI *ptrCudaStreamSynchronize)(cudaStream_t stream);
     typedef cudaError_t (CUDARTAPI *ptrCudaStreamQuery)(cudaStream_t stream);
+
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventCreate)(cudaEvent_t *event);
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventCreateWithFlags)(cudaEvent_t *event, int flags);
     typedef cudaError_t (CUDARTAPI *typePtrCudaEventRecord)(cudaEvent_t event, cudaStream_t stream __dv(0));
@@ -140,7 +141,15 @@ public:
     typedef void (CUDARTAPI *typePtrCudaRegisterTexture)(void **fatCubinHandle, const struct textureReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int norm, int ext);
     typedef void (CUDARTAPI *typePtrCudaRegisterSurface)(void **fatCubinHandle, const struct surfaceReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int ext);
     typedef void (CUDARTAPI *typePtrCudaRegisterFunction)(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize);
-    
+
+	typedef void (CUDARTAPI *typePtrCudaRegisterTexture)(void                    **fatCubinHandle,
+		  const struct textureReference  *hostVar,
+		  const void                    **deviceAddress,
+		  const char                     *deviceName,
+				int                       dim,       
+				int                       norm,      
+				int                       ext     );
+
     static cudaError_t CUDARTAPI Malloc(void ** ptr, size_t size);
     static cudaError_t CUDARTAPI Free(void *);
     static cudaError_t CUDARTAPI HostAlloc(void ** ptr, size_t size, unsigned int flags);
@@ -171,6 +180,78 @@ public:
     static cudaError_t CUDARTAPI _cudaStreamSynchronize(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaStreamQuery(cudaStream_t stream);
     static cudaError_t CUDARTAPI _cudaChooseDevice(int *device, const struct cudaDeviceProp *prop);
+	static void CUDARTAPI __cudaRegisterTexture(
+				void                    **fatCubinHandle,
+		  const struct textureReference  *hostVar,
+		  const void                    **deviceAddress,
+		  const char                     *deviceName,
+				int                       dim,       
+				int                       norm,      
+				int                       ext        
+		);
+	static cudaError_t CUDARTAPI cudaUnbindTexture(const struct textureReference *texref);
     static void Unimplemented();
-
+	static void Unimplemented_cudaMalloc3DArray();
+	static void Unimplemented_cudaMemset3D();
+	static void Unimplemented_cudaMemcpy3D();
+	static void Unimplemented_cudaMemcpy3DAsync();
+	static void Unimplemented_cudaMallocHost();
+	static void Unimplemented_cudaMallocPitch();
+	static void Unimplemented_cudaMallocArray();
+	static void Unimplemented_cudaFreeArray();
+	static void Unimplemented_cudaHostGetFlags();
+	static void Unimplemented_cudaMemGetInfo();
+	static void Unimplemented_cudaMemcpyToArray();
+	static void Unimplemented_cudaMemcpyFromArray();
+	static void Unimplemented_cudaMemcpyArrayToArray();
+	static void Unimplemented_cudaMemcpy2D();
+	static void Unimplemented_cudaMemcpy2DToArray();
+	static void Unimplemented_cudaMemcpy2DFromArray();
+	static void Unimplemented_cudaMemcpy2DArrayToArray();
+	static void Unimplemented_cudaMemcpyToSymbol();
+	static void Unimplemented_cudaMemcpyFromSymbol();
+	static void Unimplemented_cudaMemcpyAsync();
+	static void Unimplemented_cudaMemcpyToArrayAsync();
+	static void Unimplemented_cudaMemcpyFromArrayAsync();
+	static void Unimplemented_cudaMemcpy2DAsync();
+	static void Unimplemented_cudaMemcpy2DToArrayAsync();
+	static void Unimplemented_cudaMemcpy2DFromArrayAsync();
+	static void Unimplemented_cudaMemcpyToSymbolAsync();
+	static void Unimplemented_cudaMemcpyFromSymbolAsync();
+	static void Unimplemented_cudaMemset2D();
+	static void Unimplemented_cudaGetSymbolAddress();
+	static void Unimplemented_cudaGetSymbolSize();
+	static void Unimplemented_cudaSetValidDevices();
+	static void Unimplemented_cudaBindTexture2D();
+	static void Unimplemented_cudaBindTextureToArray();
+	static void Unimplemented_cudaGetTextureAlignmentOffset();
+	static void Unimplemented_cudaGetTextureReference();
+	static void Unimplemented_cudaBindSurfaceToArray();
+	static void Unimplemented_cudaGetSurfaceReference();
+	static void Unimplemented_cudaGetChannelDesc();
+	static void Unimplemented_cudaPeekAtLastError();
+	static void Unimplemented_cudaGetErrorString();
+	static void Unimplemented_cudaFuncSetCacheConfig();
+	static void Unimplemented_cudaFuncGetAttributes();
+	static void Unimplemented_cudaEventCreate();
+	static void Unimplemented_cudaEventCreateWithFlags();
+	static void Unimplemented_cudaEventRecord();
+	static void Unimplemented_cudaEventQuery();
+	static void Unimplemented_cudaEventSynchronize();
+	static void Unimplemented_cudaEventDestroy();
+	static void Unimplemented_cudaEventElapsedTime();
+	static void Unimplemented_cudaSetDoubleForDevice();
+	static void Unimplemented_cudaSetDoubleForHost();
+	static void Unimplemented_cudaThreadSetLimit();
+	static void Unimplemented_cudaThreadGetLimit();
+	static void Unimplemented_cudaDriverGetVersion();
+	static void Unimplemented_cudaRuntimeGetVersion();
+	static void Unimplemented_cudaGetExportTable();
+	static void Unimplemented_cudaGraphicsUnregisterResource();
+	static void Unimplemented_cudaGraphicsResourceSetMapFlags();
+	static void Unimplemented_cudaGraphicsMapResources();
+	static void Unimplemented_cudaGraphicsUnmapResources();
+	static void Unimplemented_cudaGraphicsResourceGetMappedPointer();
+	static void Unimplemented_cudaGraphicsSubResourceGetMappedArray();
+	static void Unimplemented___cudaRegisterSurface();
 };

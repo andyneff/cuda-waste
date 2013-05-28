@@ -18,10 +18,12 @@
 #include <windows.h> // required by stupid dbghelp.h -- it doesn't know its own dependencies...
 #include <dbghelp.h>
 #include <stdio.h>
+#include <iostream>
 
 extern char * file_name_tail(char * file_name);
 #define BUFFERSIZE 50000
-    char lpszPath[BUFFERSIZE];
+char lpszPath[BUFFERSIZE];
+char lpszPath_shorten[BUFFERSIZE];
 
 CALL_STACK_INFO::CALL_STACK_INFO()
 {
@@ -30,27 +32,59 @@ CALL_STACK_INFO::CALL_STACK_INFO()
     symOptions |= SYMOPT_LOAD_LINES; 
     symOptions &= ~SYMOPT_UNDNAME;
     SymSetOptions( symOptions );
-
     if (! GetEnvironmentVariableA( "PATH", lpszPath, BUFFERSIZE))
     {
         strcpy(lpszPath, ".");
     }
-    SymInitialize(GetCurrentProcess(), lpszPath, TRUE);
+    // SymInitialize crashes on large search paths. FUCKING AWEINSPIRING!
+    // Shorten the fucker.
+    int num = 6;
+    int stop = 0;
+    int len = strlen(lpszPath);
+    // Scan ahead for semicolon.
+    for (int i = 0; i < len; ++i)
+    {
+        char c = lpszPath[i];
+        if (c == ';')
+            num--;
+        if (num == 0)
+        {
+            stop = i;
+            break;
+        }
+        if (c == 0)
+        {
+            stop = i;
+            break;
+        }
+    }
+    for (int i = 0; i < stop; ++i)
+    {
+        char c = lpszPath[i];
+        lpszPath_shorten[i] = lpszPath[i];
+    }
+    lpszPath_shorten[stop] = 0;
+    HANDLE h = GetCurrentProcess();
+    SymInitialize(h, lpszPath_shorten, TRUE);
 }
+CALL_STACK_INFO * CALL_STACK_INFO::singleton = 0;
 
 CALL_STACK_INFO * CALL_STACK_INFO::Singleton()
 {
-    static CALL_STACK_INFO * singleton = 0;
-    if (singleton)
-        return singleton;
-    singleton = new CALL_STACK_INFO();
-    return singleton;
+    CALL_STACK_INFO * s = CALL_STACK_INFO::singleton;
+    if (s)
+        return s;
+    s = new CALL_STACK_INFO();
+    CALL_STACK_INFO::singleton = s;
+    return s;
 }
 
 // Find the module name from the ip
 bool CALL_STACK_INFO::GetModuleNameFromAddress(void * address, char * lpszModule)
 {
     BOOL              ret = FALSE;
+        strcpy( lpszModule, "?");
+    return false;
 //#if defined(_WIN64)
         // Not found :(
         strcpy( lpszModule, "?");
@@ -172,20 +206,18 @@ bool CALL_STACK_INFO::GetFunctionInfoFromAddresses( void * fnAddress, void * sta
 // The output format is: "sourcefile(linenumber)" or
 //                       "modulename!address" or
 //                       "address"
+    char          lpszFileName[BUFFERSIZE];
+    char          lpModuleInfo[BUFFERSIZE];
 bool CALL_STACK_INFO::GetSourceInfoFromAddress( void * address, char * lpszSourceInfo, char * full_file_name )
 {
+    return false;
     bool           ret = FALSE;
     IMAGEHLP_LINE  lineInfo;
     DWORD          dwDisp;
-    char          lpszFileName[BUFFERSIZE];
-    char          lpModuleInfo[BUFFERSIZE];
 
     strcpy(lpszFileName, "");
     strcpy(lpModuleInfo, "");
     strcpy(lpszSourceInfo, "?(?)");
-
-//#if defined(_WIN64)
-//#elif defined(_WIN32)
 
     ::ZeroMemory( &lineInfo, sizeof( lineInfo ) );
     lineInfo.SizeOfStruct = sizeof( lineInfo );
@@ -207,18 +239,15 @@ bool CALL_STACK_INFO::GetSourceInfoFromAddress( void * address, char * lpszSourc
             sprintf(lpszSourceInfo, "Module %s, Address 0x%08X", lpModuleInfo, address);
         ret = false;
     }
-//#endif
-	return ret;
+    return ret;
 }
+
+char buffer2[BUFFERSIZE];
+char context_string[BUFFERSIZE];
+char full_file_name[BUFFERSIZE];
 
 char * CALL_STACK_INFO::Context(int lines)
 {
-    char buffer[BUFFERSIZE];
-    strcpy(buffer, "");
-
-//#if defined(_WIN64)
-//#elif defined(_WIN32)
-
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
     const int kMaxCallers = 62; 
@@ -228,8 +257,6 @@ char * CALL_STACK_INFO::Context(int lines)
     int times = 0;
     for(int i = 0; i < count; i++)
     {
-        char context_string[BUFFERSIZE];
-        char full_file_name[BUFFERSIZE];
         GetSourceInfoFromAddress(callers[i], context_string, full_file_name);
         if (! seen_prefix)
         {
@@ -254,36 +281,31 @@ char * CALL_STACK_INFO::Context(int lines)
         if (seen_prefix)
         {
             if (times)
-                strcat(buffer, "\n");
-            strcat(buffer, context_string);
+                strcat(buffer2, "\n");
+            strcat(buffer2, context_string);
             times++;
             if (times == lines)
                 break;
         }
     }
 
-    if (strcmp("", buffer) == 0)
+    if (strcmp("", buffer2) == 0)
     {
-        strcat(buffer, "(no call stack available)");
+        strcat(buffer2, "(no call stack available)");
     }
-//#endif
-    return strdup(buffer);
+    return strdup(buffer2);
 }
 
 void * * CALL_STACK_INFO::AddressContext(int lines)
 {
-//#if defined(_WIN64)
-////	return 0;
-//#elif defined(_WIN32)
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
     const int kMaxCallers = 62; 
     static void* callers[kMaxCallers];
-	for (int i = 0; i < kMaxCallers; ++i)
-		callers[i] = 0;
+    for (int i = 0; i < kMaxCallers; ++i)
+        callers[i] = 0;
     int count = (func)(0, kMaxCallers, callers, NULL);
-	return callers;
-//#endif
+    return callers;
 }
 
 void CALL_STACK_INFO::ClassifyAsPrefix(char * file)
@@ -295,8 +317,6 @@ void CALL_STACK_INFO::ClassifyAsPrefix(char * file)
 std::list<void*> * CALL_STACK_INFO::CallTree()
 {
     std::list<void*> * result = new std::list<void*>();
-//#if defined(_WIN64)
-//#elif defined(_WIN32)
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));
     const int kMaxCallers = 62; 
@@ -306,6 +326,5 @@ std::list<void*> * CALL_STACK_INFO::CallTree()
     {
         result->push_back(callers[i]);
     }
-//#endif
-	return result;
+    return result;
 }
