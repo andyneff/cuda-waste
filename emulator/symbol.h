@@ -15,7 +15,7 @@
 */
 #pragma once
 
-class EMULATOR;
+class EMULATED_DEVICE;
 
 class SYMBOL
 {
@@ -29,7 +29,7 @@ public:
     bool array;
     size_t total_size;
     int storage_class;
-    EMULATOR * emulator;
+    EMULATED_DEVICE * emulator;
     ~SYMBOL();
 };
 

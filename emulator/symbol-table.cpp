@@ -27,7 +27,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "symbol.h"
-#include "emulator.h"
+#include "emulated-device.h"
 #include "symbol-table.h"
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
@@ -193,7 +193,7 @@ void SYMBOL_TABLE::CheckCachedPvalues()
     {
         SYMBOL * s = it->second;
         if (s->cache != s->pvalue)
-            throw new EMULATOR::EMU_ERROR("Cache overwrite!");
+            throw new EMULATED_DEVICE::EMU_ERROR("Cache overwrite!");
     }
     if (this->parent_block_symbol_table)
         this->parent_block_symbol_table->CheckCachedPvalues();

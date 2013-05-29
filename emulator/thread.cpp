@@ -16,7 +16,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -28,7 +28,7 @@
 #include "symbol-table.h"
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
-THREAD::THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root)
+THREAD::THREAD(EMULATED_DEVICE * emulator, TREE * block, int pc, SYMBOL_TABLE * root)
 {
     this->emulator = emulator;
     this->block = block;
@@ -338,7 +338,7 @@ int THREAD::Dispatch(TREE * inst)
             default:
                 assert(false);
         }
-    } catch (EMULATOR::EMU_ERROR * u)
+    } catch (EMULATED_DEVICE::EMU_ERROR * u)
     {
         std::cout << u->ShowReason() << "\n";
         delete u;

@@ -15,6 +15,7 @@
 */
 #pragma once
 
+#include <list>
 #include <vector>
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
@@ -35,6 +36,9 @@ class HOOK_MANAGER;
 #endif
 
 
+class DEVICE;
+
+
 class DLL_API CUDA_WRAPPER
 {
 public:
@@ -52,7 +56,7 @@ private:
 public:
     HOOK_MANAGER * hook_manager;
 
-        size_t padding_size;
+    size_t padding_size;
     unsigned char padding_byte;
     bool device_pointer_to_first_byte_in_block;
     std::ostream * output_stream;

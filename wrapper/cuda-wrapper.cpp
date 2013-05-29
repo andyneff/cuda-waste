@@ -37,7 +37,7 @@
 #include "call-stack-info.h"
 #include "hook-mgr.h"
 #include <__cudaFatFormat.h>
-#include "../emulator/emulator.h"
+#include "../emulator/emulated-device.h"
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 #include "../waste/version.h"
@@ -486,7 +486,7 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
     char * context = cu->Context();
 
     cu->device = device;
-    EMULATOR * emulator = EMULATOR::Singleton();
+    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
     emulator->RunDevice(device);
 
     if (cu->trace_all_calls)
@@ -506,7 +506,7 @@ void CUDA_WRAPPER::SetTrace(int lev)
     {
         (*cu->output_stream) << "SetTrace called, " << context << ".\n";
     }
-    EMULATOR * emulator = EMULATOR::Singleton();
+    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
     cu->level = lev;
     emulator->SetTrace(lev);
 }
@@ -538,7 +538,7 @@ void CUDA_WRAPPER::SetEmulationThreads(int i)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
-    EMULATOR * emulator = EMULATOR::Singleton();
+    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
     emulator->SetEmulationThreads(i);
 }
 

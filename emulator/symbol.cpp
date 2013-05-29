@@ -24,7 +24,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "symbol.h"
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 

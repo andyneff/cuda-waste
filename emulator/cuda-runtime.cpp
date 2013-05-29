@@ -16,7 +16,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -30,7 +30,7 @@
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cudaError_t EMULATOR::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream)
+cudaError_t EMULATED_DEVICE::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream)
 {
     this->ConfigureBlock(blockDim);
     this->ConfigureGrid(gridDim);
@@ -39,12 +39,12 @@ cudaError_t EMULATOR::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sha
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaThreadSynchronize()
+cudaError_t EMULATED_DEVICE::_cudaThreadSynchronize()
 {
     return cudaSuccess;
 }
 
-void ** EMULATOR::_cudaRegisterFunction(void * fun, char * name)
+void ** EMULATED_DEVICE::_cudaRegisterFunction(void * fun, char * name)
 {
     std::pair<void*, char*> i;
     i.first = fun;
@@ -53,10 +53,10 @@ void ** EMULATOR::_cudaRegisterFunction(void * fun, char * name)
     return 0;
 }
 
-cudaError_t EMULATOR::_cudaSetupArgument(const void *arg, size_t size, size_t offset)
+cudaError_t EMULATED_DEVICE::_cudaSetupArgument(const void *arg, size_t size, size_t offset)
 {
     // record argument, size, offset.
-    EMULATOR::arg * a = new EMULATOR::arg();
+    EMULATED_DEVICE::arg * a = new EMULATED_DEVICE::arg();
     //assert(size == 4);
     a->argument = malloc(size);
     memcpy(const_cast<void*>(a->argument), arg, size);
@@ -66,7 +66,7 @@ cudaError_t EMULATOR::_cudaSetupArgument(const void *arg, size_t size, size_t of
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaLaunch(const char *hostfun)
+cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
 {
     // Given the address of the kernel function in the host, determine the name of the kernel
     // it is calling in PTX, using information provided by RegisterFatBinary and _cudaRegisterFunction.
@@ -93,13 +93,13 @@ cudaError_t EMULATOR::_cudaLaunch(const char *hostfun)
 	return cudaErrorInvalidDeviceFunction;
 }
 
-cudaError_t EMULATOR::_cudaGetDevice(int * device)
+cudaError_t EMULATED_DEVICE::_cudaGetDevice(int * device)
 {
     *device = 0;
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device)
+cudaError_t EMULATED_DEVICE::_cudaGetDeviceProperties(struct cudaDeviceProp *prop, int device)
 {
     if (strcmp(this->device, "compute_20") == 0)
     {
@@ -156,25 +156,25 @@ cudaError_t EMULATOR::_cudaGetDeviceProperties(struct cudaDeviceProp *prop, int 
 }
 
 
-cudaError_t EMULATOR::_cudaStreamCreate(cudaStream_t *pStream)
+cudaError_t EMULATED_DEVICE::_cudaStreamCreate(cudaStream_t *pStream)
 {
     // nop
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaStreamDestroy(cudaStream_t stream)
+cudaError_t EMULATED_DEVICE::_cudaStreamDestroy(cudaStream_t stream)
 {
     // nop
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaStreamSynchronize(cudaStream_t stream)
+cudaError_t EMULATED_DEVICE::_cudaStreamSynchronize(cudaStream_t stream)
 {
     // nop
     return cudaSuccess;
 }
 
-cudaError_t EMULATOR::_cudaStreamQuery(cudaStream_t stream)
+cudaError_t EMULATED_DEVICE::_cudaStreamQuery(cudaStream_t stream)
 {
     // nop
     return cudaSuccess;

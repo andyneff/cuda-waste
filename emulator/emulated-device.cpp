@@ -16,7 +16,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -35,19 +35,19 @@
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
-EMULATOR * EMULATOR::singleton;
+EMULATED_DEVICE * EMULATED_DEVICE::singleton;
 
-CRIT_SECTION EMULATOR::sm_CritSec;
+CRIT_SECTION EMULATED_DEVICE::sm_CritSec;
 
-EMULATOR * EMULATOR::Singleton()
+EMULATED_DEVICE * EMULATED_DEVICE::Singleton()
 {
     if (singleton)
         return singleton;
-    singleton = new EMULATOR();
+    singleton = new EMULATED_DEVICE();
     return singleton;
 }
 
-EMULATOR::EMULATOR()
+EMULATED_DEVICE::EMULATED_DEVICE()
 {
     this->device = "compute_20";
     this->string_table = new STRING_TABLE();
@@ -57,7 +57,7 @@ EMULATOR::EMULATOR()
     this->max_instruction_thread = 100;
 }
 
-void EMULATOR::SetTrace(int level)
+void EMULATED_DEVICE::SetTrace(int level)
 {
     this->trace_level = level;
 }
@@ -65,7 +65,7 @@ void EMULATOR::SetTrace(int level)
 // In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
-EMULATOR::MOD * EMULATOR::Parse(char * module_name, char * source)
+EMULATED_DEVICE::MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
@@ -93,7 +93,7 @@ EMULATOR::MOD * EMULATOR::Parse(char * module_name, char * source)
     return module;
 }
 
-void EMULATOR::Extract_From_Tree(EMULATOR::MOD * module, TREE * node)
+void EMULATED_DEVICE::Extract_From_Tree(EMULATED_DEVICE::MOD * module, TREE * node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->GetType() == TREE_ENTRY)
@@ -122,7 +122,7 @@ void EMULATOR::Extract_From_Tree(EMULATOR::MOD * module, TREE * node)
     }
 } 
 
-void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
+void EMULATED_DEVICE::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
 {
     // Create a new symbol table block for the parameters.
     //SYMBOL_TABLE * symbol_table = this->root;
@@ -159,7 +159,7 @@ void EMULATOR::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
     }
 }
 
-size_t EMULATOR::Sizeof(int type)
+size_t EMULATED_DEVICE::Sizeof(int type)
 {
     switch (type)
     {
@@ -184,20 +184,20 @@ size_t EMULATOR::Sizeof(int type)
     return 0;
 }
 
-int EMULATOR::GetSize(TREE * tree_par_register)
+int EMULATED_DEVICE::GetSize(TREE * tree_par_register)
 {
     TREE * c = (TREE *)tree_par_register->GetChild(0);
     return (int)atoi(c->GetText());
 }
 
-SYMBOL_TABLE * EMULATOR::PushSymbolTable(SYMBOL_TABLE * parent)
+SYMBOL_TABLE * EMULATED_DEVICE::PushSymbolTable(SYMBOL_TABLE * parent)
 {
     SYMBOL_TABLE * symbol_table = new SYMBOL_TABLE();
     symbol_table->parent_block_symbol_table = parent;
     return symbol_table;
 }
 
-void EMULATOR::SetupVariables(SYMBOL_TABLE * symbol_table, TREE * code, int * desired_storage_classes)
+void EMULATED_DEVICE::SetupVariables(SYMBOL_TABLE * symbol_table, TREE * code, int * desired_storage_classes)
 {
     // Go through the block and create entries in the symbol table for each variable declared.
     for (int i = 0; i < code->GetChildCount(); ++i)
@@ -210,7 +210,7 @@ void EMULATOR::SetupVariables(SYMBOL_TABLE * symbol_table, TREE * code, int * de
     }
 }
 
-void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size)
+void EMULATED_DEVICE::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size)
 {
     // Got variable declaration.
     // Now extract info out of variable declaration.
@@ -441,7 +441,7 @@ void EMULATOR::SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * des
 }
 
 
-void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
+void EMULATED_DEVICE::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
 {
     // Scan ahead and find all labels.  Enter them into the symbol
     // table.
@@ -468,7 +468,7 @@ void EMULATOR::SetupGotos(SYMBOL_TABLE * symbol_table, TREE * code)
     }
 }
 
-void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
+void EMULATED_DEVICE::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
 {
     // No need to resolve anything if no shared memory to set up.
     if (this->conf.sharedMem == 0)
@@ -500,27 +500,27 @@ void EMULATOR::SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code)
     }
 }
 
-void EMULATOR::ConfigureGrid(dim3 dim)
+void EMULATED_DEVICE::ConfigureGrid(dim3 dim)
 {
     this->conf.gridDim = dim;
 }
 
-void EMULATOR::ConfigureBlock(dim3 dim)
+void EMULATED_DEVICE::ConfigureBlock(dim3 dim)
 {
     this->conf.blockDim = dim;
 }
 
-void EMULATOR::ConfigureSharedMemory(size_t sharedMem)
+void EMULATED_DEVICE::ConfigureSharedMemory(size_t sharedMem)
 {
     conf.sharedMem = sharedMem;
 }
 
-void EMULATOR::ConfigureStream(cudaStream_t stream)
+void EMULATED_DEVICE::ConfigureStream(cudaStream_t stream)
 {
     conf.stream = stream;
 }
 
-void EMULATOR::ResetArgs()
+void EMULATED_DEVICE::ResetArgs()
 {
     for (std::list<arg*>::iterator ia = this->arguments.begin();
         ia != this->arguments.end(); ++ia)
@@ -531,7 +531,7 @@ void EMULATOR::ResetArgs()
 }
 
 
-void EMULATOR::Execute(TREE * entry)
+void EMULATED_DEVICE::Execute(TREE * entry)
 {
 //    _CrtMemState state_begin;
 //    _CrtMemCheckpoint(&state_begin);
@@ -589,7 +589,7 @@ void EMULATOR::Execute(TREE * entry)
     this->ResetArgs();
 }
 
-bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
+bool EMULATED_DEVICE::CodeRequiresThreadSynchronization(TREE * code)
 {
     bool result = false;
     for (int i = 0; i < (int)code->GetChildCount(); ++i)
@@ -620,7 +620,7 @@ bool EMULATOR::CodeRequiresThreadSynchronization(TREE * code)
     return false;
 }
 
-void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
+void EMULATED_DEVICE::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
     std::queue<THREAD *> wait_queue;
     std::queue<THREAD *> active_queue;
@@ -783,7 +783,7 @@ void EMULATOR::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_sy
     this->extern_memory_buffer = 0;
 }
 
-void EMULATOR::PrintName(TREE * inst)
+void EMULATED_DEVICE::PrintName(TREE * inst)
 {
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
@@ -791,7 +791,7 @@ void EMULATOR::PrintName(TREE * inst)
     std::cout << inst->GetChild(start)->GetText() << "\n";
 } 
 
-void EMULATOR::Print(TREE * node, int level)
+void EMULATED_DEVICE::Print(TREE * node, int level)
 {
     for (int i = 0; i < level; ++i)
         std::cout << "   ";
@@ -807,7 +807,7 @@ void EMULATOR::Print(TREE * node, int level)
 } 
 
 
-void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
+void EMULATED_DEVICE::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typestring, int type, void * value, size_t size, int storage_class)
 {
     // First find it.
     SYMBOL * s = symbol_table->FindSymbol(name);
@@ -832,7 +832,7 @@ void EMULATOR::CreateSymbol(SYMBOL_TABLE * symbol_table, char * name, char * typ
     symbol_table->EnterSymbol(s);
 }
 
-TREE * EMULATOR::FindBlock(TREE * node)
+TREE * EMULATED_DEVICE::FindBlock(TREE * node)
 {
     for (int i = 0; i < (int)node->GetChildCount(); ++i)
     {
@@ -843,7 +843,7 @@ TREE * EMULATOR::FindBlock(TREE * node)
     return 0;
 }
 
-int EMULATOR::FindFirstInst(TREE * block, int first)
+int EMULATED_DEVICE::FindFirstInst(TREE * block, int first)
 {
     for (int i = first; i < (int)block->GetChildCount(); ++i)
     {
@@ -854,7 +854,7 @@ int EMULATOR::FindFirstInst(TREE * block, int first)
     return -1;
 }
 
-TREE * EMULATOR::GetInst(TREE * block, int pc)
+TREE * EMULATED_DEVICE::GetInst(TREE * block, int pc)
 {
     assert(block->GetType() == TREE_BLOCK);
     TREE * inst = (TREE *)block->GetChild(pc);
@@ -862,12 +862,12 @@ TREE * EMULATOR::GetInst(TREE * block, int pc)
 }
 
 
-char * EMULATOR::StringTableEntry(char * text)
+char * EMULATED_DEVICE::StringTableEntry(char * text)
 {
     return this->string_table->Entry(text);
 }
 
-CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
+CONSTANT EMULATED_DEVICE::Eval(int expected_type, TREE * const_expr)
 {
     // Perform bottom-up evaluation of a constant expression.
     CONSTANT result;
@@ -875,7 +875,7 @@ CONSTANT EMULATOR::Eval(int expected_type, TREE * const_expr)
     return result;
 }
 
-void EMULATOR::unimplemented(bool condition, char * text)
+void EMULATED_DEVICE::unimplemented(bool condition, char * text)
 {
     if (condition)
     {
@@ -883,18 +883,18 @@ void EMULATOR::unimplemented(bool condition, char * text)
     }
 }
 
-void EMULATOR::unimplemented(char * text)
+void EMULATED_DEVICE::unimplemented(char * text)
 {
     throw new EMU_ERROR(text);
 }
 
 
-void EMULATOR::RunDevice(char * device)
+void EMULATED_DEVICE::RunDevice(char * device)
 {
     this->device = this->string_table->Entry(device);
 }
 
-void EMULATOR::SetEmulationThreads(int i)
+void EMULATED_DEVICE::SetEmulationThreads(int i)
 {
     this->num_threads = i;
 }

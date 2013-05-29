@@ -18,6 +18,7 @@
 #include <vector>
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
+#include <list>
 
 class HOOK_MANAGER;
 
@@ -32,6 +33,7 @@ class HOOK_MANAGER;
 #define __dv(x)
 #endif
 
+class DEVICE;
 
 class DLL_API _CUDA_RUNTIME
 {
@@ -40,7 +42,10 @@ private:
 public:
     HMODULE hModule;
     _CUDA_RUNTIME() { did_wrap = false; }
-public:
+	DEVICE * devices;
+	DEVICE * current_device;
+	std::list<DEVICE*> AllDevices();
+	DEVICE * CurrentDevice();
     void WrapModule(char * cuda_module_name);
     // CUDA C Runtime API.
     typedef cudaError_t (CUDARTAPI *typePtrCudaMalloc3D)(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent);

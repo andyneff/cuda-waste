@@ -37,7 +37,7 @@
 #include "call-stack-info.h"
 #include "hook-mgr.h"
 #include <__cudaFatFormat.h>
-#include "../emulator/emulator.h"
+#include "../emulator/emulated-device.h"
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 
@@ -1095,7 +1095,7 @@ void** _CUDA_RUNTIME::_cudaRegisterFatBinary(void *fatCubin)
 	    }
 	    (*cu->output_stream) << " Selected version " << ptxVersion << "\n";
 
-	    EMULATOR * emulator = EMULATOR::Singleton();
+	    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
 	    emulator->Parse(profile, ptx);
     }
     else if (*(int*)fatCubin == __cudaFatMAGIC2) {
@@ -1176,7 +1176,7 @@ void** _CUDA_RUNTIME::_cudaRegisterFatBinary(void *fatCubin)
 		    *(ptx + entry->uncompressedBinarySize) = 0;
 	    }
 
-	    EMULATOR * emulator = EMULATOR::Singleton();
+	    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
 	    emulator->Parse(profile, ptx);
 
     }
@@ -1243,7 +1243,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaLaunch(const char *entry)
         return (*proc)(entry);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         emulator->_cudaLaunch(entry);
         return cudaSuccess;
     }
@@ -1263,7 +1263,7 @@ void CUDARTAPI _CUDA_RUNTIME::_cudaRegisterFunction(void **fatCubinHandle, const
         (*proc)(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid, bid, bDim, gDim, wSize);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         emulator->_cudaRegisterFunction((void*)hostFun, deviceFun);
     }
 }
@@ -1283,7 +1283,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaConfigureCall(dim3 gridDim, dim3 block
         return (*proc)(gridDim, blockDim, sharedMem, stream);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaConfigureCall(gridDim, blockDim, sharedMem, stream);
     }
 }
@@ -1303,7 +1303,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaSetupArgument(const void *arg, size_t 
         return (*proc)(arg, size, offset);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaSetupArgument(arg, size, offset);
     }
 }
@@ -1323,7 +1323,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaThreadSynchronize(void)
         return (*proc)();
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaThreadSynchronize();
     }
 }
@@ -1343,7 +1343,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaGetDevice(int *device)
         return (*proc)(device);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaGetDevice(device);
     }
 }
@@ -1364,7 +1364,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaGetDeviceProperties(struct cudaDeviceP
         return (*proc)(prop, device);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaGetDeviceProperties(prop, device);
     }
 }
@@ -1483,7 +1483,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamCreate(cudaStream_t *pStream)
         return (*proc)(pStream);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaStreamCreate(pStream);
     }
 }
@@ -1503,7 +1503,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamDestroy(cudaStream_t stream)
         return (*proc)(stream);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaStreamDestroy(stream);
     }
 }
@@ -1523,7 +1523,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamSynchronize(cudaStream_t stream)
         return (*proc)(stream);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaStreamSynchronize(stream);
     }
 }
@@ -1543,7 +1543,7 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaStreamQuery(cudaStream_t stream)
         return (*proc)(stream);
     } else
     {
-        EMULATOR * emulator = EMULATOR::Singleton();
+        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
         return emulator->_cudaStreamQuery(stream);
     }
 }

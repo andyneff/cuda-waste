@@ -25,7 +25,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
-class EMULATOR;
+class EMULATED_DEVICE;
 
 class THREAD
 {
@@ -54,14 +54,14 @@ class THREAD
         int carry;
 
         // The owner of the thread.
-        EMULATOR * emulator;
+        EMULATED_DEVICE * emulator;
 
         // The Windows HANDLE for the thread.  Threads are executed
         // concurrently.
         HANDLE hThread;
         
     public:
-        THREAD(EMULATOR * emulator, TREE * block, int pc, SYMBOL_TABLE * root);
+        THREAD(EMULATED_DEVICE * emulator, TREE * block, int pc, SYMBOL_TABLE * root);
         ~THREAD();
         static unsigned int __stdcall WinThreadExecute(void * thr); // THREAD * thread
         void Execute();

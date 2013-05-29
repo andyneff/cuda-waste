@@ -25,18 +25,19 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "constant.h"
 #include "../wrapper/lock-mgr.h"
+#include "../emulator/device.h"
 
 class SYMBOL_TABLE;
 class STRING_TABLE;
 class SYMBOL;
 class TYPES;
 
-class EMULATOR
+class EMULATED_DEVICE : DEVICE
 {
 private:
-    EMULATOR();
-    ~EMULATOR();
-    static EMULATOR * singleton;
+    EMULATED_DEVICE();
+    ~EMULATED_DEVICE();
+    static EMULATED_DEVICE * singleton;
 
 public:
     static CRIT_SECTION sm_CritSec;
@@ -137,7 +138,7 @@ public:
     void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
     void Extract_From_Tree(MOD * module, TREE * node);
     void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size);
-    static EMULATOR * Singleton();
+    static EMULATED_DEVICE * Singleton();
     MOD * Parse(char * module_name, char * source);
     void ResetArgs();
 

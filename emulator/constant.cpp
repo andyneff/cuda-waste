@@ -16,7 +16,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -179,7 +179,7 @@ CONSTANT CONSTANT::Eval(int expected_type, TREE * const_expr)
         }
     } else if (const_expr->GetType() == T_QUESTION)
     {
-        throw new EMULATOR::EMU_ERROR("Question operator in constant expression not supported.\n");
+        throw new EMULATED_DEVICE::EMU_ERROR("Question operator in constant expression not supported.\n");
     } else if (const_expr->GetType() == T_OROR)
     {
         // Perform boolean OR.

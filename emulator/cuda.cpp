@@ -16,7 +16,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include "emulator.h"
+#include "emulated-device.h"
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -30,7 +30,7 @@
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CUresult EMULATOR::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
+CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
 {
     // Now, given the name of the kernel function being called, find
     // the entry for it.
@@ -43,7 +43,7 @@ CUresult EMULATOR::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const 
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuModuleLoad(CUmodule * hmod, const char *fname)
+CUresult EMULATED_DEVICE::_cuModuleLoad(CUmodule * hmod, const char *fname)
 {
     int size = 1000000;
     char * buffer = (char *)malloc(size);
@@ -78,13 +78,13 @@ CUresult EMULATOR::_cuModuleLoad(CUmodule * hmod, const char *fname)
         return CUDA_ERROR_INVALID_CONTEXT;
 }
 
-CUresult EMULATOR::_cuParamSetSize(CUfunction hfunc, unsigned int numbytes)
+CUresult EMULATED_DEVICE::_cuParamSetSize(CUfunction hfunc, unsigned int numbytes)
 {
     // Unknown what to do for param size.
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuLaunchGrid(CUfunction hfunc, int grid_width, int grid_height)
+CUresult EMULATED_DEVICE::_cuLaunchGrid(CUfunction hfunc, int grid_width, int grid_height)
 {
     dim3 gridDim(grid_width, grid_height, 1);
     this->ConfigureGrid(gridDim);
@@ -93,10 +93,10 @@ CUresult EMULATOR::_cuLaunchGrid(CUfunction hfunc, int grid_width, int grid_heig
 }
 
 
-CUresult EMULATOR::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
+CUresult EMULATED_DEVICE::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
 {
     // record argument, size, offset.
-    EMULATOR::arg * a = new EMULATOR::arg();
+    EMULATED_DEVICE::arg * a = new EMULATED_DEVICE::arg();
     a->argument = malloc(numbytes);
     memcpy(const_cast<void*>(a->argument), ptr, numbytes);
     a->size = numbytes;
@@ -105,35 +105,35 @@ CUresult EMULATOR::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigne
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
+CUresult EMULATED_DEVICE::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
 {
     *pctx = (CUcontext)malloc(sizeof(CUcontext));
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
+CUresult EMULATED_DEVICE::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
     *pctx = (CUcontext)malloc(sizeof(CUcontext));
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuCtxDestroy( CUcontext ctx )
+CUresult EMULATED_DEVICE::_cuCtxDestroy( CUcontext ctx )
 {
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuCtxDetach(CUcontext ctx)
+CUresult EMULATED_DEVICE::_cuCtxDetach(CUcontext ctx)
 {
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceGet(CUdevice *device, int ordinal)
+CUresult EMULATED_DEVICE::_cuDeviceGet(CUdevice *device, int ordinal)
 {
     *device = 0;
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
+CUresult EMULATED_DEVICE::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
 {
     switch (attrib)
     {
@@ -253,7 +253,7 @@ CUresult EMULATOR::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUd
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
+CUresult EMULATED_DEVICE::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 {
     CUdevprop loc= {
         1024,
@@ -272,32 +272,32 @@ CUresult EMULATOR::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 }
 
 
-CUresult EMULATOR::_cuDriverGetVersion(int * driverVersion)
+CUresult EMULATED_DEVICE::_cuDriverGetVersion(int * driverVersion)
 {
     *driverVersion = 3020;
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
+CUresult EMULATED_DEVICE::_cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
 {
     *ppExportTable = 0;
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
+CUresult EMULATED_DEVICE::_cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
 {
     *major = 2;
     *minor = 0;
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceGetName(char *name, int len, CUdevice dev)
+CUresult EMULATED_DEVICE::_cuDeviceGetName(char *name, int len, CUdevice dev)
 {
     strncpy(name, "emulator", len);
     return CUDA_SUCCESS;
 }
 
-CUresult EMULATOR::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
+CUresult EMULATED_DEVICE::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
 {
     *bytes = 1309081600;
     return CUDA_SUCCESS;
