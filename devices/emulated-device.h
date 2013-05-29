@@ -25,7 +25,7 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 #include "constant.h"
 #include "../wrapper/lock-mgr.h"
-#include "../emulator/device.h"
+#include "../devices/device.h"
 
 class SYMBOL_TABLE;
 class STRING_TABLE;

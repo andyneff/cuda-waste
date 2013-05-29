@@ -37,7 +37,7 @@
 #include "call-stack-info.h"
 #include "hook-mgr.h"
 #include <__cudaFatFormat.h>
-#include "../emulator/emulated-device.h"
+#include "../devices/emulated-device.h"
 #include "_cuda.h"
 #include "_cuda_runtime.h"
 

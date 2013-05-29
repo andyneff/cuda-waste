@@ -3,9 +3,9 @@
 #include <iostream>
 #include "PtxLexer.h"
 #include "PtxParser.h"
-#include "../emulator/tree.h"
-#include "../emulator/emulated-device.h"
-#include "../emulator/string-table.h"
+#include "../devices/tree.h"
+#include "../devices/emulated-device.h"
+#include "../devices/string-table.h"
 #include "../waste/version.h"
 
 static STRING_TABLE * string_table;

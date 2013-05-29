@@ -133,7 +133,7 @@
       <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;%ANTLR_PATH%\x64\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)ptxp.lib;$(OutDir)devices.lib;%ANTLR_PATH%\x64\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
