@@ -11,7 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "waste", "..\..\waste\v11\wa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ptxp", "..\..\ptxp\v11\ptxp.vcxproj", "{6644F2CA-1A4D-4EF4-99F5-9458AB461010}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "..\..\emulator\v11\emulator.vcxproj", "{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "devices", "..\..\devices\v11\devices.vcxproj", "{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client-wrapper", "..\..\client-wrapper\v11\client-wrapper.vcxproj", "{F528AF9F-83A6-4431-913B-643A60371E18}"
 EndProject
