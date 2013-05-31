@@ -26,6 +26,7 @@
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
 
 class EMULATED_DEVICE;
+class SYMBOL_TABLE;
 
 class THREAD
 {

@@ -130,7 +130,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%ZLIB_PATH%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(OutDir)ptxp.lib;$(OutDir)devices.lib;%ANTLR_PATH%\x64\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>

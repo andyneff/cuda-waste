@@ -42,14 +42,6 @@ class DEVICE;
 class DLL_API CUDA_WRAPPER
 {
 public:
-    struct data
-    {
-        void * ptr;
-        bool is_host;
-        int size;
-        char * context;
-    };
-    friend std::vector<data>;
 private:
     CUDA_WRAPPER();
     static CUDA_WRAPPER * singleton;
@@ -67,8 +59,6 @@ public:
 	bool do_hw_devices;
     bool do_debug_halt;
     bool init;
-    static void ExitHandler();
-    std::vector<data> alloc_list;
     static char * Context(int lines = 1);
     char * global_context;
     char * device; // device to run.
@@ -77,6 +67,13 @@ public:
 	int stack_size;
     _CUDA * _cuda;
 	_CUDA_RUNTIME * _cuda_runtime;
+private:
+	static std::list<DEVICE*> * devices;
+	DEVICE * current_device;
+public:
+	std::list<DEVICE*> * AllDevices();
+	DEVICE * CurrentDevice();
+	static void ExitHandler();
 
 public:
     static CUDA_WRAPPER * Singleton();
@@ -89,7 +86,7 @@ public:
         NOT_OK = 0,
         OK = 1
     };
-    static return_type CheckOverwrite();
+
     static return_type __stdcall SetPaddingSize(size_t s);
     static return_type __stdcall SetPaddingByte(unsigned char b);
     static return_type __stdcall SetDevicePointerToFirstByteInBlock(bool b);
@@ -105,9 +102,6 @@ public:
     static return_type __stdcall RunDevice(char * device);
     static void __stdcall SetTrace(int level);
 	static void __stdcall StartDebugger();
-    static return_type CheckSinglePtrOverwrite(const data * d);
-    static bool IsBadPointer(const void * ptr);
-    static int FindAllocatedBlock(const void * pointer);
 	static unsigned int __stdcall WinThreadListener(void * wrapper);
 	void StartListener();
 	static HANDLE __stdcall StartProcess(char * command);

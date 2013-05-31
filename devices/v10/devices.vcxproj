@@ -88,19 +88,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\constant.cpp" />
-    <ClCompile Include="..\cuda-runtime.cpp" />
-    <ClCompile Include="..\cuda.cpp" />
+    <ClCompile Include="..\device.cpp" />
     <ClCompile Include="..\emulated-device.cpp" />
     <ClCompile Include="..\instructions.cpp" />
+    <ClCompile Include="..\real-device.cpp" />
     <ClCompile Include="..\symbol-table.cpp" />
     <ClCompile Include="..\symbol.cpp" />
     <ClCompile Include="..\thread.cpp" />
     <ClCompile Include="..\tree.cpp" />
-    <ClCompile Include="..\xxx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\constant.h" />
+    <ClInclude Include="..\device.h" />
     <ClInclude Include="..\emulated-device.h" />
+    <ClInclude Include="..\real-device.h" />
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
     <ClInclude Include="..\symbol.h" />

@@ -34,11 +34,3 @@
 #include "../wrapper/cuda-wrapper.h"
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
-
-DEVICE::DEVICE()
-{
-}
-
-DEVICE::~DEVICE()
-{
-}

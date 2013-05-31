@@ -63,46 +63,50 @@ CUDA_WRAPPER * CUDA_WRAPPER::Singleton()
     return CUDA_WRAPPER::singleton;
 }
 
-char * file_name_tail(char * file_name)
-{
-    if (file_name == 0)
-        return "";
-    char * t = &file_name[strlen(file_name)];
-    for (; t >= file_name; --t)
-    {
-        if (*t == '/' || *t == '\\')
-        {
-            sprintf(temp_buffer, "...%s", t);
-            return temp_buffer;
-        }
-    }
-    strncpy(temp_buffer, file_name, 49);
-    return temp_buffer;
-}
+extern char * file_name_tail(char * file_name);
 
 
 CUDA_WRAPPER::CUDA_WRAPPER()
 {
     CUDA_WRAPPER * cu = this;
-    cu->padding_size = 32;
-    cu->padding_byte = 0xde;
-    cu->device_pointer_to_first_byte_in_block = false;
-    cu->do_not_call_cuda_after_sanity_check_fail = false;
-    cu->output_stream = & std::cout;
-    cu->trace_all_calls = false;
-    cu->quit_on_error = false;
-    cu->do_emulation = true;
-    cu->do_debugger = false;
-    cu->global_context = 0;
-    cu->hook_manager = 0;
-    cu->do_debug_halt = false;
-    cu->level = 0;
-    cu->device = 0; // nothing specific.
-    cu->_cuda = new _CUDA();
-    cu->_cuda_runtime = new _CUDA_RUNTIME();
-    cu->stack_size = 10 * 1024 * 1024;
+    this->padding_size = 32;
+    this->padding_byte = 0xde;
+    this->device_pointer_to_first_byte_in_block = false;
+    this->do_not_call_cuda_after_sanity_check_fail = false;
+    this->output_stream = & std::cout;
+    this->trace_all_calls = false;
+    this->quit_on_error = false;
+    this->do_emulation = true;
+    this->do_debugger = false;
+    this->global_context = 0;
+    this->hook_manager = 0;
+    this->do_debug_halt = false;
+    this->level = 0;
+    this->device = 0; // nothing specific.
+    this->_cuda = new _CUDA();
+    this->_cuda_runtime = new _CUDA_RUNTIME();
+    this->stack_size = 10 * 1024 * 1024;
+	EMULATED_DEVICE * ed = new EMULATED_DEVICE();
+	if (devices == 0)
+		devices = new std::list<DEVICE*>();
+	devices->push_back((DEVICE*)ed);
+	this->current_device = (DEVICE*)ed;
+    if (atexit(CUDA_WRAPPER::ExitHandler))
+    {
+        std::cerr << "Cannot register CUDA_WRAPPER exit handler during initialization.  Memory leaks will not be detected.\n";
+        exit(1);
+    }
 }
 
+std::list<DEVICE*> * CUDA_WRAPPER::devices;
+
+void CUDA_WRAPPER::ExitHandler()
+{
+	for (std::list<DEVICE*>::iterator it = devices->begin(); it != devices->end(); ++it)
+	{
+		(*it)->ExitHandler();
+	}
+}
 
 
 void CUDA_WRAPPER::DoInit()
@@ -118,15 +122,6 @@ void CUDA_WRAPPER::DoInit()
     csi->ClassifyAsPrefix("cuda_runtime.h");  // This is the include file for CUDA, but we want what calls it.
     csi->ClassifyAsPrefix("_cuda.cpp");
     csi->ClassifyAsPrefix("_cuda.h");
-    if (atexit(CUDA_WRAPPER::ExitHandler))
-    {
-        char * context = cu->Context(3);
-        (*cu->output_stream) << "Cannot register CUDA_WRAPPER exit handler during initialization.  Memory leaks will not be detected.\n";
-        (*cu->output_stream) << " Call stack is:\n"
-            << context << ".\n\n";
-        if (cu->quit_on_error)
-            exit(1);
-    }
     HOOK_MANAGER * hm = HOOK_MANAGER::Singleton();
     cu->hook_manager = hm;
     // Force load of CUDA driver API, so it can be hooked.
@@ -146,162 +141,6 @@ bool CUDA_WRAPPER::WrapModule(char * cuda_module_name)
     this->_cuda_runtime->WrapModule(cuda_module_name);
     return true;
 }
-
-void CUDA_WRAPPER::ExitHandler()
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    // Check if there are no unfreed blocks.
-    for (unsigned int i = 0; i < cu->alloc_list.size(); ++i)
-    {
-        data d = cu->alloc_list[i];
-        (*cu->output_stream) << "Unfreed CUDA memory block.\n";
-        (*cu->output_stream) << " Pointer " << d.ptr << " was allocated in "
-            << d.context << ".\n";
-        (*cu->output_stream) << " Block size is " << d.size << " bytes.\n";
-        (*cu->output_stream) << " This check was called during program exit, "
-            << cu->Context() << " (exit handler).\n\n";
-        cu->CheckSinglePtrOverwrite(&d);
-    }
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckSinglePtrOverwrite(const data * d)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    CALL_STACK_INFO * csi = CALL_STACK_INFO::Singleton();
-    if (! d->is_host)
-    {
-        unsigned char * hostbuffer = (unsigned char *)malloc(d->size);
-        if (! hostbuffer)
-            return NOT_OK;
-
-        cudaError_t e1;
-        if (! cu->do_emulation)
-        {
-            _CUDA_RUNTIME::typePtrCudaMemcpy proc = (_CUDA_RUNTIME::typePtrCudaMemcpy)cu->hook_manager->FindOriginal((PROC)_CUDA_RUNTIME::Memcpy);
-            e1 = (*proc)(hostbuffer, d->ptr, d->size, cudaMemcpyDeviceToHost);
-        } else
-        {
-            memcpy(hostbuffer, d->ptr, d->size);
-            e1 = cudaSuccess;
-        }
-        if (e1 != 0)
-        {
-            free(hostbuffer);
-            return NOT_OK;
-        }
-        bool other = true;
-        for (unsigned char * c = (unsigned char *)hostbuffer; c < (((unsigned char *)hostbuffer) + cu->padding_size); ++c)
-        {
-            if (*c != cu->padding_byte)
-            {
-                (*cu->output_stream) << "Overwrite of cuda memory block header.\n";
-                (*cu->output_stream) << " Pointer " << d->ptr << " was allocated in "
-                    << d->context << ".\n";
-                (*cu->output_stream) << " This check was performed during a CUDA call in "
-                        << cu->Context() << ".\n\n";
-                other = false;
-                break;
-            }
-        }
-        if (other)
-            for (unsigned char * c = ((unsigned char *)hostbuffer) + d->size - cu->padding_size; c < (((unsigned char *)hostbuffer) + d->size); ++c)
-            {
-                if (*c != cu->padding_byte)
-                {
-                    (*cu->output_stream) << "Overwrite of cuda memory block footer.\n";
-                    (*cu->output_stream) << " Pointer " << d->ptr << " was allocated in file "
-                        << d->context << ".\n";
-                    (*cu->output_stream) << " This check was performed during a CUDA call in "
-                        << cu->Context() << ".\n\n";
-                    other = false;
-                    break;
-                }
-            }
-
-        free(hostbuffer);
-    }
-    else
-    {
-        bool other = true;
-        for (unsigned char * c = (unsigned char *)d->ptr; c < (((unsigned char *)d->ptr) + cu->padding_size); ++c)
-        {
-            if (*c != cu->padding_byte)
-            {
-                (*cu->output_stream) << "Memory overwrite for cuda memory block header.\n";
-                (*cu->output_stream) << " Pointer " << d->ptr << " was allocated in file "
-                    << d->context << ".\n";
-                (*cu->output_stream) << " This check was performed during a CUDA call in "
-                        << cu->Context() << ".\n\n";
-                other = false;
-                break;
-            }
-        }
-        if (other)
-            for (unsigned char * c = ((unsigned char *)d->ptr) + d->size - cu->padding_size; c < (((unsigned char *)d->ptr) + d->size); ++c)
-            {
-                if (*c != cu->padding_byte)
-                {
-                    (*cu->output_stream) << "Overwrite of cuda memory block footer.\n";
-                    (*cu->output_stream) << " Pointer " << d->ptr << " was allocated in file "
-                        << d->context << ".\n";
-                    (*cu->output_stream) << " This check was performed during a CUDA call in "
-                        << Context() << ".\n\n";
-                    other = false;
-                    break;
-                }
-            }
-    }
-    return OK;      
-}
-
-CUDA_WRAPPER::return_type CUDA_WRAPPER::CheckOverwrite()
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    // Check if there are overwrites.
-    for (unsigned int i = 0; i < cu->alloc_list.size(); ++i)
-    {
-        data d = cu->alloc_list[i];
-        cu->CheckSinglePtrOverwrite(&d);
-    }
-    return OK;      
-}
-
-int CUDA_WRAPPER::FindAllocatedBlock(const void * pointer)
-{
-    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    unsigned int i;
-    for (i = 0; i < cu->alloc_list.size(); ++i)
-    {
-        data * d = &cu->alloc_list[i];
-        if (pointer >= ((unsigned char *)d->ptr) + cu->padding_size
-            && pointer < (d->size - cu->padding_size + (unsigned char *)d->ptr))
-            break;
-    }
-    if (i == cu->alloc_list.size())
-    {
-        return -1;
-    }
-    return i;
-}
-
-bool CUDA_WRAPPER::IsBadPointer(const void * ptr)
-{
-    bool bad = false;
-
-#if WIN32
-    __try
-    {
-        // read
-        unsigned char value = *(unsigned char*)ptr;
-    }
-    __except(1)
-    {
-        bad = true;
-    }
-#endif
-    return bad;
-}
-
 
 char * CUDA_WRAPPER::Context(int lines)
 {
@@ -486,9 +325,6 @@ CUDA_WRAPPER::return_type CUDA_WRAPPER::RunDevice(char * device)
     char * context = cu->Context();
 
     cu->device = device;
-    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-    emulator->RunDevice(device);
-
     if (cu->trace_all_calls)
     {
         (*cu->output_stream) << "SetDevice called, " << context << ".\n";
@@ -506,9 +342,7 @@ void CUDA_WRAPPER::SetTrace(int lev)
     {
         (*cu->output_stream) << "SetTrace called, " << context << ".\n";
     }
-    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-    cu->level = lev;
-    emulator->SetTrace(lev);
+	cu->level = lev;
 }
 
 void CUDA_WRAPPER::SetStackSize(int size)
@@ -538,12 +372,7 @@ void CUDA_WRAPPER::SetEmulationThreads(int i)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
-    EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-    emulator->SetEmulationThreads(i);
 }
-
-
-
 
 
 ///////////////////////////////////////////////////////////////
@@ -1602,3 +1431,11 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
 
     return 0;
 }
+
+
+
+DEVICE * CUDA_WRAPPER::CurrentDevice()
+{
+	return this->current_device;
+}
+

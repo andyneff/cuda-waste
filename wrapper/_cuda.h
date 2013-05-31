@@ -354,5 +354,5 @@ public:
 	static CUresult CUDAAPI _cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, unsigned int Flags );
 	static CUresult CUDAAPI _cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mode fm );
 	static CUresult CUDAAPI _cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flags );
-	static CUresult CUDAAPI _cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int static );
+	static CUresult CUDAAPI _cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int _static );
 };

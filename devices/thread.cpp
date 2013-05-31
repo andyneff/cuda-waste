@@ -68,17 +68,17 @@ void THREAD::Execute()
     for (int count = 0; count < max_count; ++count)
     {
         TREE * inst = this->emulator->GetInst(block, pc);
-        if (this->emulator->trace_level > 3)
+        if (this->emulator->TraceLevel() > 3)
             this->Dump("before", pc, inst);
 
         // if debug, check if pvalues in each symbol was changed.  It
         // should have not!
-        if (this->emulator->trace_level > 1)
+        if (this->emulator->TraceLevel() > 1)
             this->root->CachePvalues();
 
         int next = this->Dispatch(inst);
 
-        if (this->emulator->trace_level > 1)
+        if (this->emulator->TraceLevel() > 1)
             this->root->CheckCachedPvalues();
 
         if (next > 0)
@@ -100,7 +100,7 @@ void THREAD::Execute()
 
         pc = this->emulator->FindFirstInst(block, pc);
 
-        if (this->emulator->trace_level > 2)
+        if (this->emulator->TraceLevel() > 2)
             this->Dump("after", pc, inst);
     }
 	// Fall through here if the instruction count was hit.
@@ -127,10 +127,10 @@ bool THREAD::Waiting()
 
 int THREAD::Dispatch(TREE * inst)
 {
-    if (this->emulator->trace_level > 1)
+    if (this->emulator->TraceLevel() > 1)
     {
         this->emulator->PrintName(inst);
-        if (this->emulator->trace_level > 2)
+        if (this->emulator->TraceLevel() > 2)
             this->emulator->Print(inst, 0);
     }
 
@@ -169,7 +169,7 @@ int THREAD::Dispatch(TREE * inst)
             test = ! test;
         if (! test)
         {
-            if (this->emulator->trace_level > 1)
+            if (this->emulator->TraceLevel() > 1)
                 std::cout << "Skipping instruction because guard predicate is false\n";
             return 0; // continue.
         }

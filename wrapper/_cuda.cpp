@@ -215,2193 +215,929 @@ void _CUDA::WrapModule()
 CUresult CUDAAPI _CUDA::_cuArray3DCreate( CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArray3DCreate proc = (ptr_cuArray3DCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArray3DCreate);
-        return (*proc)(pHandle, pAllocateArray);
-    } else
-    {
-        std::cout << "Unimplemented function _cuArray3DCreate\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArray3DCreate(pHandle, pAllocateArray);
 }
 
 CUresult CUDAAPI _CUDA::_cuArray3DCreate_v2( CUarray *pHandle, const CUDA_ARRAY3D_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArray3DCreate_v2 proc = (ptr_cuArray3DCreate_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArray3DCreate_v2);
-        return (*proc)(pHandle, pAllocateArray);
-    } else
-    {
-        std::cout << "Unimplemented function _cuArray3DCreate_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArray3DCreate_v2(pHandle, pAllocateArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArray3DGetDescriptor( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArray3DGetDescriptor proc = (ptr_cuArray3DGetDescriptor)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArray3DGetDescriptor);
-        return (*proc)(pArrayDescriptor, hArray);
-    } else
-    {
-        std::cout << "Unimplemented function _cuArray3DGetDescriptor\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArray3DGetDescriptor( pArrayDescriptor, hArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArray3DGetDescriptor_v2( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArray3DGetDescriptor_v2 proc = (ptr_cuArray3DGetDescriptor_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArray3DGetDescriptor_v2);
-        return (*proc)(pArrayDescriptor, hArray);
-    } else
-    {
-        std::cout << "Unimplemented function _cuArray3DGetDescriptor_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArray3DGetDescriptor_v2( pArrayDescriptor, hArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArrayCreate( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArrayCreate proc = (ptr_cuArrayCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArrayCreate);
-        return (*proc)(pHandle, pAllocateArray );
-    } else
-    {
-        std::cout << "Unimplemented function _cuArrayCreate\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArrayCreate( pHandle, pAllocateArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArrayCreate_v2( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArrayCreate_v2 proc = (ptr_cuArrayCreate_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArrayCreate_v2);
-        return (*proc)(pHandle, pAllocateArray );
-    } else
-    {
-        std::cout << "Unimplemented function _cuArrayCreate_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArrayCreate_v2( pHandle, pAllocateArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArrayDestroy( CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArrayDestroy proc = (ptr_cuArrayDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArrayDestroy);
-        return (*proc)( hArray );
-    } else
-    {
-        std::cout << "Unimplemented function _cuArrayDestroy\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArrayDestroy( hArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArrayGetDescriptor( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArrayGetDescriptor proc = (ptr_cuArrayGetDescriptor)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArrayGetDescriptor);
-        return (*proc)( pArrayDescriptor, hArray );
-    } else
-    {
-        std::cout << "Unimplemented function _cuArrayGetDescriptor\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArrayGetDescriptor( pArrayDescriptor, hArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuArrayGetDescriptor_v2( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuArrayGetDescriptor_v2 proc = (ptr_cuArrayGetDescriptor_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuArrayGetDescriptor_v2);
-        return (*proc)( pArrayDescriptor, hArray );
-    } else
-    {
-        std::cout << "Unimplemented function _cuArrayGetDescriptor_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuArrayGetDescriptor_v2( pArrayDescriptor, hArray );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxAttach proc = (ptr_cuCtxAttach)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxAttach);
-        return (*proc)(pctx, flags);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuCtxAttach(pctx, flags);
-    }
+    return cu->CurrentDevice()->_cuCtxAttach(pctx, flags);
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxCreate proc = (ptr_cuCtxCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxCreate);
-        return (*proc)(pctx, flags, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuCtxCreate(pctx, flags, dev);
-    }
+    return cu->CurrentDevice()->_cuCtxCreate(pctx, flags, dev );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxCreate_v2(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxCreate_v2 proc = (ptr_cuCtxCreate_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxCreate_v2);
-        return (*proc)(pctx, flags, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuCtxCreate(pctx, flags, dev);
-    }
+    return cu->CurrentDevice()->_cuCtxCreate_v2(pctx, flags, dev );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxDestroy( CUcontext ctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxDestroy proc = (ptr_cuCtxDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxDestroy);
-        return (*proc)( ctx );
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuCtxDestroy(ctx);
-    }
+    return cu->CurrentDevice()->_cuCtxDestroy( ctx );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxDetach(CUcontext ctx)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxDetach proc = (ptr_cuCtxDetach)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxDetach);
-        return (*proc)(ctx);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuCtxDetach(ctx);
-    }
+    return cu->CurrentDevice()->_cuCtxDetach( ctx);
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxGetDevice(CUdevice *device)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxGetDevice proc = (ptr_cuCtxGetDevice)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxGetDevice);
-        return (*proc)(device);
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxGetDevice\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxGetDevice(device);
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxGetLimit(size_t *pvalue, CUlimit limit)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxGetLimit proc = (ptr_cuCtxGetLimit)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxGetLimit);
-        return (*proc)(pvalue, limit);
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxGetLimit\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxGetLimit(pvalue, limit);
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxPopCurrent( CUcontext *pctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxPopCurrent proc = (ptr_cuCtxPopCurrent)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxPopCurrent);
-        return (*proc)( pctx );
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxPopCurrent\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxPopCurrent( pctx );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxPushCurrent( CUcontext ctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxPushCurrent proc = (ptr_cuCtxPushCurrent)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxPushCurrent);
-        return (*proc)( ctx );
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxPushCurrent\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxPushCurrent( ctx );
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxSetLimit(CUlimit limit, size_t value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxSetLimit proc = (ptr_cuCtxSetLimit)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxSetLimit);
-        return (*proc)(limit, value);
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxSetLimit\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxSetLimit( limit, value);
 }
 
 CUresult CUDAAPI _CUDA::_cuCtxSynchronize(void)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuCtxSynchronize proc = (ptr_cuCtxSynchronize)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuCtxSynchronize);
-        return (*proc)();
-    } else
-    {
-        std::cout << "Unimplemented function _cuCtxSynchronize\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuCtxSynchronize();
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceComputeCapability proc = (ptr_cuDeviceComputeCapability)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceComputeCapability);
-        return (*proc)(major, minor, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceComputeCapability(major, minor, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceComputeCapability(major, minor, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceGet(CUdevice *device, int ordinal)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceGet proc = (ptr_cuDeviceGet)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceGet);
-        return (*proc)(device, ordinal);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceGet(device, ordinal);
-    }
+    return cu->CurrentDevice()->_cuDeviceGet(device, ordinal);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceGetAttribute proc = (ptr_cuDeviceGetAttribute)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceGetAttribute);
-        return (*proc)(pi, attrib, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceGetAttribute(pi, attrib, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceGetAttribute(pi, attrib, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceGetCount(int *count)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceGetCount proc = (ptr_cuDeviceGetCount)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceGetCount);
-        return (*proc)(count);
-    } else
-    {
-        *count = 1;
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuDeviceGetCount(count);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceGetName(char *name, int len, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceGetName proc = (ptr_cuDeviceGetName)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceGetName);
-        return (*proc)(name, len, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceGetName(name, len, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceGetName(name, len, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceGetProperties proc = (ptr_cuDeviceGetProperties)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceGetProperties);
-        return (*proc)(prop, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceGetProperties(prop, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceGetProperties(prop, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceTotalMem proc = (ptr_cuDeviceTotalMem)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceTotalMem);
-        return (*proc)(bytes, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceTotalMem(bytes, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceTotalMem(bytes, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDeviceTotalMem_v2(unsigned int *bytes, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDeviceTotalMem_v2 proc = (ptr_cuDeviceTotalMem_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDeviceTotalMem_v2);
-        return (*proc)(bytes, dev);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDeviceTotalMem(bytes, dev);
-    }
+    return cu->CurrentDevice()->_cuDeviceTotalMem_v2(bytes, dev);
 }
 
 CUresult CUDAAPI _CUDA::_cuDriverGetVersion(int *driverVersion)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuDriverGetVersion proc = (ptr_cuDriverGetVersion)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuDriverGetVersion);
-        return (*proc)(driverVersion);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuDriverGetVersion(driverVersion);
-    }
+    return cu->CurrentDevice()->_cuDriverGetVersion(driverVersion);
 }
 
 CUresult CUDAAPI _CUDA::_cuEventCreate( CUevent *phEvent, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventCreate proc = (ptr_cuEventCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventCreate);
-        return (*proc)( phEvent, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventCreate\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventCreate( phEvent, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuEventDestroy( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventDestroy proc = (ptr_cuEventDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventDestroy);
-        return (*proc)( hEvent );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventDestroy\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventDestroy( hEvent );
 }
 
 CUresult CUDAAPI _CUDA::_cuEventElapsedTime( float *pMilliseconds, CUevent hStart, CUevent hEnd )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventElapsedTime proc = (ptr_cuEventElapsedTime)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventElapsedTime);
-        return (*proc)( pMilliseconds, hStart, hEnd );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventElapsedTime\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventElapsedTime( pMilliseconds, hStart, hEnd );
 }
 
 CUresult CUDAAPI _CUDA::_cuEventQuery( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventQuery proc = (ptr_cuEventQuery)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventQuery);
-        return (*proc)( hEvent );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventQuery\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventQuery( hEvent );
 }
 
 CUresult CUDAAPI _CUDA::_cuEventRecord( CUevent hEvent, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventRecord proc = (ptr_cuEventRecord)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventRecord);
-        return (*proc)( hEvent, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventRecord\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventRecord( hEvent, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuEventSynchronize( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuEventSynchronize proc = (ptr_cuEventSynchronize)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuEventSynchronize);
-        return (*proc)( hEvent );
-    } else
-    {
-        std::cout << "Unimplemented function _cuEventSynchronize\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuEventSynchronize( hEvent );
 }
 
 CUresult CUDAAPI _CUDA::_cuFuncGetAttribute (int *pi, CUfunction_attribute attrib, CUfunction hfunc)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuFuncGetAttribute proc = (ptr_cuFuncGetAttribute)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuFuncGetAttribute);
-        return (*proc) (pi, attrib, hfunc);
-    } else
-    {
-        std::cout << "Unimplemented function _cuFuncGetAttribute\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuFuncGetAttribute (pi, attrib, hfunc);
 }
 
 CUresult CUDAAPI _CUDA::_cuFuncSetBlockShape (CUfunction hfunc, int x, int y, int z)
 {
-    // set up dimensions, shared memory, and stream for the kernel launch.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuFuncSetBlockShape proc = (ptr_cuFuncSetBlockShape)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuFuncSetBlockShape);
-        return (*proc)(hfunc, x, y, z);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        dim3 blockDim(x,y,z);
-        emulator->ConfigureBlock(blockDim);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuFuncSetBlockShape (hfunc, x, y, z);
 }
 
 CUresult CUDAAPI _CUDA::_cuFuncSetCacheConfig(CUfunction hfunc, CUfunc_cache config)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuFuncSetCacheConfig proc = (ptr_cuFuncSetCacheConfig)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuFuncSetCacheConfig);
-        return (*proc)(hfunc, config);
-    } else
-    {
-        std::cout << "Unimplemented function _cuFuncSetCacheConfig\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuFuncSetCacheConfig(hfunc, config);
 }
 
 CUresult CUDAAPI _CUDA::_cuFuncSetSharedSize (CUfunction hfunc, unsigned int bytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuFuncSetSharedSize proc = (ptr_cuFuncSetSharedSize)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuFuncSetSharedSize);
-        return (*proc) (hfunc, bytes);
-    } else
-    {
-        std::cout << "Unimplemented function _cuFuncSetSharedSize\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuFuncSetSharedSize (hfunc, bytes);
 }
 
 CUresult CUDAAPI _CUDA::_cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGetExportTable proc = (ptr_cuGetExportTable)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGetExportTable);
-        return (*proc)( ppExportTable, pExportTableId );
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuGetExportTable(ppExportTable, pExportTableId);
-    }
+    return cu->CurrentDevice()->_cuGetExportTable( ppExportTable, pExportTableId );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsMapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsMapResources proc = (ptr_cuGraphicsMapResources)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsMapResources);
-        return (*proc)( count, resources, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsMapResources\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsMapResources( count, resources, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsResourceGetMappedPointer( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsResourceGetMappedPointer proc = (ptr_cuGraphicsResourceGetMappedPointer)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsResourceGetMappedPointer);
-        return (*proc)( pDevPtr, pSize, resource );
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsResourceGetMappedPointer( pDevPtr, pSize, resource );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsResourceGetMappedPointer_v2( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsResourceGetMappedPointer_v2 proc = (ptr_cuGraphicsResourceGetMappedPointer_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsResourceGetMappedPointer);
-        return (*proc)( pDevPtr, pSize, resource );
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsResourceGetMappedPointer_v2( pDevPtr, pSize, resource );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsResourceSetMapFlags( CUgraphicsResource resource, unsigned int flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsResourceSetMapFlags proc = (ptr_cuGraphicsResourceSetMapFlags)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsResourceSetMapFlags);
-        return (*proc)( resource, flags );;
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsResourceSetMapFlags\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsResourceSetMapFlags( resource, flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsSubResourceGetMappedArray( CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsSubResourceGetMappedArray proc = (ptr_cuGraphicsSubResourceGetMappedArray)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsSubResourceGetMappedArray);
-        return (*proc)( pArray, resource, arrayIndex, mipLevel );
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsSubResourceGetMappedArray\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsSubResourceGetMappedArray( pArray, resource, arrayIndex, mipLevel );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsUnmapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsUnmapResources proc = (ptr_cuGraphicsUnmapResources)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsUnmapResources);
-        return (*proc)( count, resources, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsUnmapResources\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsUnmapResources( count, resources, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuGraphicsUnregisterResource(CUgraphicsResource resource)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuGraphicsUnregisterResource proc = (ptr_cuGraphicsUnregisterResource)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuGraphicsUnregisterResource);
-        return (*proc)(resource);
-    } else
-    {
-        std::cout << "Unimplemented function _cuGraphicsUnregisterResource\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuGraphicsUnregisterResource(resource);
 }
 
 CUresult CUDAAPI _CUDA::_cuInit(unsigned int Flags)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuInit proc = (ptr_cuInit)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuInit);
-        return (*proc)(Flags);
-    } else
-    {
-        if (Flags == 0)
-            return CUDA_SUCCESS;
-        else
-            return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuInit( Flags);
 }
 
 CUresult CUDAAPI _CUDA::_cuLaunch ( CUfunction f )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuLaunch proc = (ptr_cuLaunch)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuLaunch);
-        return (*proc) ( f );
-    } else
-    {
-        std::cout << "Unimplemented function _cuLaunch\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuLaunch ( f );
 }
 
 CUresult CUDAAPI _CUDA::_cuLaunchGrid (CUfunction f, int grid_width, int grid_height)
 {
-    // set up dimensions, shared memory, and stream for the kernel launch.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuLaunchGrid proc = (ptr_cuLaunchGrid)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuLaunchGrid);
-        return (*proc)(f, grid_width, grid_height);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuLaunchGrid(f, grid_width, grid_height);
-    }
+    return cu->CurrentDevice()->_cuLaunchGrid (f, grid_width, grid_height);
 }
 
 CUresult CUDAAPI _CUDA::_cuLaunchGridAsync( CUfunction f, int grid_width, int grid_height, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuLaunchGridAsync proc = (ptr_cuLaunchGridAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuLaunchGridAsync);
-        return (*proc)( f, grid_width, grid_height, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuLaunchGridAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuLaunchGridAsync( f, grid_width, grid_height, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAlloc( CUdeviceptr *dptr, unsigned int bytesize)
 {
-    // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAlloc proc = (ptr_cuMemAlloc)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAlloc);
-        CUresult e1 = (*proc)(dptr, bytesize);
-        return e1;
-    } else
-    {
-        *dptr = (CUdeviceptr)malloc(bytesize);
-        return CUDA_SUCCESS;     
-    }
+    return cu->CurrentDevice()->_cuMemAlloc( dptr, bytesize);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAlloc_v2( CUdeviceptr *dptr, unsigned int bytesize)
 {
-    // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAlloc_v2 proc = (ptr_cuMemAlloc_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAlloc_v2);
-        CUresult e1 = (*proc)(dptr, bytesize);
-        return e1;
-    } else
-    {
-        *dptr = (CUdeviceptr)malloc(bytesize);
-        return CUDA_SUCCESS;     
-    }
+    return cu->CurrentDevice()->_cuMemAlloc_v2( dptr, bytesize);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAllocHost(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAllocHost proc = (ptr_cuMemAllocHost)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAllocHost);
-        return (*proc)(pp, bytesize);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemAllocHost\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemAllocHost(pp, bytesize);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAllocHost_v2(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAllocHost_v2 proc = (ptr_cuMemAllocHost_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAllocHost_v2);
-        return (*proc)(pp, bytesize);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemAllocHost_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemAllocHost_v2(pp, bytesize);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAllocPitch( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAllocPitch proc = (ptr_cuMemAllocPitch)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAllocPitch);
-        return (*proc)( dptr, pPitch, WidthInBytes, Height, ElementSizeBytes);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemAllocPitch\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemAllocPitch( dptr, pPitch, WidthInBytes, Height, ElementSizeBytes);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemAllocPitch_v2( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemAllocPitch_v2 proc = (ptr_cuMemAllocPitch_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemAllocPitch_v2);
-        return (*proc)( dptr, pPitch, WidthInBytes, Height, ElementSizeBytes);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemAllocPitch_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemAllocPitch_v2( dptr, pPitch, WidthInBytes, Height, ElementSizeBytes);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2D( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2D proc = (ptr_cuMemcpy2D)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2D);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2D\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2D( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2D_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2D_v2 proc = (ptr_cuMemcpy2D_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2D_v2);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2D_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2D_v2( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2DAsync( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2DAsync proc = (ptr_cuMemcpy2DAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2DAsync);
-        return (*proc)( pCopy, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2DAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2DAsync( pCopy, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2DAsync_v2( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2DAsync_v2 proc = (ptr_cuMemcpy2DAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2DAsync_v2);
-        return (*proc)( pCopy, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2DAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2DAsync_v2( pCopy, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2DUnaligned( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2DUnaligned proc = (ptr_cuMemcpy2DUnaligned)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2DUnaligned);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2DUnaligned\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2DUnaligned( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy2DUnaligned_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy2DUnaligned_v2 proc = (ptr_cuMemcpy2DUnaligned_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy2DUnaligned_v2);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy2DUnaligned_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy2DUnaligned_v2( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy3D( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy3D proc = (ptr_cuMemcpy3D)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy3D);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy3D\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy3D( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy3D_v2( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy3D_v2 proc = (ptr_cuMemcpy3D_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy3D_v2);
-        return (*proc)( pCopy );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy3D_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy3D_v2( pCopy );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy3DAsync( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy3DAsync proc = (ptr_cuMemcpy3DAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy3DAsync);
-        return (*proc)( pCopy, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy3DAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy3DAsync( pCopy, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpy3DAsync_v2( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpy3DAsync_v2 proc = (ptr_cuMemcpy3DAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpy3DAsync_v2);
-        return (*proc)( pCopy, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpy3DAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpy3DAsync_v2( pCopy, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoA( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoA proc = (ptr_cuMemcpyAtoA)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoA);
-        return (*proc)( dstArray, dstOffset, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoA\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoA( dstArray, dstOffset, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoA_v2( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoA_v2 proc = (ptr_cuMemcpyAtoA_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoA_v2);
-        return (*proc)( dstArray, dstOffset, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoA_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoA_v2( dstArray, dstOffset, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoD ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoD proc = (ptr_cuMemcpyAtoD)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoD);
-        return (*proc) ( dstDevice, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoD\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoD ( dstDevice, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoD_v2 ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoD_v2 proc = (ptr_cuMemcpyAtoD_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoD_v2);
-        return (*proc) ( dstDevice, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoD_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoD_v2 ( dstDevice, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoH( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoH proc = (ptr_cuMemcpyAtoH)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoH);
-        return (*proc)( dstHost, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoH\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoH( dstHost, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoH_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoH_v2 proc = (ptr_cuMemcpyAtoH_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoH_v2);
-        return (*proc)( dstHost, srcArray, srcOffset, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoH_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoH_v2( dstHost, srcArray, srcOffset, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoHAsync( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoHAsync proc = (ptr_cuMemcpyAtoHAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoHAsync);
-        return (*proc)( dstHost, srcArray, srcOffset, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoHAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoHAsync( dstHost, srcArray, srcOffset, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyAtoHAsync_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyAtoHAsync_v2 proc = (ptr_cuMemcpyAtoHAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyAtoHAsync_v2);
-        return (*proc)( dstHost, srcArray, srcOffset, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyAtoHAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyAtoHAsync_v2( dstHost, srcArray, srcOffset, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoA ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoA proc = (ptr_cuMemcpyDtoA)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoA);
-        return (*proc) ( dstArray, dstOffset, srcDevice, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoA\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoA ( dstArray, dstOffset, srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoA_v2 ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoA_v2 proc = (ptr_cuMemcpyDtoA_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoA_v2);
-        return (*proc) ( dstArray, dstOffset, srcDevice, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoA_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoA_v2 ( dstArray, dstOffset, srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoD (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoD proc = (ptr_cuMemcpyDtoD)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoD);
-        return (*proc) (dstDevice, srcDevice, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoD\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoD ( dstDevice, srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoD_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoD_v2 proc = (ptr_cuMemcpyDtoD_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoD_v2);
-        return (*proc) (dstDevice, srcDevice, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoD_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoD_v2 ( dstDevice,  srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoDAsync (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoDAsync proc = (ptr_cuMemcpyDtoDAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoDAsync);
-        return (*proc) (dstDevice, srcDevice, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoDAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoDAsync ( dstDevice, srcDevice, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoDAsync_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoDAsync_v2 proc = (ptr_cuMemcpyDtoDAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoDAsync_v2);
-        return (*proc) (dstDevice, srcDevice, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoDAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoDAsync_v2 ( dstDevice, srcDevice, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoH (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoH proc = (ptr_cuMemcpyDtoH)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoH);
-        CUresult e1 = (*proc)(dstHost, srcDevice, ByteCount);
-        return e1;
-    } else
-    {
-        memcpy(dstHost, (void*)srcDevice, ByteCount);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoH (dstHost, srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoH_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoH_v2 proc = (ptr_cuMemcpyDtoH_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoH_v2);
-        CUresult e1 = (*proc)(dstHost, srcDevice, ByteCount);
-        return e1;
-    } else
-    {
-        memcpy(dstHost, (void*)srcDevice, ByteCount);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoH_v2 (dstHost, srcDevice, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoHAsync (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoHAsync proc = (ptr_cuMemcpyDtoHAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoHAsync);
-        return (*proc) (dstHost, srcDevice, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoHAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoHAsync (dstHost, srcDevice, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyDtoHAsync_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyDtoHAsync_v2 proc = (ptr_cuMemcpyDtoHAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyDtoHAsync_v2);
-        return (*proc) (dstHost, srcDevice, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyDtoHAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyDtoHAsync_v2 (dstHost, srcDevice, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoA( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoA proc = (ptr_cuMemcpyHtoA)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoA);
-        return (*proc)( dstArray, dstOffset, srcHost, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoA\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoA( dstArray, dstOffset, srcHost, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoA_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoA_v2 proc = (ptr_cuMemcpyHtoA_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoA_v2);
-        return (*proc)( dstArray, dstOffset, srcHost, ByteCount );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoA_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoA_v2( dstArray, dstOffset, srcHost, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoAAsync( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoAAsync proc = (ptr_cuMemcpyHtoAAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoAAsync);
-        return (*proc)( dstArray, dstOffset, srcHost, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoAAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoAAsync( dstArray, dstOffset, srcHost, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoAAsync_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoAAsync_v2 proc = (ptr_cuMemcpyHtoAAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoAAsync_v2);
-        return (*proc)( dstArray, dstOffset, srcHost, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoAAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoAAsync_v2( dstArray, dstOffset, srcHost, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoD (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoD proc = (ptr_cuMemcpyHtoD)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoD);
-        CUresult e1 = (*proc)(dstDevice, srcHost, ByteCount);
-        return e1;
-    } else
-    {
-        memcpy((void*)dstDevice, srcHost, ByteCount);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoD ( dstDevice, srcHost, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoD_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoD_v2 proc = (ptr_cuMemcpyHtoD_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoD_v2);
-        CUresult e1 = (*proc)(dstDevice, srcHost, ByteCount);
-        return e1;
-    } else
-    {
-        memcpy((void*)dstDevice, srcHost, ByteCount);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoD_v2 ( dstDevice, srcHost, ByteCount );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoDAsync proc = (ptr_cuMemcpyHtoDAsync)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoDAsync);
-        return (*proc) (dstDevice, srcHost, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoDAsync\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoDAsync ( dstDevice, srcHost, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemcpyHtoDAsync_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemcpyHtoDAsync_v2 proc = (ptr_cuMemcpyHtoDAsync_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemcpyHtoDAsync_v2);
-        return (*proc) (dstDevice, srcHost, ByteCount, hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemcpyHtoDAsync_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemcpyHtoDAsync_v2 ( dstDevice, srcHost, ByteCount, hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemFree(CUdeviceptr dptr)
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemFree proc = (ptr_cuMemFree)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemFree);
-        CUresult e1 = (*proc)(dptr);
-        return e1;
-    } else
-    {
-        free((void*)dptr);
-        return CUDA_SUCCESS;     
-    }
+    return cu->CurrentDevice()->_cuMemFree(dptr);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemFree_v2(CUdeviceptr dptr)
 {
-    // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemFree_v2 proc = (ptr_cuMemFree_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemFree_v2);
-        CUresult e1 = (*proc)(dptr);
-        return e1;
-    } else
-    {
-        free((void*)dptr);
-        return CUDA_SUCCESS;     
-    }
+    return cu->CurrentDevice()->_cuMemFree_v2(dptr);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemFreeHost(void *p)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemFreeHost proc = (ptr_cuMemFreeHost)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemFreeHost);
-        return (*proc)(p);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemFreeHost\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemFreeHost(p);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemGetAddressRange( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemGetAddressRange proc = (ptr_cuMemGetAddressRange)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemGetAddressRange);
-        return (*proc)( pbase, psize, dptr );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemGetAddressRange\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemGetAddressRange( pbase, psize, dptr );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemGetAddressRange_v2( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemGetAddressRange_v2 proc = (ptr_cuMemGetAddressRange_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemGetAddressRange_v2);
-        return (*proc)( pbase, psize, dptr );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemGetAddressRange_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemGetAddressRange_v2( pbase, psize, dptr );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemGetInfo(unsigned int *free, unsigned int *total)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemGetInfo proc = (ptr_cuMemGetInfo)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemGetInfo);
-        return (*proc)(free, total);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemGetInfo\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemGetInfo(free, total);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemGetInfo_v2(unsigned int *free, unsigned int *total)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemGetInfo_v2 proc = (ptr_cuMemGetInfo_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemGetInfo_v2);
-        return (*proc)(free, total);
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemGetInfo_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemGetInfo_v2(free, total);
 }
 
 CUresult CUDAAPI _CUDA::_cuMemHostAlloc(void **pp, size_t bytesize, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemHostAlloc proc = (ptr_cuMemHostAlloc)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemHostAlloc);
-        return (*proc)(pp, bytesize, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemHostAlloc\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemHostAlloc(pp, bytesize, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemHostGetDevicePointer( CUdeviceptr *pdptr, void *p, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemHostGetDevicePointer proc = (ptr_cuMemHostGetDevicePointer)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemHostGetDevicePointer);
-        return (*proc)( pdptr, p, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemHostGetDevicePointer\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemHostGetDevicePointer( pdptr, p, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemHostGetDevicePointer_v2( CUdeviceptr *pdptr, void *p, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemHostGetDevicePointer_v2 proc = (ptr_cuMemHostGetDevicePointer_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemHostGetDevicePointer_v2);
-        return (*proc)( pdptr, p, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemHostGetDevicePointer_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemHostGetDevicePointer_v2( pdptr, p, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemHostGetFlags( unsigned int *pFlags, void *p )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemHostGetFlags proc = (ptr_cuMemHostGetFlags)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemHostGetFlags);
-        return (*proc)( pFlags, p );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemHostGetFlags\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemHostGetFlags( pFlags, p );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD16( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD16 proc = (ptr_cuMemsetD16)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD16);
-        return (*proc)( dstDevice, us, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD16\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD16( dstDevice, us, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD16_v2( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD16_v2 proc = (ptr_cuMemsetD16_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD16_v2);
-        return (*proc)( dstDevice, us, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD16_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD16_v2( dstDevice, us, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D16( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D16 proc = (ptr_cuMemsetD2D16)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D16);
-        return (*proc)( dstDevice, dstPitch, us, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D16\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D16( dstDevice, dstPitch, us, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D16_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D16_v2 proc = (ptr_cuMemsetD2D16_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D16_v2);
-        return (*proc)( dstDevice, dstPitch, us, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D16_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D16_v2( dstDevice, dstPitch, us, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D32( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D32 proc = (ptr_cuMemsetD2D32)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D32);
-        return (*proc)( dstDevice, dstPitch, ui, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D32\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D32( dstDevice, dstPitch, ui, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D32_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D32_v2 proc = (ptr_cuMemsetD2D32_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D32_v2);
-        return (*proc)( dstDevice, dstPitch, ui, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D32_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D32_v2( dstDevice, dstPitch, ui, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D8( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D8 proc = (ptr_cuMemsetD2D8)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D8);
-        return (*proc)( dstDevice, dstPitch, uc, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D8\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D8( dstDevice, dstPitch, uc, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD2D8_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD2D8_v2 proc = (ptr_cuMemsetD2D8_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD2D8_v2);
-        return (*proc)( dstDevice, dstPitch, uc, Width, Height );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD2D8_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD2D8_v2( dstDevice,  dstPitch, uc, Width, Height );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD32( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD32 proc = (ptr_cuMemsetD32)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD32);
-        return (*proc)( dstDevice, ui, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD32\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD32( dstDevice, ui, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD32_v2( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD32 proc = (ptr_cuMemsetD32)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD32);
-        return (*proc)( dstDevice, ui, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD32\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD32_v2( dstDevice, ui, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD8( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD8 proc = (ptr_cuMemsetD8)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD8);
-        return (*proc)( dstDevice, uc, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD8\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD8( dstDevice, uc, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuMemsetD8_v2( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuMemsetD8_v2 proc = (ptr_cuMemsetD8_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuMemsetD8_v2);
-        return (*proc)( dstDevice, uc, N );
-    } else
-    {
-        std::cout << "Unimplemented function _cuMemsetD8_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuMemsetD8_v2( dstDevice, uc, N );
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleGetFunction proc = (ptr_cuModuleGetFunction)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleGetFunction);
-        return (*proc)(hfunc, hmod, name);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuModuleGetFunction(hfunc, hmod, name);
-    }
+    return cu->CurrentDevice()->_cuModuleGetFunction(hfunc, hmod, name);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleGetGlobal(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleGetGlobal proc = (ptr_cuModuleGetGlobal)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleGetGlobal);
-        return (*proc)(dptr, bytes, hmod, name);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleGetGlobal\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleGetGlobal(dptr, bytes, hmod, name);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleGetGlobal_v2(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleGetGlobal_v2 proc = (ptr_cuModuleGetGlobal_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleGetGlobal_v2);
-        return (*proc)(dptr, bytes, hmod, name);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleGetGlobal_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleGetGlobal_v2(dptr, bytes, hmod, name);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleGetSurfRef(CUsurfref *pSurfRef, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleGetSurfRef proc = (ptr_cuModuleGetSurfRef)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleGetSurfRef);
-        return (*proc)(pSurfRef, hmod, name);   ;
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleGetSurfRef\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleGetSurfRef(pSurfRef, hmod, name);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleGetTexRef(CUtexref *pTexRef, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleGetTexRef proc = (ptr_cuModuleGetTexRef)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleGetTexRef);
-        return (*proc)(pTexRef, hmod, name);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleGetTexRef\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleGetTexRef(pTexRef, hmod, name);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleLoad(CUmodule *module, const char *fname)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleLoad proc = (ptr_cuModuleLoad)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleLoad);
-        return (*proc)(module, fname);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        return emulator->_cuModuleLoad(module, fname);
-    }
+    return cu->CurrentDevice()->_cuModuleLoad(module, fname);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleLoadData(CUmodule *module, const void *image)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleLoadData proc = (ptr_cuModuleLoadData)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleLoadData);
-        return (*proc)(module, image);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleLoadData\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleLoadData(module, image);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleLoadDataEx(CUmodule *module, const void *image, unsigned int numOptions, CUjit_option *options, void **optionValues)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleLoadDataEx proc = (ptr_cuModuleLoadDataEx)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleLoadDataEx);
-        return (*proc)(module, image, numOptions, options, optionValues);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleLoadDataEx\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleLoadDataEx(module, image, numOptions, options, optionValues);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleLoadFatBinary(CUmodule *module, const void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleLoadFatBinary proc = (ptr_cuModuleLoadFatBinary)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleLoadFatBinary);
-        return (*proc)(module, fatCubin);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleLoadFatBinary\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleLoadFatBinary(module, fatCubin);
 }
 
 CUresult CUDAAPI _CUDA::_cuModuleUnload(CUmodule hmod)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuModuleUnload proc = (ptr_cuModuleUnload)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuModuleUnload);
-        return (*proc)(hmod);
-    } else
-    {
-        std::cout << "Unimplemented function _cuModuleUnload\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuModuleUnload(hmod);
 }
 
 CUresult CUDAAPI _CUDA::_cuParamSetf    (CUfunction hfunc, int offset, float value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuParamSetf proc = (ptr_cuParamSetf)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuParamSetf);
-        return (*proc)    (hfunc, offset, value);
-    } else
-    {
-        std::cout << "Unimplemented function _cuParamSetf\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuParamSetf    (hfunc, offset, value);
 }
 
 CUresult CUDAAPI _CUDA::_cuParamSeti    (CUfunction hfunc, int offset, unsigned int value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuParamSeti proc = (ptr_cuParamSeti)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuParamSeti);
-        return (*proc)    (hfunc, offset, value);
-    } else
-    {
-        std::cout << "Unimplemented function _cuParamSeti\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuParamSeti    (hfunc, offset, value);
 }
 
 CUresult CUDAAPI _CUDA::_cuParamSetSize (CUfunction hfunc, unsigned int numbytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuParamSetSize proc = (ptr_cuParamSetSize)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuParamSetSize);
-        return (*proc)(hfunc, numbytes);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        emulator->_cuParamSetSize(hfunc, numbytes);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuParamSetSize (hfunc, numbytes);
 }
 
 CUresult CUDAAPI _CUDA::_cuParamSetTexRef(CUfunction hfunc, int texunit, CUtexref hTexRef)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuParamSetTexRef proc = (ptr_cuParamSetTexRef)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuParamSetTexRef);
-        return (*proc)(hfunc, texunit, hTexRef);
-    } else
-    {
-        std::cout << "Unimplemented function _cuParamSetTexRef\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuParamSetTexRef(hfunc, texunit, hTexRef);
 }
 
 CUresult CUDAAPI _CUDA::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuParamSetv proc = (ptr_cuParamSetv)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuParamSetv);
-        return (*proc)(hfunc, offset, ptr, numbytes);
-    } else
-    {
-        EMULATED_DEVICE * emulator = EMULATED_DEVICE::Singleton();
-        emulator->_cuParamSetv(hfunc, offset, ptr, numbytes);
-        return CUDA_SUCCESS;
-    }
+    return cu->CurrentDevice()->_cuParamSetv( hfunc, offset, ptr, numbytes);
 }
 
 CUresult CUDAAPI _CUDA::_cuStreamCreate( CUstream *phStream, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuStreamCreate proc = (ptr_cuStreamCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuStreamCreate);
-        return (*proc)( phStream, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuStreamCreate\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuStreamCreate( phStream, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuStreamDestroy( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuStreamDestroy proc = (ptr_cuStreamDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuStreamDestroy);
-        return (*proc)( hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuStreamDestroy\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuStreamDestroy( hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuStreamQuery( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuStreamQuery proc = (ptr_cuStreamQuery)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuStreamQuery);
-        return (*proc)( hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuStreamQuery\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuStreamQuery( hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuStreamSynchronize( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuStreamSynchronize proc = (ptr_cuStreamSynchronize)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuStreamSynchronize);
-        return (*proc)( hStream );
-    } else
-    {
-        std::cout << "Unimplemented function _cuStreamSynchronize\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuStreamSynchronize( hStream );
 }
 
 CUresult CUDAAPI _CUDA::_cuSurfRefGetArray( CUarray *phArray, CUsurfref hSurfRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuSurfRefGetArray proc = (ptr_cuSurfRefGetArray)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuSurfRefGetArray);
-        return (*proc)( phArray, hSurfRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuSurfRefGetArray\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuSurfRefGetArray( phArray, hSurfRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuSurfRefSetArray( CUsurfref hSurfRef, CUarray hArray, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuSurfRefSetArray proc = (ptr_cuSurfRefSetArray)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuSurfRefSetArray);
-        return (*proc)( hSurfRef, hArray, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuSurfRefSetArray\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuSurfRefSetArray( hSurfRef, hArray, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefCreate( CUtexref *pTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefCreate proc = (ptr_cuTexRefCreate)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefCreate);
-        return (*proc)( pTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefCreate\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefCreate( pTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefDestroy( CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefDestroy proc = (ptr_cuTexRefDestroy)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefDestroy);
-        return (*proc)( hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefDestroy\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefDestroy( hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetAddress( CUdeviceptr *pdptr, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetAddress proc = (ptr_cuTexRefGetAddress)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetAddress);
-        return (*proc)( pdptr, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetAddress\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetAddress( pdptr, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetAddress_v2( CUdeviceptr *pdptr, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetAddress_v2 proc = (ptr_cuTexRefGetAddress_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetAddress_v2);
-        return (*proc)( pdptr, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetAddress_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetAddress_v2( pdptr, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetAddressMode( CUaddress_mode *pam, CUtexref hTexRef, int dim )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetAddressMode proc = (ptr_cuTexRefGetAddressMode)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetAddressMode);
-        return (*proc)( pam, hTexRef, dim );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetAddressMode\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetAddressMode( pam, hTexRef, dim );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetArray( CUarray *phArray, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetArray proc = (ptr_cuTexRefGetArray)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetArray);
-        return (*proc)( phArray, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetArray\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetArray( phArray, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetFilterMode( CUfilter_mode *pfm, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetFilterMode proc = (ptr_cuTexRefGetFilterMode)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetFilterMode);
-        return (*proc)( pfm, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetFilterMode\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetFilterMode( pfm, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetFlags( unsigned int *pFlags, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetFlags proc = (ptr_cuTexRefGetFlags)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetFlags);
-        return (*proc)( pFlags, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetFlags\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetFlags( pFlags, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefGetFormat( CUarray_format *pFormat, int *pNumChannels, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefGetFormat proc = (ptr_cuTexRefGetFormat)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefGetFormat);
-        return (*proc)( pFormat, pNumChannels, hTexRef );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefGetFormat\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefGetFormat( pFormat, pNumChannels, hTexRef );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetAddress( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetAddress proc = (ptr_cuTexRefSetAddress)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetAddress);
-        return (*proc)( ByteOffset, hTexRef, dptr, bytes );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetAddress\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetAddress( ByteOffset, hTexRef, dptr, bytes );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetAddress_v2( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetAddress_v2 proc = (ptr_cuTexRefSetAddress_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetAddress);
-        return (*proc)( ByteOffset, hTexRef, dptr, bytes );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetAddress_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetAddress_v2( ByteOffset, hTexRef, dptr, bytes );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetAddress2D( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetAddress2D proc = (ptr_cuTexRefSetAddress2D)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetAddress2D);
-        return (*proc)( hTexRef, desc, dptr, Pitch);
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetAddress2D\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetAddress2D( hTexRef, desc, dptr, Pitch);
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetAddress2D_v2( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetAddress2D_v2 proc = (ptr_cuTexRefSetAddress2D_v2)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetAddress2D_v2);
-        return (*proc)( hTexRef, desc, dptr, Pitch);
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetAddress2D_v2\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetAddress2D_v2( hTexRef, desc, dptr, Pitch);
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetAddressMode( CUtexref hTexRef, int dim, CUaddress_mode am )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetAddressMode proc = (ptr_cuTexRefSetAddressMode)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetAddressMode);
-        return (*proc)( hTexRef, dim, am );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetAddressMode\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetAddressMode( hTexRef, dim, am );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetArray proc = (ptr_cuTexRefSetArray)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetArray);
-        return (*proc)( hTexRef, hArray, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetArray\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetArray( hTexRef, hArray, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mode fm )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetFilterMode proc = (ptr_cuTexRefSetFilterMode)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetFilterMode);
-        return (*proc)( hTexRef, fm );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetFilterMode\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetFilterMode( hTexRef, fm );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetFlags proc = (ptr_cuTexRefSetFlags)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetFlags);
-        return (*proc)( hTexRef, Flags );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetFlags\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetFlags( hTexRef, Flags );
 }
 
 CUresult CUDAAPI _CUDA::_cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int NumPackedComponents )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    if (! cu->do_emulation)
-    {
-        ptr_cuTexRefSetFormat proc = (ptr_cuTexRefSetFormat)cu->hook_manager->FindOriginal((PROC)_CUDA::_cuTexRefSetFormat);
-        return (*proc)( hTexRef, fmt, NumPackedComponents );
-    } else
-    {
-        std::cout << "Unimplemented function _cuTexRefSetFormat\n";
-        return CUDA_ERROR_INVALID_VALUE;
-    }
+    return cu->CurrentDevice()->_cuTexRefSetFormat( hTexRef, fmt, NumPackedComponents );
 }
