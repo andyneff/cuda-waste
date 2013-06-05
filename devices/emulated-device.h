@@ -27,6 +27,8 @@
 #include "../wrapper/lock-mgr.h"
 #include "../devices/device.h"
 #include "../wrapper/cuda-wrapper.h"
+#include "../devices/module.h"
+#include "../devices/entry.h"
 
 class SYMBOL_TABLE;
 class STRING_TABLE;
@@ -40,13 +42,6 @@ public:
     EMULATED_DEVICE();
     ~EMULATED_DEVICE();
 private:
-    struct ltstr
-    {
-        bool operator()(const char* s1, const char* s2) const
-        {
-            return strcmp(s1, s2) < 0;
-        }
-    };
 
     STRING_TABLE * string_table;
 
@@ -91,14 +86,9 @@ public:
 
     std::map<void*, char*> fun_to_name;
 
-    typedef struct MOD
-    {
-        char * module_name;
-        TREE * tree;
-        std::map<char*, TREE *, ltstr> entry;
-        std::map<char*, TREE *, ltstr> func;
-    } MOD;
     std::list<MOD*> modules;
+
+    std::list<ENTRY*> entries;
 
     std::list<arg*> arguments;
     config conf;
@@ -416,7 +406,7 @@ public:
     void ConfigureGrid(dim3 dim);
     void ConfigureSharedMemory(size_t sharedMem);
     void ConfigureStream(cudaStream_t stream);
-    void Execute(TREE * entry);
+    void Execute(ENTRY * entry);
 
     // Options for emulator.
     void SetTrace(int level);

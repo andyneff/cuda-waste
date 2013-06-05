@@ -124,6 +124,7 @@ tokens {
     K_ADDR_MODE_0;
     K_ADDR_MODE_1;
     K_ADDR_MODE_2;
+    K_ADDRESS_SIZE;
     K_ALIGN;
     K_ALL;
     K_AND;
@@ -354,7 +355,7 @@ tokens {
 }
 
 prog
-    : version target statement+ EOF
+    : version target address_size? statement+ EOF
     ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,6 +370,10 @@ version
 
 target
     : K_TARGET^ target_list
+    ;
+
+address_size
+    : K_ADDRESS_SIZE^ integer
     ;
 
 target_list
@@ -427,6 +432,7 @@ entry
 
 entry_aux
     :
+    (K_VISIBLE | K_EXTERN )?
     K_ENTRY kernel_name ( T_OP entry_param_list T_CP )? performance_tuning_directives? entry_body
     ->
     kernel_name ^( TREE_PARAM_LIST entry_param_list? ) ^( TREE_PERF performance_tuning_directives? ) entry_body
@@ -3416,6 +3422,7 @@ K_ALIGN: '.align';
 K_ADDR_MODE_2: '.addr_mode_2';
 K_ADDR_MODE_1: '.addr_mode_1';
 K_ADDR_MODE_0: '.addr_mode_0';
+K_ADDRESS_SIZE: '.address_size';
 K_ADD: '.add';
 K_X: '.x';
 K_Y: '.y';

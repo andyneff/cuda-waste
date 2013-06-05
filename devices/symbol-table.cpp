@@ -66,54 +66,54 @@ void SYMBOL_TABLE::Dump()
         {
             SYMBOL * s = (*it).second;
             std::cout << "name: " << s->name << " ";
-            std::cout << "size: " << s->size << " ";
-            std::cout << "stor: " << s->storage_class << " ";
-            std::cout << "type: " << s->typestring << " ";
+            std::cout << " size: " << s->size << " ";
+            std::cout << " stor: " << s->storage_class << " ";
+            std::cout << " type: " << s->typestring << " ";
             if (strcmp(s->typestring, "label") == 0)
-                std::cout << "val:  " << (int)s->pvalue << "\n";
+                std::cout << " val:  " << (int)s->pvalue << "\n";
             else if (strcmp(s->typestring, "dim3") == 0)
-                std::cout << "val:  " << ((dim3*)s->pvalue)->x
+                std::cout << " val:  " << ((dim3*)s->pvalue)->x
                         << " " << ((dim3*)s->pvalue)->y
                         << " " << ((dim3*)s->pvalue)->z
                         << "\n";
             else if (strcmp(s->typestring, ".pred") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->pred << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->pred << "\n";
             else if (strcmp(s->typestring, ".u8") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u8 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u8 << "\n";
             else if (strcmp(s->typestring, ".u16") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u16 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u16 << "\n";
             else if (strcmp(s->typestring, ".u32") == 0)
             {
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u32 << " ";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u32 << " ";
                 std::cout << std::hex << ((TYPES::Types*)s->pvalue)->u32;
                 std::cout << std::dec << "\n";
             }
             else if (strcmp(s->typestring, ".u64") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u64 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u64 << "\n";
             else if (strcmp(s->typestring, ".s8") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->s8 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->s8 << "\n";
             else if (strcmp(s->typestring, ".s16") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->s16 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->s16 << "\n";
             else if (strcmp(s->typestring, ".s32") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->s32 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->s32 << "\n";
             else if (strcmp(s->typestring, ".s64") == 0)
                 std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->s64 << "\n";
             else if (strcmp(s->typestring, ".b8") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u8 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u8 << "\n";
             else if (strcmp(s->typestring, ".b16") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u16 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u16 << "\n";
             else if (strcmp(s->typestring, ".b32") == 0)
             {
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u32 << " ";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u32 << " ";
                 std::cout << std::hex << ((TYPES::Types*)s->pvalue)->u32;
                 std::cout << std::dec << "\n";
             }
             else if (strcmp(s->typestring, ".b64") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->u64 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->u64 << "\n";
             else if (strcmp(s->typestring, ".f32") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->f32 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->f32 << "\n";
             else if (strcmp(s->typestring, ".f64") == 0)
-                std::cout << "val:  " << ((TYPES::Types*)s->pvalue)->f64 << "\n";
+                std::cout << " val:  " << ((TYPES::Types*)s->pvalue)->f64 << "\n";
             else assert(false);
         }
     }

@@ -40,6 +40,7 @@
 #include "zlib.h"
 #include <__cudaFatFormat.h>
 #include "../wrapper/call-stack-info.h"
+#include "../devices/entry.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -615,7 +616,7 @@ CUresult EMULATED_DEVICE::_cuLaunchGrid(CUfunction hfunc, int grid_width, int gr
 {
 	dim3 gridDim(grid_width, grid_height, 1);
 	this->ConfigureGrid(gridDim);
-	this->Execute((TREE*)hfunc);
+	this->Execute((ENTRY*)hfunc);
 	return CUDA_SUCCESS;
 }
 
@@ -1094,10 +1095,10 @@ CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod,
 	// Now, given the name of the kernel function being called, find
 	// the entry for it.
 	MOD * module = (MOD*)hmod;
-	std::map<char*, TREE *, ltstr>::iterator j = module->entry.find((char*)name);
+	std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find((char*)name);
 	if (j == module->entry.end())
 		return CUDA_ERROR_NOT_FOUND;
-	TREE * data = j->second;
+	ENTRY * data = j->second;
 	*hfunc = (CUfunction)data;
 	return CUDA_SUCCESS;
 }
@@ -1438,9 +1439,12 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture2D(size_t *offset,const struct text
 cudaError_t EMULATED_DEVICE::_cudaBindTextureToArray(const struct textureReference *texref, const struct cudaArray *array, const struct cudaChannelFormatDesc *desc)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaBindTextureToArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "_cudaBindTextureToArray called, " << context << ".\n\n";
+    }
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaChooseDevice(int *device, const struct cudaDeviceProp *prop)
@@ -1578,14 +1582,14 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
 
     if (cu->trace_all_calls)
     {
-        (*cu->output_stream) << "cudaFree called, ptr = " << ptr << ", "
+        (*cu->output_stream) << "_cudaFree called, ptr = " << ptr << ", "
              << context << ".\n\n";
     }
 
     // Null pointer sanity check.
     if (ptr == 0)
     {
-        (*cu->output_stream) << "Pointer in HostFree("
+        (*cu->output_stream) << "Pointer in _cudaFree("
             << "ptr = " << ptr
             << ") is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in "
@@ -1600,7 +1604,7 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
     int di = this->FindAllocatedBlock(ptr);
     if (di == -1)
     {
-        (*cu->output_stream) << "Pointer to cudaFree(" << ptr << ") is invalid.\n";
+        (*cu->output_stream) << "Pointer to _cudaFree(" << ptr << ") is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in "
             << context << ".\n\n";
         if (cu->quit_on_error)
@@ -1613,7 +1617,7 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
     void * local = ((char*)ptr) - cu->padding_size;
     if (d->ptr != local)
     {
-        (*cu->output_stream) << "Pointer to cudaFree(" << ptr << ") is invalid.\n\n";
+        (*cu->output_stream) << "Pointer to _cudaFree(" << ptr << ") is invalid.\n\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in "
             << context << ".\n\n";
         if (cu->quit_on_error)
@@ -1631,9 +1635,59 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
 cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaFreeArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+	struct cudaArray * ptr = array;
+	char * context = cu->Context();
+
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "_cudaFreeArray called, ptr = " << ptr << ", "
+				<< context << ".\n\n";
+	}
+
+	// Null pointer sanity check.
+	if (ptr == 0)
+	{
+		(*cu->output_stream) << "Pointer in _cudaFreeArray("
+				<< "ptr = " << ptr
+				<< ") is invalid.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in "
+				<< context << ".\n\n";
+		if (cu->quit_on_error)
+			exit(1);
+		if (cu->do_not_call_cuda_after_sanity_check_fail)
+			return cudaErrorInvalidDevicePointer;
+		return cudaErrorMemoryAllocation;
+	}
+
+	int di = this->FindAllocatedBlock(ptr);
+	if (di == -1)
+	{
+		(*cu->output_stream) << "Pointer to _cudaFreeArray(" << ptr << ") is invalid.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in "
+				<< context << ".\n\n";
+		if (cu->quit_on_error)
+			exit(1);
+		if (cu->do_not_call_cuda_after_sanity_check_fail)
+			return cudaErrorInvalidDevicePointer;
+		return cudaErrorMemoryAllocation;
+	}
+	EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
+	void * local = ((char*)ptr) - cu->padding_size;
+	if (d->ptr != local)
+	{
+		(*cu->output_stream) << "Pointer to _cudaFreeArray(" << ptr << ") is invalid.\n\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in "
+				<< context << ".\n\n";
+		if (cu->quit_on_error)
+			exit(1);
+		if (cu->do_not_call_cuda_after_sanity_check_fail)
+			return cudaErrorInvalidDevicePointer;
+		return cudaErrorMemoryAllocation;
+	}
+	(*this->alloc_list).erase((*this->alloc_list).begin() + di);
+	this->CheckSinglePtrOverwrite(d);
+	free(local);
+	return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaFreeHost(void * ptr)
@@ -2060,14 +2114,14 @@ cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
     for (std::list<MOD*>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
     {
         MOD * module = *it;
-        if (strcmp(this->device, module->module_name) == 0 ||
+        if (strcmp(this->device, module->name) == 0 ||
             this->modules.size() == 1)
         {
             // Now, given the name of the kernel function being called, find
             // the entry for it.
-            std::map<char*, TREE *, ltstr>::iterator j = module->entry.find(name);
+            std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find(name);
             assert(j != module->entry.end());
-            TREE * entry = j->second;
+            ENTRY * entry = j->second;
             this->Execute(entry);
             return cudaSuccess;
         }
@@ -2153,10 +2207,67 @@ cudaError_t EMULATED_DEVICE::_cudaMalloc3DArray(struct cudaPitchedPtr* pitchedDe
 
 cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const struct cudaChannelFormatDesc *desc, size_t width, size_t height __dv(0), unsigned int flags __dv(0))
 {
+	void * local = 0;
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMallocArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+	char * context = cu->Context();
+
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "cudaMallocArray called, " << context << ".\n\n";
+		(*cu->output_stream).flush();
+	}
+
+	if (this->IsBadPointer(desc))
+	{
+		(*cu->output_stream) << "Bad pointer passed to cudaMallocArray("
+				<< desc << ", ..., ...).\n";
+		(*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
+		if (cu->quit_on_error)
+			exit(1);
+		if (cu->do_not_call_cuda_after_sanity_check_fail)
+			return cudaErrorMemoryAllocation;
+	}
+
+	cudaError_t resetErrKernel = _cudaGetLastError();
+
+	// calculate size.
+	// NOTE: a cudaChannelFormatDesc is a structure of the sizes of components of a linear piece of memory.  It is not a 4D cube.
+	unsigned int size = width * height * (desc->x + desc->y + desc->z + desc->w)/8;  // bytes.
+
+	// Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
+	local = malloc(size+2*cu->padding_size);
+	if (! local)
+	{
+		(*cu->output_stream) << "Host memory allocation failed in cudaMallocArray.  The buffer is used to initialize the device buffer.\n";
+		(*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
+		if (cu->quit_on_error)
+			exit(1);
+		if (cu->do_not_call_cuda_after_sanity_check_fail)
+			return cudaErrorMemoryAllocation;
+		return cudaErrorMemoryAllocation;
+	}
+	// Mark paddings with padding characters.
+	for (char * init = (char*)local; init < (((char*)local) + cu->padding_size); ++init)
+	{
+		*init = cu->padding_byte;
+	}
+	for (char * init = ((char*)local) + size + cu->padding_size; init < (((char*)local) + size + 2 * cu->padding_size); ++init)
+	{
+		*init = cu->padding_byte;
+	}
+	// Init buffer with zeros.
+	for (char * init = ((char*)local) + cu->padding_size; init < (((char*)local) + size + cu->padding_size); ++init)
+	{
+		*init = 0;
+	}
+	EMULATED_DEVICE::data d;
+	d.ptr = local;
+	d.size = size + 2 * cu->padding_size;
+	d.is_host = false;
+	d.context = strdup(cu->Context());
+	this->alloc_list->push_back(d);
+	*array = (cudaArray*)(((char*)local) + cu->padding_size);
+	return cudaSuccess;     
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMallocHost(void **ptr, size_t size)
@@ -2475,9 +2586,182 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *s
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyToArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    char * file_name = 0;
+    int line = 0;
+    char * context = cu->Context();
+
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaMemcpyToArray called, " << context << ".\n\n";
+    }
+
+    // Null pointer sanity check.
+    if (dst == 0)
+    {
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpyToArray("
+            << "dst = " << dst
+            << ", ..., ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+            << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorMemoryAllocation;
+    }
+    if (src == 0)
+    {
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., "
+            << "src = " << src
+            << ", ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+            << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorMemoryAllocation;
+    }
+	// Four cases:
+    if (kind == cudaMemcpyHostToDevice)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
+
+        if (ds != -1 && dd == -1)
+        {
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
+                << "dst = " << dst
+                << ", src = " << src << ", ..., ...) "
+                << " are reversed in directionality.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd == -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpyToArray("
+                << "dst = " << dst
+                << ", ..., ..., ...) "
+                << " is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src
+                << ", ..., ...) looks invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src
+                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        EMULATED_DEVICE::data * ddst = 0;
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (dd != -1)
+            ddst = &(*this->alloc_list)[dd];
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        // Perform copy.
+        cudaError_t err;
+        memcpy(dst, src, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+    else if (kind == cudaMemcpyDeviceToHost)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        if (ds == -1 && dd != -1)
+        {
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
+                << "dst = " << dst
+                << ", src = " << src << ", ..., ...) "
+                << " are reversed in directionality.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpyToArray(..., "
+                << "src = " << src
+                << ", ..., ..., ...) "
+                << " is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd != -1 && (*this->alloc_list)[dd].is_host)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray("
+                << "dst = " << dst
+                << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (this->IsBadPointer(dst))
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray("
+                << "dst = " << dst
+                << ", ..., ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        // Check before copy if block boundaries are intact.
+        EMULATED_DEVICE::data * ddst = 0;
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (dd != -1)
+            ddst = &(*this->alloc_list)[dd];
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+
+        // Perform copy.
+		int offset = 0;
+
+        memcpy((char*)dst + offset, src, count);
+
+		cudaError_t err;
+        err = cudaSuccess;
+
+		// Perform overwrite check again.
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+    else
+        return cudaErrorMemoryAllocation;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -2507,9 +2791,9 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbolAsync(const char *symbol, const 
 cudaError_t EMULATED_DEVICE::_cudaMemGetInfo(size_t *free, size_t *total)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemGetInfo is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+	*free = 250000000;
+	*total = 3000000000;
+	return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemset(void * dst, int value, size_t count)
@@ -2962,7 +3246,7 @@ EMULATED_DEVICE::EMULATED_DEVICE()
     this->string_table = new STRING_TABLE();
     this->trace_level = 0;
     this->extern_memory_buffer = 0;
-    this->num_threads = 2;
+    this->num_threads = 1;
     this->max_instruction_thread = 100;
 	this->alloc_list = new std::vector<data>();
 }
@@ -2975,7 +3259,7 @@ void EMULATED_DEVICE::SetTrace(int level)
 // In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
-EMULATED_DEVICE::MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
+MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
@@ -2989,40 +3273,56 @@ EMULATED_DEVICE::MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
         std::cout << "====================================================\n\n\n";
     }
 
-    TREE * mod = parse(source);
-    if (! mod)
+    TREE * tree = parse(source);
+    if (! tree)
     {
         std::cout << "Error: cannot parse PTX!\n";
         return false;
     }
+    if (this->trace_level > 1 || cu->trace_all_calls)
+    {
+        std::cout << "====================================================\n";
+        std::cout << "TREE: " << std::endl;
+		this->Print(tree, 0);
+        std::cout << "====================================================\n\n\n";
+    }
     MOD * module = new MOD();
-    module->module_name = this->StringTableEntry(module_name);
-    module->tree = mod;
-    Extract_From_Tree(module, mod);
+    module->name = this->StringTableEntry(module_name);
+    module->tree = tree;
+	// Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
+    Extract_From_Tree(module, tree);
     this->modules.push_back(module);
     return module;
 }
 
-void EMULATED_DEVICE::Extract_From_Tree(EMULATED_DEVICE::MOD * module, TREE * node)
+void EMULATED_DEVICE::Extract_From_Tree(MOD * module, TREE * node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->GetType() == TREE_ENTRY)
     {
         // First child will be name node.
+		ENTRY * entry = new ENTRY();
         TREE * word = node->GetChild(0);
         char * name = word->GetText();
-        std::pair<char*, TREE *> i;
+		entry->name = name;
+		entry->module = module;
+		entry->tree = node;
+        std::pair<char*, ENTRY *> i;
         i.first = (char*)name;
-        i.second = node;
+        i.second = entry;
         module->entry.insert(i);
     }
     else if (node->GetType() == TREE_FUNC)
     {
+		ENTRY * entry = new ENTRY();
         TREE * word = node->GetChild(0);
         char * name = word->GetText();
-        std::pair<char*, TREE *> i;
+		entry->name = name;
+		entry->module = module;
+		entry->tree = node;
+        std::pair<char*, ENTRY *> i;
         i.first = (char*)name;
-        i.second = node;
+        i.second = entry;
         module->func.insert(i);
     }
     for (int i = 0; i < node->GetChildCount(); ++i)
@@ -3089,6 +3389,8 @@ size_t EMULATED_DEVICE::Sizeof(int type)
     case K_B32: return sizeof(signed __int32);
     case K_B64: return sizeof(signed __int64);
     case K_PRED: return sizeof(bool);
+	// Texref is a dynamic type, so size is unknown. .tex in ptx is now deprecated in favor of this POS.
+	case K_TEXREF: return 0;
     }
     assert(false);
     return 0;
@@ -3441,20 +3743,24 @@ void EMULATED_DEVICE::ResetArgs()
 }
 
 
-void EMULATED_DEVICE::Execute(TREE * entry)
+void EMULATED_DEVICE::Execute(ENTRY * entry)
 {
 //    _CrtMemState state_begin;
 //    _CrtMemCheckpoint(&state_begin);
 
+	//this->trace_level = 3;
+
+
+
     //// Get function block.
-    TREE * code = FindBlock(entry);
+    TREE * code = FindBlock(entry->tree);
 
     // Create symbol table for outer blocks.
     SYMBOL_TABLE * obst = PushSymbolTable(0);
 
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
-        int sc[] = { K_GLOBAL, K_SHARED, 0};
+        int sc[] = { K_GLOBAL, K_SHARED, K_TEX, 0};
         SetupVariables(obst, p, sc);
     }
 
@@ -3463,7 +3769,7 @@ void EMULATED_DEVICE::Execute(TREE * entry)
     int sc[] = { K_GLOBAL, K_CONST, K_TEX, 0};
     SetupVariables(block_symbol_table, code, sc);
     SetupGotos(block_symbol_table, code);
-    SetupParams(block_symbol_table, entry);
+    SetupParams(block_symbol_table, entry->tree);
     CreateSymbol(block_symbol_table, "%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
     CreateSymbol(block_symbol_table, "%ntid", "dim3", K_V4, &conf.blockDim, sizeof(conf.blockDim), K_LOCAL);
 
@@ -3706,13 +4012,10 @@ void EMULATED_DEVICE::Print(TREE * node, int level)
     for (int i = 0; i < level; ++i)
         std::cout << "   ";
     std::cout << node->GetText() << "\n";
-    if (this->trace_level > 1)
+    for (int i = 0; i < (int)node->GetChildCount(); ++i)
     {
-        for (int i = 0; i < (int)node->GetChildCount(); ++i)
-        {
-            TREE * child = (TREE *)node->GetChild(i);
-            Print(child, level+1);
-        }
+        TREE * child = (TREE *)node->GetChild(i);
+        Print(child, level+1);
     }
 } 
 

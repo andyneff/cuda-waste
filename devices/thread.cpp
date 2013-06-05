@@ -64,10 +64,16 @@ void THREAD::Execute()
         this->finished = true;
         return;
     }
-	int max_count = emulator->max_instruction_thread;
+    int max_count = emulator->max_instruction_thread;
     for (int count = 0; count < max_count; ++count)
     {
-        TREE * inst = this->emulator->GetInst(block, pc);
+		TREE * inst = this->emulator->GetInst(block, pc);
+		if (inst == 0)
+			// Fell off the tree.
+		{
+			this->finished = true;
+			return;
+		}
         if (this->emulator->TraceLevel() > 3)
             this->Dump("before", pc, inst);
 
@@ -88,6 +94,11 @@ void THREAD::Execute()
             this->finished = true;
             return;
         }
+		else if (next == -KI_RET)
+		{
+			this->finished = true;
+			return;
+		}
         else if (next == -KI_BAR)
         {
         // Set state of this thread to wait, and pack up current program counter.
@@ -103,11 +114,11 @@ void THREAD::Execute()
         if (this->emulator->TraceLevel() > 2)
             this->Dump("after", pc, inst);
     }
-	// Fall through here if the instruction count was hit.
-	// In this case, pack up the thread in order to be executed next time.
-	this->wait = true;
-	this->pc = pc;
-	return;
+    // Fall through here if the instruction count was hit.
+    // In this case, pack up the thread in order to be executed next time.
+    this->wait = true;
+    this->pc = pc;
+    return;
 }
 
 bool THREAD::Finished()
@@ -127,23 +138,23 @@ bool THREAD::Waiting()
 
 int THREAD::Dispatch(TREE * inst)
 {
-    if (this->emulator->TraceLevel() > 1)
+    TREE * i = (TREE *)inst->GetChild(0);
+    int inst_type = i->GetType();
+    if (this->emulator->TraceLevel() > 1 || inst_type == KI_TEX)
     {
         this->emulator->PrintName(inst);
-        if (this->emulator->TraceLevel() > 2)
+        if (this->emulator->TraceLevel() > 2|| inst_type == KI_TEX)
             this->emulator->Print(inst, 0);
     }
 
-    TREE * i = (TREE *)inst->GetChild(0);
-    int inst_type = i->GetType();
     if (inst_type == TREE_PRED)
     {
-    // Predicate preceeds the instruction.
+        // Predicate preceeds the instruction.
         TREE * pred = i;
         i = (TREE *)inst->GetChild(1);
         inst_type = i->GetType();
 
-    // Check if pred is true.  If false, ignore instruction with this predicate.
+        // Check if pred is true.  If false, ignore instruction with this predicate.
         int i = 0;
         bool not = false;
         TREE * tsym = 0;

@@ -165,7 +165,9 @@
     <ClCompile Include="..\constant.cpp" />
     <ClCompile Include="..\device.cpp" />
     <ClCompile Include="..\emulated-device.cpp" />
+    <ClCompile Include="..\entry.cpp" />
     <ClCompile Include="..\instructions.cpp" />
+    <ClCompile Include="..\module.cpp" />
     <ClCompile Include="..\nvidia-gpu.cpp" />
     <ClCompile Include="..\symbol-table.cpp" />
     <ClCompile Include="..\symbol.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="..\constant.h" />
     <ClInclude Include="..\device.h" />
     <ClInclude Include="..\emulated-device.h" />
+    <ClCompile Include="..\entry.h" />
+    <ClCompile Include="..\module.h" />
     <ClInclude Include="..\nvidia-gpu.h" />
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
