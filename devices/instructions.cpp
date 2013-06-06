@@ -7791,50 +7791,137 @@ int THREAD::DoTex(TREE * inst)
     assert(j != this->emulator->texture_to_binding.end());
     TEXREF * texture_binding = j->second;
 
-	// Compute actual source.
     TYPES::Types * s;
-    TYPES::Types value;
-	SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
-    assert(ssrc2 != 0);
-    switch (ssrc2->storage_class)
-    {
-        case K_GLOBAL:
-        case K_LOCAL:
-        case K_PARAM:
-        case K_SHARED:
-        case K_CONST:
-			assert(false);
-            break;
-        case K_REG:
-            // names in instructions refer to the contents of the
-            // register.
-            s = (TYPES::Types*)ssrc2->pvalue;
-            break;
-    }
+	if (_1d)
+	{
+		// Compute actual source.
+		TYPES::Types value;
+		SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+		assert(ssrc2 != 0);
+		switch (ssrc2->storage_class)
+		{
+			case K_GLOBAL:
+			case K_LOCAL:
+			case K_PARAM:
+			case K_SHARED:
+			case K_CONST:
+				assert(false);
+				break;
+			case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+				s = (TYPES::Types*)ssrc2->pvalue;
+				break;
+		}
 
-	// Get value of register.
-	int index = 0;
-    switch (stype)
-    {
-        case K_S32:
-            index = s->s32;
-            break;
-        default:
-            assert(false);
-    }
+		// Get value of register.
+		float findex = 0;
+		switch (stype)
+		{
+			case K_S32:
+				findex = s->s32;
+				break;
+			case K_F32:
+				findex = s->f32;
+				break;
+			default:
+				assert(false);
+		}
 
-	// Add value to texture binding address and dereference to get and assign value.
+		// Add value to texture binding address and dereference to get and assign value.
+		SYMBOL * sdst = 0;
+		if (dst1->GetType() == T_WORD)
+		{
+			sdst = this->root->FindSymbol(dst1->GetText());
+		} else assert(false);
+
+		s = (TYPES::Types*)(texture_binding->devPtr);
+		unsigned char * addr = 0;
+		addr = (unsigned char*)s;
+
+		int index = (int) findex;
+
+		s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+	} else 	if (_2d)
+	{
+		// Compute actual source.
+		TYPES::Types value;
+		SYMBOL * ssrca2 = this->root->FindSymbol(osrc2->GetChild(0)->GetText());
+		SYMBOL * ssrcb2 = this->root->FindSymbol(osrc2->GetChild(1)->GetText());
+		assert(ssrca2 != 0);
+		assert(ssrcb2 != 0);
+		switch (ssrca2->storage_class)
+		{
+			case K_GLOBAL:
+			case K_LOCAL:
+			case K_PARAM:
+			case K_SHARED:
+			case K_CONST:
+				assert(false);
+				break;
+			case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+				s = (TYPES::Types*)ssrca2->pvalue;
+				break;
+		}
+
+		// Get value of register.
+		float findex = 0;
+		switch (stype)
+		{
+			case K_S32:
+				findex = s->s32;
+				break;
+			case K_F32:
+				findex = s->f32;
+				break;
+			default:
+				assert(false);
+		}
+
+		switch (ssrcb2->storage_class)
+		{
+			case K_GLOBAL:
+			case K_LOCAL:
+			case K_PARAM:
+			case K_SHARED:
+			case K_CONST:
+				assert(false);
+				break;
+			case K_REG:
+				// names in instructions refer to the contents of the
+				// register.
+				s = (TYPES::Types*)ssrcb2->pvalue;
+				break;
+		}
+
+		switch (stype)
+		{
+			case K_S32:
+				findex = findex + texture_binding->width * s->s32;
+				break;
+			case K_F32:
+				findex = findex + texture_binding->width * s->f32;
+				break;
+			default:
+				assert(false);
+		}
+
+		s = (TYPES::Types*)(texture_binding->devPtr);
+		unsigned char * addr = 0;
+		addr = (unsigned char*)s;
+
+		int index = (int) findex;
+
+		s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+	}
+
 	SYMBOL * sdst = 0;
 	if (dst1->GetType() == T_WORD)
 	{
 		sdst = this->root->FindSymbol(dst1->GetText());
 	} else assert(false);
-
-	s = (TYPES::Types*)(texture_binding->devPtr);
-	unsigned char * addr = 0;
-	addr = (unsigned char*)s;
-	s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
-
 	TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
 	switch (dtype)

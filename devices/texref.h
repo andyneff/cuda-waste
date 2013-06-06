@@ -23,4 +23,7 @@ public:
 	void *devPtr;
 	struct cudaChannelFormatDesc *desc;
 	size_t size;
+	size_t width;
+	size_t height;
+	size_t pitch;
 };

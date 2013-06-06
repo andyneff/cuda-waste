@@ -1447,9 +1447,30 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture(size_t *offset, const struct textu
 cudaError_t EMULATED_DEVICE::_cudaBindTexture2D(size_t *offset,const struct textureReference *texref,const void *devPtr, const struct cudaChannelFormatDesc *desc,size_t width, size_t height, size_t pitch)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaBindTexture2D is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "_cudaBindTexture2D called, " << context << ".\n\n";
+    }
+
+	// Associate the "texref" with the rest of the info in this call.
+	// When assigning or grabbing the values for texref, we'll need this information.
+	TEXREF * tr = new TEXREF();
+	tr->desc = (struct cudaChannelFormatDesc*)desc;
+	tr->devPtr = (void*)devPtr;
+	tr->offset = offset;
+	tr->size = 0;
+	tr->width = width;
+	tr->height = height;
+	tr->pitch = pitch;
+	tr->texref = (struct textureReference*)texref;
+
+    std::pair<void*, TEXREF*> i;
+    i.first = (void*)texref;
+    i.second = tr;
+	this->texture_to_binding.insert(i);
+
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaBindTextureToArray(const struct textureReference *texref, const struct cudaArray *array, const struct cudaChannelFormatDesc *desc)
