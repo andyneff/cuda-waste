@@ -184,6 +184,7 @@
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
     <ClInclude Include="..\symbol.h" />
+    <ClInclude Include="..\texref.h" />
     <ClInclude Include="..\thread.h" />
     <ClInclude Include="..\tree.h" />
     <ClInclude Include="..\types.h" />

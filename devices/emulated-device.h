@@ -29,11 +29,13 @@
 #include "../wrapper/cuda-wrapper.h"
 #include "../devices/module.h"
 #include "../devices/entry.h"
+#include "../devices/ltstr.h"
 
 class SYMBOL_TABLE;
 class STRING_TABLE;
 class SYMBOL;
 class TYPES;
+class TEXREF;
 
 class EMULATED_DEVICE : DEVICE
 {
@@ -84,13 +86,19 @@ public:
         cudaStream_t stream;
     };
 
+
     std::map<void*, char*> fun_to_name;
+
+	std::map<char*, void*, ltstr> texturename_to_texture;
+
+	std::map<void*, TEXREF*> texture_to_binding;
 
     std::list<MOD*> modules;
 
     std::list<ENTRY*> entries;
 
     std::list<arg*> arguments;
+
     config conf;
     void * extern_memory_buffer;
 	int max_instruction_thread;

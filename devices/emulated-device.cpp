@@ -41,6 +41,7 @@
 #include <__cudaFatFormat.h>
 #include "../wrapper/call-stack-info.h"
 #include "../devices/entry.h"
+#include "../devices/texref.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -1425,6 +1426,21 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture(size_t *offset, const struct textu
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaBindTexture called, " << context << ".\n\n";
     }
+
+	// Associate the "texref" with the rest of the info in this call.
+	// When assigning or grabbing the values for texref, we'll need this information.
+	TEXREF * tr = new TEXREF();
+	tr->desc = (struct cudaChannelFormatDesc*)desc;
+	tr->devPtr = (void*)devPtr;
+	tr->offset = offset;
+	tr->size = size;
+	tr->texref = (struct textureReference*)texref;
+
+    std::pair<void*, TEXREF*> i;
+    i.first = (void*)texref;
+    i.second = tr;
+	this->texture_to_binding.insert(i);
+
     return cudaSuccess;
 }
 
@@ -3041,7 +3057,7 @@ void EMULATED_DEVICE::_cudaRegisterSurface(void **fatCubinHandle, const struct s
 	_CUDA_RUNTIME::Unimplemented();
 }
 
-void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct textureReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int norm, int ext)
+void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct textureReference *hostVar, const void **deviceAddress, const char *textureName, int dim, int norm, int ext)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
@@ -3049,6 +3065,12 @@ void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct t
         char * context = cu->Context();
         (*cu->output_stream) << "__cudaRegisterTexture called, " << context << ".\n\n";
     }
+	// Associate "textureName" with "hostVar".  When using textures, we'll need to get the address 
+	// of the texture in memory from the name of the texture.
+    std::pair<char*, void*> i;
+    i.first = (char*)textureName;
+    i.second = (void*)hostVar;
+    this->texturename_to_texture.insert(i);
 }
 
 void EMULATED_DEVICE::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, char *deviceAddress, const char *deviceName, int ext, int size, int constant, int global)

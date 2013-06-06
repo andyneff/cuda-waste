@@ -25,6 +25,7 @@
 #include "constant.h"
 #include "../wrapper/lock-mgr.h"
 #include "../wrapper/cuda-wrapper.h"
+#include "../devices/texref.h"
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
@@ -7780,6 +7781,76 @@ int THREAD::DoTex(TREE * inst)
 	assert(tex != 0);
 	
 
+	// Find texture from name.
+	std::map<char*, void*>::iterator i = this->emulator->texturename_to_texture.find(tex->name);
+    assert(i != this->emulator->texturename_to_texture.end());
+    void * texture = i->second;
+
+	// Find texture binding from texture.
+	std::map<void*, TEXREF*>::iterator j = this->emulator->texture_to_binding.find(texture);
+    assert(j != this->emulator->texture_to_binding.end());
+    TEXREF * texture_binding = j->second;
+
+	// Compute actual source.
+    TYPES::Types * s;
+    TYPES::Types value;
+	SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+    assert(ssrc2 != 0);
+    switch (ssrc2->storage_class)
+    {
+        case K_GLOBAL:
+        case K_LOCAL:
+        case K_PARAM:
+        case K_SHARED:
+        case K_CONST:
+			assert(false);
+            break;
+        case K_REG:
+            // names in instructions refer to the contents of the
+            // register.
+            s = (TYPES::Types*)ssrc2->pvalue;
+            break;
+    }
+
+	// Get value of register.
+	int index = 0;
+    switch (stype)
+    {
+        case K_S32:
+            index = s->s32;
+            break;
+        default:
+            assert(false);
+    }
+
+	// Add value to texture binding address and dereference to get and assign value.
+	SYMBOL * sdst = 0;
+	if (dst1->GetType() == T_WORD)
+	{
+		sdst = this->root->FindSymbol(dst1->GetText());
+	} else assert(false);
+
+	s = (TYPES::Types*)(texture_binding->devPtr);
+	unsigned char * addr = 0;
+	addr = (unsigned char*)s;
+	s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+
+	TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+
+	switch (dtype)
+	{
+		case K_U32:
+			d->u32 = s->u32;
+			break;
+		case K_S32:
+			d->s32 = s->s32;
+			break;
+		case K_F32:
+			d->f32 = s->f32;
+			break;
+		default:
+			assert(false);
+	}
 
 	return 0;
 }
