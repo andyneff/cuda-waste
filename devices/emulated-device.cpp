@@ -42,6 +42,9 @@
 #include "../wrapper/call-stack-info.h"
 #include "../devices/entry.h"
 #include "../devices/texref.h"
+#include "../devices/texture.h"
+#include "../devices/array.h"
+#include "../devices/texarr.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -1439,7 +1442,7 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture(size_t *offset, const struct textu
     std::pair<void*, TEXREF*> i;
     i.first = (void*)texref;
     i.second = tr;
-	this->texture_to_binding.insert(i);
+	this->texture_to_device_memory_binding.insert(i);
 
     return cudaSuccess;
 }
@@ -1468,7 +1471,7 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture2D(size_t *offset,const struct text
     std::pair<void*, TEXREF*> i;
     i.first = (void*)texref;
     i.second = tr;
-	this->texture_to_binding.insert(i);
+	this->texture_to_device_memory_binding.insert(i);
 
     return cudaSuccess;
 }
@@ -1481,6 +1484,19 @@ cudaError_t EMULATED_DEVICE::_cudaBindTextureToArray(const struct textureReferen
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaBindTextureToArray called, " << context << ".\n\n";
     }
+
+	// Associate the "texref" with the rest of the info in this call.
+	// When assigning or grabbing the values for texref, we'll need this information.
+	TEXARR * ta = new TEXARR();
+	ta->texref = (struct textureReference*)texref;
+	ta->array = (struct cudaArray *) array;
+	ta->desc = (struct cudaChannelFormatDesc*)desc;
+
+    std::pair<void*, TEXARR*> i;
+    i.first = (void*)texref;
+    i.second = ta;
+	this->texture_to_array_binding.insert(i);
+
     return cudaSuccess;
 }
 
@@ -1804,9 +1820,14 @@ cudaError_t EMULATED_DEVICE::_cudaFuncSetCacheConfig(const char *func, enum cuda
 cudaError_t EMULATED_DEVICE::_cudaGetChannelDesc(struct cudaChannelFormatDesc *desc, const struct cudaArray *array)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetChannelDesc is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    if (cu->trace_all_calls)
+    {
+        char * context = cu->Context();
+        (*cu->output_stream) << "_cudaGetChannelDesc called, " << context << ".\n\n";
+    }
+	ARRAY * arr = (ARRAY*)array;
+	*desc = *arr->desc;
+	return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetDevice(int *device)
@@ -2270,9 +2291,14 @@ cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const st
 	// calculate size.
 	// NOTE: a cudaChannelFormatDesc is a structure of the sizes of components of a linear piece of memory.  It is not a 4D cube.
 	unsigned int size = width * height * (desc->x + desc->y + desc->z + desc->w)/8;  // bytes.
+	ARRAY * arr = new ARRAY();
+	arr->desc = (struct cudaChannelFormatDesc *)desc;
+	arr->width = width;
+	arr->height = height;
+	arr->flags = flags;
 
 	// Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
-	local = malloc(size+2*cu->padding_size);
+	local = (void*) malloc(size+2*cu->padding_size);
 	if (! local)
 	{
 		(*cu->output_stream) << "Host memory allocation failed in cudaMallocArray.  The buffer is used to initialize the device buffer.\n";
@@ -2297,13 +2323,12 @@ cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const st
 	{
 		*init = 0;
 	}
-	EMULATED_DEVICE::data d;
-	d.ptr = local;
-	d.size = size + 2 * cu->padding_size;
-	d.is_host = false;
-	d.context = strdup(cu->Context());
-	this->alloc_list->push_back(d);
-	*array = (cudaArray*)(((char*)local) + cu->padding_size);
+	
+	arr->memory = (unsigned char*)(((char*)local) + cu->padding_size);
+
+	*array = (struct cudaArray*) arr;
+	this->arrays.push_back(arr);
+
 	return cudaSuccess;     
 }
 
@@ -2643,6 +2668,10 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
         //memcpy(dst, src, count);
         return cudaErrorMemoryAllocation;
     }
+	// Find the array.
+
+	ARRAY * arr = (ARRAY*) dst;
+
     if (src == 0)
     {
         (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., "
@@ -2656,7 +2685,6 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
 	// Four cases:
     if (kind == cudaMemcpyHostToDevice)
     {
-        int dd = this->FindAllocatedBlock(dst);
         int ds = this->FindAllocatedBlock(src);
 
         // Users can pass a pointer to a pointer in the middle of a block.
@@ -2665,21 +2693,12 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
         // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
         // even though it really is a host pointer!
 
-        if (ds != -1 && dd == -1)
+        if (ds != -1)
         {
             (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
                 << " are reversed in directionality.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (dd == -1)
-        {
-            (*cu->output_stream) << "Destination pointer in _cudaMemcpyToArray("
-                << "dst = " << dst
-                << ", ..., ..., ...) "
-                << " is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
@@ -2703,32 +2722,26 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
-        EMULATED_DEVICE::data * ddst = 0;
+
         EMULATED_DEVICE::data * dsrc = 0;
-        if (dd != -1)
-            ddst = &(*this->alloc_list)[dd];
         if (ds != -1)
             dsrc = &(*this->alloc_list)[ds];
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
         if (dsrc)
             this->CheckSinglePtrOverwrite(dsrc);
+
         // Perform copy.
         cudaError_t err;
-        memcpy(dst, src, count);
+        memcpy(arr->memory + cu->padding_size, src, count);
         err = cudaSuccess;
         // Perform overwrite check again.
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
         if (dsrc)
             this->CheckSinglePtrOverwrite(dsrc);
         return err;
     }
     else if (kind == cudaMemcpyDeviceToHost)
     {
-        int dd = this->FindAllocatedBlock(dst);
         int ds = this->FindAllocatedBlock(src);
-        if (ds == -1 && dd != -1)
+        if (ds == -1)
         {
             (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
                 << "dst = " << dst
@@ -2746,53 +2759,22 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
-        else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
-        {
-            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray(..., "
-                << "src = " << src
-                << ", ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (dd != -1 && (*this->alloc_list)[dd].is_host)
-        {
-            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray("
-                << "dst = " << dst
-                << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (this->IsBadPointer(dst))
-        {
-            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToArray("
-                << "dst = " << dst
-                << ", ..., ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
         // Check before copy if block boundaries are intact.
-        EMULATED_DEVICE::data * ddst = 0;
         EMULATED_DEVICE::data * dsrc = 0;
-        if (dd != -1)
-            ddst = &(*this->alloc_list)[dd];
         if (ds != -1)
             dsrc = &(*this->alloc_list)[ds];
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
         if (dsrc)
             this->CheckSinglePtrOverwrite(dsrc);
 
         // Perform copy.
 		int offset = 0;
 
-        memcpy((char*)dst + offset, src, count);
+        memcpy((char*)arr->memory + cu->padding_size + offset, src, count);
 
 		cudaError_t err;
         err = cudaSuccess;
 
 		// Perform overwrite check again.
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
         if (dsrc)
             this->CheckSinglePtrOverwrite(dsrc);
         return err;
@@ -3088,9 +3070,16 @@ void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct t
     }
 	// Associate "textureName" with "hostVar".  When using textures, we'll need to get the address 
 	// of the texture in memory from the name of the texture.
-    std::pair<char*, void*> i;
+    TEXTURE * texture = new TEXTURE();
+	texture->hostVar = (struct textureReference*)hostVar;
+	texture->deviceAddress = (void**) deviceAddress;
+	texture->textureName = (char*) textureName;
+	texture->dim = dim;
+	texture->norm = norm;
+	texture->ext = ext;
+	std::pair<char*, TEXTURE*> i;
     i.first = (char*)textureName;
-    i.second = (void*)hostVar;
+    i.second = (TEXTURE*)texture;
     this->texturename_to_texture.insert(i);
 }
 

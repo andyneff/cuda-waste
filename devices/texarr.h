@@ -16,17 +16,12 @@
 #pragma once
 
 /*
- * Class TEXREF is used to represent the binding of device memory with a texture.
+ * Class TEXARR is used to represent a CUDA "Array" with a CUDA texture.
  */
-class TEXREF
+class TEXARR
 {
 public:
-	size_t * offset;
 	struct textureReference *texref;
-	void *devPtr;
+	struct cudaArray *array;
 	struct cudaChannelFormatDesc *desc;
-	size_t size;
-	size_t width;
-	size_t height;
-	size_t pitch;
 };

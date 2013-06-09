@@ -36,6 +36,9 @@ class STRING_TABLE;
 class SYMBOL;
 class TYPES;
 class TEXREF;
+class TEXARR;
+class TEXTURE;
+class ARRAY;
 
 class EMULATED_DEVICE : DEVICE
 {
@@ -89,13 +92,17 @@ public:
 
     std::map<void*, char*> fun_to_name;
 
-	std::map<char*, void*, ltstr> texturename_to_texture;
+	std::map<char*, TEXTURE*, ltstr> texturename_to_texture;
 
-	std::map<void*, TEXREF*> texture_to_binding;
+	std::map<void*, TEXREF*> texture_to_device_memory_binding;
+
+	std::map<void*, TEXARR*> texture_to_array_binding;
 
     std::list<MOD*> modules;
 
     std::list<ENTRY*> entries;
+
+	std::list<ARRAY*> arrays;
 
     std::list<arg*> arguments;
 

@@ -15,18 +15,17 @@
 */
 #pragma once
 
-/*
- * Class TEXREF is used to represent the binding of device memory with a texture.
- */
-class TEXREF
+class TEXTURE
 {
 public:
-	size_t * offset;
-	struct textureReference *texref;
-	void *devPtr;
-	struct cudaChannelFormatDesc *desc;
-	size_t size;
-	size_t width;
-	size_t height;
-	size_t pitch;
+	TEXTURE()
+	{
+	};
+	
+	struct textureReference *hostVar;
+	void **deviceAddress;
+	char *textureName;
+	int dim;
+	int norm;
+	int ext;
 };

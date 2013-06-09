@@ -175,6 +175,7 @@
     <ClCompile Include="..\tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\array.h" />
     <ClInclude Include="..\constant.h" />
     <ClInclude Include="..\device.h" />
     <ClInclude Include="..\emulated-device.h" />
@@ -184,7 +185,9 @@
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
     <ClInclude Include="..\symbol.h" />
+    <ClInclude Include="..\texarr.h" />
     <ClInclude Include="..\texref.h" />
+    <ClInclude Include="..\texture.h" />
     <ClInclude Include="..\thread.h" />
     <ClInclude Include="..\tree.h" />
     <ClInclude Include="..\types.h" />
