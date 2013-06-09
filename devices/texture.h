@@ -15,6 +15,9 @@
 */
 #pragma once
 
+/*
+ * Class TEXTURE is used to represent a CUDA texture registered with the runtime.
+ */
 class TEXTURE
 {
 public:
@@ -22,7 +25,7 @@ public:
 	{
 	};
 	
-	struct textureReference *hostVar;
+	struct textureReference *hostVar; // used to find the associated TEXREF/TEXARR structures.
 	void **deviceAddress;
 	char *textureName;
 	int dim;

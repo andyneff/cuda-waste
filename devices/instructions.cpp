@@ -7800,6 +7800,7 @@ int THREAD::DoTex(TREE * inst)
 		TEXREF * texture_binding = j->second;
 
 		TYPES::Types * s;
+
 		if (_1d)
 		{
 			// Compute actual source.
@@ -7850,6 +7851,7 @@ int THREAD::DoTex(TREE * inst)
 			int index = (int) findex;
 
 			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+
 		} else 	if (_2d)
 		{
 			// Compute actual source.
@@ -7948,6 +7950,7 @@ int THREAD::DoTex(TREE * inst)
 		}
 	}
 	else {
+		// Array bound texture.  Perform filtering.
 		std::map<void*, TEXARR*>::iterator k = this->emulator->texture_to_array_binding.find(texture->hostVar);
 		assert(k != this->emulator->texture_to_array_binding.end());
 		
@@ -7958,6 +7961,8 @@ int THREAD::DoTex(TREE * inst)
 		CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
 		TYPES::Types * s;
+		TYPES::Types value;
+
 		if (_1d)
 		{
 			// Compute actual source.
@@ -8000,14 +8005,68 @@ int THREAD::DoTex(TREE * inst)
 			{
 				sdst = this->root->FindSymbol(dst1->GetText());
 			} else assert(false);
+			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
 			s = (TYPES::Types*)(arr->memory + cu->padding_size);
 			unsigned char * addr = 0;
 			addr = (unsigned char*)s;
 
-			int index = (int) findex;
+			if (texture->hostVar->filterMode & cudaFilterModeLinear)
+			{
+				// Perform interpolation.
+				// findex will be between floor(findex) and ceil(findex).  However, before grabbing the values
+				// at these two indices, perform index range checking.
+				int i1 = (int)floor(findex - 0.5);
+				int i2 = i1 + 1;
+				if (i1 < 0)
+				{
+					i1 = 0;
+					i2 = 0;
+				}
+				if (i1+1 >= arr->width)
+				{
+					i1 = arr->width - 1;
+					i2 = i1;
+				}
+				s = (TYPES::Types*)(addr + i1 * (this->emulator->Sizeof(dtype)));
+				TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->emulator->Sizeof(dtype)));
+				TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->emulator->Sizeof(dtype)));
 
-			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+				switch (dtype)
+				{
+					case K_U32:
+						d->u32 = s->s32;
+						break;
+					case K_S32:
+						d->s32 = s->s32;
+						break;
+					case K_F32:
+						d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
+						break;
+					default:
+						assert(false);
+				}
+
+			}
+			else {
+				int index = (int) findex;
+				s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+
+				switch (dtype)
+				{
+					case K_U32:
+						d->u32 = s->u32;
+						break;
+					case K_S32:
+						d->s32 = s->s32;
+						break;
+					case K_F32:
+						d->f32 = s->f32;
+						break;
+					default:
+						assert(false);
+				}
+			}
 		} else 	if (_2d)
 		{
 			// Compute actual source.
@@ -8081,28 +8140,27 @@ int THREAD::DoTex(TREE * inst)
 			int index = (int) findex;
 
 			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
-		}
+			SYMBOL * sdst = 0;
+			if (dst1->GetType() == T_WORD)
+			{
+				sdst = this->root->FindSymbol(dst1->GetText());
+			} else assert(false);
+			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-		SYMBOL * sdst = 0;
-		if (dst1->GetType() == T_WORD)
-		{
-			sdst = this->root->FindSymbol(dst1->GetText());
-		} else assert(false);
-		TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
-
-		switch (dtype)
-		{
-			case K_U32:
-				d->u32 = s->u32;
-				break;
-			case K_S32:
-				d->s32 = s->s32;
-				break;
-			case K_F32:
-				d->f32 = s->f32;
-				break;
-			default:
-				assert(false);
+			switch (dtype)
+			{
+				case K_U32:
+					d->u32 = s->u32;
+					break;
+				case K_S32:
+					d->s32 = s->s32;
+					break;
+				case K_F32:
+					d->f32 = s->f32;
+					break;
+				default:
+					assert(false);
+			}
 		}
 	}
 	return 0;

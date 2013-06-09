@@ -16,7 +16,7 @@
 #pragma once
 
 /*
- * Class TEXARR is used to represent a CUDA "Array" with a CUDA texture.
+ * Class TEXARR is used to represent an associated CUDA "Array" with a CUDA texture.
  */
 class TEXARR
 {

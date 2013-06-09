@@ -16,7 +16,7 @@
 #pragma once
 
 /*
- * Class TEXREF is used to represent the binding of device memory with a texture.
+ * Class TEXREF is used to represent an associated linear global memory with a CUDA texture.
  */
 class TEXREF
 {
