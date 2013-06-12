@@ -56,7 +56,7 @@ class THREAD
         int carry;
 
         // The owner of the thread.
-        EMULATED_DEVICE * emulator;
+        EMULATED_DEVICE * device;
 
         // The Windows HANDLE for the thread.  Threads are executed
         // concurrently.

@@ -80,7 +80,7 @@ int THREAD::DoAbs(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "ABS.ftz not implemented.");
+    this->device->unimplemented(ftz, "ABS.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -99,7 +99,7 @@ int THREAD::DoAbs(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -124,7 +124,7 @@ int THREAD::DoAbs(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -234,7 +234,7 @@ int THREAD::DoAdd(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "ADD.ftz not implemented.");
+    this->device->unimplemented(ftz, "ADD.ftz not implemented.");
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
@@ -258,7 +258,7 @@ int THREAD::DoAdd(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -292,7 +292,7 @@ int THREAD::DoAdd(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -327,7 +327,7 @@ int THREAD::DoAdd(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -361,7 +361,7 @@ int THREAD::DoAdd(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -565,7 +565,7 @@ int THREAD::DoAddc(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -587,7 +587,7 @@ int THREAD::DoAddc(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -610,7 +610,7 @@ int THREAD::DoAddc(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -632,7 +632,7 @@ int THREAD::DoAddc(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -757,7 +757,7 @@ int THREAD::DoAnd(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -779,7 +779,7 @@ int THREAD::DoAnd(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -802,7 +802,7 @@ int THREAD::DoAnd(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -824,7 +824,7 @@ int THREAD::DoAnd(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -867,7 +867,7 @@ int THREAD::DoAnd(TREE * inst)
 
 int THREAD::DoAtom(TREE * inst)
 {
-    LOCK_MANAGER<CRIT_SECTION>  lockMgr(this->emulator->sm_CritSec, TRUE);
+    LOCK_MANAGER<CRIT_SECTION>  lockMgr(this->device->sm_CritSec, TRUE);
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
@@ -954,7 +954,7 @@ int THREAD::DoAtom(TREE * inst)
         assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
         TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = this->emulator->Eval(K_S32, const_expr);
+        value = this->device->Eval(K_S32, const_expr);
     }
 
     // Different semantics for different storage classes.
@@ -1038,7 +1038,7 @@ int THREAD::DoAtom(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B32:
@@ -1066,7 +1066,7 @@ int THREAD::DoAtom(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -1251,7 +1251,7 @@ int THREAD::DoBar(TREE * inst)
             if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else this->emulator->unimplemented(true, "BAR with two or more operands unimplemented.");
+            } else this->device->unimplemented(true, "BAR with two or more operands unimplemented.");
         } else assert(false);
     }
     assert(ttype != 0);
@@ -1283,8 +1283,8 @@ int THREAD::DoBar(TREE * inst)
         else if (gt = K_U32)
             size = K_U32;
     }
-    this->emulator->unimplemented(arrive, "BAR.arrive not implemented.");
-    this->emulator->unimplemented(red, "BAR.red not implemented.");
+    this->device->unimplemented(arrive, "BAR.arrive not implemented.");
+    this->device->unimplemented(red, "BAR.red not implemented.");
     
     int type = K_U32;
     TREE * src1 = osrc1->GetChild(0);
@@ -1295,7 +1295,7 @@ int THREAD::DoBar(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -1304,12 +1304,12 @@ int THREAD::DoBar(TREE * inst)
             default:
                 assert(false);
         }
-        this->emulator->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
+        this->device->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
     } else if (src1->GetType() == T_WORD)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -1321,7 +1321,7 @@ int THREAD::DoBar(TREE * inst)
         }
     } else assert(false);
 
-    this->emulator->unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
+    this->device->unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
 
     // pack up the THREAD context.  Synchronize all assumed.
 
@@ -1460,11 +1460,11 @@ int THREAD::DoCall(TREE * inst)
                 // load value into stack...
                 SYMBOL * param = this->root->FindSymbol(u->GetText());
                 assert(param != 0);
-                this->emulator->unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
+                this->device->unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
                 stack.push_back(param);
             }
             else
-                this->emulator->unimplemented("CALL unimplemented parameter type.");
+                this->device->unimplemented("CALL unimplemented parameter type.");
         } else
             break;
     }
@@ -1575,7 +1575,7 @@ int THREAD::DoCnot(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -1597,7 +1597,7 @@ int THREAD::DoCnot(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -2327,7 +2327,7 @@ int THREAD::DoDiv(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -2366,7 +2366,7 @@ int THREAD::DoDiv(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -2486,7 +2486,7 @@ int THREAD::DoEx2(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "EX2.ftz not implemented.");
+    this->device->unimplemented(ftz, "EX2.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -2505,7 +2505,7 @@ int THREAD::DoEx2(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2521,7 +2521,7 @@ int THREAD::DoEx2(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -2645,7 +2645,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -2666,7 +2666,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2687,7 +2687,7 @@ int THREAD::DoFma(TREE * inst)
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src3->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_F32:
@@ -2802,7 +2802,7 @@ int THREAD::DoLd(TREE * inst)
         assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
         TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = this->emulator->Eval(K_S32, const_expr);
+        value = this->device->Eval(K_S32, const_expr);
     }
 
     int times = 1;
@@ -3296,7 +3296,7 @@ int THREAD::DoLd(TREE * inst)
                     assert(false);
             }
 
-        addr = addr + this->emulator->Sizeof(type);
+        addr = addr + this->device->Sizeof(type);
     }
     return 0;
 }
@@ -3379,7 +3379,7 @@ int THREAD::DoLdu(TREE * inst)
         assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
         TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = this->emulator->Eval(K_S32, const_expr);
+        value = this->device->Eval(K_S32, const_expr);
     }
 
     TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
@@ -3512,7 +3512,7 @@ int THREAD::DoLg2(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "LG2.ftz not implemented.");
+    this->device->unimplemented(ftz, "LG2.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -3531,7 +3531,7 @@ int THREAD::DoLg2(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -3547,7 +3547,7 @@ int THREAD::DoLg2(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -3675,7 +3675,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -3708,7 +3708,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3741,7 +3741,7 @@ int THREAD::DoMad(TREE * inst)
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src3->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src3->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -3909,7 +3909,7 @@ int THREAD::DoMov(TREE * inst)
 
     if (src->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -4100,7 +4100,7 @@ int THREAD::DoMul(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -4127,7 +4127,7 @@ int THREAD::DoMul(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -4298,7 +4298,7 @@ int THREAD::DoMul24(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U32:
@@ -4319,7 +4319,7 @@ int THREAD::DoMul24(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U32:
@@ -4408,7 +4408,7 @@ int THREAD::DoNeg(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "NEG.ftz not implemented.");
+    this->device->unimplemented(ftz, "NEG.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -4427,7 +4427,7 @@ int THREAD::DoNeg(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -4452,7 +4452,7 @@ int THREAD::DoNeg(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -4559,7 +4559,7 @@ int THREAD::DoNot(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4581,7 +4581,7 @@ int THREAD::DoNot(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -4690,7 +4690,7 @@ int THREAD::DoOr(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -4712,7 +4712,7 @@ int THREAD::DoOr(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -4735,7 +4735,7 @@ int THREAD::DoOr(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -4757,7 +4757,7 @@ int THREAD::DoOr(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -4874,7 +4874,7 @@ int THREAD::DoRcp(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "RCP.ftz not implemented.");
+    this->device->unimplemented(ftz, "RCP.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -4893,7 +4893,7 @@ int THREAD::DoRcp(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -4909,7 +4909,7 @@ int THREAD::DoRcp(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -5018,7 +5018,7 @@ int THREAD::DoRem(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -5051,7 +5051,7 @@ int THREAD::DoRem(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -5180,7 +5180,7 @@ int THREAD::DoSelp(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->emulator->unimplemented(ftz, "SELP.ftz not implemented.");
+    this->device->unimplemented(ftz, "SELP.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
@@ -5204,7 +5204,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_S16:
@@ -5247,7 +5247,7 @@ int THREAD::DoSelp(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -5291,7 +5291,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_S16:
@@ -5334,7 +5334,7 @@ int THREAD::DoSelp(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -5539,7 +5539,7 @@ int THREAD::DoSet(TREE * inst)
     }
     else if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(stype, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(stype, src1->GetChild( 0));
         switch (stype)
         {
             case K_B16:
@@ -5590,7 +5590,7 @@ int THREAD::DoSet(TREE * inst)
     }
     else if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(stype, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(stype, src2->GetChild(0));
         switch (stype)
         {
             case K_B16:
@@ -6165,7 +6165,7 @@ int THREAD::DoSetp(TREE * inst)
     }
     else if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -6216,7 +6216,7 @@ int THREAD::DoSetp(TREE * inst)
     }
     else if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -6603,7 +6603,7 @@ int THREAD::DoShl(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -6622,7 +6622,7 @@ int THREAD::DoShl(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -6642,7 +6642,7 @@ int THREAD::DoShl(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -6661,7 +6661,7 @@ int THREAD::DoShl(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -6766,7 +6766,7 @@ int THREAD::DoShr(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -6803,7 +6803,7 @@ int THREAD::DoShr(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -6841,7 +6841,7 @@ int THREAD::DoShr(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -6878,7 +6878,7 @@ int THREAD::DoShr(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -7032,7 +7032,7 @@ int THREAD::DoSqrt(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_F32:
@@ -7140,7 +7140,7 @@ int THREAD::DoSt(TREE * inst)
         assert(const_expr_tree->GetType() == TREE_CONSTANT_EXPR);
         TREE * const_expr = const_expr_tree->GetChild(0);
         assert(const_expr != 0);
-        value = this->emulator->Eval(K_S32, const_expr);
+        value = this->device->Eval(K_S32, const_expr);
     }
 
     TYPES::Types * d = 0;
@@ -7230,7 +7230,7 @@ int THREAD::DoSt(TREE * inst)
         {
             // cannot do both store from constant and to vector.
             assert(i == 0);
-            CONSTANT c = this->emulator->Eval(type, src->GetChild(0));
+            CONSTANT c = this->device->Eval(type, src->GetChild(0));
             s = &c.value;
         } else if (src->GetType() == T_WORD)
         {
@@ -7343,7 +7343,7 @@ int THREAD::DoSt(TREE * inst)
                 assert(false);
         }
 
-        addr = addr + this->emulator->Sizeof(type);
+        addr = addr + this->device->Sizeof(type);
     }
 
     return 0;
@@ -7435,7 +7435,7 @@ int THREAD::DoSub(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_U16:
@@ -7469,7 +7469,7 @@ int THREAD::DoSub(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -7504,7 +7504,7 @@ int THREAD::DoSub(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_U16:
@@ -7538,7 +7538,7 @@ int THREAD::DoSub(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
@@ -7797,16 +7797,16 @@ int THREAD::DoTex(TREE * inst)
 	
 
 	// Find texture from name.
-	std::map<char*, TEXTURE*>::iterator i = this->emulator->texturename_to_texture.find(tex->name);
-    assert(i != this->emulator->texturename_to_texture.end());
+	std::map<char*, TEXTURE*>::iterator i = this->device->texturename_to_texture.find(tex->name);
+    assert(i != this->device->texturename_to_texture.end());
     TEXTURE * texture = i->second;
 
 	// Find texture binding from texture.
 	// There are going to be only one of two possible ways:
 	// (1) linear device memory
 	// (2) CUDA Array.
-	std::map<void*, TEXREF*>::iterator j = this->emulator->texture_to_device_memory_binding.find(texture->hostVar);
-	if (j != this->emulator->texture_to_device_memory_binding.end())
+	std::map<void*, TEXREF*>::iterator j = this->device->texture_to_device_memory_binding.find(texture->hostVar);
+	if (j != this->device->texture_to_device_memory_binding.end())
 	{
 		// Linear device memory.
 		TEXREF * texture_binding = j->second;
@@ -7862,7 +7862,7 @@ int THREAD::DoTex(TREE * inst)
 
 			int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 
 		} else 	if (_2d)
 		{
@@ -7936,7 +7936,7 @@ int THREAD::DoTex(TREE * inst)
 
 			int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 		}
 
 		SYMBOL * sdst = 0;
@@ -7963,8 +7963,8 @@ int THREAD::DoTex(TREE * inst)
 	}
 	else {
 		// Array bound texture.  Perform filtering.
-		std::map<void*, TEXARR*>::iterator k = this->emulator->texture_to_array_binding.find(texture->hostVar);
-		assert(k != this->emulator->texture_to_array_binding.end());
+		std::map<void*, TEXARR*>::iterator k = this->device->texture_to_array_binding.find(texture->hostVar);
+		assert(k != this->device->texture_to_array_binding.end());
 		
 		// Texture bound to array.
 		TEXARR * texture_binding = k->second;
@@ -8040,9 +8040,9 @@ int THREAD::DoTex(TREE * inst)
 					i1 = arr->width - 1;
 					i2 = i1;
 				}
-				s = (TYPES::Types*)(addr + i1 * (this->emulator->Sizeof(dtype)));
-				TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->emulator->Sizeof(dtype)));
-				TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->emulator->Sizeof(dtype)));
+				s = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
+				TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
+				TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->device->Sizeof(dtype)));
 
 				switch (dtype)
 				{
@@ -8062,7 +8062,7 @@ int THREAD::DoTex(TREE * inst)
 			}
 			else {
 				int index = (int) findex;
-				s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+				s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 
 				switch (dtype)
 				{
@@ -8151,7 +8151,7 @@ int THREAD::DoTex(TREE * inst)
 
 			int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->emulator->Sizeof(dtype)));
+			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 			SYMBOL * sdst = 0;
 			if (dst1->GetType() == T_WORD)
 			{
@@ -8306,7 +8306,7 @@ int THREAD::DoXor(TREE * inst)
 
     if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src1->GetChild( 0));
+        CONSTANT c = this->device->Eval(type, src1->GetChild( 0));
         switch (type)
         {
             case K_B16:
@@ -8328,7 +8328,7 @@ int THREAD::DoXor(TREE * inst)
     {
         SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
-        assert(ssrc1->size == this->emulator->Sizeof(type));
+        assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
         switch (type)
         {
@@ -8351,7 +8351,7 @@ int THREAD::DoXor(TREE * inst)
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
-        CONSTANT c = this->emulator->Eval(type, src2->GetChild(0));
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         switch (type)
         {
             case K_B16:
@@ -8373,7 +8373,7 @@ int THREAD::DoXor(TREE * inst)
     {
         SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
-        assert(ssrc2->size == this->emulator->Sizeof(type));
+        assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         switch (type)
         {
