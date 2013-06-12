@@ -31,8 +31,8 @@
 THREAD::THREAD(EMULATED_DEVICE * emulator, TREE * block, int pc, SYMBOL_TABLE * root)
 {
     this->emulator = emulator;
-    this->block = block;
-    this->pc = pc;
+	this->stack_of_tree_blocks.push(block);
+	this->stack_of_pc.push(pc);
     this->root = root;
     this->finished = false;
     this->wait = false;
@@ -54,12 +54,9 @@ unsigned int __stdcall THREAD::WinThreadExecute(void * thr)
 
 void THREAD::Execute()
 {
-    // set up symbol table environment.
-    int pc = this->pc;
-
     // Execute.
-    pc = emulator->FindFirstInst(block, pc);
-    if (pc < 0)
+	this->stack_of_pc.top() = emulator->FindFirstInst(this->stack_of_tree_blocks.top(), this->stack_of_pc.top());
+    if (this->stack_of_pc.top() < 0)
     {
         this->finished = true;
         return;
@@ -67,57 +64,90 @@ void THREAD::Execute()
     int max_count = emulator->max_instruction_thread;
     for (int count = 0; count < max_count; ++count)
     {
-		TREE * inst = this->emulator->GetInst(block, pc);
-		if (inst == 0)
-			// Fell off the tree.
-		{
-			this->finished = true;
-			return;
-		}
+        TREE * inst = this->emulator->GetInst(this->stack_of_tree_blocks.top(), this->stack_of_pc.top());
+        if (inst == 0)
+            // Fell off the tree.
+        {
+			if (this->stack_of_pc.size() == 1)
+			{
+				this->finished = true;
+				return;
+			}
+			else
+			{
+				this->stack_of_pc.pop();
+				this->stack_of_tree_blocks.pop();
+				this->root = this->root->parent_block_symbol_table;
+				continue;
+			}
+        }
         if (this->emulator->TraceLevel() > 3)
-            this->Dump("before", pc, inst);
+            this->Dump("before", this->stack_of_pc.top(), inst);
 
         // if debug, check if pvalues in each symbol was changed.  It
         // should have not!
-        if (this->emulator->TraceLevel() > 1)
+        if (this->emulator->TraceLevel() > 3)
             this->root->CachePvalues();
 
-        int next = this->Dispatch(inst);
-
-        if (this->emulator->TraceLevel() > 1)
-            this->root->CheckCachedPvalues();
-
-        if (next > 0)
-            pc = next;
-        else if (next == -KI_EXIT)
-        {
-            this->finished = true;
-            return;
-        }
-		else if (next == -KI_RET)
+		if (inst->GetType() == TREE_BLOCK)
 		{
-			this->finished = true;
-			return;
+			if (this->emulator->TraceLevel() > 1)
+				this->Dump("before push", this->stack_of_pc.top(), inst);
+
+			// Push new pc and block.
+			this->stack_of_tree_blocks.push(inst);
+			this->stack_of_pc.top()++;
+			this->stack_of_pc.push(0);
+			this->stack_of_pc.top() = this->emulator->FindFirstInst(this->stack_of_tree_blocks.top(), this->stack_of_pc.top());
+			SYMBOL_TABLE * block_symbol_table = this->emulator->PushSymbolTable(this->root);
+			int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
+			this->emulator->SetupVariables(block_symbol_table, inst, sc);
+			this->root = block_symbol_table;
+			if (this->emulator->TraceLevel() > 1)
+				this->Dump("after push", this->stack_of_pc.top(), inst);
 		}
-        else if (next == -KI_BAR)
-        {
-        // Set state of this thread to wait, and pack up current program counter.
-            this->wait = true;
-            this->pc = pc + 1;
-            return;
-        }
-        else
-            pc++;
+		else if (inst->GetType() == TREE_LABEL)
+		{
+		}
+		else
+		{
 
-        pc = this->emulator->FindFirstInst(block, pc);
+			int next = this->Dispatch(inst);
 
-        if (this->emulator->TraceLevel() > 2)
-            this->Dump("after", pc, inst);
-    }
+			if (this->emulator->TraceLevel() > 3)
+				this->root->CheckCachedPvalues();
+
+			if (next > 0)
+				this->stack_of_pc.top() = next;
+			else if (next == -KI_EXIT)
+			{
+				this->finished = true;
+				return;
+			}
+			else if (next == -KI_RET)
+			{
+				this->finished = true;
+				return;
+			}
+			else if (next == -KI_BAR)
+			{
+			// Set state of this thread to wait, and pack up current program counter.
+				this->wait = true;
+				this->stack_of_pc.top() = this->stack_of_pc.top() + 1;
+				return;
+			}
+			else
+				this->stack_of_pc.top()++;
+
+			this->stack_of_pc.top() = this->emulator->FindFirstInst(this->stack_of_tree_blocks.top(), this->stack_of_pc.top());
+
+			if (this->emulator->TraceLevel() > 2)
+				this->Dump("after", this->stack_of_pc.top(), inst);
+		}
+	}
     // Fall through here if the instruction count was hit.
     // In this case, pack up the thread in order to be executed next time.
     this->wait = true;
-    this->pc = pc;
     return;
 }
 
@@ -140,10 +170,10 @@ int THREAD::Dispatch(TREE * inst)
 {
     TREE * i = (TREE *)inst->GetChild(0);
     int inst_type = i->GetType();
-    if (this->emulator->TraceLevel() > 1 || inst_type == KI_TEX)
+    if (this->emulator->TraceLevel() > 1)
     {
         this->emulator->PrintName(inst);
-        if (this->emulator->TraceLevel() > 2|| inst_type == KI_TEX)
+        if (this->emulator->TraceLevel() > 2)
             this->emulator->Print(inst, 0);
     }
 
@@ -184,8 +214,12 @@ int THREAD::Dispatch(TREE * inst)
                 std::cout << "Skipping instruction because guard predicate is false\n";
             return 0; // continue.
         }
-    }
-    try {
+    } else if (inst_type == TREE_LABEL)
+    {
+		return 0;
+	}
+
+	try {
         switch (inst_type)
         {
             case KI_ABS:
@@ -346,6 +380,8 @@ int THREAD::Dispatch(TREE * inst)
                 return DoVsub(inst);
             case KI_XOR:
                 return DoXor(inst);
+			case K_LOC:
+				return 0;
             default:
                 assert(false);
         }

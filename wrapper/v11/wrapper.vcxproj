@@ -133,7 +133,7 @@
       <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;$(OutDir)devices.lib;%ANTLR_PATH%\x64\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)ptxp.lib;$(OutDir)devices.lib;$(OutDir)libc.lib;%ANTLR_PATH%\x64\Debug\antlr3cd.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatDebug\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -192,12 +192,15 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\libc\v11\libc.vcxproj">
+      <Project>{7a7bcad6-9cfa-4381-8777-f8f7069e722b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\ptxp\v11\ptxp.vcxproj">
       <Project>{6644f2ca-1a4d-4ef4-99f5-9458ab461010}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\emulator\v11\emulator.vcxproj">
+    <ProjectReference Include="..\..\devices\v11\devices.vcxproj">
       <Project>{c6320b81-ce1a-4e33-aa48-fe36a7a3a9b8}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>

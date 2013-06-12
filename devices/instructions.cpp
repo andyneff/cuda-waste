@@ -1372,6 +1372,9 @@ int THREAD::DoBrkpt(TREE * inst)
     throw new EMULATED_DEVICE::EMU_ERROR("BRKPT unimplemented");
 }
 
+template<class  T>
+signed int k_vprintf(const char *pFormat, va_list ap);
+
 int THREAD::DoCall(TREE * inst)
 {
     int start = 0;
@@ -1432,10 +1435,10 @@ int THREAD::DoCall(TREE * inst)
         if (gt == TREE_OPR)
         {
             TREE * u = t->GetChild(0);
-            if (u->GetType() == T_UNDERSCORE)
+            //if (u->GetType() == T_UNDERSCORE)
                 once++;
-            else
-                throw new EMULATED_DEVICE::EMU_ERROR("CALL non-underscore return unimplemented.");
+            //else
+            //    throw new EMULATED_DEVICE::EMU_ERROR("CALL non-underscore return unimplemented.");
         } else
             break;
     }
@@ -1497,7 +1500,11 @@ int THREAD::DoCall(TREE * inst)
 //        }
 //    }
 
-    vprintf( (char*)(((TYPES::Types*)stack[0]->pvalue)->u32), (va_list) ((TYPES::Types*)stack[1]->pvalue)->u32);
+	TYPES::Types* p1 = (TYPES::Types*)stack[0]->pvalue;
+	TYPES::Types* p2 = (TYPES::Types*)stack[1]->pvalue;
+
+	// Call depending on size of pointer.
+	k_vprintf<__int32>( p1->pchar, static_cast<va_list>(p2->pvoid));
 //    va_end(out);
 
     return 0;
@@ -2170,7 +2177,7 @@ int THREAD::DoCvta(TREE * inst)
         int gt = t->GetType();
         if (gt == K_U32 || gt == K_U64)
             ttype = t;
-        else if (gt == K_SHARED || gt == K_GLOBAL || gt == K_LOCAL)
+        else if (gt == K_SHARED || gt == K_GLOBAL || gt == K_LOCAL || gt == K_CONST)
             storage_class = gt;
 		else if (gt == K_TO)
 			to = true;
@@ -4169,8 +4176,13 @@ int THREAD::DoMul(TREE * inst)
             if (width == K_LO)
                 d->u32 = s1->u32 * s2->u32;
             else if (width == K_HI)
-                d->u32 = (s1->u32 * s2->u32 ) >> 16;
-            else if (width == K_WIDE)
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				vx = vx >> 32;
+                d->u32 = vx; // (s1->u32 * s2->u32 ) >> 32;
+			}
+			else if (width == K_WIDE)
                 d->u64 = s1->u32 * s2->u32;
             else assert(false);
             break;
@@ -4178,7 +4190,7 @@ int THREAD::DoMul(TREE * inst)
             if (width == K_LO)
                 d->s32 = s1->s32 * s2->s32;
             else if (width == K_HI)
-                d->s32 = (s1->s32 * s2->s32 ) >> 16;
+                d->s32 = (s1->s32 * s2->s32 ) >> 32;
             else if (width == K_WIDE)
                 d->s64 = s1->s32 * s2->s32;
             else assert(false);
@@ -4187,14 +4199,14 @@ int THREAD::DoMul(TREE * inst)
             if (width == K_LO)
                 d->u64 = s1->u64 * s2->u64;
             else if (width == K_HI)
-                d->u64 = (s1->u64 * s2->u64 ) >> 16;
+                d->u64 = (s1->u64 * s2->u64 ) >> 64;
             else assert(false);
             break;
         case K_S64:
             if (width == K_LO)
                 d->s64 = s1->s64 * s2->s64;
             else if (width == K_HI)
-                d->s64 = (s1->s64 * s2->s64 ) >> 16;
+                d->s64 = (s1->s64 * s2->s64 ) >> 64;
             else assert(false);
             break;
         case K_F32:

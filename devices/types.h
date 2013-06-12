@@ -35,6 +35,8 @@ public:
         double f64;
         bool pred;
         void * pvoid;
+        char * pchar;
+        unsigned char * puchar;
     } Types;
 };
 

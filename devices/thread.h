@@ -24,6 +24,7 @@
 #include "tree.h"
 #include <cuda.h>
 #include <cuda_runtime.h> // cudaError_t, CUDARTAPI, etc.
+#include <stack>
 
 class EMULATED_DEVICE;
 class SYMBOL_TABLE;
@@ -31,12 +32,12 @@ class SYMBOL_TABLE;
 class THREAD
 {
     private:
-        // Root of AST that thread is executing.
-        TREE * block;
+        // Root of AST that thread is executing. Top gives current block being executed.
+		std::stack<TREE*> stack_of_tree_blocks;
 
         // Current program counter. If "n", then the current
         // instruction is just block->GetChild(n).
-        int pc;
+        std::stack<int> stack_of_pc;
 
         // Boolean to denote if the thread has executed the EXIT
         // instruction.
