@@ -420,9 +420,9 @@ semicolon_terminated_directive
 
 unterminated_directive
     : entry
-    | func
+    | func ( T_SEMICOLON! )?
     | debugging_directive
-    | K_OC s=statement+ K_CC -> ^( TREE_BLOCK $s )
+    | T_OC statement+ T_CC -> ^( TREE_BLOCK statement+ )
     ;
 
 entry
@@ -1546,7 +1546,7 @@ i_cvta
 i_cvta_type
     :
     K_TO?
-    ( K_GLOBAL | K_LOCAL | K_SHARED )
+    ( K_GLOBAL | K_LOCAL | K_SHARED | K_CONST )
     ( K_U32 | K_U64 )
     ;
 
