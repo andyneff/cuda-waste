@@ -49,7 +49,7 @@ class THREAD
 
         // Points to the topmost symbol table, e.g., registers, that
         // the thread uses.
-        SYMBOL_TABLE * root;
+        SYMBOL_TABLE * symbol_table;
 
         // The "carry" bit.  Generally inaccessible, execept for some
         // ADD and SUB instructions.

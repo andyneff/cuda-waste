@@ -21,14 +21,14 @@
 class TEXTURE
 {
 public:
-	TEXTURE()
-	{
-	};
-	
-	struct textureReference *hostVar; // used to find the associated TEXREF/TEXARR structures.
-	void **deviceAddress;
-	char *textureName;
-	int dim;
-	int norm;
-	int ext;
+    TEXTURE()
+    {
+    };
+    
+    struct textureReference *hostVar; // used to find the associated TEXREF/TEXARR structures.
+    void **deviceAddress;
+    char *textureName;
+    int dim;
+    int norm;
+    int ext;
 };

@@ -89,7 +89,7 @@ int THREAD::DoAbs(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -122,7 +122,7 @@ int THREAD::DoAbs(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -243,7 +243,7 @@ int THREAD::DoAdd(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -290,7 +290,7 @@ int THREAD::DoAdd(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -359,7 +359,7 @@ int THREAD::DoAdd(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -550,7 +550,7 @@ int THREAD::DoAddc(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -585,7 +585,7 @@ int THREAD::DoAddc(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -630,7 +630,7 @@ int THREAD::DoAddc(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -745,7 +745,7 @@ int THREAD::DoAnd(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -777,7 +777,7 @@ int THREAD::DoAnd(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -822,7 +822,7 @@ int THREAD::DoAnd(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -943,7 +943,7 @@ int THREAD::DoAtom(TREE * inst)
     TREE * src3 = osrc3 ? osrc3->GetChild(0) : 0;
 
     assert(src1->GetType() == T_WORD);
-    SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+    SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
     assert(ssrc1 != 0);
     TREE * plus = osrc1->GetChild(1);
     CONSTANT value(0);
@@ -1029,7 +1029,7 @@ int THREAD::DoAtom(TREE * inst)
 
     SYMBOL * sdst = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     assert(sdst != 0);
     TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
     TYPES::Types * s1 = (TYPES::Types*)addr;
@@ -1064,7 +1064,7 @@ int THREAD::DoAtom(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -1307,7 +1307,7 @@ int THREAD::DoBar(TREE * inst)
         this->device->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -1362,7 +1362,7 @@ int THREAD::DoBra(TREE * inst)
     TREE * opr = inst->GetChild(start);
     TREE * dst = opr->GetChild(0);
     assert(dst->GetType() == T_WORD);
-    SYMBOL * sdst = this->root->FindSymbol(dst->GetText());
+    SYMBOL * sdst = this->symbol_table->FindSymbol(dst->GetText());
     assert (sdst != 0);
     return (int)sdst->pvalue;
 }
@@ -1458,7 +1458,7 @@ int THREAD::DoCall(TREE * inst)
             if (u->GetType() == T_WORD)
             {
                 // load value into stack...
-                SYMBOL * param = this->root->FindSymbol(u->GetText());
+                SYMBOL * param = this->symbol_table->FindSymbol(u->GetText());
                 assert(param != 0);
                 this->device->unimplemented(param->storage_class != K_PARAM, "CALL indirect form unimplemented.");
                 stack.push_back(param);
@@ -1565,7 +1565,7 @@ int THREAD::DoCnot(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -1595,7 +1595,7 @@ int THREAD::DoCnot(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -1727,9 +1727,9 @@ int THREAD::DoCvt(TREE * inst)
     assert(o2->GetType() == TREE_OPR);
     assert(o2->GetChild(0)->GetType() == T_WORD);
 
-    SYMBOL * s1 = this->root->FindSymbol(o1->GetChild(0)->GetText());
+    SYMBOL * s1 = this->symbol_table->FindSymbol(o1->GetChild(0)->GetText());
     assert(s1 != 0);
-    SYMBOL * s2 = this->root->FindSymbol(o2->GetChild(0)->GetText());
+    SYMBOL * s2 = this->symbol_table->FindSymbol(o2->GetChild(0)->GetText());
     assert(s2 != 0);
 
     dst_value = (TYPES::Types*)s1->pvalue;
@@ -2191,7 +2191,7 @@ int THREAD::DoCvta(TREE * inst)
     SYMBOL * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types * d;
@@ -2204,7 +2204,7 @@ int THREAD::DoCvta(TREE * inst)
     // different semantics depending on if register, global, etc.
     if (src->GetType() == T_WORD)
     {
-        ssrc = this->root->FindSymbol(src->GetText());
+        ssrc = this->symbol_table->FindSymbol(src->GetText());
         // Various types of id's to handle:
         assert(ssrc != 0);
         switch (ssrc->storage_class)
@@ -2316,7 +2316,7 @@ int THREAD::DoDiv(TREE * inst)
     SYMBOL * ssrc1 = 0;
     SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -2359,7 +2359,7 @@ int THREAD::DoDiv(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -2398,7 +2398,7 @@ int THREAD::DoDiv(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -2495,7 +2495,7 @@ int THREAD::DoEx2(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -2519,7 +2519,7 @@ int THREAD::DoEx2(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -2632,7 +2632,7 @@ int THREAD::DoFma(TREE * inst)
     SYMBOL * ssrc2 = 0;
     SYMBOL * ssrc3 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -2659,7 +2659,7 @@ int THREAD::DoFma(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -2680,7 +2680,7 @@ int THREAD::DoFma(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -2701,7 +2701,7 @@ int THREAD::DoFma(TREE * inst)
         }
     } else if (src3->GetType() == T_WORD)
     {
-        ssrc3 = this->root->FindSymbol(src3->GetText());
+        ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
     } else assert(false);
@@ -2791,7 +2791,7 @@ int THREAD::DoLd(TREE * inst)
     SYMBOL * ssrc = 0;
     
     assert(src->GetType() == T_WORD);
-    ssrc = this->root->FindSymbol(src->GetText());
+    ssrc = this->symbol_table->FindSymbol(src->GetText());
     assert(ssrc != 0);
     TREE * plus = osrc->GetChild( 1);
     CONSTANT value(0);
@@ -2886,7 +2886,7 @@ int THREAD::DoLd(TREE * inst)
         TREE * dst = odst->GetChild( i);
         SYMBOL * sdst = 0;
         assert(dst->GetType() == T_WORD);
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
         assert(sdst != 0);
         TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
@@ -3366,10 +3366,10 @@ int THREAD::DoLdu(TREE * inst)
     SYMBOL * sdst = 0;
     SYMBOL * ssrc = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     
     assert(src->GetType() == T_WORD);
-    ssrc = this->root->FindSymbol(src->GetText());
+    ssrc = this->symbol_table->FindSymbol(src->GetText());
     TREE * plus = osrc->GetChild( 1);
     CONSTANT value(0);
     if (plus != 0)
@@ -3521,7 +3521,7 @@ int THREAD::DoLg2(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -3545,7 +3545,7 @@ int THREAD::DoLg2(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -3662,7 +3662,7 @@ int THREAD::DoMad(TREE * inst)
     SYMBOL * ssrc2 = 0;
     SYMBOL * ssrc3 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -3701,7 +3701,7 @@ int THREAD::DoMad(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -3734,7 +3734,7 @@ int THREAD::DoMad(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -3767,7 +3767,7 @@ int THREAD::DoMad(TREE * inst)
         }
     } else if (src3->GetType() == T_WORD)
     {
-        ssrc3 = this->root->FindSymbol(src3->GetText());
+        ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
     } else assert(false);
@@ -3896,7 +3896,7 @@ int THREAD::DoMov(TREE * inst)
     SYMBOL * ssrc = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types * d;
@@ -3941,7 +3941,7 @@ int THREAD::DoMov(TREE * inst)
         }
     } else if (src->GetType() == T_WORD)
     {
-        ssrc = this->root->FindSymbol(src->GetText());
+        ssrc = this->symbol_table->FindSymbol(src->GetText());
         assert(ssrc != 0);
         // Various types of id's to handle:
         switch (ssrc->storage_class)
@@ -4089,7 +4089,7 @@ int THREAD::DoMul(TREE * inst)
     SYMBOL * ssrc1 = 0;
     SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -4120,7 +4120,7 @@ int THREAD::DoMul(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -4147,7 +4147,7 @@ int THREAD::DoMul(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -4287,7 +4287,7 @@ int THREAD::DoMul24(TREE * inst)
     SYMBOL * ssrc1 = 0;
     SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -4312,7 +4312,7 @@ int THREAD::DoMul24(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -4333,7 +4333,7 @@ int THREAD::DoMul24(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -4417,7 +4417,7 @@ int THREAD::DoNeg(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -4450,7 +4450,7 @@ int THREAD::DoNeg(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4549,7 +4549,7 @@ int THREAD::DoNot(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -4579,7 +4579,7 @@ int THREAD::DoNot(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4678,7 +4678,7 @@ int THREAD::DoOr(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -4710,7 +4710,7 @@ int THREAD::DoOr(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -4755,7 +4755,7 @@ int THREAD::DoOr(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -4883,7 +4883,7 @@ int THREAD::DoRcp(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -4907,7 +4907,7 @@ int THREAD::DoRcp(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -5007,7 +5007,7 @@ int THREAD::DoRem(TREE * inst)
     SYMBOL * ssrc1 = 0;
     SYMBOL * ssrc2 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -5044,7 +5044,7 @@ int THREAD::DoRem(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -5077,7 +5077,7 @@ int THREAD::DoRem(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
     } else assert(false);
@@ -5191,7 +5191,7 @@ int THREAD::DoSelp(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
@@ -5245,7 +5245,7 @@ int THREAD::DoSelp(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -5332,7 +5332,7 @@ int THREAD::DoSelp(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -5378,7 +5378,7 @@ int THREAD::DoSelp(TREE * inst)
 
     if (src3->GetType() == T_WORD)
     {
-        SYMBOL * ssrc3 = this->root->FindSymbol(src3->GetText());
+        SYMBOL * ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
 // FIX      assert(strcmp(ssrc3->type, ".pred") == 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
@@ -5525,14 +5525,14 @@ int THREAD::DoSet(TREE * inst)
 
     if (dst1->GetType() == T_WORD)
     {
-        sdst1 = this->root->FindSymbol(dst1->GetText());
+        sdst1 = this->symbol_table->FindSymbol(dst1->GetText());
     } else assert(false);
 
     TYPES::Types * d = (TYPES::Types*)sdst1->pvalue;
 
     if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
         assert(s1 != 0);
@@ -5583,7 +5583,7 @@ int THREAD::DoSet(TREE * inst)
 
     if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
         assert(s2 != 0);
@@ -6151,14 +6151,14 @@ int THREAD::DoSetp(TREE * inst)
 
     if (dst1->GetType() == T_WORD)
     {
-        sdst1 = this->root->FindSymbol(dst1->GetText());
+        sdst1 = this->symbol_table->FindSymbol(dst1->GetText());
     } else assert(false);
 
     TYPES::Types * d = (TYPES::Types*)sdst1->pvalue;
 
     if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
         assert(s1 != 0);
@@ -6209,7 +6209,7 @@ int THREAD::DoSetp(TREE * inst)
 
     if (src2->GetType() == T_WORD)
     {
-        ssrc2 = this->root->FindSymbol(src2->GetText());
+        ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
         assert(s2 != 0);
@@ -6591,7 +6591,7 @@ int THREAD::DoShl(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -6620,7 +6620,7 @@ int THREAD::DoShl(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -6659,7 +6659,7 @@ int THREAD::DoShl(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -6754,7 +6754,7 @@ int THREAD::DoShr(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -6801,7 +6801,7 @@ int THREAD::DoShr(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -6876,7 +6876,7 @@ int THREAD::DoShr(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -7023,7 +7023,7 @@ int THREAD::DoSqrt(TREE * inst)
     SYMBOL * sdst = 0;
     SYMBOL * ssrc1 = 0;
     assert(dst->GetType() == T_WORD);
-    sdst = this->root->FindSymbol(dst->GetText());
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
     char * dummy;
 
     TYPES::Types value1; // used if literal
@@ -7046,7 +7046,7 @@ int THREAD::DoSqrt(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        ssrc1 = this->root->FindSymbol(src1->GetText());
+        ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
     } else assert(false);
@@ -7129,7 +7129,7 @@ int THREAD::DoSt(TREE * inst)
 
     TREE * dst = odst->GetChild( 0);
     assert(dst->GetType() == T_WORD);
-    SYMBOL * sdst = this->root->FindSymbol(dst->GetText());
+    SYMBOL * sdst = this->symbol_table->FindSymbol(dst->GetText());
     assert(sdst != 0);
     TREE * plus = odst->GetChild( 1);
     CONSTANT value(0);
@@ -7234,7 +7234,7 @@ int THREAD::DoSt(TREE * inst)
             s = &c.value;
         } else if (src->GetType() == T_WORD)
         {
-            ssrc = this->root->FindSymbol(src->GetText());
+            ssrc = this->symbol_table->FindSymbol(src->GetText());
             assert(ssrc != 0);
             // Various types of id's to handle:
             switch (ssrc->storage_class)
@@ -7286,7 +7286,7 @@ int THREAD::DoSt(TREE * inst)
             case K_SHARED:
                 {
                     // verify addr is within a pvalue with the given storage class.
-                    SYMBOL * ok = this->root->FindAddr(ss, addr);
+                    SYMBOL * ok = this->symbol_table->FindAddr(ss, addr);
                     if (! ok)
                     {
 						throw new EMULATED_DEVICE::EMU_ERROR("Out of bounds ST in kernel caught.");
@@ -7420,7 +7420,7 @@ int THREAD::DoSub(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -7467,7 +7467,7 @@ int THREAD::DoSub(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -7536,7 +7536,7 @@ int THREAD::DoSub(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
@@ -7790,7 +7790,7 @@ int THREAD::DoTex(TREE * inst)
 	SYMBOL * tex = 0;
 	if (src1->GetType() == T_WORD)
 	{
-		tex = this->root->FindSymbol(src1->GetText());
+		tex = this->symbol_table->FindSymbol(src1->GetText());
 	} else assert(false);
 	// Get details of the texture.
 	assert(tex != 0);
@@ -7817,7 +7817,7 @@ int THREAD::DoTex(TREE * inst)
 		{
 			// Compute actual source.
 			TYPES::Types value;
-			SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+			SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
 			assert(ssrc2 != 0);
 			switch (ssrc2->storage_class)
 			{
@@ -7853,7 +7853,7 @@ int THREAD::DoTex(TREE * inst)
 			SYMBOL * sdst = 0;
 			if (dst1->GetType() == T_WORD)
 			{
-				sdst = this->root->FindSymbol(dst1->GetText());
+				sdst = this->symbol_table->FindSymbol(dst1->GetText());
 			} else assert(false);
 
 			s = (TYPES::Types*)(texture_binding->devPtr);
@@ -7868,8 +7868,8 @@ int THREAD::DoTex(TREE * inst)
 		{
 			// Compute actual source.
 			TYPES::Types value;
-			SYMBOL * ssrca2 = this->root->FindSymbol(osrc2->GetChild(0)->GetText());
-			SYMBOL * ssrcb2 = this->root->FindSymbol(osrc2->GetChild(1)->GetText());
+			SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
+			SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
 			assert(ssrca2 != 0);
 			assert(ssrcb2 != 0);
 			switch (ssrca2->storage_class)
@@ -7942,7 +7942,7 @@ int THREAD::DoTex(TREE * inst)
 		SYMBOL * sdst = 0;
 		if (dst1->GetType() == T_WORD)
 		{
-			sdst = this->root->FindSymbol(dst1->GetText());
+			sdst = this->symbol_table->FindSymbol(dst1->GetText());
 		} else assert(false);
 		TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
@@ -7979,7 +7979,7 @@ int THREAD::DoTex(TREE * inst)
 		{
 			// Compute actual source.
 			TYPES::Types value;
-			SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+			SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
 			assert(ssrc2 != 0);
 			switch (ssrc2->storage_class)
 			{
@@ -8015,7 +8015,7 @@ int THREAD::DoTex(TREE * inst)
 			SYMBOL * sdst = 0;
 			if (dst1->GetType() == T_WORD)
 			{
-				sdst = this->root->FindSymbol(dst1->GetText());
+				sdst = this->symbol_table->FindSymbol(dst1->GetText());
 			} else assert(false);
 			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
@@ -8083,8 +8083,8 @@ int THREAD::DoTex(TREE * inst)
 		{
 			// Compute actual source.
 			TYPES::Types value;
-			SYMBOL * ssrca2 = this->root->FindSymbol(osrc2->GetChild(0)->GetText());
-			SYMBOL * ssrcb2 = this->root->FindSymbol(osrc2->GetChild(1)->GetText());
+			SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
+			SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
 			assert(ssrca2 != 0);
 			assert(ssrcb2 != 0);
 			switch (ssrca2->storage_class)
@@ -8155,7 +8155,7 @@ int THREAD::DoTex(TREE * inst)
 			SYMBOL * sdst = 0;
 			if (dst1->GetType() == T_WORD)
 			{
-				sdst = this->root->FindSymbol(dst1->GetText());
+				sdst = this->symbol_table->FindSymbol(dst1->GetText());
 			} else assert(false);
 			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
@@ -8294,7 +8294,7 @@ int THREAD::DoXor(TREE * inst)
     SYMBOL * sdst = 0;
     if (dst->GetType() == T_WORD)
     {
-        sdst = this->root->FindSymbol(dst->GetText());
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
     } else assert(false);
 
     TYPES::Types value1;
@@ -8326,7 +8326,7 @@ int THREAD::DoXor(TREE * inst)
         }
     } else if (src1->GetType() == T_WORD)
     {
-        SYMBOL * ssrc1 = this->root->FindSymbol(src1->GetText());
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         assert(ssrc1->size == this->device->Sizeof(type));
         TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
@@ -8371,7 +8371,7 @@ int THREAD::DoXor(TREE * inst)
         }
     } else if (src2->GetType() == T_WORD)
     {
-        SYMBOL * ssrc2 = this->root->FindSymbol(src2->GetText());
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         assert(ssrc2->size == this->device->Sizeof(type));
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;

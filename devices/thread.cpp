@@ -33,7 +33,7 @@ THREAD::THREAD(EMULATED_DEVICE * device, TREE * block, int pc, SYMBOL_TABLE * ro
     this->device = device;
 	this->stack_of_tree_blocks.push(block);
 	this->stack_of_pc.push(pc);
-    this->root = root;
+    this->symbol_table = root;
     this->finished = false;
     this->wait = false;
     this->carry = 0;
@@ -41,7 +41,7 @@ THREAD::THREAD(EMULATED_DEVICE * device, TREE * block, int pc, SYMBOL_TABLE * ro
 
 THREAD::~THREAD()
 {
-    delete root;
+    delete this->symbol_table;
 }
 
 unsigned int __stdcall THREAD::WinThreadExecute(void * thr)
@@ -77,7 +77,7 @@ void THREAD::Execute()
 			{
 				this->stack_of_pc.pop();
 				this->stack_of_tree_blocks.pop();
-				this->root = this->root->parent_block_symbol_table;
+				this->symbol_table = this->symbol_table->parent_block_symbol_table;
 				continue;
 			}
         }
@@ -87,7 +87,7 @@ void THREAD::Execute()
         // if debug, check if pvalues in each symbol was changed.  It
         // should have not!
         if (this->device->TraceLevel() > 3)
-            this->root->CachePvalues();
+            this->symbol_table->CachePvalues();
 
 		if (inst->GetType() == TREE_BLOCK)
 		{
@@ -99,10 +99,10 @@ void THREAD::Execute()
 			this->stack_of_pc.top()++;
 			this->stack_of_pc.push(0);
 			this->stack_of_pc.top() = this->device->FindFirstInst(this->stack_of_tree_blocks.top(), this->stack_of_pc.top());
-			SYMBOL_TABLE * block_symbol_table = this->device->PushSymbolTable(this->root);
+			SYMBOL_TABLE * block_symbol_table = this->device->PushSymbolTable(this->symbol_table);
 			int sc[] = { K_SHARED, K_REG, K_LOCAL, K_ALIGN, K_PARAM, 0};
 			this->device->SetupVariables(block_symbol_table, inst, sc);
-			this->root = block_symbol_table;
+			this->symbol_table = block_symbol_table;
 			if (this->device->TraceLevel() > 1)
 				this->Dump("after push", this->stack_of_pc.top(), inst);
 		}
@@ -115,7 +115,7 @@ void THREAD::Execute()
 			int next = this->Dispatch(inst);
 
 			if (this->device->TraceLevel() > 3)
-				this->root->CheckCachedPvalues();
+				this->symbol_table->CheckCachedPvalues();
 
 			if (next > 0)
 				this->stack_of_pc.top() = next;
@@ -201,7 +201,7 @@ int THREAD::Dispatch(TREE * inst)
             else assert(false);
         }
         assert(tsym != 0);
-        SYMBOL * sym = this->root->FindSymbol(tsym->GetText());
+        SYMBOL * sym = this->symbol_table->FindSymbol(tsym->GetText());
         assert(sym != 0);
         TYPES::Types * s = (TYPES::Types*)sym->pvalue;
 
@@ -400,7 +400,7 @@ void THREAD::Dump(char * comment, int pc, TREE * inst)
     std::cout << "PC = " << pc << "\n";
     this->device->Print(inst, 0);
     std::cout << "Symbol tables:\n";
-    this->root->Dump();
+    this->symbol_table->Dump();
     std::cout.flush();
 }
 

@@ -21,7 +21,7 @@
 class TEXARR
 {
 public:
-	struct textureReference *texref;
-	struct cudaArray *array;
-	struct cudaChannelFormatDesc *desc;
+    struct textureReference *texref;
+    struct cudaArray *array;
+    struct cudaChannelFormatDesc *desc;
 };
