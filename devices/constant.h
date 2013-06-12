@@ -21,26 +21,27 @@
 
 class CONSTANT
 {
-    public:
-        // Constants in PTX are represented using this class.  The type
-        // of the constant is one of K_B8, K_B16, ..., which are values
-        // defined by the PTX grammar.
-        int type;
+public:
 
-        // The actual value of the contant is store here.
-        TYPES::Types value;
+    // Constants in PTX are represented using this class.  The type
+    // of the constant is one of K_B8, K_B16, ..., which are values
+    // defined in the PTX grammar, using Antlr.
+    int type;
 
-        CONSTANT(int i)
-        {
-            type = K_S32;
-            value.s32 = i;
-        }
+    // The actual value of the contant is store here.
+    TYPES::Types value;
 
-        CONSTANT()
-        {
-            memset(&this->value, 0, sizeof(value));
-        }
+    CONSTANT(int i)
+    {
+        type = K_S32;
+        value.s32 = i;
+    }
 
-		CONSTANT Eval(int expected_type, TREE * const_expr);
+    CONSTANT()
+    {
+        memset(&this->value, 0, sizeof(value));
+    }
+
+    CONSTANT Eval(int expected_type, TREE * const_expr);
 };
 
