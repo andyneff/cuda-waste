@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -25,10 +26,11 @@
 #include "constant.h"
 #include "../wrapper/lock-mgr.h"
 #include "../wrapper/cuda-wrapper.h"
-#include "../devices/texref.h"
-#include "../devices/texture.h"
-#include "../devices/array.h"
-#include "../devices/texarr.h"
+#include "texref.h"
+#include "texture.h"
+#include "array.h"
+#include "texarr.h"
+#include "../libc/k_stdio.h"
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
@@ -1372,8 +1374,6 @@ int THREAD::DoBrkpt(TREE * inst)
     throw new EMULATED_DEVICE::EMU_ERROR("BRKPT unimplemented");
 }
 
-template<class  T>
-signed int k_vprintf(const char *pFormat, va_list ap);
 
 int THREAD::DoCall(TREE * inst)
 {
@@ -1500,11 +1500,11 @@ int THREAD::DoCall(TREE * inst)
 //        }
 //    }
 
-	TYPES::Types* p1 = (TYPES::Types*)stack[0]->pvalue;
-	TYPES::Types* p2 = (TYPES::Types*)stack[1]->pvalue;
+    TYPES::Types* p1 = (TYPES::Types*)stack[0]->pvalue;
+    TYPES::Types* p2 = (TYPES::Types*)stack[1]->pvalue;
 
-	// Call depending on size of pointer.
-	k_vprintf<__int32>( p1->pchar, static_cast<va_list>(p2->pvoid));
+    // Call depending on size of pointer.
+    k_vprintf<__int32>( p1->pchar, static_cast<va_list>(p2->pvoid));
 //    va_end(out);
 
     return 0;
@@ -2168,7 +2168,7 @@ int THREAD::DoCvta(TREE * inst)
     assert(odst != 0);
     assert(osrc != 0);
     int storage_class = 0;
-	bool to = false;
+    bool to = false;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
@@ -2179,8 +2179,8 @@ int THREAD::DoCvta(TREE * inst)
             ttype = t;
         else if (gt == K_SHARED || gt == K_GLOBAL || gt == K_LOCAL || gt == K_CONST)
             storage_class = gt;
-		else if (gt == K_TO)
-			to = true;
+        else if (gt == K_TO)
+            to = true;
         else assert(false);
     }
     assert(ttype);
@@ -2760,7 +2760,7 @@ int THREAD::DoLd(TREE * inst)
     int ss = 0;
     int cop = 0;
     int vec = 0;
-	int vol = 0;
+    int vol = 0;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
@@ -2778,8 +2778,8 @@ int THREAD::DoLd(TREE * inst)
             cop = gt;
         else if (gt == K_V2 || gt == K_V4)
             vec = gt;
-		else if (gt == K_VOLATILE)
-			vol = gt;
+        else if (gt == K_VOLATILE)
+            vol = gt;
         else assert(false);
     }
     assert(ttype != 0);
@@ -3775,46 +3775,100 @@ int THREAD::DoMad(TREE * inst)
     switch (type)
     {
         case K_U16:
-            if (width == K_LO)
-                d->u16 = s1->u16 * s2->u16 + s3->u16;
+			if (width == K_LO)
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				vx = vx + s3->u16;
+				d->u16 = vx;
+			}
             else if (width == K_HI)
-                d->u16 = (s1->u16 * s2->u16 + s3->u16) >> 16;
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				vx = vx + s3->u16;
+				d->u16 = vx >> 16;
+			}
             else if (width == K_WIDE)
-                d->u32 = s1->u16 * s2->u16 + s3->u32;
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				vx = vx + s3->u32;
+				d->u32 = vx;
+			}
             else assert(false);
             break;
         case K_S16:
-            if (width == K_LO)
-                d->s16 = s1->s16 * s2->s16 + s3->s16;
-            else if (width == K_HI)
-                d->s16 = (s1->s16 * s2->s16 + s3->s16) >> 16;
-            else if (width == K_WIDE)
-                d->s32 = s1->s16 * s2->s16 + s3->s32;
-            else assert(false);
-            break;
+			if (width == K_LO)
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				vx = vx + s3->s16;
+				d->s16 = vx;
+			}
+			else if (width == K_HI)
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				vx = vx + s3->s16;
+				d->s16 = vx >> 16;
+			}
+			else if (width == K_WIDE)
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				vx = vx + s3->s32;
+				d->s32 = vx;
+			}
+			else assert(false);
+			break;
         case K_U32:
-            if (width == K_LO)
-                d->u32 = s1->u32 * s2->u32 + s3->u32;
-            else if (width == K_HI)
-                d->u32 = (s1->u32 * s2->u32 + s3->u32) >> 32;
-            else if (width == K_WIDE)
-                d->u64 = s1->u32 * s2->u32 + s3->u64;
-            else assert(false);
+			if (width == K_LO)
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				vx = vx + s3->u32;
+				d->u32 = (unsigned __int32)(0xffffffff & vx);
+			}
+			else if (width == K_HI)
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				vx = vx + s3->u32;
+				d->u32 = vx >> 32;
+			}
+			else if (width == K_WIDE)
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				vx = vx + s3->u64;
+				d->u64 = vx;
+			}
+			else assert(false);
             break;
         case K_S32:
-            if (width == K_LO)
-                d->s32 = s1->s32 * s2->s32 + s3->s32;
-            else if (width == K_HI)
-                d->s32 = (s1->s32 * s2->s32 + s3->s32) >> 32;
-            else if (width == K_WIDE)
-                d->s64 = s1->s32 * s2->s32 + s3->s64;
-            else assert(false);
-            break;
-        case K_F32:
-            d->f32 = s1->f32 * s2->f32 + s3->f32;
-            break;
-        case K_F64:
-            d->f64 = s1->f64 * s2->f64 + s3->f64;
+			if (width == K_LO)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				vx = vx + s3->s32;
+				d->s32 = (__int32)(0xffffffff & vx);
+			}
+			else if (width == K_HI)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				vx = vx + s3->s32;
+				d->s32 = vx >> 32;
+			}
+			else if (width == K_WIDE)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				vx = vx + s3->s64;
+				d->s64 = vx;
+			}
+			else assert(false);
             break;
         default:
             assert(false);
@@ -4156,64 +4210,87 @@ int THREAD::DoMul(TREE * inst)
     {
         case K_U16:
             if (width == K_LO)
-                d->u16 = s1->u16 * s2->u16;
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				d->u16 = vx;
+			}
             else if (width == K_HI)
-                d->u16 = (s1->u16 * s2->u16 ) >> 16;
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				d->u16 = vx >> 16;
+			}
             else if (width == K_WIDE)
-                d->u32 = s1->u16 * s2->u16;
+			{
+				unsigned __int32 vx = s1->u16;
+				vx = vx * s2->u16;
+				d->u32 = vx;
+			}
             else assert(false);
             break;
         case K_S16:
             if (width == K_LO)
-                d->s16 = s1->s16 * s2->s16;
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				d->s16 = vx;
+			}
             else if (width == K_HI)
-                d->s16 = (s1->s16 * s2->s16 ) >> 16;
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				d->s16 = vx >> 16;
+			}
             else if (width == K_WIDE)
-                d->s32 = s1->s16 * s2->s16;
+			{
+				__int32 vx = s1->s16;
+				vx = vx * s2->s16;
+				d->s32 = vx;
+			}
             else assert(false);
             break;
         case K_U32:
             if (width == K_LO)
-                d->u32 = s1->u32 * s2->u32;
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				d->u32 = (unsigned __int32)(0xffffffff & vx);
+			}
             else if (width == K_HI)
 			{
 				unsigned __int64 vx = s1->u32;
 				vx = vx * s2->u32;
-				vx = vx >> 32;
-                d->u32 = vx; // (s1->u32 * s2->u32 ) >> 32;
+				d->u32 = vx >> 32;
 			}
-			else if (width == K_WIDE)
-                d->u64 = s1->u32 * s2->u32;
+            else if (width == K_WIDE)
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u32;
+				d->u64 = vx;
+			}
             else assert(false);
             break;
         case K_S32:
-            if (width == K_LO)
-                d->s32 = s1->s32 * s2->s32;
-            else if (width == K_HI)
-                d->s32 = (s1->s32 * s2->s32 ) >> 32;
-            else if (width == K_WIDE)
-                d->s64 = s1->s32 * s2->s32;
+			if (width == K_LO)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				d->s32 = (__int32)(0xffffffff & vx);
+			}
+			else if (width == K_HI)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				d->s32 = vx >> 32;
+			}
+			else if (width == K_WIDE)
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s32;
+				d->s64 = vx;
+			}
             else assert(false);
-            break;
-        case K_U64:
-            if (width == K_LO)
-                d->u64 = s1->u64 * s2->u64;
-            else if (width == K_HI)
-                d->u64 = (s1->u64 * s2->u64 ) >> 64;
-            else assert(false);
-            break;
-        case K_S64:
-            if (width == K_LO)
-                d->s64 = s1->s64 * s2->s64;
-            else if (width == K_HI)
-                d->s64 = (s1->s64 * s2->s64 ) >> 64;
-            else assert(false);
-            break;
-        case K_F32:
-            d->f32 = s1->f32 * s2->f32;
-            break;
-        case K_F64:
-            d->f64 = s1->f64 * s2->f64;
             break;
         default:
             assert(false);
@@ -5110,7 +5187,7 @@ int THREAD::DoRem(TREE * inst)
 
 int THREAD::DoRet(TREE * inst)
 {
-	return -KI_RET;
+    return -KI_RET;
 }
 
 int THREAD::DoRsqrt(TREE * inst)
@@ -5492,13 +5569,13 @@ int THREAD::DoSet(TREE * inst)
                  || gt == K_S16 || gt == K_S32 || gt == K_S64
                  || gt == K_B16 || gt == K_B32 || gt == K_B64
                  || gt == K_F32 || gt == K_F64)
-		{
-			if (dtype == 0)
-				dtype = gt;
-			else if (stype == 0)
-				stype = gt;
-			else assert(false);
-		}
+        {
+            if (dtype == 0)
+                dtype = gt;
+            else if (stype == 0)
+                stype = gt;
+            else assert(false);
+        }
         else if (gt == K_EQ || gt == K_NE || gt == K_LT || gt == K_LE || gt == K_GT || gt == K_GE
                  || gt == K_LO || gt == K_LS || gt == K_HI || gt == K_HS
                  || gt == K_EQU || gt == K_NEU || gt == K_LTU || gt == K_LEU
@@ -5507,7 +5584,7 @@ int THREAD::DoSet(TREE * inst)
         else assert(false);
     }
     assert(dtype != 0);
-	assert(stype != 0);
+    assert(stype != 0);
     assert(op != 0);
     assert(ftz == false);
 
@@ -5632,48 +5709,48 @@ int THREAD::DoSet(TREE * inst)
     }
     else assert(false);
 
-	bool compare = false;
-	
+    bool compare = false;
+    
     switch (op)
     {
         case K_EQ:
             switch (stype)
             {
-				case K_B16:
-					compare = s1->b16 == s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 == s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 == s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 == s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 == s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 == s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 == s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 == s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 == s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 == s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 == s2->f64;
-					break;
-				default:
-					assert(false);
+                case K_B16:
+                    compare = s1->b16 == s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 == s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 == s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 == s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 == s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 == s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 == s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 == s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 == s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 == s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 == s2->f64;
+                    break;
+                default:
+                    assert(false);
             }
             break;
         case K_NE:
@@ -5719,15 +5796,15 @@ int THREAD::DoSet(TREE * inst)
         case K_LT:
             switch (stype)
             {
-				case K_B16:
-					compare = s1->b16 < s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 < s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 < s2->b64;
-					break;
+                case K_B16:
+                    compare = s1->b16 < s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 < s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 < s2->b64;
+                    break;
                 case K_U16:
                     compare = s1->u16 < s2->u16;
                     break;
@@ -5759,15 +5836,15 @@ int THREAD::DoSet(TREE * inst)
         case K_LE:
             switch (stype)
             {
-				case K_B16:
-					compare = s1->b16 <= s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 <= s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 <= s2->b64;
-					break;
+                case K_B16:
+                    compare = s1->b16 <= s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 <= s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 <= s2->b64;
+                    break;
                 case K_U16:
                     compare = s1->u16 <= s2->u16;
                     break;
@@ -5799,15 +5876,15 @@ int THREAD::DoSet(TREE * inst)
         case K_GT:
             switch (stype)
             {
-				case K_B16:
-					compare = s1->b16 > s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 > s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 > s2->b64;
-					break;
+                case K_B16:
+                    compare = s1->b16 > s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 > s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 > s2->b64;
+                    break;
                 case K_U16:
                     compare = s1->u16 > s2->u16;
                     break;
@@ -5837,226 +5914,226 @@ int THREAD::DoSet(TREE * inst)
             }
             break;
         case K_GE:
-			switch (stype)
-			{
-				case K_B16:
-					compare = s1->b16 >= s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 >= s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 >= s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 >= s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 >= s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 >= s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 >= s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 >= s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 >= s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 >= s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 >= s2->f64;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_B16:
+                    compare = s1->b16 >= s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 >= s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 >= s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 >= s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 >= s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 >= s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 >= s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 >= s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 >= s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 >= s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 >= s2->f64;
+                    break;
+                default:
+                    assert(false);
+            }
             break;
         case K_LO:
-			switch (stype)
-			{
-				case K_B16:
-					compare = s1->b16 < s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 < s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 < s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 < s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 < s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 < s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 < s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 < s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 < s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 < s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 < s2->f64;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_B16:
+                    compare = s1->b16 < s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 < s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 < s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 < s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 < s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 < s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 < s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 < s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 < s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 < s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 < s2->f64;
+                    break;
+                default:
+                    assert(false);
+            }
             break;
         case K_LS:
-			switch (stype)
-			{
-				case K_B16:
-					compare = s1->b16 <= s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 <= s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 <= s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 <= s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 <= s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 <= s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 <= s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 <= s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 <= s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 <= s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 <= s2->f64;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_B16:
+                    compare = s1->b16 <= s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 <= s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 <= s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 <= s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 <= s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 <= s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 <= s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 <= s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 <= s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 <= s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 <= s2->f64;
+                    break;
+                default:
+                    assert(false);
+            }
             break;
         case K_HI:
-			switch (stype)
-			{
-				case K_B16:
-					compare = s1->b16 > s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 > s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 > s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 > s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 > s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 > s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 > s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 > s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 > s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 > s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 > s2->f64;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_B16:
+                    compare = s1->b16 > s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 > s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 > s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 > s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 > s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 > s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 > s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 > s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 > s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 > s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 > s2->f64;
+                    break;
+                default:
+                    assert(false);
+            }
             break;
         case K_HS:
-			switch (stype)
-			{
-				case K_B16:
-					compare = s1->b16 >= s2->b16;
-					break;
-				case K_B32:
-					compare = s1->b32 >= s2->b32;
-					break;
-				case K_B64:
-					compare = s1->b64 >= s2->b64;
-					break;
-				case K_U16:
-					compare = s1->u16 >= s2->u16;
-					break;
-				case K_U32:
-					compare = s1->u32 >= s2->u32;
-					break;
-				case K_U64:
-					compare = s1->u64 >= s2->u64;
-					break;
-				case K_S16:
-					compare = s1->s16 >= s2->s16;
-					break;
-				case K_S32:
-					compare = s1->s32 >= s2->s32;
-					break;
-				case K_S64:
-					compare = s1->s64 >= s2->s64;
-					break;
-				case K_F32:
-					compare = s1->f32 >= s2->f32;
-					break;
-				case K_F64:
-					compare = s1->f64 >= s2->f64;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_B16:
+                    compare = s1->b16 >= s2->b16;
+                    break;
+                case K_B32:
+                    compare = s1->b32 >= s2->b32;
+                    break;
+                case K_B64:
+                    compare = s1->b64 >= s2->b64;
+                    break;
+                case K_U16:
+                    compare = s1->u16 >= s2->u16;
+                    break;
+                case K_U32:
+                    compare = s1->u32 >= s2->u32;
+                    break;
+                case K_U64:
+                    compare = s1->u64 >= s2->u64;
+                    break;
+                case K_S16:
+                    compare = s1->s16 >= s2->s16;
+                    break;
+                case K_S32:
+                    compare = s1->s32 >= s2->s32;
+                    break;
+                case K_S64:
+                    compare = s1->s64 >= s2->s64;
+                    break;
+                case K_F32:
+                    compare = s1->f32 >= s2->f32;
+                    break;
+                case K_F64:
+                    compare = s1->f64 >= s2->f64;
+                    break;
+                default:
+                    assert(false);
+            }
             break;
         default:
             assert(false);
             break;
     }
 
-	// Store the result.
-	switch (dtype)
-	{
-		case K_U32:
-			d->u32 = (compare)? -1 : 0;
-			break;
-		case K_S32:
-			d->s32 = (compare)? -1 : 0;
-			break;
-		case K_F32:
-			d->f32 = (compare)? 1.0 : 0;
-			break;
-		default:
-			assert(false);
-	}
-	return 0;
+    // Store the result.
+    switch (dtype)
+    {
+        case K_U32:
+            d->u32 = (compare)? -1 : 0;
+            break;
+        case K_S32:
+            d->s32 = (compare)? -1 : 0;
+            break;
+        case K_F32:
+            d->f32 = (compare)? 1.0 : 0;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 int THREAD::DoSetp(TREE * inst)
@@ -7101,7 +7178,7 @@ int THREAD::DoSt(TREE * inst)
     int ss = 0;
     int cop = 0;
     int vec = 0;
-	int vol = 0;
+    int vol = 0;
     for (int i = 0; ; ++i)
     {
         TREE * t = ttype->GetChild(i);
@@ -7119,8 +7196,8 @@ int THREAD::DoSt(TREE * inst)
             cop = gt;
         else if (gt == K_V2 || gt == K_V4)
             vec = gt;
-		else if (gt == K_VOLATILE)
-			vol = gt;
+        else if (gt == K_VOLATILE)
+            vol = gt;
         else assert(false);
     }
     assert(ttype != 0);
@@ -7289,7 +7366,7 @@ int THREAD::DoSt(TREE * inst)
                     SYMBOL * ok = this->symbol_table->FindAddr(ss, addr);
                     if (! ok)
                     {
-						throw new EMULATED_DEVICE::EMU_ERROR("Out of bounds ST in kernel caught.");
+                        throw new EMULATED_DEVICE::EMU_ERROR("Out of bounds ST in kernel caught.");
                     }
                 }
                 break;
@@ -7700,482 +7777,482 @@ int THREAD::DoTestp(TREE * inst)
 
 int THREAD::DoTex(TREE * inst)
 {
-	int start = 0;
-	if (inst->GetChild(start)->GetType() == TREE_PRED)
-		start++;
-	assert(inst->GetChild(start)->GetType() == KI_TEX);
-	start++;
-	TREE * ttype = 0;
-	TREE * odst1 = 0;
-	TREE * odst2 = 0;
-	TREE * osrc1 = 0;
-	TREE * osrc2 = 0;
-	TREE * osrc3 = 0;
-	for (;; ++start)
-	{
-		TREE * t = inst->GetChild(start);
-		if (t == 0)
-			break;
-		int gt = t->GetType();
-		if (gt == TREE_TYPE)
-			ttype = t;
-		else if (gt == TREE_OPR)
-		{
-			if (odst1 == 0)
-			{
-				odst1 = t;
-			} else if (osrc1 == 0)
-			{
-				osrc1 = t;
-			} else if (osrc2 == 0)
-			{
-				osrc2 = t;
-			} else if (osrc3 == 0)
-			{
-				osrc3 = t;
-			}
-			else assert(false);
-		} else assert(false);
-	}
-	assert(ttype != 0);
-	assert(odst1 != 0);
-	assert(osrc1 != 0);
-	assert(osrc2 != 0);
+    int start = 0;
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
+        start++;
+    assert(inst->GetChild(start)->GetType() == KI_TEX);
+    start++;
+    TREE * ttype = 0;
+    TREE * odst1 = 0;
+    TREE * odst2 = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
+    for (;; ++start)
+    {
+        TREE * t = inst->GetChild(start);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst1 == 0)
+            {
+                odst1 = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else if (osrc3 == 0)
+            {
+                osrc3 = t;
+            }
+            else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst1 != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
 
-	// third source not supported yet.
-	assert(osrc3 == 0);
+    // third source not supported yet.
+    assert(osrc3 == 0);
 
-	bool _1d = false;
-	bool _2d = false;
-	bool _3d = false;
-	int stype = 0;
-	int dtype = 0;
-	for (int i = 0; ; ++i)
-	{
-		TREE * t = ttype->GetChild(i);
-		if (t == 0)
-			break;
-		int gt = t->GetType();
-		if (gt == K_1D)
-			_1d = true;
-		else if (gt == K_2D)
-			_2d = true;
-		else if (gt == K_3D)
-			_3d = true;
-		else if (gt == K_V4)
-			;
-		else if (dtype == 0)
-		{
-			if (gt == K_U32 || gt == K_S32 || gt == K_F32)
-				dtype = gt;
-			else assert(false);
-		}
-		else if (stype == 0)
-		{
-			if (gt == K_U32 || gt == K_S32 || gt == K_F32)
-				stype = gt;
-			else assert(false);
-		}
-		else assert(false);
-	}
-	assert(stype != 0);
-	assert(dtype != 0);
+    bool _1d = false;
+    bool _2d = false;
+    bool _3d = false;
+    int stype = 0;
+    int dtype = 0;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = ttype->GetChild(i);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == K_1D)
+            _1d = true;
+        else if (gt == K_2D)
+            _2d = true;
+        else if (gt == K_3D)
+            _3d = true;
+        else if (gt == K_V4)
+            ;
+        else if (dtype == 0)
+        {
+            if (gt == K_U32 || gt == K_S32 || gt == K_F32)
+                dtype = gt;
+            else assert(false);
+        }
+        else if (stype == 0)
+        {
+            if (gt == K_U32 || gt == K_S32 || gt == K_F32)
+                stype = gt;
+            else assert(false);
+        }
+        else assert(false);
+    }
+    assert(stype != 0);
+    assert(dtype != 0);
 
-	int type = ttype->GetType();
-	TREE * dst1 = odst1->GetChild(0);
-	TREE * src1 = osrc1->GetChild(0);
-	TREE * src2 = osrc2->GetChild(0);
+    int type = ttype->GetType();
+    TREE * dst1 = odst1->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
 
-	// Look up symbol dimensions.
-	SYMBOL * tex = 0;
-	if (src1->GetType() == T_WORD)
-	{
-		tex = this->symbol_table->FindSymbol(src1->GetText());
-	} else assert(false);
-	// Get details of the texture.
-	assert(tex != 0);
-	
+    // Look up symbol dimensions.
+    SYMBOL * tex = 0;
+    if (src1->GetType() == T_WORD)
+    {
+        tex = this->symbol_table->FindSymbol(src1->GetText());
+    } else assert(false);
+    // Get details of the texture.
+    assert(tex != 0);
+    
 
-	// Find texture from name.
-	std::map<char*, TEXTURE*>::iterator i = this->device->texturename_to_texture.find(tex->name);
+    // Find texture from name.
+    std::map<char*, TEXTURE*>::iterator i = this->device->texturename_to_texture.find(tex->name);
     assert(i != this->device->texturename_to_texture.end());
     TEXTURE * texture = i->second;
 
-	// Find texture binding from texture.
-	// There are going to be only one of two possible ways:
-	// (1) linear device memory
-	// (2) CUDA Array.
-	std::map<void*, TEXREF*>::iterator j = this->device->texture_to_device_memory_binding.find(texture->hostVar);
-	if (j != this->device->texture_to_device_memory_binding.end())
-	{
-		// Linear device memory.
-		TEXREF * texture_binding = j->second;
+    // Find texture binding from texture.
+    // There are going to be only one of two possible ways:
+    // (1) linear device memory
+    // (2) CUDA Array.
+    std::map<void*, TEXREF*>::iterator j = this->device->texture_to_device_memory_binding.find(texture->hostVar);
+    if (j != this->device->texture_to_device_memory_binding.end())
+    {
+        // Linear device memory.
+        TEXREF * texture_binding = j->second;
 
-		TYPES::Types * s;
+        TYPES::Types * s;
 
-		if (_1d)
-		{
-			// Compute actual source.
-			TYPES::Types value;
-			SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
-			assert(ssrc2 != 0);
-			switch (ssrc2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrc2->pvalue;
-					break;
-			}
+        if (_1d)
+        {
+            // Compute actual source.
+            TYPES::Types value;
+            SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
+            assert(ssrc2 != 0);
+            switch (ssrc2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrc2->pvalue;
+                    break;
+            }
 
-			// Get value of register.
-			float findex = 0;
-			switch (stype)
-			{
-				case K_S32:
-					findex = s->s32;
-					break;
-				case K_F32:
-					findex = s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            // Get value of register.
+            float findex = 0;
+            switch (stype)
+            {
+                case K_S32:
+                    findex = s->s32;
+                    break;
+                case K_F32:
+                    findex = s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			// Add value to texture binding address and dereference to get and assign value.
-			SYMBOL * sdst = 0;
-			if (dst1->GetType() == T_WORD)
-			{
-				sdst = this->symbol_table->FindSymbol(dst1->GetText());
-			} else assert(false);
+            // Add value to texture binding address and dereference to get and assign value.
+            SYMBOL * sdst = 0;
+            if (dst1->GetType() == T_WORD)
+            {
+                sdst = this->symbol_table->FindSymbol(dst1->GetText());
+            } else assert(false);
 
-			s = (TYPES::Types*)(texture_binding->devPtr);
-			unsigned char * addr = 0;
-			addr = (unsigned char*)s;
+            s = (TYPES::Types*)(texture_binding->devPtr);
+            unsigned char * addr = 0;
+            addr = (unsigned char*)s;
 
-			int index = (int) findex;
+            int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
+            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 
-		} else 	if (_2d)
-		{
-			// Compute actual source.
-			TYPES::Types value;
-			SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
-			SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
-			assert(ssrca2 != 0);
-			assert(ssrcb2 != 0);
-			switch (ssrca2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrca2->pvalue;
-					break;
-			}
+        } else  if (_2d)
+        {
+            // Compute actual source.
+            TYPES::Types value;
+            SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
+            SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
+            assert(ssrca2 != 0);
+            assert(ssrcb2 != 0);
+            switch (ssrca2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrca2->pvalue;
+                    break;
+            }
 
-			// Get value of register.
-			float findex = 0;
-			switch (stype)
-			{
-				case K_S32:
-					findex = s->s32;
-					break;
-				case K_F32:
-					findex = s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            // Get value of register.
+            float findex = 0;
+            switch (stype)
+            {
+                case K_S32:
+                    findex = s->s32;
+                    break;
+                case K_F32:
+                    findex = s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			switch (ssrcb2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrcb2->pvalue;
-					break;
-			}
+            switch (ssrcb2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrcb2->pvalue;
+                    break;
+            }
 
-			switch (stype)
-			{
-				case K_S32:
-					findex = findex + texture_binding->width * s->s32;
-					break;
-				case K_F32:
-					findex = findex + texture_binding->width * s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_S32:
+                    findex = findex + texture_binding->width * s->s32;
+                    break;
+                case K_F32:
+                    findex = findex + texture_binding->width * s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			s = (TYPES::Types*)(texture_binding->devPtr);
-			unsigned char * addr = 0;
-			addr = (unsigned char*)s;
+            s = (TYPES::Types*)(texture_binding->devPtr);
+            unsigned char * addr = 0;
+            addr = (unsigned char*)s;
 
-			int index = (int) findex;
+            int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-		}
+            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
+        }
 
-		SYMBOL * sdst = 0;
-		if (dst1->GetType() == T_WORD)
-		{
-			sdst = this->symbol_table->FindSymbol(dst1->GetText());
-		} else assert(false);
-		TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+        SYMBOL * sdst = 0;
+        if (dst1->GetType() == T_WORD)
+        {
+            sdst = this->symbol_table->FindSymbol(dst1->GetText());
+        } else assert(false);
+        TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-		switch (dtype)
-		{
-			case K_U32:
-				d->u32 = s->u32;
-				break;
-			case K_S32:
-				d->s32 = s->s32;
-				break;
-			case K_F32:
-				d->f32 = s->f32;
-				break;
-			default:
-				assert(false);
-		}
-	}
-	else {
-		// Array bound texture.  Perform filtering.
-		std::map<void*, TEXARR*>::iterator k = this->device->texture_to_array_binding.find(texture->hostVar);
-		assert(k != this->device->texture_to_array_binding.end());
-		
-		// Texture bound to array.
-		TEXARR * texture_binding = k->second;
-		cudaArray * cudaArr = texture_binding->array;
-		ARRAY * arr = (ARRAY*)cudaArr;
-		CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+        switch (dtype)
+        {
+            case K_U32:
+                d->u32 = s->u32;
+                break;
+            case K_S32:
+                d->s32 = s->s32;
+                break;
+            case K_F32:
+                d->f32 = s->f32;
+                break;
+            default:
+                assert(false);
+        }
+    }
+    else {
+        // Array bound texture.  Perform filtering.
+        std::map<void*, TEXARR*>::iterator k = this->device->texture_to_array_binding.find(texture->hostVar);
+        assert(k != this->device->texture_to_array_binding.end());
+        
+        // Texture bound to array.
+        TEXARR * texture_binding = k->second;
+        cudaArray * cudaArr = texture_binding->array;
+        ARRAY * arr = (ARRAY*)cudaArr;
+        CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
-		TYPES::Types * s;
-		TYPES::Types value;
+        TYPES::Types * s;
+        TYPES::Types value;
 
-		if (_1d)
-		{
-			// Compute actual source.
-			TYPES::Types value;
-			SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
-			assert(ssrc2 != 0);
-			switch (ssrc2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrc2->pvalue;
-					break;
-			}
+        if (_1d)
+        {
+            // Compute actual source.
+            TYPES::Types value;
+            SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
+            assert(ssrc2 != 0);
+            switch (ssrc2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrc2->pvalue;
+                    break;
+            }
 
-			// Get value of register.
-			float findex = 0;
-			switch (stype)
-			{
-				case K_S32:
-					findex = s->s32;
-					break;
-				case K_F32:
-					findex = s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            // Get value of register.
+            float findex = 0;
+            switch (stype)
+            {
+                case K_S32:
+                    findex = s->s32;
+                    break;
+                case K_F32:
+                    findex = s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			// Add value to texture binding address and dereference to get and assign value.
-			SYMBOL * sdst = 0;
-			if (dst1->GetType() == T_WORD)
-			{
-				sdst = this->symbol_table->FindSymbol(dst1->GetText());
-			} else assert(false);
-			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+            // Add value to texture binding address and dereference to get and assign value.
+            SYMBOL * sdst = 0;
+            if (dst1->GetType() == T_WORD)
+            {
+                sdst = this->symbol_table->FindSymbol(dst1->GetText());
+            } else assert(false);
+            TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-			s = (TYPES::Types*)(arr->memory + cu->padding_size);
-			unsigned char * addr = 0;
-			addr = (unsigned char*)s;
+            s = (TYPES::Types*)(arr->memory + cu->padding_size);
+            unsigned char * addr = 0;
+            addr = (unsigned char*)s;
 
-			if (texture->hostVar->filterMode & cudaFilterModeLinear)
-			{
-				// Perform interpolation.
-				// findex will be between floor(findex) and ceil(findex).  However, before grabbing the values
-				// at these two indices, perform index range checking.
-				int i1 = (int)floor(findex - 0.5);
-				int i2 = i1 + 1;
-				if (i1 < 0)
-				{
-					i1 = 0;
-					i2 = 0;
-				}
-				if (i1+1 >= arr->width)
-				{
-					i1 = arr->width - 1;
-					i2 = i1;
-				}
-				s = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
-				TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
-				TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->device->Sizeof(dtype)));
+            if (texture->hostVar->filterMode & cudaFilterModeLinear)
+            {
+                // Perform interpolation.
+                // findex will be between floor(findex) and ceil(findex).  However, before grabbing the values
+                // at these two indices, perform index range checking.
+                int i1 = (int)floor(findex - 0.5);
+                int i2 = i1 + 1;
+                if (i1 < 0)
+                {
+                    i1 = 0;
+                    i2 = 0;
+                }
+                if (i1+1 >= arr->width)
+                {
+                    i1 = arr->width - 1;
+                    i2 = i1;
+                }
+                s = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
+                TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
+                TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->device->Sizeof(dtype)));
 
-				switch (dtype)
-				{
-					case K_U32:
-						d->u32 = s->s32;
-						break;
-					case K_S32:
-						d->s32 = s->s32;
-						break;
-					case K_F32:
-						d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
-						break;
-					default:
-						assert(false);
-				}
+                switch (dtype)
+                {
+                    case K_U32:
+                        d->u32 = s->s32;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_F32:
+                        d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
+                        break;
+                    default:
+                        assert(false);
+                }
 
-			}
-			else {
-				int index = (int) findex;
-				s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
+            }
+            else {
+                int index = (int) findex;
+                s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 
-				switch (dtype)
-				{
-					case K_U32:
-						d->u32 = s->u32;
-						break;
-					case K_S32:
-						d->s32 = s->s32;
-						break;
-					case K_F32:
-						d->f32 = s->f32;
-						break;
-					default:
-						assert(false);
-				}
-			}
-		} else 	if (_2d)
-		{
-			// Compute actual source.
-			TYPES::Types value;
-			SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
-			SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
-			assert(ssrca2 != 0);
-			assert(ssrcb2 != 0);
-			switch (ssrca2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrca2->pvalue;
-					break;
-			}
+                switch (dtype)
+                {
+                    case K_U32:
+                        d->u32 = s->u32;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    default:
+                        assert(false);
+                }
+            }
+        } else  if (_2d)
+        {
+            // Compute actual source.
+            TYPES::Types value;
+            SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
+            SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
+            assert(ssrca2 != 0);
+            assert(ssrcb2 != 0);
+            switch (ssrca2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrca2->pvalue;
+                    break;
+            }
 
-			// Get value of register.
-			float findex = 0;
-			switch (stype)
-			{
-				case K_S32:
-					findex = s->s32;
-					break;
-				case K_F32:
-					findex = s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            // Get value of register.
+            float findex = 0;
+            switch (stype)
+            {
+                case K_S32:
+                    findex = s->s32;
+                    break;
+                case K_F32:
+                    findex = s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			switch (ssrcb2->storage_class)
-			{
-				case K_GLOBAL:
-				case K_LOCAL:
-				case K_PARAM:
-				case K_SHARED:
-				case K_CONST:
-					assert(false);
-					break;
-				case K_REG:
-					// names in instructions refer to the contents of the
-					// register.
-					s = (TYPES::Types*)ssrcb2->pvalue;
-					break;
-			}
+            switch (ssrcb2->storage_class)
+            {
+                case K_GLOBAL:
+                case K_LOCAL:
+                case K_PARAM:
+                case K_SHARED:
+                case K_CONST:
+                    assert(false);
+                    break;
+                case K_REG:
+                    // names in instructions refer to the contents of the
+                    // register.
+                    s = (TYPES::Types*)ssrcb2->pvalue;
+                    break;
+            }
 
-			switch (stype)
-			{
-				case K_S32:
-					findex = findex + arr->width * s->s32;
-					break;
-				case K_F32:
-					findex = findex + arr->width * s->f32;
-					break;
-				default:
-					assert(false);
-			}
+            switch (stype)
+            {
+                case K_S32:
+                    findex = findex + arr->width * s->s32;
+                    break;
+                case K_F32:
+                    findex = findex + arr->width * s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
 
-			s = (TYPES::Types*)(arr->memory + cu->padding_size);
-			unsigned char * addr = 0;
-			addr = (unsigned char*)s;
+            s = (TYPES::Types*)(arr->memory + cu->padding_size);
+            unsigned char * addr = 0;
+            addr = (unsigned char*)s;
 
-			int index = (int) findex;
+            int index = (int) findex;
 
-			s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-			SYMBOL * sdst = 0;
-			if (dst1->GetType() == T_WORD)
-			{
-				sdst = this->symbol_table->FindSymbol(dst1->GetText());
-			} else assert(false);
-			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
+            SYMBOL * sdst = 0;
+            if (dst1->GetType() == T_WORD)
+            {
+                sdst = this->symbol_table->FindSymbol(dst1->GetText());
+            } else assert(false);
+            TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-			switch (dtype)
-			{
-				case K_U32:
-					d->u32 = s->u32;
-					break;
-				case K_S32:
-					d->s32 = s->s32;
-					break;
-				case K_F32:
-					d->f32 = s->f32;
-					break;
-				default:
-					assert(false);
-			}
-		}
-	}
-	return 0;
+            switch (dtype)
+            {
+                case K_U32:
+                    d->u32 = s->u32;
+                    break;
+                case K_S32:
+                    d->s32 = s->s32;
+                    break;
+                case K_F32:
+                    d->f32 = s->f32;
+                    break;
+                default:
+                    assert(false);
+            }
+        }
+    }
+    return 0;
 }
 
 int THREAD::DoTrap(TREE * inst)

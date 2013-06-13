@@ -161,6 +161,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libc\output.c" />
     <ClCompile Include="..\driver.cpp" />
     <ClCompile Include="..\PtxLexer.c" />
     <ClCompile Include="..\PtxParser.c" />

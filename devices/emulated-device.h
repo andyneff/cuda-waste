@@ -27,7 +27,7 @@
 #include "../wrapper/lock-mgr.h"
 #include "../devices/device.h"
 #include "../wrapper/cuda-wrapper.h"
-#include "../devices/module.h"
+//#include "../devices/module.h"
 #include "../devices/entry.h"
 #include "../devices/ltstr.h"
 
@@ -39,6 +39,7 @@ class TEXREF;
 class TEXARR;
 class TEXTURE;
 class ARRAY;
+class MODULE;
 
 class EMULATED_DEVICE : DEVICE
 {
@@ -98,7 +99,7 @@ public:
 
 	std::map<void*, TEXARR*> texture_to_array_binding;
 
-    std::list<MOD*> modules;
+    std::list<MODULE *> modules;
 
     std::list<ENTRY*> entries;
 
@@ -156,9 +157,9 @@ public:
     void ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz);
     bool CodeRequiresThreadSynchronization(TREE * code);
     void SetupExternShared(SYMBOL_TABLE * symbol_table, TREE * code);
-    void Extract_From_Tree(MOD * module, TREE * node);
+    void Extract_From_Tree(MODULE * module, TREE * node);
     void SetupSingleVar(SYMBOL_TABLE * symbol_table, TREE * var, int * desired_storage_classes, bool externed, size_t total_size);
-    MOD * Parse(char * module_name, char * source);
+    MODULE * Parse(char * module_name, char * source);
     void ResetArgs();
 
     // cuda_runtime.h equivalents.

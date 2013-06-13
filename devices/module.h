@@ -10,10 +10,10 @@ class ENTRY;
  * (e.g., "compile_sm10"), the entire IR representing the parse tree of the module PTX,
  * a list of entry points, and list of functions, both of which are contained in the PTX.
  */
-class MOD
+class MODULE
 {
 public:
-	MOD()
+	MODULE()
 	{
 	};
 
@@ -24,6 +24,7 @@ public:
             return strcmp(s1, s2) < 0;
         }
     };
+
     char * name;
     TREE * tree;
     std::map<char*, ENTRY *, ltstr> entry;

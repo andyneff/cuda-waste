@@ -40,11 +40,12 @@
 #include "zlib.h"
 #include <__cudaFatFormat.h>
 #include "../wrapper/call-stack-info.h"
-#include "../devices/entry.h"
-#include "../devices/texref.h"
-#include "../devices/texture.h"
-#include "../devices/array.h"
-#include "../devices/texarr.h"
+#include "entry.h"
+#include "texref.h"
+#include "texture.h"
+#include "array.h"
+#include "texarr.h"
+#include "module.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -1098,7 +1099,8 @@ CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod,
 {
 	// Now, given the name of the kernel function being called, find
 	// the entry for it.
-	MOD * module = (MOD*)hmod;
+	void * foo = hfunc;
+	MODULE * module = dynamic_cast<MODULE *>((MODULE *)foo);
 	std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find((char*)name);
 	if (j == module->entry.end())
 		return CUDA_ERROR_NOT_FOUND;
@@ -1162,7 +1164,7 @@ CUresult EMULATED_DEVICE::_cuModuleLoad(CUmodule * hmod, const char *fname)
 	}
 	if (count == 0)
 		return CUDA_ERROR_FILE_NOT_FOUND;
-	MOD * module = this->Parse(this->device, (char*)buffer);
+	MODULE * module = this->Parse(this->device, (char*)buffer);
 	*hmod = (CUmodule)module;
 	if (module != 0)
 		return CUDA_SUCCESS;
@@ -2169,9 +2171,9 @@ cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
     char * name = i->second;
 
     // Go through all modules, look for current device.
-    for (std::list<MOD*>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
+    for (std::list<MODULE *>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
     {
-        MOD * module = *it;
+        MODULE * module = *it;
         if (strcmp(this->device, module->name) == 0 ||
             this->modules.size() == 1)
         {
@@ -2340,12 +2342,26 @@ cudaError_t EMULATED_DEVICE::_cudaMallocHost(void **ptr, size_t size)
 	return cudaErrorNotYetImplemented;
 }
 
+int roundUp(size_t numToRound, size_t multiple) 
+{ 
+ if(multiple == 0) 
+ { 
+  return numToRound; 
+ } 
+
+ int remainder = numToRound % multiple;
+ if (remainder == 0)
+  return numToRound;
+ return numToRound + multiple - remainder;
+}
+
 cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height)
 {
     void * local = 0;
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
-	size_t size = width * height;
+	// Round up width to be multiple of 128.
+	size_t size = roundUp(width, 128) * height;
 
     if (cu->trace_all_calls)
     {
@@ -3523,7 +3539,7 @@ void EMULATED_DEVICE::SetTrace(int level)
 // In ptxp/driver.cpp.
 extern TREE * parse(char * source);
 
-MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
+MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
@@ -3550,7 +3566,7 @@ MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
 		this->Print(tree, 0);
         std::cout << "====================================================\n\n\n";
     }
-    MOD * module = new MOD();
+    MODULE * module = new MODULE();
     module->name = this->StringTableEntry(module_name);
     module->tree = tree;
 	// Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
@@ -3559,7 +3575,7 @@ MOD * EMULATED_DEVICE::Parse(char * module_name, char * source)
     return module;
 }
 
-void EMULATED_DEVICE::Extract_From_Tree(MOD * module, TREE * node)
+void EMULATED_DEVICE::Extract_From_Tree(MODULE * module, TREE * node)
 {
     // Traverse the tree and look for key features like entry, func, variable declarations, etc.
     if (node->GetType() == TREE_ENTRY)

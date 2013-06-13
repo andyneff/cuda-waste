@@ -2,7 +2,7 @@
 
 #include <map>
 
-class MOD;
+class MODULE;
 class TREE;
 
 /*
@@ -24,7 +24,7 @@ public:
             return strcmp(s1, s2) < 0;
         }
     };
-    MOD * module;
+    MODULE * module;
     TREE * tree;
     char * name;
 };

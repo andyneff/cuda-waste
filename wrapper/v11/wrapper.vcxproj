@@ -178,7 +178,7 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>$(OutDir)ptxp.lib;%ANTLR_PATH%\Release\antlr3c.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x86\ZlibStatRelease\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)devices.lib;$(OutDir)libc.lib;%ANTLR_PATH%\x64\Release\antlr3c.lib;Rpcrt4.lib;%ZLIB_PATH%contrib\vstudio\vc11\x64\ZlibStatRelease\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">

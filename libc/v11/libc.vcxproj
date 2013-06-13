@@ -27,7 +27,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\fcvt.c" />
     <ClCompile Include="..\k_stdio.cpp" />
+    <ClCompile Include="..\output.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\k_stdio.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>libc</ProjectName>

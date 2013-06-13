@@ -39,6 +39,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <type_traits>
+#include "k_stdio.h"
 
 //------------------------------------------------------------------------------
 //         Local Definitions
@@ -295,99 +296,107 @@ signed int PutHexa(
 /// \param pFormat Format string.
 /// \param ap      Argument list.
 //------------------------------------------------------------------------------
+//template<class  T>
+//signed int k_vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
+//{
+//    char          fill;
+//    unsigned char width;
+//    signed int    num = 0;
+//    signed int    size = 0;
+//
+//    // Clear the string
+//    if (pStr) {
+//
+//        *pStr = 0;
+//    }
+//
+//    // Phase string
+//    while (*pFormat != 0 && size < length) {
+//
+//        // Normal character
+//        if (*pFormat != '%') {
+//
+//            *pStr++ = *pFormat++;
+//            size++;
+//        }
+//        // Escaped '%'
+//        else if (*(pFormat+1) == '%') {
+//
+//            *pStr++ = '%';
+//            pFormat += 2;
+//            size++;
+//        }
+//        // Token delimiter
+//        else {
+//
+//            fill = ' ';
+//            width = 0;
+//            pFormat++;
+//
+//            // Parse filler
+//            if (*pFormat == '0') {
+//
+//                fill = '0';
+//                pFormat++;
+//            }
+//
+//            // Ignore justifier
+//            if (*pFormat == '-') {
+//                pFormat++;
+//            }
+//
+//            // Parse width
+//            while ((*pFormat >= '0') && (*pFormat <= '9')) {
+//        
+//                width = (width*10) + *pFormat-'0';
+//                pFormat++;
+//            }
+//
+//            // Check if there is enough space
+//            if (size + width > length) {
+//
+//                width = length - size;
+//            }
+//        
+//			// Parse type
+//            switch (*pFormat) {
+//            case 'd': 
+//            case 'i': num = PutSignedInt(pStr, fill, width, my_va_arg(ap, std::make_signed<T>::type)); break;
+//            case 'u': num = PutUnsignedInt(pStr, fill, width, my_va_arg(ap, std::make_unsigned<T>::type)); break;
+//            case 'x': num = PutHexa(pStr, fill, width, 0, my_va_arg(ap, std::make_unsigned<T>::type)); break;
+//            case 'X': num = PutHexa(pStr, fill, width, 1, my_va_arg(ap, std::make_unsigned<T>::type)); break;
+//            case 's': num = PutString(pStr, fill, width, my_va_arg(ap, char *)); break;
+//            case 'c': num = append_char(pStr, my_va_arg(ap, std::make_unsigned<T>::type)); break;
+//            default:
+//                return EOF;
+//            }
+//
+//            pFormat++;
+//            pStr += num;
+//            size += num;
+//        }
+//    }
+//
+//    // NULL-terminated (final \0 is not counted)
+//    if (size < length) {
+//
+//        *pStr = 0;
+//    }
+//    else {
+//
+//        *(--pStr) = 0;
+//        size--;
+//    }
+//
+//    return size;
+//}
+
+extern "C" int _output(char *stream, const char *format, va_list args);
+
 template<class  T>
 signed int k_vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
 {
-    char          fill;
-    unsigned char width;
-    signed int    num = 0;
-    signed int    size = 0;
-
-    // Clear the string
-    if (pStr) {
-
-        *pStr = 0;
-    }
-
-    // Phase string
-    while (*pFormat != 0 && size < length) {
-
-        // Normal character
-        if (*pFormat != '%') {
-
-            *pStr++ = *pFormat++;
-            size++;
-        }
-        // Escaped '%'
-        else if (*(pFormat+1) == '%') {
-
-            *pStr++ = '%';
-            pFormat += 2;
-            size++;
-        }
-        // Token delimiter
-        else {
-
-            fill = ' ';
-            width = 0;
-            pFormat++;
-
-            // Parse filler
-            if (*pFormat == '0') {
-
-                fill = '0';
-                pFormat++;
-            }
-
-            // Ignore justifier
-            if (*pFormat == '-') {
-                pFormat++;
-            }
-
-            // Parse width
-            while ((*pFormat >= '0') && (*pFormat <= '9')) {
-        
-                width = (width*10) + *pFormat-'0';
-                pFormat++;
-            }
-
-            // Check if there is enough space
-            if (size + width > length) {
-
-                width = length - size;
-            }
-        
-			// Parse type
-            switch (*pFormat) {
-            case 'd': 
-            case 'i': num = PutSignedInt(pStr, fill, width, my_va_arg(ap, std::make_signed<T>::type)); break;
-            case 'u': num = PutUnsignedInt(pStr, fill, width, my_va_arg(ap, std::make_unsigned<T>::type)); break;
-            case 'x': num = PutHexa(pStr, fill, width, 0, my_va_arg(ap, std::make_unsigned<T>::type)); break;
-            case 'X': num = PutHexa(pStr, fill, width, 1, my_va_arg(ap, std::make_unsigned<T>::type)); break;
-            case 's': num = PutString(pStr, fill, width, my_va_arg(ap, char *)); break;
-            case 'c': num = append_char(pStr, my_va_arg(ap, std::make_unsigned<T>::type)); break;
-            default:
-                return EOF;
-            }
-
-            pFormat++;
-            pStr += num;
-            size += num;
-        }
-    }
-
-    // NULL-terminated (final \0 is not counted)
-    if (size < length) {
-
-        *pStr = 0;
-    }
-    else {
-
-        *(--pStr) = 0;
-        size--;
-    }
-
-    return size;
+	return _output(pStr, pFormat, ap);
 }
 
 //------------------------------------------------------------------------------

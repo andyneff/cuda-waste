@@ -100,7 +100,8 @@ Global
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|Win32.ActiveCfg = Release|Win32
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|Win32.Build.0 = Release|Win32
-		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|x64.ActiveCfg = Release|Win32
+		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|x64.ActiveCfg = Release|x64
+		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

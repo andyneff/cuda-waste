@@ -127,6 +127,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>%ZLIB_PATH%;%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,7 +155,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%ZLIB_PATH%;%ANTLR_PATH%\include;%CUDA_PATH%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
@@ -171,7 +172,6 @@
     <ClCompile Include="..\constant.cpp" />
     <ClCompile Include="..\emulated-device.cpp" />
     <ClCompile Include="..\instructions.cpp" />
-    <ClCompile Include="..\module.cpp" />
     <ClCompile Include="..\nvidia-gpu.cpp" />
     <ClCompile Include="..\symbol-table.cpp" />
     <ClCompile Include="..\symbol.cpp" />
@@ -185,6 +185,7 @@
     <ClInclude Include="..\emulated-device.h" />
     <ClCompile Include="..\entry.h" />
     <ClCompile Include="..\module.h" />
+    <ClInclude Include="..\ltstr.h" />
     <ClInclude Include="..\nvidia-gpu.h" />
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
