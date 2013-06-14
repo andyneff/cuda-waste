@@ -2352,6 +2352,7 @@ int roundUp(size_t numToRound, size_t multiple)
  int remainder = numToRound % multiple;
  if (remainder == 0)
   return numToRound;
+ printf("round = %d\n", numToRound + multiple - remainder);
  return numToRound + multiple - remainder;
 }
 
@@ -2361,7 +2362,7 @@ cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 	// Round up width to be multiple of 128.
-	size_t size = roundUp(width, 128) * height;
+	size_t size = roundUp(width, 128 * 4) * height;
 
     if (cu->trace_all_calls)
     {
@@ -2422,7 +2423,7 @@ cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size
     d.context = strdup(cu->Context());
     this->alloc_list->push_back(d);
     *devPtr = ((char*)local) + cu->padding_size;
-	*pitch = width;
+	*pitch = size / height;
     return cudaSuccess;
 }
 
@@ -2603,6 +2604,27 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         return cudaErrorMemoryAllocation;
 }
 
+void copy_aux(char * dst, size_t dpitch, char * src, size_t spitch, size_t width, size_t height)
+{
+	for (int i = 0, j = 0; ;)
+	{
+		if (i % spitch >= width)
+		{
+			int inc = spitch - width;
+			i += inc;
+		}
+		if (j % dpitch >= width)
+		{
+			int inc = dpitch - width;
+			j += inc;
+		}
+		dst[j++] = src[i++];
+		if (i >= spitch * height)
+			break;
+	}
+}
+
+
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
@@ -2700,7 +2722,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
             this->CheckSinglePtrOverwrite(dsrc);
         // Perform copy.
         cudaError_t err;
-        memcpy(dst, src, count);
+        copy_aux((char*)dst, dpitch, (char*)src, spitch, width, height);
         err = cudaSuccess;
         // Perform overwrite check again.
         if (ddst)
@@ -2768,7 +2790,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
             this->CheckSinglePtrOverwrite(dsrc);
         // Perform copy.
         cudaError_t err;
-        memcpy(dst, src, count);
+        copy_aux((char*)dst, dpitch, (char*)src, spitch, width, height);
         err = cudaSuccess;
         // Perform overwrite check again.
         if (ddst)
