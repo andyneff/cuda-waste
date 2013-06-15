@@ -56,7 +56,7 @@ int main()
 	CUDA_CALL( cudaMemcpyToArray(cuArray, 0, 0, h_data, sizeof(float) * size, cudaMemcpyHostToDevice) );
    
 	// bind a texture to the CUDA array
-	cudaBindTextureToArray (texRef1, cuArray);
+	cudaBindTextureToArray(texRef1, cuArray);
  
 	// Set texture access
 	texRef1.normalized = false;

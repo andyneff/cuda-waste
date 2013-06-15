@@ -2838,9 +2838,234 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DFromArrayAsync(void *dst, size_t dpitc
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DToArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    char * file_name = 0;
+    int line = 0;
+    char * context = cu->Context();
+	int count = spitch * height;
+
+	ARRAY * arr = (ARRAY*) dst;
+
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaMemcpy2D called, " << context << ".\n\n";
+    }
+
+    // Null pointer sanity check.
+    if (dst == 0)
+    {
+        (*cu->output_stream) << "Destination pointer in Memcpy("
+            << "dst = " << dst
+            << ", ..., ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+            << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorMemoryAllocation;
+    }
+    if (src == 0)
+    {
+        (*cu->output_stream) << "Source pointer passed to Memcpy(..., "
+            << "src = " << src
+            << ", ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+            << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorMemoryAllocation;
+    }
+
+    // Four cases:
+    if (kind == cudaMemcpyHostToDevice)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
+
+        if (ds != -1 && dd == -1)
+        {
+            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+                << "dst = " << dst
+                << ", src = " << src << ", ..., ...) "
+                << " are reversed in directionality.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd == -1)
+        {
+            (*cu->output_stream) << "Destination pointer in Memcpy("
+                << "dst = " << dst
+                << ", ..., ..., ...) "
+                << " is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+                << ", ..., ...) looks invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        EMULATED_DEVICE::data * ddst = 0;
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (dd != -1)
+            ddst = &(*this->alloc_list)[dd];
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        // Perform copy.
+        cudaError_t err;
+        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+	else if (kind == cudaMemcpyDeviceToDevice)
+    {
+        int ds = this->FindAllocatedBlock(src);
+
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
+
+        if (ds != -1)
+        {
+            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+                << "dst = " << dst
+                << ", src = " << src << ", ..., ...) "
+                << " are reversed in directionality.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+                << ", ..., ...) looks invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        // Perform copy.
+        cudaError_t err;
+        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+    else if (kind == cudaMemcpyDeviceToHost)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        if (ds == -1 && dd != -1)
+        {
+            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+                << "dst = " << dst
+                << ", src = " << src << ", ..., ...) "
+                << " are reversed in directionality.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in Memcpy(..., "
+                << "src = " << src
+                << ", ..., ..., ...) "
+                << " is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (dd != -1 && (*this->alloc_list)[dd].is_host)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+                << "dst = " << dst
+                << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        else if (this->IsBadPointer(dst))
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+                << "dst = " << dst
+                << ", ..., ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        }
+        // Check before copy if block boundaries are intact.
+        EMULATED_DEVICE::data * ddst = 0;
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (dd != -1)
+            ddst = &(*this->alloc_list)[dd];
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        // Perform copy.
+        cudaError_t err;
+        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+    else
+        return cudaErrorMemoryAllocation;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))

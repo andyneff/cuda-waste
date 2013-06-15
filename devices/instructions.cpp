@@ -4292,7 +4292,15 @@ int THREAD::DoMul(TREE * inst)
 			}
             else assert(false);
             break;
-        default:
+        case K_F32:
+			assert(width == 0);
+            d->f32 = s1->f32 * s2->f32;
+            break;
+        case K_F64:
+			assert(width == 0);
+            d->f64 = s1->f64 * s2->f64;
+            break;
+		default:
             assert(false);
     }
     return 0;
