@@ -187,6 +187,7 @@
     <ClCompile Include="..\module.h" />
     <ClInclude Include="..\ltstr.h" />
     <ClInclude Include="..\nvidia-gpu.h" />
+    <ClInclude Include="..\regvar.h" />
     <ClInclude Include="..\string-table.h" />
     <ClInclude Include="..\symbol-table.h" />
     <ClInclude Include="..\symbol.h" />

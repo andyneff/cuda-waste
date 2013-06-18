@@ -433,7 +433,7 @@ entry
 entry_aux
     :
     (K_VISIBLE | K_EXTERN )?
-    K_ENTRY kernel_name ( T_OP entry_param_list T_CP )? performance_tuning_directives? entry_body
+    K_ENTRY kernel_name ( T_OP entry_param_list? T_CP )? performance_tuning_directives? entry_body
     ->
     kernel_name ^( TREE_PARAM_LIST entry_param_list? ) ^( TREE_PERF performance_tuning_directives? ) entry_body
     ;

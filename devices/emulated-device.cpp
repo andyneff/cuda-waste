@@ -46,6 +46,7 @@
 #include "array.h"
 #include "texarr.h"
 #include "module.h"
+#include "regvar.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -3058,9 +3059,173 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArrayAsync(void *dst, const struct c
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbol(void *dst, const char *symbol, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToHost))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyFromSymbol is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-    return cudaErrorNotYetImplemented;
+	char * file_name = 0;
+	char * context = cu->Context();
+
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "_cudaMemcpyFromSymbol called, " << context << ".\n\n";
+	}
+
+	// Null pointer sanity check.
+	if (symbol == 0)
+	{
+		(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+				<< "dst = " << dst
+				<< "symbol = " << symbol
+				<< ", ..., ..., ...) is invalid.\n";
+		return cudaErrorInvalidValue;
+	}
+
+	if (dst == 0)
+	{
+		(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+				<< "dst = " << dst
+				<< "symbol = " << symbol
+				<< ", ..., ...) is invalid.\n";
+		return cudaErrorInvalidValue;
+	}
+
+	if (kind == cudaMemcpyDeviceToHost)
+	{
+		int ds = this->FindAllocatedBlock(symbol);
+		int dd = this->FindAllocatedBlock(dst);
+		int as = this->FindAllocatedArray(symbol);
+		int ad = this->FindAllocatedArray(dst);
+
+		if (ds != -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ") where symbol is memory allocated by cudaMalloc, not a symbol.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ..., ...) "
+					<< " where dst is device memory.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ...) where symbol is device array pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad != -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ...) is dst is device array pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(dst))
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ...) is invalid.\n";
+			return cudaErrorInvalidValue;
+		}
+
+		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+		if (j == this->variables.end())
+			return cudaErrorInvalidSymbol;
+		
+		REGVAR * var = j->second;
+
+		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+		if (sym == 0)
+			return cudaErrorInvalidSymbol;
+
+		// Perform copy.
+		cudaError_t err;
+		memcpy((char*)dst , sym->pvalue, count);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
+	}
+	else if (kind == cudaMemcpyDeviceToDevice)
+	{
+		int ds = this->FindAllocatedBlock(symbol);
+		int dd = this->FindAllocatedBlock(dst);
+		int as = this->FindAllocatedArray(symbol);
+		int ad = this->FindAllocatedArray(dst);
+
+		if (ds == -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ...) is device pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad != -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+					<< ", ..., ...) is not an array pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+
+		if (this->IsBadPointer(dst))
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+					<< "dst = " << dst
+					<< "symbol = " << symbol
+				<< ", ..., ...) is invalid.\n";
+			return cudaErrorInvalidValue;
+		}
+
+		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+		if (j == this->variables.end())
+			return cudaErrorInvalidSymbol;
+		
+		REGVAR * var = j->second;
+
+		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+		if (sym == 0)
+			return cudaErrorInvalidSymbol;
+
+		// Perform copy.
+		cudaError_t err;
+		memcpy((char*)dst , sym->pvalue, count);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
+	}
+	else {
+		(*cu->output_stream) << "Direction copy to _cudaMemcpyFromSymbol("
+				<< "dst = " << dst
+				<< "symbol = " << symbol
+				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+		return cudaErrorInvalidValue;
+	}
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *symbol, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3109,7 +3274,6 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
 		return cudaErrorInvalidValue;
 	}
 
-	// Four cases:
 	if (kind == cudaMemcpyHostToDevice)
 	{
 		int dd = this->FindAllocatedBlock(dst);
@@ -3259,9 +3423,153 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbol(const char *symbol, const void *src, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyHostToDevice))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyToSymbol is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-    return cudaErrorNotYetImplemented;
+	char * file_name = 0;
+	char * context = cu->Context();
+
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "_cudaMemcpyToSymbol called, " << context << ".\n\n";
+	}
+
+	// Null pointer sanity check.
+	if (symbol == 0)
+	{
+		(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+				<< "symbol = " << symbol
+				<< ", ..., ..., ...) is invalid.\n";
+		return cudaErrorInvalidValue;
+	}
+
+	if (src == 0)
+	{
+		(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., "
+				<< "src = " << src
+				<< ", ..., ...) is invalid.\n";
+		return cudaErrorInvalidValue;
+	}
+
+	if (kind == cudaMemcpyHostToDevice)
+	{
+		int dd = this->FindAllocatedBlock(symbol);
+		int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(symbol);
+		int as = this->FindAllocatedArray(src);
+
+		if (ds != -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
+					<< "symbol = " << symbol
+					<< ", src = " << src << ", ...) "
+					<< " is on the device, but cudaMemcpyHostToDevice specified.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+					<< "symbol = " << symbol
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+					<< ", ..., ...) is device pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad != -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+					<< ", ..., ...) is an array pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(src))
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
+			return cudaErrorInvalidValue;
+		}
+
+		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+		if (j == this->variables.end())
+			return cudaErrorInvalidSymbol;
+		
+		REGVAR * var = j->second;
+
+		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+		if (sym == 0)
+			return cudaErrorInvalidSymbol;
+
+		// Perform copy.
+		cudaError_t err;
+		memcpy((char*)sym->pvalue, src, count);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
+	}
+	else if (kind == cudaMemcpyDeviceToDevice)
+	{
+		int dd = this->FindAllocatedBlock(symbol);
+		int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(symbol);
+		int as = this->FindAllocatedArray(src);
+
+		if (ds == -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
+					<< "symbol = " << symbol
+					<< ", src = " << src << ", ...) "
+					<< " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+					<< "symbol = " << symbol
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+					<< ", ..., ...) is device pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad != -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+					<< ", ..., ...) is an array pointer.\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(src))
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
+			return cudaErrorInvalidValue;
+		}
+
+		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+		if (j == this->variables.end())
+			return cudaErrorInvalidSymbol;
+		
+		REGVAR * var = j->second;
+
+		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+		if (sym == 0)
+			return cudaErrorInvalidSymbol;
+
+		// Perform copy.
+		cudaError_t err;
+		memcpy((char*)sym->pvalue , src, count);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
+	}
+	else {
+		(*cu->output_stream) << "Direction copy to _cudaMemcpyToSymbol(..., "
+				<< "src = " << src
+				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+		return cudaErrorInvalidValue;
+	}
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3556,9 +3864,19 @@ void EMULATED_DEVICE::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, cha
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaRegisterVar called, " << context << ".\n\n";
     }
-    {
-        // no op for now.
-    }
+
+	REGVAR * var = new REGVAR();
+	var->constant = constant;
+	var->deviceAddress = deviceAddress;
+	var->deviceName = const_cast<char*>(deviceName);
+	var->ext = ext;
+	var->global = global;
+	var->hostVar = hostVar;
+	var->size = size;
+    std::pair<void*, REGVAR*> i;
+    i.first = (void*)hostVar;
+    i.second = var;
+    this->variables.insert(i);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaRuntimeGetVersion(int *runtimeVersion)
@@ -3746,6 +4064,7 @@ EMULATED_DEVICE::EMULATED_DEVICE()
     this->num_threads = 1;
     this->max_instruction_thread = 100;
     this->alloc_list = new std::vector<data>();
+	this->global_symbol_table = 0;
 }
 
 void EMULATED_DEVICE::SetTrace(int level)
@@ -3786,9 +4105,18 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
     MODULE * module = new MODULE();
     module->name = this->StringTableEntry(module_name);
     module->tree = tree;
+
     // Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
     Extract_From_Tree(module, tree);
-    this->modules.push_back(module);
+	this->modules.push_back(module);
+
+	// Extract globals, constants, etc.
+	// Create symbol table for outer blocks.
+	assert(this->global_symbol_table == 0);
+	this->global_symbol_table = this->PushSymbolTable(0);
+	int sc[] = { K_GLOBAL, K_TEX, K_CONST, 0};
+	this->SetupVariables(this->global_symbol_table, tree, sc);
+
     return module;
 }
 
@@ -4252,19 +4580,17 @@ void EMULATED_DEVICE::Execute(ENTRY * entry)
     //// Get function block.
     TREE * code = FindBlock(entry->tree);
 
-    // Create symbol table for outer blocks.
-    SYMBOL_TABLE * obst = PushSymbolTable(0);
+    // Create symbol table for outer blocks, specifically shared memory.
+    SYMBOL_TABLE * obst = PushSymbolTable(this->global_symbol_table);
 
     for (TREE * p = code->GetParent()->GetParent(); p != 0; p = p->GetParent())
     {
-        int sc[] = { K_GLOBAL, K_SHARED, K_TEX, K_CONST, 0};
+        int sc[] = { K_SHARED, 0};
         SetupVariables(obst, p, sc);
     }
 
     // Create symbol table for this block.
     SYMBOL_TABLE * block_symbol_table = PushSymbolTable(obst);
-    int sc[] = { K_GLOBAL, K_CONST, K_TEX, 0};
-    SetupVariables(block_symbol_table, code, sc);
     SetupGotos(block_symbol_table, code);
     SetupParams(block_symbol_table, entry->tree);
     CreateSymbol(block_symbol_table, "%nctaid", "dim3", K_V4, &conf.gridDim, sizeof(conf.gridDim), K_LOCAL);
@@ -4290,15 +4616,7 @@ void EMULATED_DEVICE::Execute(ENTRY * entry)
     }
     delete block_symbol_table;
     delete obst;
-    delete this->string_table;
 
-//  _CrtCheckMemory();
-//  _CrtMemState state_end;
-//    _CrtMemCheckpoint(&state_end);
-//  _CrtMemState diff;
-//    _CrtMemDumpAllObjectsSince(&state_end);
-//  _CrtMemDumpAllObjectsSince(&state_begin);
-    this->string_table = new STRING_TABLE();
     this->ResetArgs();
 }
 

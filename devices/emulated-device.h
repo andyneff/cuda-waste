@@ -40,6 +40,7 @@ class TEXARR;
 class TEXTURE;
 class ARRAY;
 class MODULE;
+class REGVAR;
 
 class EMULATED_DEVICE : DEVICE
 {
@@ -106,6 +107,10 @@ public:
     std::vector<ARRAY*> arrays;
 
     std::vector<arg*> arguments;
+
+	std::map<void*, REGVAR*> variables;
+
+	SYMBOL_TABLE * global_symbol_table;
 
     config conf;
     void * extern_memory_buffer;
