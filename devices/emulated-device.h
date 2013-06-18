@@ -52,7 +52,7 @@ private:
     STRING_TABLE * string_table;
 
     char * device;
-	int num_threads;
+    int num_threads;
 
 private:
     struct data
@@ -69,10 +69,10 @@ private:
     int trace_level;
 
 public:
-	int TraceLevel()
-	{
-		return trace_level;
-	}
+    int TraceLevel()
+    {
+        return trace_level;
+    }
 
 public:
     struct arg
@@ -93,23 +93,23 @@ public:
 
     std::map<void*, char*> fun_to_name;
 
-	std::map<char*, TEXTURE*, ltstr> texturename_to_texture;
+    std::map<char*, TEXTURE*, ltstr> texturename_to_texture;
 
-	std::map<void*, TEXREF*> texture_to_device_memory_binding;
+    std::map<void*, TEXREF*> texture_to_device_memory_binding;
 
-	std::map<void*, TEXARR*> texture_to_array_binding;
+    std::map<void*, TEXARR*> texture_to_array_binding;
 
-    std::list<MODULE *> modules;
+    std::vector<MODULE *> modules;
 
-    std::list<ENTRY*> entries;
+    std::vector<ENTRY*> entries;
 
-	std::list<ARRAY*> arrays;
+    std::vector<ARRAY*> arrays;
 
-    std::list<arg*> arguments;
+    std::vector<arg*> arguments;
 
     config conf;
     void * extern_memory_buffer;
-	int max_instruction_thread;
+    int max_instruction_thread;
     
 public:
     class EMU_ERROR {
@@ -134,7 +134,7 @@ public:
     };
     void unimplemented(bool condition, char * text);
     void unimplemented(char * text);
-	void Unimplemented();
+    void Unimplemented();
 public:
     TREE * FindBlock(TREE * node);
     TREE * GetInst(TREE * block, int pc);
@@ -428,9 +428,9 @@ public:
     void SetTrace(int level);
     char * StringTableEntry(char * text);
     void RunDevice(char * device);
-	void SetEmulationThreads(int i);
-	    
-	enum return_type {
+    void SetEmulationThreads(int i);
+        
+    enum return_type {
         NOT_OK = 0,
         OK = 1
     };
@@ -439,9 +439,10 @@ public:
     return_type CheckSinglePtrOverwrite(const data * d);
     void ExitHandler();
 private:
-	static std::list<EMULATED_DEVICE*> all_emulated_devices;
+    static std::list<EMULATED_DEVICE*> all_emulated_devices;
 public:
     bool IsBadPointer(const void * ptr);
     int FindAllocatedBlock(const void * pointer);
+	int FindAllocatedArray(const void * pointer);
 };
 

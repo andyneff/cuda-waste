@@ -185,1226 +185,1226 @@ CUresult EMULATED_DEVICE::_cuArray3DGetDescriptor_v2( CUDA_ARRAY3D_DESCRIPTOR *p
 CUresult EMULATED_DEVICE::_cuArrayCreate( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuArrayCreate\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuArrayCreate\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuArrayCreate_v2( CUarray *pHandle, const CUDA_ARRAY_DESCRIPTOR *pAllocateArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuArrayCreate_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuArrayCreate_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuArrayDestroy( CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuArrayDestroy\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuArrayDestroy\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuArrayGetDescriptor( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuArrayGetDescriptor\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuArrayGetDescriptor\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuArrayGetDescriptor_v2( CUDA_ARRAY_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuArrayGetDescriptor_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuArrayGetDescriptor_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	*pctx = (CUcontext)malloc(sizeof(CUcontext));
-	return CUDA_SUCCESS;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    *pctx = (CUcontext)malloc(sizeof(CUcontext));
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxCreate\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxCreate\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxCreate_v2(CUcontext *pctx, unsigned int flags, CUdevice dev )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxCreate_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxCreate_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxDestroy( CUcontext ctx )
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return CUDA_SUCCESS;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxDetach(CUcontext ctx)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return CUDA_SUCCESS;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxGetDevice(CUdevice * device)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxGetDevice\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxGetDevice\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxGetLimit(size_t *pvalue, CUlimit limit)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxGetLimit\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Unimplemented function _cuCtxGetLimit\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxPopCurrent( CUcontext *pctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxPopCurrent\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxPopCurrent\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxPushCurrent( CUcontext ctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxPushCurrent\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxPushCurrent\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxSetLimit(CUlimit limit, size_t value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxSetLimit\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxSetLimit\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxSynchronize(void)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuCtxSynchronize\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuCtxSynchronize\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceComputeCapability(int *major, int *minor, CUdevice dev)
 {
-	*major = 2;
-	*minor = 0;
-	return CUDA_SUCCESS;
+    *major = 2;
+    *minor = 0;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGet(CUdevice *device, int ordinal)
 {
-	*device = 0;
-	return CUDA_SUCCESS;
+    *device = 0;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev)
 {
-	switch (attrib)
-	{
-		case CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y:
-			*pi = 1024;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z:
-			*pi = 64;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK:
-			*pi = 49152;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TOTAL_CONSTANT_MEMORY:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_WARP_SIZE:
-			*pi = 32;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_PITCH:
-			*pi = 2147483647;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK:
-			*pi = 32768;
-			break;
-		//case CU_DEVICE_ATTRIBUTE_REGISTERS_PER_BLOCK:  same as CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK
-		//  *pi = 32768;
-		//  break;
-		case CU_DEVICE_ATTRIBUTE_CLOCK_RATE:
-			*pi = 810000;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TEXTURE_ALIGNMENT:
-			*pi = 512;
-			break;
-		case CU_DEVICE_ATTRIBUTE_GPU_OVERLAP:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT:
-			*pi = 14;
-			break;
-		case CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_INTEGRATED:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_COMPUTE_MODE:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_WIDTH:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_WIDTH:
-			*pi = 65536;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_HEIGHT:
-			*pi = 65535;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_WIDTH:
-			*pi = 16384;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_HEIGHT:
-			*pi = 16384;
-			break;
-		case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_NUMSLICES:
-			*pi = 2048;
-			break;
-		case CU_DEVICE_ATTRIBUTE_SURFACE_ALIGNMENT:
-			*pi = 512;
-			break;
-		case CU_DEVICE_ATTRIBUTE_CONCURRENT_KERNELS:
-			*pi = 1;
-			break;
-		case CU_DEVICE_ATTRIBUTE_ECC_ENABLED:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_PCI_BUS_ID:
-			*pi = 3;
-			break;
-		case CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID:
-			*pi = 0;
-			break;
-		case CU_DEVICE_ATTRIBUTE_TCC_DRIVER:
-			*pi = 0;
-			break;
-		default:
-			assert(false);
-			*pi = 0;
-			break;
-	}
-	return CUDA_SUCCESS;
+    switch (attrib)
+    {
+        case CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y:
+            *pi = 1024;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z:
+            *pi = 64;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK:
+            *pi = 49152;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TOTAL_CONSTANT_MEMORY:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_WARP_SIZE:
+            *pi = 32;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_PITCH:
+            *pi = 2147483647;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK:
+            *pi = 32768;
+            break;
+        //case CU_DEVICE_ATTRIBUTE_REGISTERS_PER_BLOCK:  same as CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK
+        //  *pi = 32768;
+        //  break;
+        case CU_DEVICE_ATTRIBUTE_CLOCK_RATE:
+            *pi = 810000;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TEXTURE_ALIGNMENT:
+            *pi = 512;
+            break;
+        case CU_DEVICE_ATTRIBUTE_GPU_OVERLAP:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT:
+            *pi = 14;
+            break;
+        case CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_INTEGRATED:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_COMPUTE_MODE:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_WIDTH:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_WIDTH:
+            *pi = 65536;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_HEIGHT:
+            *pi = 65535;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_WIDTH:
+            *pi = 16384;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_HEIGHT:
+            *pi = 16384;
+            break;
+        case CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_ARRAY_NUMSLICES:
+            *pi = 2048;
+            break;
+        case CU_DEVICE_ATTRIBUTE_SURFACE_ALIGNMENT:
+            *pi = 512;
+            break;
+        case CU_DEVICE_ATTRIBUTE_CONCURRENT_KERNELS:
+            *pi = 1;
+            break;
+        case CU_DEVICE_ATTRIBUTE_ECC_ENABLED:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_PCI_BUS_ID:
+            *pi = 3;
+            break;
+        case CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID:
+            *pi = 0;
+            break;
+        case CU_DEVICE_ATTRIBUTE_TCC_DRIVER:
+            *pi = 0;
+            break;
+        default:
+            assert(false);
+            *pi = 0;
+            break;
+    }
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGetCount(int *count)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	*count = 1;
-	return CUDA_SUCCESS;
+    *count = 1;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGetName(char *name, int len, CUdevice dev)
 {
-	strncpy(name, "emulator", len);
-	return CUDA_SUCCESS;
+    strncpy(name, "emulator", len);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
 {
-	CUdevprop loc= {
-		1024,
-		{ 1024, 1024, 64},
-		{ 65535, 65535, 1},
-		49152,
-		65536,
-		32,
-		2147483647,
-		32768,
-		810000,
-		512
-	};
-	*prop = loc;
-	return CUDA_SUCCESS;
+    CUdevprop loc= {
+        1024,
+        { 1024, 1024, 64},
+        { 65535, 65535, 1},
+        49152,
+        65536,
+        32,
+        2147483647,
+        32768,
+        810000,
+        512
+    };
+    *prop = loc;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
 {
-	*bytes = 1309081600;
-	return CUDA_SUCCESS;
+    *bytes = 1309081600;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceTotalMem_v2(unsigned int *bytes, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return this->_cuDeviceTotalMem(bytes, dev);
+    return this->_cuDeviceTotalMem(bytes, dev);
 }
 
 CUresult EMULATED_DEVICE::_cuDriverGetVersion(int * driverVersion)
 {
-	*driverVersion = 3020;
-	return CUDA_SUCCESS;
+    *driverVersion = 3020;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuEventCreate( CUevent *phEvent, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventCreate\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventCreate\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuEventDestroy( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventDestroy\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventDestroy\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuEventElapsedTime( float *pMilliseconds, CUevent hStart, CUevent hEnd )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventElapsedTime\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventElapsedTime\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuEventQuery( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventQuery\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventQuery\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuEventRecord( CUevent hEvent, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventRecord\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventRecord\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuEventSynchronize( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuEventSynchronize\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuEventSynchronize\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuFuncGetAttribute (int *pi, CUfunction_attribute attrib, CUfunction hfunc)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuFuncGetAttribute\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuFuncGetAttribute\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuFuncSetBlockShape (CUfunction hfunc, int x, int y, int z)
 {
     // set up dimensions, shared memory, and stream for the kernel launch.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	dim3 blockDim(x,y,z);
-	this->ConfigureBlock(blockDim);
-	return CUDA_SUCCESS;
+    dim3 blockDim(x,y,z);
+    this->ConfigureBlock(blockDim);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuFuncSetCacheConfig(CUfunction hfunc, CUfunc_cache config)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuFuncSetCacheConfig\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuFuncSetCacheConfig\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuFuncSetSharedSize (CUfunction hfunc, unsigned int bytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuFuncSetSharedSize\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuFuncSetSharedSize\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
 {
-	*ppExportTable = 0;
-	return CUDA_SUCCESS;
+    *ppExportTable = 0;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsMapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsMapResources\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsMapResources\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsResourceGetMappedPointer( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsResourceGetMappedPointer_v2( CUdeviceptr *pDevPtr, unsigned int *pSize, CUgraphicsResource resource )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsResourceSetMapFlags( CUgraphicsResource resource, unsigned int flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsResourceSetMapFlags\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsResourceSetMapFlags\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsSubResourceGetMappedArray( CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsSubResourceGetMappedArray\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsSubResourceGetMappedArray\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsUnmapResources( unsigned int count, CUgraphicsResource *resources, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsUnmapResources\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsUnmapResources\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGraphicsUnregisterResource(CUgraphicsResource resource)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuGraphicsUnregisterResource\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuGraphicsUnregisterResource\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuInit(unsigned int Flags)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	if (Flags == 0)
-		return CUDA_SUCCESS;
-	else
-		return CUDA_ERROR_INVALID_VALUE;
+    if (Flags == 0)
+        return CUDA_SUCCESS;
+    else
+        return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuLaunch ( CUfunction f )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuLaunch\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuLaunch\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuLaunchGrid(CUfunction hfunc, int grid_width, int grid_height)
 {
-	dim3 gridDim(grid_width, grid_height, 1);
-	this->ConfigureGrid(gridDim);
-	this->Execute((ENTRY*)hfunc);
-	return CUDA_SUCCESS;
+    dim3 gridDim(grid_width, grid_height, 1);
+    this->ConfigureGrid(gridDim);
+    this->Execute((ENTRY*)hfunc);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuLaunchGridAsync( CUfunction f, int grid_width, int grid_height, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuLaunchGridAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuLaunchGridAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAlloc( CUdeviceptr *dptr, unsigned int bytesize)
 {
     // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	*dptr = (CUdeviceptr)malloc(bytesize);
-	return CUDA_SUCCESS;
+    *dptr = (CUdeviceptr)malloc(bytesize);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAlloc_v2( CUdeviceptr *dptr, unsigned int bytesize)
 {
     // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	*dptr = (CUdeviceptr)malloc(bytesize);
-	return CUDA_SUCCESS;
+    *dptr = (CUdeviceptr)malloc(bytesize);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAllocHost(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemAllocHost\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemAllocHost\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAllocHost_v2(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemAllocHost_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemAllocHost_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAllocPitch( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemAllocPitch\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemAllocPitch\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemAllocPitch_v2( CUdeviceptr *dptr, unsigned int *pPitch, unsigned int WidthInBytes, unsigned int Height, unsigned int ElementSizeBytes)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemAllocPitch_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemAllocPitch_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2D( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2D\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2D\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2D_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2D_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2D_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2DAsync( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2DAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2DAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2DAsync_v2( const CUDA_MEMCPY2D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2DAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2DAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2DUnaligned( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2DUnaligned\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2DUnaligned\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy2DUnaligned_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy2DUnaligned_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy2DUnaligned_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy3D( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy3D\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy3D\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy3D_v2( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy3D_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy3D_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy3DAsync( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy3DAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy3DAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpy3DAsync_v2( const CUDA_MEMCPY3D *pCopy, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpy3DAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpy3DAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoA( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoA\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoA\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoA_v2( CUarray dstArray, unsigned int dstOffset, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoA_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoA_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoD ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoD\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoD\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoD_v2 ( CUdeviceptr dstDevice, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoD_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoD_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoH( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoH\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoH\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoH_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoH_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoH_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoHAsync( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoHAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoHAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyAtoHAsync_v2( void *dstHost, CUarray srcArray, unsigned int srcOffset, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyAtoHAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyAtoHAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoA ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoA\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoA\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoA_v2 ( CUarray dstArray, unsigned int dstOffset, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoA_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoA_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoD (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoD\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoD\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoD_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoD_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoD_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoDAsync (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoDAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoDAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoDAsync_v2 (CUdeviceptr dstDevice, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoDAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoDAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoH (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	memcpy(dstHost, (void*)srcDevice, ByteCount);
-	return CUDA_SUCCESS;
+    memcpy(dstHost, (void*)srcDevice, ByteCount);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoH_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount )
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	memcpy(dstHost, (void*)srcDevice, ByteCount);
-	return CUDA_SUCCESS;
+    memcpy(dstHost, (void*)srcDevice, ByteCount);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoHAsync (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoHAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoHAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyDtoHAsync_v2 (void *dstHost, CUdeviceptr srcDevice, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyDtoHAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyDtoHAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoA( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoA\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoA\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoA_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoA_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoA_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoAAsync( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoAAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoAAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoAAsync_v2( CUarray dstArray, unsigned int dstOffset, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoAAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoAAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoD (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	memcpy((void*)dstDevice, srcHost, ByteCount);
-	return CUDA_SUCCESS;
+    memcpy((void*)dstDevice, srcHost, ByteCount);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoD_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount )
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	memcpy((void*)dstDevice, srcHost, ByteCount);
-	return CUDA_SUCCESS;
+    memcpy((void*)dstDevice, srcHost, ByteCount);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoDAsync\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoDAsync\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemcpyHtoDAsync_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemcpyHtoDAsync_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemFree(CUdeviceptr dptr)
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	free((void*)dptr);
-	return CUDA_SUCCESS;     
+    free((void*)dptr);
+    return CUDA_SUCCESS;     
 }
 
 CUresult EMULATED_DEVICE::_cuMemFree_v2(CUdeviceptr dptr)
 {
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	free((void*)dptr);
-	return CUDA_SUCCESS;     
+    free((void*)dptr);
+    return CUDA_SUCCESS;     
 }
 
 CUresult EMULATED_DEVICE::_cuMemFreeHost(void *p)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemFreeHost\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemFreeHost\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemGetAddressRange( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemGetAddressRange\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemGetAddressRange\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemGetAddressRange_v2( CUdeviceptr *pbase, unsigned int *psize, CUdeviceptr dptr )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemGetAddressRange_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemGetAddressRange_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemGetInfo(unsigned int *free, unsigned int *total)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemGetInfo\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemGetInfo\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemGetInfo_v2(unsigned int *free, unsigned int *total)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemGetInfo_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemGetInfo_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemHostAlloc(void **pp, size_t bytesize, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemHostAlloc\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemHostAlloc\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemHostGetDevicePointer( CUdeviceptr *pdptr, void *p, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemHostGetDevicePointer\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemHostGetDevicePointer\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemHostGetDevicePointer_v2( CUdeviceptr *pdptr, void *p, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemHostGetDevicePointer_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemHostGetDevicePointer_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemHostGetFlags( unsigned int *pFlags, void *p )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemHostGetFlags\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemHostGetFlags\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD16( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD16\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD16\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD16_v2( CUdeviceptr dstDevice, unsigned short us, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD16_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD16_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D16( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D16\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D16\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D16_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned short us, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D16_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D16_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D32( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D32\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D32\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D32_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned int ui, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D32_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D32_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D8( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D8\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D8\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD2D8_v2( CUdeviceptr dstDevice, unsigned int dstPitch, unsigned char uc, unsigned int Width, unsigned int Height )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD2D8_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD2D8_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD32( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD32\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD32\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD32_v2( CUdeviceptr dstDevice, unsigned int ui, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD32\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD32\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD8( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD8\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD8\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuMemsetD8_v2( CUdeviceptr dstDevice, unsigned char uc, unsigned int N )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuMemsetD8_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuMemsetD8_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod, const char *name)
 {
-	// Now, given the name of the kernel function being called, find
-	// the entry for it.
-	void * foo = hfunc;
-	MODULE * module = dynamic_cast<MODULE *>((MODULE *)foo);
-	std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find((char*)name);
-	if (j == module->entry.end())
-		return CUDA_ERROR_NOT_FOUND;
-	ENTRY * data = j->second;
-	*hfunc = (CUfunction)data;
-	return CUDA_SUCCESS;
+    // Now, given the name of the kernel function being called, find
+    // the entry for it.
+    void * foo = hfunc;
+    MODULE * module = dynamic_cast<MODULE *>((MODULE *)foo);
+    std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find((char*)name);
+    if (j == module->entry.end())
+        return CUDA_ERROR_NOT_FOUND;
+    ENTRY * data = j->second;
+    *hfunc = (CUfunction)data;
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleGetGlobal(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleGetGlobal\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleGetGlobal\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleGetGlobal_v2(CUdeviceptr *dptr, unsigned int *bytes, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleGetGlobal_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleGetGlobal_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleGetSurfRef(CUsurfref *pSurfRef, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleGetSurfRef\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleGetSurfRef\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleGetTexRef(CUtexref *pTexRef, CUmodule hmod, const char *name)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleGetTexRef\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleGetTexRef\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleLoad(CUmodule * hmod, const char *fname)
 {
-	int size = 1000000;
-	char * buffer = (char *)malloc(size);
-	// Open file, parse, and record AST.
-	std::ifstream myfile(fname);
-	int count = 0;
-	if (myfile.is_open())
-	{
-		while (! myfile.eof())
-		{
-			if (count >= size)
-			{
-				size = size * 2;
-				buffer = (char *)realloc(buffer, size);
-			}
-			int c = myfile.get();
-			if (c != -1)
-				buffer[count++] = c;
-			else
-				break;
-		}
-		myfile.close();
-		buffer[count++] = 0;
-	}
-	if (count == 0)
-		return CUDA_ERROR_FILE_NOT_FOUND;
-	MODULE * module = this->Parse(this->device, (char*)buffer);
-	*hmod = (CUmodule)module;
-	if (module != 0)
-		return CUDA_SUCCESS;
-	else
-		return CUDA_ERROR_INVALID_CONTEXT;
+    int size = 1000000;
+    char * buffer = (char *)malloc(size);
+    // Open file, parse, and record AST.
+    std::ifstream myfile(fname);
+    int count = 0;
+    if (myfile.is_open())
+    {
+        while (! myfile.eof())
+        {
+            if (count >= size)
+            {
+                size = size * 2;
+                buffer = (char *)realloc(buffer, size);
+            }
+            int c = myfile.get();
+            if (c != -1)
+                buffer[count++] = c;
+            else
+                break;
+        }
+        myfile.close();
+        buffer[count++] = 0;
+    }
+    if (count == 0)
+        return CUDA_ERROR_FILE_NOT_FOUND;
+    MODULE * module = this->Parse(this->device, (char*)buffer);
+    *hmod = (CUmodule)module;
+    if (module != 0)
+        return CUDA_SUCCESS;
+    else
+        return CUDA_ERROR_INVALID_CONTEXT;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleLoadData(CUmodule *module, const void *image)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleLoadData\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleLoadData\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleLoadDataEx(CUmodule *module, const void *image, unsigned int numOptions, CUjit_option *options, void **optionValues)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleLoadDataEx\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleLoadDataEx\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleLoadFatBinary(CUmodule *module, const void *fatCubin)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleLoadFatBinary\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleLoadFatBinary\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuModuleUnload(CUmodule hmod)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuModuleUnload\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuModuleUnload\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSetf    (CUfunction hfunc, int offset, float value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuParamSetf\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuParamSetf\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSeti    (CUfunction hfunc, int offset, unsigned int value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuParamSeti\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuParamSeti\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSetSize(CUfunction hfunc, unsigned int numbytes)
 {
-	// Unknown what to do for param size.
-	return CUDA_SUCCESS;
+    // Unknown what to do for param size.
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSetTexRef(CUfunction hfunc, int texunit, CUtexref hTexRef)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuParamSetTexRef\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuParamSetTexRef\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, unsigned int numbytes)
 {
-	// record argument, size, offset.
-	EMULATED_DEVICE::arg * a = new EMULATED_DEVICE::arg();
-	a->argument = malloc(numbytes);
-	memcpy(const_cast<void*>(a->argument), ptr, numbytes);
-	a->size = numbytes;
-	a->offset = offset;
-	this->arguments.push_back(a);
-	return CUDA_SUCCESS;
+    // record argument, size, offset.
+    EMULATED_DEVICE::arg * a = new EMULATED_DEVICE::arg();
+    a->argument = malloc(numbytes);
+    memcpy(const_cast<void*>(a->argument), ptr, numbytes);
+    a->size = numbytes;
+    a->offset = offset;
+    this->arguments.push_back(a);
+    return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuStreamCreate( CUstream *phStream, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuStreamCreate\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuStreamCreate\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuStreamDestroy( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuStreamDestroy\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuStreamDestroy\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuStreamQuery( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuStreamQuery\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuStreamQuery\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuStreamSynchronize( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuStreamSynchronize\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuStreamSynchronize\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuSurfRefGetArray( CUarray *phArray, CUsurfref hSurfRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuSurfRefGetArray\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuSurfRefGetArray\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuSurfRefSetArray( CUsurfref hSurfRef, CUarray hArray, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuSurfRefSetArray\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuSurfRefSetArray\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefCreate( CUtexref *pTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefCreate\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefCreate\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefDestroy( CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefDestroy\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefDestroy\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetAddress( CUdeviceptr *pdptr, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetAddress\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetAddress\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetAddress_v2( CUdeviceptr *pdptr, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetAddress_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetAddress_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetAddressMode( CUaddress_mode *pam, CUtexref hTexRef, int dim )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetAddressMode\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetAddressMode\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetArray( CUarray *phArray, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetArray\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetArray\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetFilterMode( CUfilter_mode *pfm, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetFilterMode\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetFilterMode\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetFlags( unsigned int *pFlags, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetFlags\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetFlags\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefGetFormat( CUarray_format *pFormat, int *pNumChannels, CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefGetFormat\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefGetFormat\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetAddress( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetAddress\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetAddress\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetAddress_v2( unsigned int *ByteOffset, CUtexref hTexRef, CUdeviceptr dptr, unsigned int bytes )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetAddress_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetAddress_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetAddress2D( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetAddress2D\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetAddress2D\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetAddress2D_v2( CUtexref hTexRef, const CUDA_ARRAY_DESCRIPTOR *desc, CUdeviceptr dptr, unsigned int Pitch)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetAddress2D_v2\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetAddress2D_v2\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetAddressMode( CUtexref hTexRef, int dim, CUaddress_mode am )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetAddressMode\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetAddressMode\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetArray\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetArray\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mode fm )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetFilterMode\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetFilterMode\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetFlags\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetFlags\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuTexRefSetFormat( CUtexref hTexRef, CUarray_format fmt, int NumPackedComponents )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cuTexRefSetFormat\n";
-	return CUDA_ERROR_INVALID_VALUE;
+    std::cout << "Unimplemented function _cuTexRefSetFormat\n";
+    return CUDA_ERROR_INVALID_VALUE;
 }
 
 
@@ -1418,93 +1418,93 @@ CUresult EMULATED_DEVICE::_cuTexRefSetFormat( CUtexref hTexRef, CUarray_format f
 
 cudaError_t EMULATED_DEVICE::_cudaBindSurfaceToArray(const struct surfaceReference *surfref, const struct cudaArray *array, const struct cudaChannelFormatDesc *desc)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cudaBindSurfaceToArray\n";
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Unimplemented function _cudaBindSurfaceToArray\n";
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaBindTexture(size_t *offset, const struct textureReference *texref, const void *devPtr, const struct cudaChannelFormatDesc *desc, size_t size __dv(UINT_MAX))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaBindTexture called, " << context << ".\n\n";
     }
 
-	// Associate the "texref" with the rest of the info in this call.
-	// When assigning or grabbing the values for texref, we'll need this information.
-	TEXREF * tr = new TEXREF();
-	tr->desc = (struct cudaChannelFormatDesc*)desc;
-	tr->devPtr = (void*)devPtr;
-	tr->offset = offset;
-	tr->size = size;
-	tr->texref = (struct textureReference*)texref;
+    // Associate the "texref" with the rest of the info in this call.
+    // When assigning or grabbing the values for texref, we'll need this information.
+    TEXREF * tr = new TEXREF();
+    tr->desc = (struct cudaChannelFormatDesc*)desc;
+    tr->devPtr = (void*)devPtr;
+    tr->offset = offset;
+    tr->size = size;
+    tr->texref = (struct textureReference*)texref;
 
     std::pair<void*, TEXREF*> i;
     i.first = (void*)texref;
     i.second = tr;
-	this->texture_to_device_memory_binding.insert(i);
+    this->texture_to_device_memory_binding.insert(i);
 
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaBindTexture2D(size_t *offset,const struct textureReference *texref,const void *devPtr, const struct cudaChannelFormatDesc *desc,size_t width, size_t height, size_t pitch)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaBindTexture2D called, " << context << ".\n\n";
     }
 
-	// Associate the "texref" with the rest of the info in this call.
-	// When assigning or grabbing the values for texref, we'll need this information.
-	TEXREF * tr = new TEXREF();
-	tr->desc = (struct cudaChannelFormatDesc*)desc;
-	tr->devPtr = (void*)devPtr;
-	tr->offset = offset;
-	tr->size = 0;
-	tr->width = width;
-	tr->height = height;
-	tr->pitch = pitch;
-	tr->texref = (struct textureReference*)texref;
+    // Associate the "texref" with the rest of the info in this call.
+    // When assigning or grabbing the values for texref, we'll need this information.
+    TEXREF * tr = new TEXREF();
+    tr->desc = (struct cudaChannelFormatDesc*)desc;
+    tr->devPtr = (void*)devPtr;
+    tr->offset = offset;
+    tr->size = 0;
+    tr->width = width;
+    tr->height = height;
+    tr->pitch = pitch;
+    tr->texref = (struct textureReference*)texref;
 
     std::pair<void*, TEXREF*> i;
     i.first = (void*)texref;
     i.second = tr;
-	this->texture_to_device_memory_binding.insert(i);
+    this->texture_to_device_memory_binding.insert(i);
 
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaBindTextureToArray(const struct textureReference *texref, const struct cudaArray *array, const struct cudaChannelFormatDesc *desc)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaBindTextureToArray called, " << context << ".\n\n";
     }
 
-	// Associate the "texref" with the rest of the info in this call.
-	// When assigning or grabbing the values for texref, we'll need this information.
-	TEXARR * ta = new TEXARR();
-	ta->texref = (struct textureReference*)texref;
-	ta->array = (struct cudaArray *) array;
-	ta->desc = (struct cudaChannelFormatDesc*)desc;
+    // Associate the "texref" with the rest of the info in this call.
+    // When assigning or grabbing the values for texref, we'll need this information.
+    TEXARR * ta = new TEXARR();
+    ta->texref = (struct textureReference*)texref;
+    ta->array = (struct cudaArray *) array;
+    ta->desc = (struct cudaChannelFormatDesc*)desc;
 
     std::pair<void*, TEXARR*> i;
     i.first = (void*)texref;
     i.second = ta;
-	this->texture_to_array_binding.insert(i);
+    this->texture_to_array_binding.insert(i);
 
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaChooseDevice(int *device, const struct cudaDeviceProp *prop)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -1516,7 +1516,7 @@ cudaError_t EMULATED_DEVICE::_cudaChooseDevice(int *device, const struct cudaDev
 
 cudaError_t EMULATED_DEVICE::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem __dv(0), cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     this->ConfigureBlock(blockDim);
     this->ConfigureGrid(gridDim);
     this->ConfigureSharedMemory(sharedMem);
@@ -1526,7 +1526,7 @@ cudaError_t EMULATED_DEVICE::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, siz
 
 struct cudaChannelFormatDesc EMULATED_DEVICE::_cudaCreateChannelDesc(int x, int y, int z, int w, enum cudaChannelFormatKind f)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -1568,71 +1568,71 @@ struct cudaChannelFormatDesc EMULATED_DEVICE::_cudaCreateChannelDesc(int x, int 
 
 cudaError_t EMULATED_DEVICE::_cudaDriverGetVersion(int *driverVersion)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaDriverGetVersion is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaDriverGetVersion is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventCreate(cudaEvent_t *event)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventCreate is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventCreate is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventCreateWithFlags(cudaEvent_t *event, int flags)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventCreateWithFlags is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventCreateWithFlags is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventDestroy(cudaEvent_t event)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventDestroy is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventDestroy is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventElapsedTime(float *ms, cudaEvent_t start, cudaEvent_t end)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventElapsedTime is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventElapsedTime is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventQuery(cudaEvent_t event)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventQuery is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventQuery is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventRecord(cudaEvent_t event, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventRecord is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventRecord is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaEventSynchronize(cudaEvent_t event)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaEventSynchronize is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaEventSynchronize is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     if (cu->trace_all_calls)
@@ -1689,155 +1689,143 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
 
 cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	struct cudaArray * ptr = array;
-	char * context = cu->Context();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    struct cudaArray * ptr = array;
+    char * context = cu->Context();
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "_cudaFreeArray called, ptr = " << ptr << ", "
-				<< context << ".\n\n";
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaFreeArray called, ptr = " << ptr << ", "
+                << context << ".\n\n";
+    }
 
-	// Null pointer sanity check.
-	if (ptr == 0)
-	{
-		(*cu->output_stream) << "Pointer in _cudaFreeArray("
-				<< "ptr = " << ptr
-				<< ") is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in "
-				<< context << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorMemoryAllocation;
-	}
+    // Null pointer sanity check.
+    if (ptr == 0)
+    {
+        (*cu->output_stream) << "Pointer in _cudaFreeArray("
+                << "ptr = " << ptr
+                << ") is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in "
+                << context << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorInvalidDevicePointer;
+        return cudaErrorMemoryAllocation;
+    }
 
-	int di = this->FindAllocatedBlock(ptr);
-	if (di == -1)
-	{
-		(*cu->output_stream) << "Pointer to _cudaFreeArray(" << ptr << ") is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in "
-				<< context << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorMemoryAllocation;
-	}
-	EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
-	void * local = ((char*)ptr) - cu->padding_size;
-	if (d->ptr != local)
-	{
-		(*cu->output_stream) << "Pointer to _cudaFreeArray(" << ptr << ") is invalid.\n\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in "
-				<< context << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorMemoryAllocation;
-	}
-	(*this->alloc_list).erase((*this->alloc_list).begin() + di);
-	this->CheckSinglePtrOverwrite(d);
-	free(local);
-	return cudaSuccess;
+    int di = this->FindAllocatedArray(ptr);
+    if (di == -1)
+    {
+        (*cu->output_stream) << "Pointer to _cudaFreeArray(" << ptr << ") is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in "
+                << context << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorInvalidDevicePointer;
+        return cudaErrorMemoryAllocation;
+    }
+    ARRAY * d = (ARRAY*) array;
+    this->arrays.erase(this->arrays.begin() + di);
+	free(d->memory);
+	delete d;
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaFreeHost(void * ptr)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	char * file_name = 0;
-	int line = 0;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * file_name = 0;
+    int line = 0;
 
-	char * context = cu->Context();
+    char * context = cu->Context();
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "cudaFreeHost called, " << context << ".\n\n";
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "cudaFreeHost called, " << context << ".\n\n";
+    }
 
-	// Null pointer sanity check.
-	if (ptr == 0)
-	{
-		(*cu->output_stream) << "Pointer in FreeHost("
-				<< "ptr = " << ptr
-				<< ") is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorInvalidDevicePointer;
-	}
+    // Null pointer sanity check.
+    if (ptr == 0)
+    {
+        (*cu->output_stream) << "Pointer in FreeHost("
+                << "ptr = " << ptr
+                << ") is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorInvalidDevicePointer;
+        return cudaErrorInvalidDevicePointer;
+    }
 
-	int di = this->FindAllocatedBlock(ptr);
-	if (di == -1)
-	{
-		(*cu->output_stream) << "Pointer to FreeHost(" << ptr << ") is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorInvalidDevicePointer;
-	}
-	EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
-	void * local = ((char*)ptr) - cu->padding_size;
-	if (d->ptr != local)
-	{
-		(*cu->output_stream) << "Pointer to FreeHost(" << ptr << ") is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorInvalidDevicePointer;
-		return cudaErrorInvalidDevicePointer;
-	}
-	(*this->alloc_list).erase((*this->alloc_list).begin() + di);
-	this->CheckSinglePtrOverwrite(d);
-	return cudaSuccess;
+    int di = this->FindAllocatedBlock(ptr);
+    if (di == -1)
+    {
+        (*cu->output_stream) << "Pointer to FreeHost(" << ptr << ") is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorInvalidDevicePointer;
+        return cudaErrorInvalidDevicePointer;
+    }
+    EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
+    void * local = ((char*)ptr) - cu->padding_size;
+    if (d->ptr != local)
+    {
+        (*cu->output_stream) << "Pointer to FreeHost(" << ptr << ") is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorInvalidDevicePointer;
+        return cudaErrorInvalidDevicePointer;
+    }
+    (*this->alloc_list).erase((*this->alloc_list).begin() + di);
+    this->CheckSinglePtrOverwrite(d);
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaFuncGetAttributes(struct cudaFuncAttributes *attr, const char *func)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaFuncGetAttributes is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaFuncGetAttributes is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaFuncSetCacheConfig(const char *func, enum cudaFuncCache cacheConfig)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaFuncSetCacheConfig is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaFuncSetCacheConfig is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetChannelDesc(struct cudaChannelFormatDesc *desc, const struct cudaArray *array)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
         (*cu->output_stream) << "_cudaGetChannelDesc called, " << context << ".\n\n";
     }
-	ARRAY * arr = (ARRAY*)array;
-	*desc = *arr->desc;
-	return cudaSuccess;
+    ARRAY * arr = (ARRAY*)array;
+    *desc = *arr->desc;
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetDevice(int *device)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetDevice is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetDevice is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetDeviceCount(int *count)
@@ -1910,23 +1898,23 @@ cudaError_t EMULATED_DEVICE::_cudaGetDeviceProperties(struct cudaDeviceProp *pro
 
 const char* EMULATED_DEVICE::_cudaGetErrorString(cudaError_t error)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetErrorString is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return 0;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetErrorString is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return 0;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetExportTable(const void **ppExportTable, const cudaUUID_t *pExportTableId)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetExportTable is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetExportTable is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetLastError(void)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -1937,103 +1925,103 @@ cudaError_t EMULATED_DEVICE::_cudaGetLastError(void)
 
 cudaError_t EMULATED_DEVICE::_cudaGetSurfaceAlignmentOffset(size_t *offset, const struct surfaceReference *surfref)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaBindTexture2D is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaBindTexture2D is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetSurfaceReference(const struct surfaceReference **surfref, const char *symbol)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetSurfaceReference is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetSurfaceReference is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetSymbolAddress(void **devPtr, const char *symbol)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetSymbolAddress is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetSymbolAddress is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetSymbolSize(size_t *size, const char *symbol)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetSymbolSize is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetSymbolSize is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetTextureAlignmentOffset(size_t *offset, const struct textureReference *texref)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetTextureAlignmentOffset is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetTextureAlignmentOffset is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetTextureReference(const struct textureReference **texref, const char *symbol)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGetTextureReference is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGetTextureReference is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsMapResources(int count, struct cudaGraphicsResource **resources, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsMapResources is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsMapResources is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsResourceGetMappedPointer(void **devPtr, size_t *size, struct cudaGraphicsResource *resource)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsResourceGetMappedPointer is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsResourceGetMappedPointer is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsResourceSetMapFlags(struct cudaGraphicsResource *resource, unsigned int flags)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsResourceSetMapFlags is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsResourceSetMapFlags is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsSubResourceGetMappedArray(struct cudaArray **arrayPtr, struct cudaGraphicsResource *resource, unsigned int arrayIndex, unsigned int mipLevel)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsSubResourceGetMappedArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsSubResourceGetMappedArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsUnmapResources(int count, struct cudaGraphicsResource **resources, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsUnmapResources is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsUnmapResources is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGraphicsUnregisterResource(struct cudaGraphicsResource *resource)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaGraphicsUnregisterResource is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaGraphicsUnregisterResource is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaHostAlloc(void ** ptr, size_t size, unsigned int flags)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     void * local = 0;
     char * context = cu->Context();
 
@@ -2149,10 +2137,10 @@ cudaError_t EMULATED_DEVICE::_cudaHostGetDevicePointer(void ** pDevice, void * p
 
 cudaError_t EMULATED_DEVICE::_cudaHostGetFlags(unsigned int *pFlags, void *pHost)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaHostGetFlags is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaHostGetFlags is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
@@ -2164,14 +2152,14 @@ cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
         (*cu->output_stream) << "cudaLaunch called, " << context << ".\n\n";
     }
 
-	// Given the address of the kernel function in the host, determine the name of the kernel
+    // Given the address of the kernel function in the host, determine the name of the kernel
     // it is calling in PTX, using information provided by RegisterFatBinary and _cudaRegisterFunction.
     std::map<void*, char*>::iterator i = this->fun_to_name.find((void*)hostfun);
     assert(i != this->fun_to_name.end());
     char * name = i->second;
 
     // Go through all modules, look for current device.
-    for (std::list<MODULE *>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
+    for (std::vector<MODULE *>::iterator it = this->modules.begin(); it != this->modules.end(); ++it)
     {
         MODULE * module = *it;
         if (strcmp(this->device, module->name) == 0 ||
@@ -2259,87 +2247,87 @@ cudaError_t EMULATED_DEVICE::_cudaMalloc(void ** ptr, size_t size)
 
 cudaError_t EMULATED_DEVICE::_cudaMalloc3DArray(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMalloc3DArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMalloc3DArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const struct cudaChannelFormatDesc *desc, size_t width, size_t height __dv(0), unsigned int flags __dv(0))
 {
-	void * local = 0;
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	char * context = cu->Context();
+    void * local = 0;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * context = cu->Context();
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "cudaMallocArray called, " << context << ".\n\n";
-		(*cu->output_stream).flush();
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "cudaMallocArray called, " << context << ".\n\n";
+        (*cu->output_stream).flush();
+    }
 
-	if (this->IsBadPointer(desc))
-	{
-		(*cu->output_stream) << "Bad pointer passed to cudaMallocArray("
-				<< desc << ", ..., ...).\n";
-		(*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorMemoryAllocation;
-	}
+    if (this->IsBadPointer(desc))
+    {
+        (*cu->output_stream) << "Bad pointer passed to cudaMallocArray("
+                << desc << ", ..., ...).\n";
+        (*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorMemoryAllocation;
+    }
 
-	cudaError_t resetErrKernel = _cudaGetLastError();
+    cudaError_t resetErrKernel = _cudaGetLastError();
 
-	// calculate size.
-	// NOTE: a cudaChannelFormatDesc is a structure of the sizes of components of a linear piece of memory.  It is not a 4D cube.
-	unsigned int size = width * height * (desc->x + desc->y + desc->z + desc->w)/8;  // bytes.
-	ARRAY * arr = new ARRAY();
-	arr->desc = (struct cudaChannelFormatDesc *)desc;
-	arr->width = width;
-	arr->height = height;
-	arr->flags = flags;
+    // calculate size.
+    // NOTE: a cudaChannelFormatDesc is a structure of the sizes of components of a linear piece of memory.  It is not a 4D cube.
+    unsigned int size = width * height * (desc->x + desc->y + desc->z + desc->w)/8;  // bytes.
+    ARRAY * arr = new ARRAY();
+    arr->desc = (struct cudaChannelFormatDesc *)desc;
+    arr->width = width;
+    arr->height = height;
+    arr->flags = flags;
 
-	// Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
-	local = (void*) malloc(size+2*cu->padding_size);
-	if (! local)
-	{
-		(*cu->output_stream) << "Host memory allocation failed in cudaMallocArray.  The buffer is used to initialize the device buffer.\n";
-		(*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
-		if (cu->quit_on_error)
-			exit(1);
-		if (cu->do_not_call_cuda_after_sanity_check_fail)
-			return cudaErrorMemoryAllocation;
-		return cudaErrorMemoryAllocation;
-	}
-	// Mark paddings with padding characters.
-	for (char * init = (char*)local; init < (((char*)local) + cu->padding_size); ++init)
-	{
-		*init = cu->padding_byte;
-	}
-	for (char * init = ((char*)local) + size + cu->padding_size; init < (((char*)local) + size + 2 * cu->padding_size); ++init)
-	{
-		*init = cu->padding_byte;
-	}
-	// Init buffer with zeros.
-	for (char * init = ((char*)local) + cu->padding_size; init < (((char*)local) + size + cu->padding_size); ++init)
-	{
-		*init = 0;
-	}
-	
-	arr->memory = (unsigned char*)(((char*)local) + cu->padding_size);
+    // Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
+    local = (void*) malloc(size+2*cu->padding_size);
+    if (! local)
+    {
+        (*cu->output_stream) << "Host memory allocation failed in cudaMallocArray.  The buffer is used to initialize the device buffer.\n";
+        (*cu->output_stream) << " This check was performed in " << cu->Context() << ".\n\n";
+        if (cu->quit_on_error)
+            exit(1);
+        if (cu->do_not_call_cuda_after_sanity_check_fail)
+            return cudaErrorMemoryAllocation;
+        return cudaErrorMemoryAllocation;
+    }
+    // Mark paddings with padding characters.
+    for (char * init = (char*)local; init < (((char*)local) + cu->padding_size); ++init)
+    {
+        *init = cu->padding_byte;
+    }
+    for (char * init = ((char*)local) + size + cu->padding_size; init < (((char*)local) + size + 2 * cu->padding_size); ++init)
+    {
+        *init = cu->padding_byte;
+    }
+    // Init buffer with zeros.
+    for (char * init = ((char*)local) + cu->padding_size; init < (((char*)local) + size + cu->padding_size); ++init)
+    {
+        *init = 0;
+    }
+    
+    arr->memory = (unsigned char*)(((char*)local));
 
-	*array = (struct cudaArray*) arr;
-	this->arrays.push_back(arr);
+    *array = (struct cudaArray*) arr;
+    this->arrays.push_back(arr);
 
-	return cudaSuccess;     
+    return cudaSuccess;     
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMallocHost(void **ptr, size_t size)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMallocHost is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMallocHost is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 int roundUp(size_t numToRound, size_t multiple) 
@@ -2361,8 +2349,8 @@ cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size
     void * local = 0;
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
-	// Round up width to be multiple of 128.
-	size_t size = roundUp(width, 128 * 4) * height;
+    // Round up width to be multiple of 128.
+    size_t size = roundUp(width, 128 * 4) * height;
 
     if (cu->trace_all_calls)
     {
@@ -2423,13 +2411,13 @@ cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size
     d.context = strdup(cu->Context());
     this->alloc_list->push_back(d);
     *devPtr = ((char*)local) + cu->padding_size;
-	*pitch = size / height;
+    *pitch = size / height;
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t count, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
     char * context = cu->Context();
@@ -2442,7 +2430,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
     // Null pointer sanity check.
     if (dst == 0)
     {
-        (*cu->output_stream) << "Destination pointer in Memcpy("
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpy("
             << "dst = " << dst
             << ", ..., ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2452,7 +2440,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
     }
     if (src == 0)
     {
-        (*cu->output_stream) << "Source pointer passed to Memcpy(..., "
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpy(..., "
             << "src = " << src
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2475,7 +2463,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
 
         if (ds != -1 && dd == -1)
         {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpy("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
                 << " are reversed in directionality.\n";
@@ -2484,30 +2472,30 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         }
         else if (dd == -1)
         {
-            (*cu->output_stream) << "Destination pointer in Memcpy("
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy("
                 << "dst = " << dst
                 << ", ..., ..., ...) "
                 << " is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
-		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy(..., src = " << src
                 << ", ..., ...) looks invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
         else if (ds != -1 && (*this->alloc_list)[ds].is_host)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy(..., src = " << src
                 << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
         else if (this->IsBadPointer(src))
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy(..., src = " << src << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
@@ -2538,7 +2526,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         int ds = this->FindAllocatedBlock(src);
         if (ds == -1 && dd != -1)
         {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpy("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
                 << " are reversed in directionality.\n";
@@ -2547,7 +2535,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         }
         else if (ds == -1)
         {
-            (*cu->output_stream) << "Source pointer in Memcpy(..., "
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy(..., "
                 << "src = " << src
                 << ", ..., ..., ...) "
                 << " is invalid.\n";
@@ -2556,7 +2544,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         }
         else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., "
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy(..., "
                 << "src = " << src
                 << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2564,7 +2552,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         }
         else if (dd != -1 && (*this->alloc_list)[dd].is_host)
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy("
                 << "dst = " << dst
                 << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2572,7 +2560,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
         }
         else if (this->IsBadPointer(dst))
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy("
                 << "dst = " << dst
                 << ", ..., ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2606,32 +2594,32 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy(void * dst, const void * src, size_t co
 
 void copy_aux(char * dst, size_t dpitch, char * src, size_t spitch, size_t width, size_t height)
 {
-	for (int i = 0, j = 0; ;)
-	{
-		if (i % spitch >= width)
-		{
-			int inc = spitch - width;
-			i += inc;
-		}
-		if (j % dpitch >= width)
-		{
-			int inc = dpitch - width;
-			j += inc;
-		}
-		dst[j++] = src[i++];
-		if (i >= spitch * height)
-			break;
-	}
+    for (int i = 0, j = 0; ;)
+    {
+        if (i % spitch >= width)
+        {
+            int inc = spitch - width;
+            i += inc;
+        }
+        if (j % dpitch >= width)
+        {
+            int inc = dpitch - width;
+            j += inc;
+        }
+        dst[j++] = src[i++];
+        if (i >= spitch * height)
+            break;
+    }
 }
 
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
     char * context = cu->Context();
-	int count = spitch * height;
+    int count = spitch * height;
 
     if (cu->trace_all_calls)
     {
@@ -2641,7 +2629,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
     // Null pointer sanity check.
     if (dst == 0)
     {
-        (*cu->output_stream) << "Destination pointer in Memcpy("
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
             << "dst = " << dst
             << ", ..., ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2651,7 +2639,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
     }
     if (src == 0)
     {
-        (*cu->output_stream) << "Source pointer passed to Memcpy(..., "
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2D(..., "
             << "src = " << src
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2674,7 +2662,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
 
         if (ds != -1 && dd == -1)
         {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpy2D("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
                 << " are reversed in directionality.\n";
@@ -2683,30 +2671,30 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         }
         else if (dd == -1)
         {
-            (*cu->output_stream) << "Destination pointer in Memcpy("
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
                 << "dst = " << dst
                 << ", ..., ..., ...) "
                 << " is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
-		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2D(..., src = " << src
                 << ", ..., ...) looks invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
         else if (ds != -1 && (*this->alloc_list)[ds].is_host)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2D(..., src = " << src
                 << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
         else if (this->IsBadPointer(src))
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2D(..., src = " << src << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         }
@@ -2737,7 +2725,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         int ds = this->FindAllocatedBlock(src);
         if (ds == -1 && dd != -1)
         {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpy2D("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
                 << " are reversed in directionality.\n";
@@ -2746,7 +2734,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         }
         else if (ds == -1)
         {
-            (*cu->output_stream) << "Source pointer in Memcpy(..., "
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2D(..., "
                 << "src = " << src
                 << ", ..., ..., ...) "
                 << " is invalid.\n";
@@ -2755,7 +2743,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         }
         else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., "
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy2D(..., "
                 << "src = " << src
                 << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2763,7 +2751,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         }
         else if (dd != -1 && (*this->alloc_list)[dd].is_host)
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy2D("
                 << "dst = " << dst
                 << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2771,7 +2759,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         }
         else if (this->IsBadPointer(dst))
         {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpy2D("
                 << "dst = " << dst
                 << ", ..., ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
@@ -2805,45 +2793,45 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DArrayToArray(struct cudaArray *dst, size_t wOffsetDst, size_t hOffsetDst, const struct cudaArray *src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToDevice))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DArrayToArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy2DArrayToArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DAsync(void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy2DAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DFromArray(void *dst, size_t dpitch, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t width, size_t height, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DFromArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy2DFromArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DFromArrayAsync(void *dst, size_t dpitch, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DFromArrayAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy2DFromArrayAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * file_name = 0;
     int line = 0;
     char * context = cu->Context();
-	int count = spitch * height;
+    int count = spitch * height;
 
-	ARRAY * arr = (ARRAY*) dst;
+    ARRAY * arr = (ARRAY*) dst;
 
     if (cu->trace_all_calls)
     {
@@ -2853,23 +2841,23 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
     // Null pointer sanity check.
     if (dst == 0)
     {
-        (*cu->output_stream) << "Destination pointer in Memcpy("
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
             << "dst = " << dst
             << ", ..., ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
         //memcpy(dst, src, count);
-        return cudaErrorMemoryAllocation;
+        return cudaErrorInvalidValue;
     }
     if (src == 0)
     {
-        (*cu->output_stream) << "Source pointer passed to Memcpy(..., "
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., "
             << "src = " << src
             << ", ..., ...) is invalid.\n";
         (*cu->output_stream) << " This check was performed during a CUDA call in file "
             << file_name_tail(file_name) << ", line " << line << ".\n\n";
         //memcpy(dst, src, count);
-        return cudaErrorMemoryAllocation;
+        return cudaErrorInvalidValue;
     }
 
     // Four cases:
@@ -2877,75 +2865,8 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
     {
         int dd = this->FindAllocatedBlock(dst);
         int ds = this->FindAllocatedBlock(src);
-
-        // Users can pass a pointer to a pointer in the middle of a block.
-        // Also, the source pointer can look like a device pointer if the address
-        // ranges of the source and target overlap.  This did happen for me using
-        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
-        // even though it really is a host pointer!
-
-        if (ds != -1 && dd == -1)
-        {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
-                << "dst = " << dst
-                << ", src = " << src << ", ..., ...) "
-                << " are reversed in directionality.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (dd == -1)
-        {
-            (*cu->output_stream) << "Destination pointer in Memcpy("
-                << "dst = " << dst
-                << ", ..., ..., ...) "
-                << " is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
-        {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
-                << ", ..., ...) looks invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
-        {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
-                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (this->IsBadPointer(src))
-        {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        EMULATED_DEVICE::data * ddst = 0;
-        EMULATED_DEVICE::data * dsrc = 0;
-        if (dd != -1)
-            ddst = &(*this->alloc_list)[dd];
-        if (ds != -1)
-            dsrc = &(*this->alloc_list)[ds];
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        // Perform copy.
-        cudaError_t err;
-        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
-        err = cudaSuccess;
-        // Perform overwrite check again.
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        return err;
-    }
-	else if (kind == cudaMemcpyDeviceToDevice)
-    {
-        int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(dst);
+		int as = this->FindAllocatedArray(src);
 
         // Users can pass a pointer to a pointer in the middle of a block.
         // Also, the source pointer can look like a device pointer if the address
@@ -2955,364 +2876,413 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
 
         if (ds != -1)
         {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
                 << "dst = " << dst
                 << ", src = " << src << ", ..., ...) "
-                << " are reversed in directionality.\n";
+                << " is on the device, but cudaMemcpyHostToDevice specified.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
         }
-		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
+        if (dd != -1)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
-                << ", ..., ...) looks invalid.\n";
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+                << "dst = " << dst
+                << ", ..., ..., ...) "
+                << " should be array, but was allocated using cudaMalloc.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
         }
-        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
+        if (as != -1)
         {
-            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src
-                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+                << ", ..., ...) is device pointer.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
         }
-        else if (this->IsBadPointer(src))
+		if (ad == -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+                << ", ..., ...) is not an array pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
         {
             (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
         }
-        EMULATED_DEVICE::data * dsrc = 0;
-        if (ds != -1)
-            dsrc = &(*this->alloc_list)[ds];
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
+
         // Perform copy.
         cudaError_t err;
         copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
         err = cudaSuccess;
         // Perform overwrite check again.
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
         return err;
     }
-    else if (kind == cudaMemcpyDeviceToHost)
+    else if (kind == cudaMemcpyDeviceToDevice)
     {
-        int dd = this->FindAllocatedBlock(dst);
-        int ds = this->FindAllocatedBlock(src);
-        if (ds == -1 && dd != -1)
-        {
-            (*cu->output_stream) << "Source and destination pointers in Memcpy("
-                << "dst = " << dst
-                << ", src = " << src << ", ..., ...) "
-                << " are reversed in directionality.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (ds == -1)
-        {
-            (*cu->output_stream) << "Source pointer in Memcpy(..., "
-                << "src = " << src
-                << ", ..., ..., ...) "
-                << " is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (dd != -1 && ! (*this->alloc_list)[dd].is_host)
-        {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., "
-                << "src = " << src
-                << ", ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (dd != -1 && (*this->alloc_list)[dd].is_host)
-        {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
-                << "dst = " << dst
-                << ", ..., ..., ...) is a pointer to a host block that could be device addressible.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (this->IsBadPointer(dst))
-        {
-            (*cu->output_stream) << "Destination pointer passed to Memcpy("
-                << "dst = " << dst
-                << ", ..., ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        // Check before copy if block boundaries are intact.
-        EMULATED_DEVICE::data * ddst = 0;
-        EMULATED_DEVICE::data * dsrc = 0;
-        if (dd != -1)
-            ddst = &(*this->alloc_list)[dd];
-        if (ds != -1)
-            dsrc = &(*this->alloc_list)[ds];
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        // Perform copy.
-        cudaError_t err;
-        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
-        err = cudaSuccess;
-        // Perform overwrite check again.
-        if (ddst)
-            this->CheckSinglePtrOverwrite(ddst);
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        return err;
+		int dd = this->FindAllocatedBlock(dst);
+		int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(dst);
+		int as = this->FindAllocatedArray(src);
+
+		// Users can pass a pointer to a pointer in the middle of a block.
+		// Also, the source pointer can look like a device pointer if the address
+		// ranges of the source and target overlap.  This did happen for me using
+		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+		// even though it really is a host pointer!
+
+		if (ds == -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", src = " << src << ", ..., ...) "
+					<< " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+					<< ", ..., ...) is device pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad == -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+					<< ", ..., ...) is not an array pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(src))
+		{
+			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+
+		// Perform copy.
+		cudaError_t err;
+		copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
     }
-    else
-        return cudaErrorMemoryAllocation;
+	else {
+		(*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
+				<< "src = " << src
+				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in file "
+				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+		return cudaErrorInvalidValue;
+	}
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy2DToArrayAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy2DToArrayAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy3D(const struct cudaMemcpy3DParms *p)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy3D is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy3D is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy3DAsync(const struct cudaMemcpy3DParms *p, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpy3DAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpy3DAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyArrayToArray(struct cudaArray *dst, size_t wOffsetDst, size_t hOffsetDst, const struct cudaArray *src, size_t wOffsetSrc, size_t hOffsetSrc, size_t count, enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToDevice))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyArrayToArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyArrayToArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyAsync(void *dst, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArray(void *dst, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t count, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyFromArray is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyFromArray is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArrayAsync(void *dst, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyFromArrayAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyFromArrayAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbol(void *dst, const char *symbol, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToHost))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyFromSymbol is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyFromSymbol is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *symbol, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyFromSymbolAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyFromSymbolAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    char * file_name = 0;
-    int line = 0;
-    char * context = cu->Context();
+	char * file_name = 0;
+	int line = 0;
+	char * context = cu->Context();
 
-    if (cu->trace_all_calls)
-    {
-        (*cu->output_stream) << "_cudaMemcpyToArray called, " << context << ".\n\n";
-    }
-
-    // Null pointer sanity check.
-    if (dst == 0)
-    {
-        (*cu->output_stream) << "Destination pointer in _cudaMemcpyToArray("
-            << "dst = " << dst
-            << ", ..., ..., ...) is invalid.\n";
-        (*cu->output_stream) << " This check was performed during a CUDA call in file "
-            << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        //memcpy(dst, src, count);
-        return cudaErrorMemoryAllocation;
-    }
-	// Find the array.
+	assert(wOffset == 0 && hOffset == 0);
 
 	ARRAY * arr = (ARRAY*) dst;
 
-    if (src == 0)
-    {
-        (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., "
-            << "src = " << src
-            << ", ..., ...) is invalid.\n";
-        (*cu->output_stream) << " This check was performed during a CUDA call in file "
-            << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        //memcpy(dst, src, count);
-        return cudaErrorMemoryAllocation;
-    }
+	if (cu->trace_all_calls)
+	{
+		(*cu->output_stream) << "_cudaMemcpy2D called, " << context << ".\n\n";
+	}
+
+	// Null pointer sanity check.
+	if (dst == 0)
+	{
+		(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+				<< "dst = " << dst
+				<< ", ..., ..., ...) is invalid.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in file "
+				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+		//memcpy(dst, src, count);
+		return cudaErrorInvalidValue;
+	}
+	if (src == 0)
+	{
+		(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., "
+				<< "src = " << src
+				<< ", ..., ...) is invalid.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in file "
+				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+		//memcpy(dst, src, count);
+		return cudaErrorInvalidValue;
+	}
+
 	// Four cases:
-    if (kind == cudaMemcpyHostToDevice)
-    {
-        int ds = this->FindAllocatedBlock(src);
+	if (kind == cudaMemcpyHostToDevice)
+	{
+		int dd = this->FindAllocatedBlock(dst);
+		int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(dst);
+		int as = this->FindAllocatedArray(src);
 
-        // Users can pass a pointer to a pointer in the middle of a block.
-        // Also, the source pointer can look like a device pointer if the address
-        // ranges of the source and target overlap.  This did happen for me using
-        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
-        // even though it really is a host pointer!
+		// Users can pass a pointer to a pointer in the middle of a block.
+		// Also, the source pointer can look like a device pointer if the address
+		// ranges of the source and target overlap.  This did happen for me using
+		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+		// even though it really is a host pointer!
 
-        if (ds != -1)
-        {
-            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
-                << "dst = " << dst
-                << ", src = " << src << ", ..., ...) "
-                << " are reversed in directionality.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-		else if (ds != -1 && ! (*this->alloc_list)[ds].is_host)
-        {
-            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src
-                << ", ..., ...) looks invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (ds != -1 && (*this->alloc_list)[ds].is_host)
-        {
-            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src
-                << ", ..., ...) is a pointer to a host block that could be device addressible.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (this->IsBadPointer(src))
-        {
-            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToArray(..., src = " << src << ", ..., ...) is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
+		if (ds != -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", src = " << src << ", ..., ...) "
+					<< " is on the device, but cudaMemcpyHostToDevice specified.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+					<< ", ..., ...) is device pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad == -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+					<< ", ..., ...) is not an array pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(src))
+		{
+			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
 
-        EMULATED_DEVICE::data * dsrc = 0;
-        if (ds != -1)
-            dsrc = &(*this->alloc_list)[ds];
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-
-        // Perform copy.
-        cudaError_t err;
-        memcpy(arr->memory + cu->padding_size, src, count);
-        err = cudaSuccess;
-        // Perform overwrite check again.
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        return err;
-    }
-    else if (kind == cudaMemcpyDeviceToHost)
-    {
-        int ds = this->FindAllocatedBlock(src);
-        if (ds == -1)
-        {
-            (*cu->output_stream) << "Source and destination pointers in _cudaMemcpyToArray("
-                << "dst = " << dst
-                << ", src = " << src << ", ..., ...) "
-                << " are reversed in directionality.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        else if (ds == -1)
-        {
-            (*cu->output_stream) << "Source pointer in _cudaMemcpyToArray(..., "
-                << "src = " << src
-                << ", ..., ..., ...) "
-                << " is invalid.\n";
-            (*cu->output_stream) << " This check was performed during a CUDA call in file "
-                << file_name_tail(file_name) << ", line " << line << ".\n\n";
-        }
-        // Check before copy if block boundaries are intact.
-        EMULATED_DEVICE::data * dsrc = 0;
-        if (ds != -1)
-            dsrc = &(*this->alloc_list)[ds];
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-
-        // Perform copy.
-		int offset = 0;
-
-        memcpy((char*)arr->memory + cu->padding_size + offset, src, count);
-
+		// Perform copy.
 		cudaError_t err;
-        err = cudaSuccess;
-
+		memcpy((char*)arr->memory + cu->padding_size, src, count);
+		err = cudaSuccess;
 		// Perform overwrite check again.
-        if (dsrc)
-            this->CheckSinglePtrOverwrite(dsrc);
-        return err;
-    }
-    else
-        return cudaErrorMemoryAllocation;
+		return err;
+	}
+	else if (kind == cudaMemcpyDeviceToDevice)
+	{
+		int dd = this->FindAllocatedBlock(dst);
+		int ds = this->FindAllocatedBlock(src);
+		int ad = this->FindAllocatedArray(dst);
+		int as = this->FindAllocatedArray(src);
+
+		// Users can pass a pointer to a pointer in the middle of a block.
+		// Also, the source pointer can look like a device pointer if the address
+		// ranges of the source and target overlap.  This did happen for me using
+		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+		// even though it really is a host pointer!
+
+		if (ds == -1)
+		{
+			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", src = " << src << ", ..., ...) "
+					<< " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (dd != -1)
+		{
+			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+					<< "dst = " << dst
+					<< ", ..., ..., ...) "
+					<< " should be array, but was allocated using cudaMalloc.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (as != -1)
+		{
+			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+					<< ", ..., ...) is device pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (ad == -1)
+		{
+			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+					<< ", ..., ...) is not an array pointer.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+		if (this->IsBadPointer(src))
+		{
+			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+			(*cu->output_stream) << " This check was performed during a CUDA call in file "
+					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+			return cudaErrorInvalidValue;
+		}
+
+		// Perform copy.
+		cudaError_t err;
+		memcpy((char*)arr->memory + cu->padding_size, src, count);
+		err = cudaSuccess;
+		// Perform overwrite check again.
+		return err;
+	}
+	else {
+		(*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
+				<< "src = " << src
+				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+		(*cu->output_stream) << " This check was performed during a CUDA call in file "
+				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
+		return cudaErrorInvalidValue;
+	}
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyToArrayAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyToArrayAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbol(const char *symbol, const void *src, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyHostToDevice))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyToSymbol is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyToSymbol is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemcpyToSymbolAsync is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemcpyToSymbolAsync is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemGetInfo(size_t *free, size_t *total)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	*free = 250000000;
-	*total = 3000000000;
-	return cudaSuccess;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    *free = 250000000;
+    *total = 3000000000;
+    return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemset(void * dst, int value, size_t count)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     if (cu->trace_all_calls)
@@ -3395,26 +3365,26 @@ cudaError_t EMULATED_DEVICE::_cudaMemset(void * dst, int value, size_t count)
 
 cudaError_t EMULATED_DEVICE::_cudaMemset2D(void *devPtr, size_t pitch, int value, size_t width, size_t height)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemset2D is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemset2D is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemset3D(struct cudaPitchedPtr pitchedDevPtr, int value, struct cudaExtent extent)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaMemset3D is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaMemset3D is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaPeekAtLastError(void)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaPeekAtLastError is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaPeekAtLastError is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 void** EMULATED_DEVICE::_cudaRegisterFatBinary(void *fatCubin)
@@ -3541,7 +3511,7 @@ void** EMULATED_DEVICE::_cudaRegisterFatBinary(void *fatCubin)
 
 void EMULATED_DEVICE::_cudaRegisterFunction(void **fatCubinHandle, const char *hostFun, char *deviceFun, const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid, dim3 *bDim, dim3 *gDim, int *wSize)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::pair<void*, char*> i;
     i.first = (void*)hostFun;
     i.second = deviceFun;
@@ -3550,29 +3520,29 @@ void EMULATED_DEVICE::_cudaRegisterFunction(void **fatCubinHandle, const char *h
 
 void EMULATED_DEVICE::_cudaRegisterSurface(void **fatCubinHandle, const struct surfaceReference *hostVar, const void **deviceAddress, const char *deviceName, int dim, int ext)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaRegisterSurface is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaRegisterSurface is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
 }
 
 void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct textureReference *hostVar, const void **deviceAddress, const char *textureName, int dim, int norm, int ext)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
         (*cu->output_stream) << "__cudaRegisterTexture called, " << context << ".\n\n";
     }
-	// Associate "textureName" with "hostVar".  When using textures, we'll need to get the address 
-	// of the texture in memory from the name of the texture.
+    // Associate "textureName" with "hostVar".  When using textures, we'll need to get the address 
+    // of the texture in memory from the name of the texture.
     TEXTURE * texture = new TEXTURE();
-	texture->hostVar = (struct textureReference*)hostVar;
-	texture->deviceAddress = (void**) deviceAddress;
-	texture->textureName = (char*) textureName;
-	texture->dim = dim;
-	texture->norm = norm;
-	texture->ext = ext;
-	std::pair<char*, TEXTURE*> i;
+    texture->hostVar = (struct textureReference*)hostVar;
+    texture->deviceAddress = (void**) deviceAddress;
+    texture->textureName = (char*) textureName;
+    texture->dim = dim;
+    texture->norm = norm;
+    texture->ext = ext;
+    std::pair<char*, TEXTURE*> i;
     i.first = (char*)textureName;
     i.second = (TEXTURE*)texture;
     this->texturename_to_texture.insert(i);
@@ -3580,7 +3550,7 @@ void EMULATED_DEVICE::_cudaRegisterTexture(void **fatCubinHandle, const struct t
 
 void EMULATED_DEVICE::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, char *deviceAddress, const char *deviceName, int ext, int size, int constant, int global)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -3593,15 +3563,15 @@ void EMULATED_DEVICE::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, cha
 
 cudaError_t EMULATED_DEVICE::_cudaRuntimeGetVersion(int *runtimeVersion)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaRuntimeGetVersion is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaRuntimeGetVersion is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaSetDevice(int device)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -3612,7 +3582,7 @@ cudaError_t EMULATED_DEVICE::_cudaSetDevice(int device)
 
 cudaError_t EMULATED_DEVICE::_cudaSetDeviceFlags(unsigned int flags)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -3623,23 +3593,23 @@ cudaError_t EMULATED_DEVICE::_cudaSetDeviceFlags(unsigned int flags)
 
 cudaError_t EMULATED_DEVICE::_cudaSetDoubleForDevice(double *d)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaSetDoubleForDevice is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaSetDoubleForDevice is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaSetDoubleForHost(double *d)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaSetDoubleForHost is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaSetDoubleForHost is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaSetupArgument(const void *arg, size_t size, size_t offset)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     // record argument, size, offset.
     EMULATED_DEVICE::arg * a = new EMULATED_DEVICE::arg();
     //assert(size == 4);
@@ -3653,39 +3623,39 @@ cudaError_t EMULATED_DEVICE::_cudaSetupArgument(const void *arg, size_t size, si
 
 cudaError_t EMULATED_DEVICE::_cudaSetValidDevices(int *device_arr, int len)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaSetValidDevices is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaSetValidDevices is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaStreamCreate(cudaStream_t *pStream)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaStreamDestroy(cudaStream_t stream)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaStreamQuery(cudaStream_t stream)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaStreamSynchronize(cudaStream_t stream)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaThreadExit()
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     char * context = cu->Context();
 
     if (cu->trace_all_calls)
@@ -3710,29 +3680,29 @@ cudaError_t EMULATED_DEVICE::_cudaThreadExit()
 
 cudaError_t EMULATED_DEVICE::_cudaThreadGetLimit(enum cudaLimit limit, size_t value)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaThreadGetLimit is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaThreadGetLimit is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaThreadSetLimit(enum cudaLimit limit, size_t value)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Function _cudaThreadSetLimit is not implemented.\n";
-	_CUDA_RUNTIME::Unimplemented();
-	return cudaErrorNotYetImplemented;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    std::cout << "Function _cudaThreadSetLimit is not implemented.\n";
+    _CUDA_RUNTIME::Unimplemented();
+    return cudaErrorNotYetImplemented;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaThreadSynchronize(void)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaUnbindTexture(const struct textureReference *texref)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (cu->trace_all_calls)
     {
         char * context = cu->Context();
@@ -3775,7 +3745,7 @@ EMULATED_DEVICE::EMULATED_DEVICE()
     this->extern_memory_buffer = 0;
     this->num_threads = 1;
     this->max_instruction_thread = 100;
-	this->alloc_list = new std::vector<data>();
+    this->alloc_list = new std::vector<data>();
 }
 
 void EMULATED_DEVICE::SetTrace(int level)
@@ -3810,13 +3780,13 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
     {
         std::cout << "====================================================\n";
         std::cout << "TREE: " << std::endl;
-		this->Print(tree, 0);
+        this->Print(tree, 0);
         std::cout << "====================================================\n\n\n";
     }
     MODULE * module = new MODULE();
     module->name = this->StringTableEntry(module_name);
     module->tree = tree;
-	// Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
+    // Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
     Extract_From_Tree(module, tree);
     this->modules.push_back(module);
     return module;
@@ -3828,12 +3798,12 @@ void EMULATED_DEVICE::Extract_From_Tree(MODULE * module, TREE * node)
     if (node->GetType() == TREE_ENTRY)
     {
         // First child will be name node.
-		ENTRY * entry = new ENTRY();
+        ENTRY * entry = new ENTRY();
         TREE * word = node->GetChild(0);
         char * name = word->GetText();
-		entry->name = name;
-		entry->module = module;
-		entry->tree = node;
+        entry->name = name;
+        entry->module = module;
+        entry->tree = node;
         std::pair<char*, ENTRY *> i;
         i.first = (char*)name;
         i.second = entry;
@@ -3841,12 +3811,12 @@ void EMULATED_DEVICE::Extract_From_Tree(MODULE * module, TREE * node)
     }
     else if (node->GetType() == TREE_FUNC)
     {
-		ENTRY * entry = new ENTRY();
+        ENTRY * entry = new ENTRY();
         TREE * word = node->GetChild(0);
         char * name = word->GetText();
-		entry->name = name;
-		entry->module = module;
-		entry->tree = node;
+        entry->name = name;
+        entry->module = module;
+        entry->tree = node;
         std::pair<char*, ENTRY *> i;
         i.first = (char*)name;
         i.second = entry;
@@ -3869,7 +3839,7 @@ void EMULATED_DEVICE::SetupParams(SYMBOL_TABLE * symbol_table, TREE * e)
     {
         int argc = this->arguments.size();
         TREE * param_list = (TREE *)e->GetChild(1);
-        std::list<arg*>::iterator ia = this->arguments.begin();
+        std::vector<arg*>::iterator ia = this->arguments.begin();
         for (int i = 0; i < argc; ++i, ++ia)
         {
             // Get to the parameter in the AST.
@@ -3916,8 +3886,8 @@ size_t EMULATED_DEVICE::Sizeof(int type)
     case K_B32: return sizeof(signed __int32);
     case K_B64: return sizeof(signed __int64);
     case K_PRED: return sizeof(bool);
-	// Texref is a dynamic type, so size is unknown. .tex in ptx is now deprecated in favor of this POS.
-	case K_TEXREF: return 0;
+    // Texref is a dynamic type, so size is unknown. .tex in ptx is now deprecated in favor of this POS.
+    case K_TEXREF: return 0;
     }
     assert(false);
     return 0;
@@ -4261,7 +4231,7 @@ void EMULATED_DEVICE::ConfigureStream(cudaStream_t stream)
 
 void EMULATED_DEVICE::ResetArgs()
 {
-    for (std::list<arg*>::iterator ia = this->arguments.begin();
+    for (std::vector<arg*>::iterator ia = this->arguments.begin();
         ia != this->arguments.end(); ++ia)
     {
         delete *ia;
@@ -4275,7 +4245,7 @@ void EMULATED_DEVICE::Execute(ENTRY * entry)
 //    _CrtMemState state_begin;
 //    _CrtMemCheckpoint(&state_begin);
 
-	//this->trace_level = 3;
+    //this->trace_level = 3;
 
 
 
@@ -4770,6 +4740,22 @@ int EMULATED_DEVICE::FindAllocatedBlock(const void * pointer)
         return -1;
     }
     return i;
+}
+
+int EMULATED_DEVICE::FindAllocatedArray(const void * pointer)
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    unsigned int i;
+    for (i = 0; i < this->arrays.size(); ++i)
+    {
+        ARRAY * d = this->arrays[i];
+        if (pointer == (void*) d)
+            break;
+    }
+    if (i == this->arrays.size())
+        return -1;
+    else
+        return i;
 }
 
 bool EMULATED_DEVICE::IsBadPointer(const void * ptr)
