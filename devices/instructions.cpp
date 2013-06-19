@@ -7882,7 +7882,7 @@ int THREAD::DoTex(TREE * inst)
     
 
     // Find texture from name.
-    std::map<char*, TEXTURE*>::iterator i = this->device->texturename_to_texture.find(tex->name);
+    std::map<char*, TEXTURE*, ltstr>::iterator i = this->device->texturename_to_texture.find(tex->name);
     assert(i != this->device->texturename_to_texture.end());
     TEXTURE * texture = i->second;
 

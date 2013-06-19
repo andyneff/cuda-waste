@@ -23,6 +23,7 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
+#include <map>
 #include "tree.h"
 #include <process.h>    /* _beginthread, _endthread */
 #include "thread.h"
@@ -1102,7 +1103,7 @@ CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod,
     // the entry for it.
     void * foo = hfunc;
     MODULE * module = dynamic_cast<MODULE *>((MODULE *)foo);
-    std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find((char*)name);
+    std::map<char*, ENTRY *, ltstr>::iterator j = module->entry.find((char*)name);
     if (j == module->entry.end())
         return CUDA_ERROR_NOT_FOUND;
     ENTRY * data = j->second;
@@ -2168,7 +2169,7 @@ cudaError_t EMULATED_DEVICE::_cudaLaunch(const char *hostfun)
         {
             // Now, given the name of the kernel function being called, find
             // the entry for it.
-            std::map<char*, ENTRY *, ENTRY::ltstr>::iterator j = module->entry.find(name);
+            std::map<char*, ENTRY *, ltstr>::iterator j = module->entry.find(name);
             assert(j != module->entry.end());
             ENTRY * entry = j->second;
             this->Execute(entry);
