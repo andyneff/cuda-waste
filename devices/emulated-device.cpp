@@ -2788,7 +2788,66 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
             this->CheckSinglePtrOverwrite(dsrc);
         return err;
     }
-    else
+    else if (kind == cudaMemcpyDeviceToDevice)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2D("
+				<< "dst = " << dst
+                << "src = " << src
+                << ",  ...) "
+                << " is invalid.\n";
+        }
+        if (dd == -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
+				<< "dst = " << dst
+                << "src = " << src
+                << ", ...) "
+                << " is invalid.\n";
+        }
+        
+		if (this->IsBadPointer(dst))
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
+				<< "dst = " << dst
+                << "src = " << src
+                << ", ...) "
+                << " is invalid.\n";
+        }
+		if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2D("
+				<< "dst = " << dst
+                << "src = " << src
+                << ", ...) "
+                << " is invalid.\n";
+        }
+        // Check before copy if block boundaries are intact.
+        EMULATED_DEVICE::data * ddst = 0;
+        EMULATED_DEVICE::data * dsrc = 0;
+        if (dd != -1)
+            ddst = &(*this->alloc_list)[dd];
+        if (ds != -1)
+            dsrc = &(*this->alloc_list)[ds];
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        // Perform copy.
+        cudaError_t err;
+        copy_aux((char*)dst, dpitch, (char*)src, spitch, width, height);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        if (ddst)
+            this->CheckSinglePtrOverwrite(ddst);
+        if (dsrc)
+            this->CheckSinglePtrOverwrite(dsrc);
+        return err;
+    }
+	else
         return cudaErrorMemoryAllocation;
 }
 
@@ -4112,8 +4171,7 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
 
 	// Extract globals, constants, etc.
 	// Create symbol table for outer blocks.
-	assert(this->global_symbol_table == 0);
-	this->global_symbol_table = this->PushSymbolTable(0);
+	this->global_symbol_table = this->PushSymbolTable(this->global_symbol_table);
 	int sc[] = { K_GLOBAL, K_TEX, K_CONST, 0};
 	this->SetupVariables(this->global_symbol_table, tree, sc);
 
