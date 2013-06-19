@@ -1730,8 +1730,8 @@ cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
     }
     ARRAY * d = (ARRAY*) array;
     this->arrays.erase(this->arrays.begin() + di);
-	free(d->memory);
-	delete d;
+    free(d->memory);
+    delete d;
     return cudaSuccess;
 }
 
@@ -2332,18 +2332,17 @@ cudaError_t EMULATED_DEVICE::_cudaMallocHost(void **ptr, size_t size)
     return cudaErrorNotYetImplemented;
 }
 
-int roundUp(size_t numToRound, size_t multiple) 
-{ 
- if(multiple == 0) 
- { 
-  return numToRound; 
- } 
+int roundUp(size_t numToRound, size_t multiple)
+{
+    if(multiple == 0)
+    {
+        return numToRound;
+    }
 
- int remainder = numToRound % multiple;
- if (remainder == 0)
-  return numToRound;
- printf("round = %d\n", numToRound + multiple - remainder);
- return numToRound + multiple - remainder;
+    int remainder = numToRound % multiple;
+    if (remainder == 0)
+        return numToRound;
+    return numToRound + multiple - remainder;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMallocPitch(void **devPtr, size_t *pitch, size_t width, size_t height)
@@ -2796,7 +2795,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         if (ds == -1)
         {
             (*cu->output_stream) << "Source pointer in _cudaMemcpy2D("
-				<< "dst = " << dst
+                << "dst = " << dst
                 << "src = " << src
                 << ",  ...) "
                 << " is invalid.\n";
@@ -2804,24 +2803,24 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
         if (dd == -1)
         {
             (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
-				<< "dst = " << dst
+                << "dst = " << dst
                 << "src = " << src
                 << ", ...) "
                 << " is invalid.\n";
         }
         
-		if (this->IsBadPointer(dst))
+        if (this->IsBadPointer(dst))
         {
             (*cu->output_stream) << "Destination pointer in _cudaMemcpy2D("
-				<< "dst = " << dst
+                << "dst = " << dst
                 << "src = " << src
                 << ", ...) "
                 << " is invalid.\n";
         }
-		if (this->IsBadPointer(src))
+        if (this->IsBadPointer(src))
         {
             (*cu->output_stream) << "Source pointer in _cudaMemcpy2D("
-				<< "dst = " << dst
+                << "dst = " << dst
                 << "src = " << src
                 << ", ...) "
                 << " is invalid.\n";
@@ -2848,7 +2847,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2D(void *dst, size_t dpitch, const void 
             this->CheckSinglePtrOverwrite(dsrc);
         return err;
     }
-	else
+    else
         return cudaErrorMemoryAllocation;
 }
 
@@ -2926,8 +2925,8 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
     {
         int dd = this->FindAllocatedBlock(dst);
         int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(dst);
-		int as = this->FindAllocatedArray(src);
+        int ad = this->FindAllocatedArray(dst);
+        int as = this->FindAllocatedArray(src);
 
         // Users can pass a pointer to a pointer in the middle of a block.
         // Also, the source pointer can look like a device pointer if the address
@@ -2943,7 +2942,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
                 << " is on the device, but cudaMemcpyHostToDevice specified.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
+            return cudaErrorInvalidValue;
         }
         if (dd != -1)
         {
@@ -2953,7 +2952,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
                 << " should be array, but was allocated using cudaMalloc.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
+            return cudaErrorInvalidValue;
         }
         if (as != -1)
         {
@@ -2961,22 +2960,22 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
                 << ", ..., ...) is device pointer.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
+            return cudaErrorInvalidValue;
         }
-		if (ad == -1)
+        if (ad == -1)
         {
             (*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
                 << ", ..., ...) is not an array pointer.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
+            return cudaErrorInvalidValue;
         }
         if (this->IsBadPointer(src))
         {
             (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
             (*cu->output_stream) << " This check was performed during a CUDA call in file "
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
+            return cudaErrorInvalidValue;
         }
 
         // Perform copy.
@@ -2988,76 +2987,76 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
     }
     else if (kind == cudaMemcpyDeviceToDevice)
     {
-		int dd = this->FindAllocatedBlock(dst);
-		int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(dst);
-		int as = this->FindAllocatedArray(src);
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        int ad = this->FindAllocatedArray(dst);
+        int as = this->FindAllocatedArray(src);
 
-		// Users can pass a pointer to a pointer in the middle of a block.
-		// Also, the source pointer can look like a device pointer if the address
-		// ranges of the source and target overlap.  This did happen for me using
-		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
-		// even though it really is a host pointer!
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
 
-		if (ds == -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", src = " << src << ", ..., ...) "
-					<< " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
-					<< ", ..., ...) is device pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad == -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
-					<< ", ..., ...) is not an array pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(src))
-		{
-			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", src = " << src << ", ..., ...) "
+                    << " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+                    << ", ..., ...) is device pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad == -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+                    << ", ..., ...) is not an array pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
 
-		// Perform copy.
-		cudaError_t err;
-		copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
+        // Perform copy.
+        cudaError_t err;
+        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
     }
-	else {
-		(*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
-				<< "src = " << src
-				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		return cudaErrorInvalidValue;
-	}
+    else {
+        (*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        return cudaErrorInvalidValue;
+    }
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3119,173 +3118,173 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArrayAsync(void *dst, const struct c
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbol(void *dst, const char *symbol, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToHost))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	char * file_name = 0;
-	char * context = cu->Context();
+    char * file_name = 0;
+    char * context = cu->Context();
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "_cudaMemcpyFromSymbol called, " << context << ".\n\n";
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaMemcpyFromSymbol called, " << context << ".\n\n";
+    }
 
-	// Null pointer sanity check.
-	if (symbol == 0)
-	{
-		(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
-				<< "dst = " << dst
-				<< "symbol = " << symbol
-				<< ", ..., ..., ...) is invalid.\n";
-		return cudaErrorInvalidValue;
-	}
+    // Null pointer sanity check.
+    if (symbol == 0)
+    {
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+                << "dst = " << dst
+                << "symbol = " << symbol
+                << ", ..., ..., ...) is invalid.\n";
+        return cudaErrorInvalidValue;
+    }
 
-	if (dst == 0)
-	{
-		(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
-				<< "dst = " << dst
-				<< "symbol = " << symbol
-				<< ", ..., ...) is invalid.\n";
-		return cudaErrorInvalidValue;
-	}
+    if (dst == 0)
+    {
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+                << "dst = " << dst
+                << "symbol = " << symbol
+                << ", ..., ...) is invalid.\n";
+        return cudaErrorInvalidValue;
+    }
 
-	if (kind == cudaMemcpyDeviceToHost)
-	{
-		int ds = this->FindAllocatedBlock(symbol);
-		int dd = this->FindAllocatedBlock(dst);
-		int as = this->FindAllocatedArray(symbol);
-		int ad = this->FindAllocatedArray(dst);
+    if (kind == cudaMemcpyDeviceToHost)
+    {
+        int ds = this->FindAllocatedBlock(symbol);
+        int dd = this->FindAllocatedBlock(dst);
+        int as = this->FindAllocatedArray(symbol);
+        int ad = this->FindAllocatedArray(dst);
 
-		if (ds != -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ") where symbol is memory allocated by cudaMalloc, not a symbol.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ..., ...) "
-					<< " where dst is device memory.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ...) where symbol is device array pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad != -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ...) is dst is device array pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(dst))
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ...) is invalid.\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds != -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ") where symbol is memory allocated by cudaMalloc, not a symbol.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ..., ...) "
+                    << " where dst is device memory.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ...) where symbol is device array pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad != -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ...) is dst is device array pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(dst))
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ...) is invalid.\n";
+            return cudaErrorInvalidValue;
+        }
 
-		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
-		if (j == this->variables.end())
-			return cudaErrorInvalidSymbol;
-		
-		REGVAR * var = j->second;
+        std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+        if (j == this->variables.end())
+            return cudaErrorInvalidSymbol;
+        
+        REGVAR * var = j->second;
 
-		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
-		if (sym == 0)
-			return cudaErrorInvalidSymbol;
+        SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+        if (sym == 0)
+            return cudaErrorInvalidSymbol;
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)dst , sym->pvalue, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else if (kind == cudaMemcpyDeviceToDevice)
-	{
-		int ds = this->FindAllocatedBlock(symbol);
-		int dd = this->FindAllocatedBlock(dst);
-		int as = this->FindAllocatedArray(symbol);
-		int ad = this->FindAllocatedArray(dst);
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)dst , sym->pvalue, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else if (kind == cudaMemcpyDeviceToDevice)
+    {
+        int ds = this->FindAllocatedBlock(symbol);
+        int dd = this->FindAllocatedBlock(dst);
+        int as = this->FindAllocatedArray(symbol);
+        int ad = this->FindAllocatedArray(dst);
 
-		if (ds == -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ...) is device pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad != -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-					<< ", ..., ...) is not an array pointer.\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ...) is device pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad != -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                    << ", ..., ...) is not an array pointer.\n";
+            return cudaErrorInvalidValue;
+        }
 
-		if (this->IsBadPointer(dst))
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
-					<< "dst = " << dst
-					<< "symbol = " << symbol
-				<< ", ..., ...) is invalid.\n";
-			return cudaErrorInvalidValue;
-		}
+        if (this->IsBadPointer(dst))
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyFromSymbol("
+                    << "dst = " << dst
+                    << "symbol = " << symbol
+                << ", ..., ...) is invalid.\n";
+            return cudaErrorInvalidValue;
+        }
 
-		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
-		if (j == this->variables.end())
-			return cudaErrorInvalidSymbol;
-		
-		REGVAR * var = j->second;
+        std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+        if (j == this->variables.end())
+            return cudaErrorInvalidSymbol;
+        
+        REGVAR * var = j->second;
 
-		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
-		if (sym == 0)
-			return cudaErrorInvalidSymbol;
+        SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+        if (sym == 0)
+            return cudaErrorInvalidSymbol;
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)dst , sym->pvalue, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else {
-		(*cu->output_stream) << "Direction copy to _cudaMemcpyFromSymbol("
-				<< "dst = " << dst
-				<< "symbol = " << symbol
-				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
-		return cudaErrorInvalidValue;
-	}
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)dst , sym->pvalue, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else {
+        (*cu->output_stream) << "Direction copy to _cudaMemcpyFromSymbol("
+                << "dst = " << dst
+                << "symbol = " << symbol
+                << ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+        return cudaErrorInvalidValue;
+    }
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *symbol, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3298,178 +3297,178 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *s
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind)
 {
-	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	char * file_name = 0;
-	int line = 0;
-	char * context = cu->Context();
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    char * file_name = 0;
+    int line = 0;
+    char * context = cu->Context();
 
-	assert(wOffset == 0 && hOffset == 0);
+    assert(wOffset == 0 && hOffset == 0);
 
-	ARRAY * arr = (ARRAY*) dst;
+    ARRAY * arr = (ARRAY*) dst;
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "_cudaMemcpy2D called, " << context << ".\n\n";
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaMemcpy2D called, " << context << ".\n\n";
+    }
 
-	// Null pointer sanity check.
-	if (dst == 0)
-	{
-		(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
-				<< "dst = " << dst
-				<< ", ..., ..., ...) is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		//memcpy(dst, src, count);
-		return cudaErrorInvalidValue;
-	}
-	if (src == 0)
-	{
-		(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., "
-				<< "src = " << src
-				<< ", ..., ...) is invalid.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		//memcpy(dst, src, count);
-		return cudaErrorInvalidValue;
-	}
+    // Null pointer sanity check.
+    if (dst == 0)
+    {
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+                << "dst = " << dst
+                << ", ..., ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorInvalidValue;
+    }
+    if (src == 0)
+    {
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        //memcpy(dst, src, count);
+        return cudaErrorInvalidValue;
+    }
 
-	if (kind == cudaMemcpyHostToDevice)
-	{
-		int dd = this->FindAllocatedBlock(dst);
-		int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(dst);
-		int as = this->FindAllocatedArray(src);
+    if (kind == cudaMemcpyHostToDevice)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        int ad = this->FindAllocatedArray(dst);
+        int as = this->FindAllocatedArray(src);
 
-		// Users can pass a pointer to a pointer in the middle of a block.
-		// Also, the source pointer can look like a device pointer if the address
-		// ranges of the source and target overlap.  This did happen for me using
-		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
-		// even though it really is a host pointer!
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
 
-		if (ds != -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", src = " << src << ", ..., ...) "
-					<< " is on the device, but cudaMemcpyHostToDevice specified.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
-					<< ", ..., ...) is device pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad == -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
-					<< ", ..., ...) is not an array pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(src))
-		{
-			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds != -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", src = " << src << ", ..., ...) "
+                    << " is on the device, but cudaMemcpyHostToDevice specified.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+                    << ", ..., ...) is device pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad == -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+                    << ", ..., ...) is not an array pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)arr->memory + cu->padding_size, src, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else if (kind == cudaMemcpyDeviceToDevice)
-	{
-		int dd = this->FindAllocatedBlock(dst);
-		int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(dst);
-		int as = this->FindAllocatedArray(src);
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)arr->memory + cu->padding_size, src, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else if (kind == cudaMemcpyDeviceToDevice)
+    {
+        int dd = this->FindAllocatedBlock(dst);
+        int ds = this->FindAllocatedBlock(src);
+        int ad = this->FindAllocatedArray(dst);
+        int as = this->FindAllocatedArray(src);
 
-		// Users can pass a pointer to a pointer in the middle of a block.
-		// Also, the source pointer can look like a device pointer if the address
-		// ranges of the source and target overlap.  This did happen for me using
-		// a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
-		// even though it really is a host pointer!
+        // Users can pass a pointer to a pointer in the middle of a block.
+        // Also, the source pointer can look like a device pointer if the address
+        // ranges of the source and target overlap.  This did happen for me using
+        // a Geforce 9800 on Windows.  So, FindAllocatedBlock may return a block
+        // even though it really is a host pointer!
 
-		if (ds == -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", src = " << src << ", ..., ...) "
-					<< " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
-					<< "dst = " << dst
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
-					<< ", ..., ...) is device pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad == -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
-					<< ", ..., ...) is not an array pointer.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(src))
-		{
-			(*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
-			(*cu->output_stream) << " This check was performed during a CUDA call in file "
-					<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", src = " << src << ", ..., ...) "
+                    << " is a host pointer, but cudaMemcpyDeviceToDevice specified.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpy2DToArray("
+                    << "dst = " << dst
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpy2DToArray(..., src = " << src
+                    << ", ..., ...) is device pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad == -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to Memcpy(..., src = " << src
+                    << ", ..., ...) is not an array pointer.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to Memcpy(..., src = " << src << ", ..., ...) is invalid.\n";
+            (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                    << file_name_tail(file_name) << ", line " << line << ".\n\n";
+            return cudaErrorInvalidValue;
+        }
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)arr->memory + cu->padding_size, src, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else {
-		(*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
-				<< "src = " << src
-				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
-		(*cu->output_stream) << " This check was performed during a CUDA call in file "
-				<< file_name_tail(file_name) << ", line " << line << ".\n\n";
-		return cudaErrorInvalidValue;
-	}
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)arr->memory + cu->padding_size, src, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else {
+        (*cu->output_stream) << "Direction copy to _cudaMemcpy2DToArray(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+        (*cu->output_stream) << " This check was performed during a CUDA call in file "
+                << file_name_tail(file_name) << ", line " << line << ".\n\n";
+        return cudaErrorInvalidValue;
+    }
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3483,153 +3482,153 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbol(const char *symbol, const void *src, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyHostToDevice))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	char * file_name = 0;
-	char * context = cu->Context();
+    char * file_name = 0;
+    char * context = cu->Context();
 
-	if (cu->trace_all_calls)
-	{
-		(*cu->output_stream) << "_cudaMemcpyToSymbol called, " << context << ".\n\n";
-	}
+    if (cu->trace_all_calls)
+    {
+        (*cu->output_stream) << "_cudaMemcpyToSymbol called, " << context << ".\n\n";
+    }
 
-	// Null pointer sanity check.
-	if (symbol == 0)
-	{
-		(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
-				<< "symbol = " << symbol
-				<< ", ..., ..., ...) is invalid.\n";
-		return cudaErrorInvalidValue;
-	}
+    // Null pointer sanity check.
+    if (symbol == 0)
+    {
+        (*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+                << "symbol = " << symbol
+                << ", ..., ..., ...) is invalid.\n";
+        return cudaErrorInvalidValue;
+    }
 
-	if (src == 0)
-	{
-		(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., "
-				<< "src = " << src
-				<< ", ..., ...) is invalid.\n";
-		return cudaErrorInvalidValue;
-	}
+    if (src == 0)
+    {
+        (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid.\n";
+        return cudaErrorInvalidValue;
+    }
 
-	if (kind == cudaMemcpyHostToDevice)
-	{
-		int dd = this->FindAllocatedBlock(symbol);
-		int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(symbol);
-		int as = this->FindAllocatedArray(src);
+    if (kind == cudaMemcpyHostToDevice)
+    {
+        int dd = this->FindAllocatedBlock(symbol);
+        int ds = this->FindAllocatedBlock(src);
+        int ad = this->FindAllocatedArray(symbol);
+        int as = this->FindAllocatedArray(src);
 
-		if (ds != -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
-					<< "symbol = " << symbol
-					<< ", src = " << src << ", ...) "
-					<< " is on the device, but cudaMemcpyHostToDevice specified.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
-					<< "symbol = " << symbol
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
-					<< ", ..., ...) is device pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad != -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
-					<< ", ..., ...) is an array pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(src))
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds != -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
+                    << "symbol = " << symbol
+                    << ", src = " << src << ", ...) "
+                    << " is on the device, but cudaMemcpyHostToDevice specified.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+                    << "symbol = " << symbol
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+                    << ", ..., ...) is device pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad != -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+                    << ", ..., ...) is an array pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
+            return cudaErrorInvalidValue;
+        }
 
-		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
-		if (j == this->variables.end())
-			return cudaErrorInvalidSymbol;
-		
-		REGVAR * var = j->second;
+        std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+        if (j == this->variables.end())
+            return cudaErrorInvalidSymbol;
+        
+        REGVAR * var = j->second;
 
-		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
-		if (sym == 0)
-			return cudaErrorInvalidSymbol;
+        SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+        if (sym == 0)
+            return cudaErrorInvalidSymbol;
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)sym->pvalue, src, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else if (kind == cudaMemcpyDeviceToDevice)
-	{
-		int dd = this->FindAllocatedBlock(symbol);
-		int ds = this->FindAllocatedBlock(src);
-		int ad = this->FindAllocatedArray(symbol);
-		int as = this->FindAllocatedArray(src);
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)sym->pvalue, src, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else if (kind == cudaMemcpyDeviceToDevice)
+    {
+        int dd = this->FindAllocatedBlock(symbol);
+        int ds = this->FindAllocatedBlock(src);
+        int ad = this->FindAllocatedArray(symbol);
+        int as = this->FindAllocatedArray(src);
 
-		if (ds == -1)
-		{
-			(*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
-					<< "symbol = " << symbol
-					<< ", src = " << src << ", ...) "
-					<< " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (dd != -1)
-		{
-			(*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
-					<< "symbol = " << symbol
-					<< ", ..., ..., ...) "
-					<< " should be array, but was allocated using cudaMalloc.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (as != -1)
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
-					<< ", ..., ...) is device pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (ad != -1)
-		{
-			(*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
-					<< ", ..., ...) is an array pointer.\n";
-			return cudaErrorInvalidValue;
-		}
-		if (this->IsBadPointer(src))
-		{
-			(*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
-			return cudaErrorInvalidValue;
-		}
+        if (ds == -1)
+        {
+            (*cu->output_stream) << "Source pointer in _cudaMemcpyToSymbol("
+                    << "symbol = " << symbol
+                    << ", src = " << src << ", ...) "
+                    << " is not on the device, but cudaMemcpyDeviceToDevice specified.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (dd != -1)
+        {
+            (*cu->output_stream) << "Destination pointer in _cudaMemcpyToSymbol("
+                    << "symbol = " << symbol
+                    << ", ..., ..., ...) "
+                    << " should be array, but was allocated using cudaMalloc.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (as != -1)
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+                    << ", ..., ...) is device pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (ad != -1)
+        {
+            (*cu->output_stream) << "Destination pointer passed to _cudaMemcpyToSymbol(..., src = " << src
+                    << ", ..., ...) is an array pointer.\n";
+            return cudaErrorInvalidValue;
+        }
+        if (this->IsBadPointer(src))
+        {
+            (*cu->output_stream) << "Source pointer passed to _cudaMemcpyToSymbol(..., src = " << src << ", ..., ...) is invalid.\n";
+            return cudaErrorInvalidValue;
+        }
 
-		std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
-		if (j == this->variables.end())
-			return cudaErrorInvalidSymbol;
-		
-		REGVAR * var = j->second;
+        std::map<void*, REGVAR*>::iterator j = this->variables.find((void*)symbol);
+        if (j == this->variables.end())
+            return cudaErrorInvalidSymbol;
+        
+        REGVAR * var = j->second;
 
-		SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
-		if (sym == 0)
-			return cudaErrorInvalidSymbol;
+        SYMBOL * sym = this->global_symbol_table->FindSymbol(var->deviceAddress);
+        if (sym == 0)
+            return cudaErrorInvalidSymbol;
 
-		// Perform copy.
-		cudaError_t err;
-		memcpy((char*)sym->pvalue , src, count);
-		err = cudaSuccess;
-		// Perform overwrite check again.
-		return err;
-	}
-	else {
-		(*cu->output_stream) << "Direction copy to _cudaMemcpyToSymbol(..., "
-				<< "src = " << src
-				<< ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
-		return cudaErrorInvalidValue;
-	}
+        // Perform copy.
+        cudaError_t err;
+        memcpy((char*)sym->pvalue , src, count);
+        err = cudaSuccess;
+        // Perform overwrite check again.
+        return err;
+    }
+    else {
+        (*cu->output_stream) << "Direction copy to _cudaMemcpyToSymbol(..., "
+                << "src = " << src
+                << ", ..., ...) is invalid. You can only copy from host/device to an array.\n";
+        return cudaErrorInvalidValue;
+    }
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
@@ -3925,14 +3924,14 @@ void EMULATED_DEVICE::_cudaRegisterVar(void **fatCubinHandle, char *hostVar, cha
         (*cu->output_stream) << "_cudaRegisterVar called, " << context << ".\n\n";
     }
 
-	REGVAR * var = new REGVAR();
-	var->constant = constant;
-	var->deviceAddress = deviceAddress;
-	var->deviceName = const_cast<char*>(deviceName);
-	var->ext = ext;
-	var->global = global;
-	var->hostVar = hostVar;
-	var->size = size;
+    REGVAR * var = new REGVAR();
+    var->constant = constant;
+    var->deviceAddress = deviceAddress;
+    var->deviceName = const_cast<char*>(deviceName);
+    var->ext = ext;
+    var->global = global;
+    var->hostVar = hostVar;
+    var->size = size;
     std::pair<void*, REGVAR*> i;
     i.first = (void*)hostVar;
     i.second = var;
@@ -4124,7 +4123,7 @@ EMULATED_DEVICE::EMULATED_DEVICE()
     this->num_threads = 1;
     this->max_instruction_thread = 100;
     this->alloc_list = new std::vector<data>();
-	this->global_symbol_table = 0;
+    this->global_symbol_table = 0;
 }
 
 void EMULATED_DEVICE::SetTrace(int level)
@@ -4168,13 +4167,13 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
 
     // Extract entry points, functions, etc. from tree. Note, tree is passed into function because it works recursively.
     Extract_From_Tree(module, tree);
-	this->modules.push_back(module);
+    this->modules.push_back(module);
 
-	// Extract globals, constants, etc.
-	// Create symbol table for outer blocks.
-	this->global_symbol_table = this->PushSymbolTable(this->global_symbol_table);
-	int sc[] = { K_GLOBAL, K_TEX, K_CONST, 0};
-	this->SetupVariables(this->global_symbol_table, tree, sc);
+    // Extract globals, constants, etc.
+    // Create symbol table for outer blocks.
+    this->global_symbol_table = this->PushSymbolTable(this->global_symbol_table);
+    int sc[] = { K_GLOBAL, K_TEX, K_CONST, 0};
+    this->SetupVariables(this->global_symbol_table, tree, sc);
 
     return module;
 }
