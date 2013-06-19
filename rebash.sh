@@ -45,6 +45,42 @@ echo
 
 #############################################################
 #
+# Set up SVN on path.
+#
+#############################################################
+
+echo "Looking for svn.exe"
+svn &> /dev/null
+if [ "$?" -gt 1 ]
+then
+	echo svn.exe not found in path.
+	echo -n "Searching ... "
+	# well, let's try to find it.
+	p=`find "/cygdrive/c/" -iname svn.exe 2> /dev/null`
+	x=""
+	for p2 in $p
+	do
+		if [ -e "$p2" ]
+		then
+			x="$p2"
+		fi
+	done
+	if [ "$x" == "" ]
+	then
+		echo 'No svn.exe found. Please install SVN from TortoiseSVN.net (preferred) or via Cygwin setup.'
+		exit 1
+	fi
+	# move up the tree to export the path.
+	y=${x%%/svn.exe}
+	echo "found in "$y
+	export PATH="$y:$PATH"
+else
+	echo svn.exe found.
+fi
+echo
+
+#############################################################
+#
 # Set up variables for CUDA Toolkit base, if not already set.
 #
 #############################################################
