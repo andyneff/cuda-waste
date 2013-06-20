@@ -716,7 +716,7 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
             LPVOID bb = xxx(size-4, ll_page, codePtr, 0);
 #elif defined(_WIN32)
             // int 3
-            AddBytes(code, 0xcc);
+            //AddBytes(code, 0xcc);
 
             AddBytes(code, 0x9c);   // pushfd
             AddBytes(code, 0x60);   // pushad

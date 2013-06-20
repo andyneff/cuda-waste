@@ -143,13 +143,14 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\devices\v10\devices.vcxproj">
+      <Project>{c6320b81-ce1a-4e33-aa48-fe36a7a3a9b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libc\v10\libc.vcxproj">
+      <Project>{a7189e41-ef21-413b-b818-7f83dd7834dc}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\ptxp\v10\ptxp.vcxproj">
       <Project>{6644f2ca-1a4d-4ef4-99f5-9458ab461010}</Project>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\..\emulator\v10\emulator.vcxproj">
-      <Project>{c6320b81-ce1a-4e33-aa48-fe36a7a3a9b8}</Project>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </ProjectReference>

@@ -114,6 +114,18 @@ else
 fi
 
 
+export CUDA_PATH=`cygpath --dos $CUDA_PATH`
+
+# I noticed that CUDA 5.5 doesn't seem to set the CUDA environmental
+# variables correctly.  They're assumed to contain a trailing slash.
+# check that CUDA_PATH ends in a slash.
+y=${CUDA_PATH##*\\}
+if [ "$y" != "" ]
+then
+	echo CUDA_PATH does not end in a slash. Fixing.
+	export CUDA_PATH="$CUDA_PATH\\"
+fi
+
 # check CUDA_PATH.
 if [ -e "$CUDA_PATH" -a -d "$CUDA_PATH" ]
 then
@@ -123,7 +135,9 @@ else
 	exit 1
 fi
 
-export CUDA_PATH=`cygpath --dos $CUDA_PATH`
+export CUDA_LIB_PATH="${CUDA_PATH%\\}\\lib\\"
+export CUDA_INC_PATH="${CUDA_PATH%\\}include\\"
+export CUDA_BIN_PATH="${CUDA_PATH%\\}bin\\"
 
 echo
 

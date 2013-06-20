@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
             {
                 do_debugger = true;
             }
-            else if (strcmp("-v", *argv) == 0 || strcmp("--non-standard-ptr", *argv) == 0)
+            else if (strcmp("-v", *argv) == 0 || strcmp("--version", *argv) == 0)
             {
                 std::cerr << "Version " << WASTE_VERSION << "\n";
             }
