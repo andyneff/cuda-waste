@@ -42,7 +42,7 @@ TREE * TREE::GetChild(int index)
         return this->children[index];
 }
 
-int TREE::GetChildCount()
+size_t TREE::GetChildCount()
 {
     return this->children.size();
 }

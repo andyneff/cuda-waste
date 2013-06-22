@@ -13,6 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+
 #include "stdafx.h"
 #include "call-stack-info.h"
 #include <windows.h> // required by stupid dbghelp.h -- it doesn't know its own dependencies...
@@ -40,7 +44,7 @@ CALL_STACK_INFO::CALL_STACK_INFO()
     // Shorten the fucker.
     int num = 6;
     int stop = 0;
-    int len = strlen(lpszPath);
+    size_t len = strlen(lpszPath);
     // Scan ahead for semicolon.
     for (int i = 0; i < len; ++i)
     {
@@ -82,7 +86,7 @@ CALL_STACK_INFO * CALL_STACK_INFO::Singleton()
 // Find the module name from the ip
 bool CALL_STACK_INFO::GetModuleNameFromAddress(void * address, char * lpszModule)
 {
-    BOOL              ret = FALSE;
+    bool              ret = false;
         strcpy( lpszModule, "?");
     return false;
 //#if defined(_WIN64)
@@ -296,7 +300,7 @@ char * CALL_STACK_INFO::Context(int lines)
     return strdup(buffer2);
 }
 
-void * * CALL_STACK_INFO::AddressContext(int lines)
+void * * CALL_STACK_INFO::AddressContext(size_t lines)
 {
     typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out PVOID*, __out_opt PULONG);
     CaptureStackBackTraceType func = (CaptureStackBackTraceType)(GetProcAddress(LoadLibraryA("kernel32.dll"), "RtlCaptureStackBackTrace"));

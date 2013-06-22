@@ -62,7 +62,7 @@
 		<lastprinted/>
 		<createdtm>06/21/1999 09:00</createdtm>
 		<lastsavedtm>07/14/2000 12:50</lastsavedtm>
-		<pagecount>200</pagecount>
+		<pagecount>300</pagecount>
 		<wordcount>0</wordcount>
 		<charcount/>
 		<appname>InstallShield Express</appname>
@@ -340,6 +340,8 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{A24F27A8-6D8F-46C5-ABA0-845BF113D087}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>msvcp110.dll</td><td>{3C4F2DEB-AAFE-4BBA-B35C-D52FB08D00C8}</td><td>INSTALLDIR</td><td>2</td><td/><td>msvcp110.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>msvcr110.dll</td><td>{B36BD492-ACC4-48DD-87D7-E1121790A29A}</td><td>INSTALLDIR</td><td>2</td><td/><td>msvcr110.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>waste.Primary_Output</td><td>{C06171FD-7C76-47C0-AC3D-6E43D3076678}</td><td>INSTALLDIR</td><td>2</td><td/><td>waste.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>wrapper.Primary_Output</td><td>{9BE4B043-4E9A-42CC-A6F7-54824CFEBAE4}</td><td>INSTALLDIR</td><td>2</td><td/><td>wrapper.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1860,6 +1862,8 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>AlwaysInstall</td><td>msvcp110.dll</td></row>
+		<row><td>AlwaysInstall</td><td>msvcr110.dll</td></row>
 		<row><td>AlwaysInstall</td><td>waste.Primary_Output</td></row>
 		<row><td>AlwaysInstall</td><td>wrapper.Primary_Output</td></row>
 	</table>
@@ -1876,6 +1880,8 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
+		<row><td>msvcp110.dll</td><td>msvcp110.dll</td><td>msvcp110.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\redist\x64\Microsoft.VC110.CRT\msvcp110.dll</td><td>1</td><td/></row>
+		<row><td>msvcr110.dll</td><td>msvcr110.dll</td><td>msvcr110.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\redist\x64\Microsoft.VC110.CRT\msvcr110.dll</td><td>1</td><td/></row>
 		<row><td>waste.primary_output</td><td>waste.Primary_Output</td><td>waste.Primary Output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;waste&gt;|Built</td><td>3</td><td/></row>
 		<row><td>wrapper.primary_output</td><td>wrapper.Primary_Output</td><td>wrapper.Primary Output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;wrapper&gt;|Built</td><td>3</td><td/></row>
 	</table>
@@ -2135,6 +2141,8 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_09ED5EF2_B1D0_4278_BDB0_1F814FA47F79_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>msvcp110.dll</td><td/><td/><td>_AAF3B44A_9EA7_4E09_9D1F_535C2F6ED665_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>msvcr110.dll</td><td/><td/><td>_3BEA37E8_B7CD_4EC7_B05E_57D65EE8DD6A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>waste.Primary_Output</td><td/><td/><td>_3D6DC6CA_EC5D_4DE8_8DD8_CAC2352757DA_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>wrapper.Primary_Output</td><td/><td/><td>_55F72169_1DA9_4E60_84B1_EB79B81337AE_FILTER</td><td/><td/><td/><td/></row>
 	</table>
@@ -2766,7 +2774,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>1033</td><td>cuda-waste</td><td>0</td><td/><td>-1692280026</td></row>
+		<row><td>COMPANY_NAME</td><td>1033</td><td>cuda-waste</td><td>0</td><td/><td>-1423865207</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1033</td><td>Always Install</td><td>0</td><td/><td>1931569354</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1033</td><td>The color settings of your system are not adequate for running [ProductName].</td><td>0</td><td/><td>1931569354</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>1033</td><td>The operating system is not adequate for running [ProductName].</td><td>0</td><td/><td>1931569354</td></row>
@@ -3865,8 +3873,10 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>1033</td><td>The processor is not adequate for running [ProductName].</td><td>0</td><td/><td>1931569354</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>1931569354</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>1931569354</td></row>
-		<row><td>ID_STRING1</td><td>1033</td><td>https://code.google.com/p/cuda-waste/</td><td>0</td><td/><td>-1692304949</td></row>
-		<row><td>ID_STRING2</td><td>1033</td><td>cuda-waste</td><td>0</td><td/><td>-1692280026</td></row>
+		<row><td>ID_STRING1</td><td>1033</td><td>http://www.cuda-waste.com</td><td>0</td><td/><td>-1423865207</td></row>
+		<row><td>ID_STRING2</td><td>1033</td><td>cuda-waste</td><td>0</td><td/><td>-1423865207</td></row>
+		<row><td>ID_STRING3</td><td>1033</td><td>http://www.cuda-waste.com</td><td>0</td><td/><td>-1423865207</td></row>
+		<row><td>ID_STRING4</td><td>1033</td><td>https://code.google.com/p/cuda-waste/</td><td>0</td><td/><td>-1423881719</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>1931569354</td></row>
 	</table>
 
@@ -4107,7 +4117,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{D8C7BCDD-0DB9-45A9-86B1-10A8A7B5E08F}</td></row>
 		<row><td>ISUSSignature</td><td>{C2C01EC2-805E-4349-B1A8-BCE2B395C805}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewSystemSearch,viewInstallScriptStd,viewISToday,viewRelease,viewDesignPatches,viewProject,viewSetupDesign,viewSetupTypes,viewSupportFiles,viewAppV,viewRealSetupDesign,viewUpgradePaths,viewUpdateService,viewAppFiles,viewFeatureFiles,viewObjects,viewDependencies,viewCE,viewShortcuts,viewRegistry,viewIniFiles,viewEnvironmentVariables,viewFileExtensions,viewSQLServer,viewComponentServices,viewUI,viewBillboards,viewTextMessages,viewCustomActions</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewSystemSearch,viewInstallScriptStd,viewISToday,viewRelease,viewDesignPatches,viewProject,viewSetupDesign,viewSetupTypes,viewSupportFiles,viewAppV,viewRealSetupDesign,viewUpgradePaths,viewUpdateService,viewAppFiles,viewFeatureFiles,viewObjects,viewDependencies,viewCE,viewShortcuts,viewRegistry,viewIniFiles,viewEnvironmentVariables,viewFileExtensions,viewSQLServer,viewComponentServices,viewUI,viewBillboards,viewTextMessages,viewCustomActions,viewVRoots,viewXMLConfig,viewTextFiles</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4412,10 +4422,12 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L0">Value</col>
 		<col def="S255">ISComments</col>
 		<row><td>ALLUSERS</td><td>1</td><td/></row>
+		<row><td>ARPHELPLINK</td><td>##ID_STRING3##</td><td/></row>
 		<row><td>ARPINSTALLLOCATION</td><td/><td/></row>
 		<row><td>ARPPRODUCTICON</td><td>ARPPRODUCTICON.exe</td><td/></row>
 		<row><td>ARPSIZE</td><td/><td/></row>
 		<row><td>ARPURLINFOABOUT</td><td>##ID_STRING1##</td><td/></row>
+		<row><td>ARPURLUPDATEINFO</td><td>##ID_STRING4##</td><td/></row>
 		<row><td>AgreeToLicense</td><td>No</td><td/></row>
 		<row><td>ApplicationUsers</td><td>AllUsers</td><td/></row>
 		<row><td>DWUSINTERVAL</td><td>30</td><td/></row>

@@ -50,7 +50,7 @@ public:
     virtual ~PROCESS_MANAGER();
     BOOL Populate(BOOL bPopulateModules);
     BOOL PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules);
-    DWORD GetProcessCount() const;
+    size_t GetProcessCount() const;
     ExecutableModule* GetProcessById(DWORD dwProcessId);
 private:
     CLibHandler       *m_pLibHandler;
@@ -68,7 +68,7 @@ public:
     void Add(Module &moduleInstance);
     void ReleaseAll();
     Module* GetModule(DWORD dwIndex) const;
-    DWORD GetCount() const;
+    size_t GetCount() const;
 };
 
 class CElements: public ModuleList  
@@ -150,7 +150,7 @@ public:
     virtual ~ExecutableModule();
     DWORD Get_ProcessId() const;
     BOOL PopulateModules();
-    DWORD GetModuleCount();
+    size_t GetModuleCount();
     Module* GetModuleByIndex(DWORD dwIndex);
 private:
     DWORD        m_dwProcessId;

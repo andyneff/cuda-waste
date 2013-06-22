@@ -13,6 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Based upon the code in API Hooking Revealed (http://www.codeproject.com/KB/system/hooksys.aspx)
@@ -446,7 +450,7 @@ BOOL HookedFunction::ReplaceInAllModules(
         pProcess = process_mgr.GetProcessById(::GetCurrentProcessId());
         if (NULL != pProcess)
         {
-            for (int i = 0; i < pProcess->GetModuleCount(); i++)
+            for (DWORD i = 0; i < pProcess->GetModuleCount(); i++)
             {
                 pModule = pProcess->GetModuleByIndex(i);
                 bReplace = (pModule->Get_Module() != ModuleFromAddress(HOOK_MANAGER::MyLoadLibraryA)); 
@@ -676,7 +680,7 @@ BOOL HookedFunctions::GetFunctionNameFromExportSection(HMODULE hmodOriginal, DWO
         PWORD pwOrdinals = (PWORD)(pExportDir->AddressOfNameOrdinals + (DWORD)hmodOriginal);
         DWORD *pszFuncNames =   (DWORD *)(pExportDir->AddressOfNames + (DWORD)hmodOriginal);
         PSTR pszExpFunName;
-        for (long i = 0; i < dwNumberOfExported; i++, pdwFunctions++)
+        for (DWORD i = 0; i < dwNumberOfExported; i++, pdwFunctions++)
         {
             DWORD entryPointRVA = *pdwFunctions;
             if ( entryPointRVA == 0 )

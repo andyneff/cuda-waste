@@ -1,3 +1,7 @@
+
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+
 #include "stdafx.h"
 #include <windows.h>
 #include <iostream>
@@ -149,7 +153,7 @@ int main(int argc, char * argv[])
 
     // Set options.
     if (set_trace_all_calls)
-        cu->SetTraceAllCalls(trace_all_calls);
+        cu->SetTraceAllCalls(trace_all_calls == 1 ? true : false);
 
     if (do_debugger)
         cu->SetStartDebugger();
@@ -158,13 +162,13 @@ int main(int argc, char * argv[])
         cu->SetTrace(level);
 
     if (set_quit_on_error)
-        cu->SetQuitOnError(quit_on_error);
+        cu->SetQuitOnError(quit_on_error == 1 ? true : false);
 
-    if (set_do_not_call_cuda_after_sanity_check_fail)
-        cu->SetDoNotCallCudaAfterSanityCheckFail(do_not_call_cuda_after_sanity_check_fail);
+    if (set_do_not_call_cuda_after_sanity_check_fail == 1 ? true : false)
+        cu->SetDoNotCallCudaAfterSanityCheckFail(do_not_call_cuda_after_sanity_check_fail == 1 ? true : false);
 
     if (set_device_pointer_to_first_byte_in_block)
-        cu->SetDevicePointerToFirstByteInBlock(device_pointer_to_first_byte_in_block);
+        cu->SetDevicePointerToFirstByteInBlock(device_pointer_to_first_byte_in_block == 1 ? true : false);
 
     if (set_padding_byte)
         cu->SetPaddingByte(padding_byte);
@@ -188,7 +192,7 @@ int main(int argc, char * argv[])
 
     // combine rest of args into one string.
     char * command;
-    int len = 0;
+    size_t len = 0;
     for (char ** av = argv; *av != 0; ++av)
     {
         len += strlen(*av) + 3;

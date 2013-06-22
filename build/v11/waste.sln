@@ -16,8 +16,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "devices", "..\..\devices\v1
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B} = {7A7BCAD6-9CFA-4381-8777-F8F7069E722B}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client-wrapper", "..\..\client-wrapper\v11\client-wrapper.vcxproj", "{F528AF9F-83A6-4431-913B-643A60371E18}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libc", "..\..\libc\v11\libc.vcxproj", "{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}"
 EndProject
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "deploy", "deploy\deploy.isproj", "{A29654ED-2484-48F6-8658-F62B6E560074}"
@@ -192,42 +190,6 @@ Global
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.SingleInstanceDebug|Win32.Build.0 = SingleInstanceDebug|Win32
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.SingleInstanceDebug|x64.ActiveCfg = Debug|x64
 		{C6320B81-CE1A-4E33-AA48-FE36A7A3A9B8}.SingleInstanceDebug|x64.Build.0 = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|Mixed Platforms.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|Win32.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|Win32.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|x64.ActiveCfg = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.CD_ROM|x64.Build.0 = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|Win32.Build.0 = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|x64.ActiveCfg = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Debug|x64.Build.0 = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|Mixed Platforms.Build.0 = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|Win32.ActiveCfg = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|Win32.Build.0 = Debug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|x64.ActiveCfg = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.DVD-5|x64.Build.0 = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|Win32.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|Win32.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|x64.ActiveCfg = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.Release|x64.Build.0 = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|Mixed Platforms.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|Mixed Platforms.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|Win32.ActiveCfg = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|Win32.Build.0 = Release|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|x64.ActiveCfg = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleImage|x64.Build.0 = Release|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|Mixed Platforms.ActiveCfg = SingleInstanceDebug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|Mixed Platforms.Build.0 = SingleInstanceDebug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|Win32.ActiveCfg = SingleInstanceDebug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|Win32.Build.0 = SingleInstanceDebug|Win32
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|x64.ActiveCfg = Debug|x64
-		{F528AF9F-83A6-4431-913B-643A60371E18}.SingleInstanceDebug|x64.Build.0 = Debug|x64
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.CD_ROM|Mixed Platforms.ActiveCfg = Template|Win32
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.CD_ROM|Mixed Platforms.Build.0 = Template|Win32
 		{7A7BCAD6-9CFA-4381-8777-F8F7069E722B}.CD_ROM|Win32.ActiveCfg = Template|Win32

@@ -509,7 +509,7 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
     int trace_all_calls = cu->trace_all_calls;
-    int padding_size = cu->padding_size;
+    size_t padding_size = cu->padding_size;
     int padding_byte = cu->padding_byte;
     int quit_on_error = cu->quit_on_error;
     int do_not_call_cuda_after_sanity_check_fail = cu->do_not_call_cuda_after_sanity_check_fail;
@@ -576,7 +576,11 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
         // for the main program.  We'll jump to this in code we'll set up
         // later.
         CONTEXT context = { 0 };
+#if defined(_WIN64)
+        DWORD64 originalEip;
+#elif defined(_WIN32)
         DWORD originalEip;
+#endif
 
         context.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
         //| CONTEXT_CONTROL | CONTEXT_DEBUG_REGISTERS;

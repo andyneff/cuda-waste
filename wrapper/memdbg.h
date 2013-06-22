@@ -31,7 +31,7 @@ public:
     {
         void * ptr;
         bool is_alloc;
-        int size;
+        size_t size;
 		unsigned int allocation_number;
         void ** context;
 		enum { is_RtlAllocateHeap = 1,

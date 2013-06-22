@@ -17,6 +17,8 @@
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
+#include <string>
+#include <sstream>
 #include <crtdbg.h>
 #include "emulated-device.h"
 #include <assert.h>
@@ -48,6 +50,7 @@
 #include "texarr.h"
 #include "module.h"
 #include "regvar.h"
+#include "errors.h"
 
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
@@ -160,6 +163,7 @@ CUresult EMULATED_DEVICE::_cuArray3DCreate( CUarray *pHandle, const CUDA_ARRAY3D
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArray3DCreate\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -167,13 +171,15 @@ CUresult EMULATED_DEVICE::_cuArray3DCreate_v2( CUarray *pHandle, const CUDA_ARRA
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArray3DCreate_v2\n";
-    return CUDA_ERROR_INVALID_VALUE;
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
+	return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuArray3DGetDescriptor( CUDA_ARRAY3D_DESCRIPTOR *pArrayDescriptor, CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArray3DGetDescriptor\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -181,6 +187,7 @@ CUresult EMULATED_DEVICE::_cuArray3DGetDescriptor_v2( CUDA_ARRAY3D_DESCRIPTOR *p
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArray3DGetDescriptor_v2\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -188,6 +195,7 @@ CUresult EMULATED_DEVICE::_cuArrayCreate( CUarray *pHandle, const CUDA_ARRAY_DES
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArrayCreate\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -195,6 +203,7 @@ CUresult EMULATED_DEVICE::_cuArrayCreate_v2( CUarray *pHandle, const CUDA_ARRAY_
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArrayCreate_v2\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -202,6 +211,7 @@ CUresult EMULATED_DEVICE::_cuArrayDestroy( CUarray hArray )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArrayDestroy\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -209,6 +219,7 @@ CUresult EMULATED_DEVICE::_cuArrayGetDescriptor( CUDA_ARRAY_DESCRIPTOR *pArrayDe
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArrayGetDescriptor\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -216,6 +227,7 @@ CUresult EMULATED_DEVICE::_cuArrayGetDescriptor_v2( CUDA_ARRAY_DESCRIPTOR *pArra
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuArrayGetDescriptor_v2\n";
+ 	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -223,6 +235,7 @@ CUresult EMULATED_DEVICE::_cuCtxAttach(CUcontext *pctx, unsigned int flags)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     *pctx = (CUcontext)malloc(sizeof(CUcontext));
+ 	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -230,6 +243,7 @@ CUresult EMULATED_DEVICE::_cuCtxCreate(CUcontext *pctx, unsigned int flags, CUde
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxCreate\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -237,18 +251,21 @@ CUresult EMULATED_DEVICE::_cuCtxCreate_v2(CUcontext *pctx, unsigned int flags, C
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxCreate_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxDestroy( CUcontext ctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuCtxDetach(CUcontext ctx)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -256,6 +273,7 @@ CUresult EMULATED_DEVICE::_cuCtxGetDevice(CUdevice * device)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxGetDevice\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -263,6 +281,7 @@ CUresult EMULATED_DEVICE::_cuCtxGetLimit(size_t *pvalue, CUlimit limit)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxGetLimit\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -270,6 +289,7 @@ CUresult EMULATED_DEVICE::_cuCtxPopCurrent( CUcontext *pctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxPopCurrent\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -277,6 +297,7 @@ CUresult EMULATED_DEVICE::_cuCtxPushCurrent( CUcontext ctx )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxPushCurrent\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -284,6 +305,7 @@ CUresult EMULATED_DEVICE::_cuCtxSetLimit(CUlimit limit, size_t value)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxSetLimit\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -291,6 +313,7 @@ CUresult EMULATED_DEVICE::_cuCtxSynchronize(void)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuCtxSynchronize\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -298,12 +321,14 @@ CUresult EMULATED_DEVICE::_cuDeviceComputeCapability(int *major, int *minor, CUd
 {
     *major = 2;
     *minor = 0;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGet(CUdevice *device, int ordinal)
 {
     *device = 0;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -424,6 +449,7 @@ CUresult EMULATED_DEVICE::_cuDeviceGetAttribute(int *pi, CUdevice_attribute attr
             *pi = 0;
             break;
     }
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -431,12 +457,14 @@ CUresult EMULATED_DEVICE::_cuDeviceGetCount(int *count)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     *count = 1;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceGetName(char *name, int len, CUdevice dev)
 {
     strncpy(name, "emulator", len);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -455,24 +483,29 @@ CUresult EMULATED_DEVICE::_cuDeviceGetProperties(CUdevprop *prop, CUdevice dev)
         512
     };
     *prop = loc;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceTotalMem(unsigned int *bytes, CUdevice dev)
 {
     *bytes = 1309081600;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
 CUresult EMULATED_DEVICE::_cuDeviceTotalMem_v2(unsigned int *bytes, CUdevice dev)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    return this->_cuDeviceTotalMem(bytes, dev);
+    CUresult res = this->_cuDeviceTotalMem(bytes, dev);
+	ERRS * error = new ERRS(res, __FILE__, " " + __LINE__);
+	return res;
 }
 
 CUresult EMULATED_DEVICE::_cuDriverGetVersion(int * driverVersion)
 {
     *driverVersion = 3020;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -480,6 +513,7 @@ CUresult EMULATED_DEVICE::_cuEventCreate( CUevent *phEvent, unsigned int Flags )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventCreate\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -487,6 +521,7 @@ CUresult EMULATED_DEVICE::_cuEventDestroy( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventDestroy\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -494,6 +529,7 @@ CUresult EMULATED_DEVICE::_cuEventElapsedTime( float *pMilliseconds, CUevent hSt
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventElapsedTime\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -501,6 +537,7 @@ CUresult EMULATED_DEVICE::_cuEventQuery( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventQuery\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -508,6 +545,7 @@ CUresult EMULATED_DEVICE::_cuEventRecord( CUevent hEvent, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventRecord\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -515,6 +553,7 @@ CUresult EMULATED_DEVICE::_cuEventSynchronize( CUevent hEvent )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuEventSynchronize\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -522,6 +561,7 @@ CUresult EMULATED_DEVICE::_cuFuncGetAttribute (int *pi, CUfunction_attribute att
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuFuncGetAttribute\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -531,6 +571,7 @@ CUresult EMULATED_DEVICE::_cuFuncSetBlockShape (CUfunction hfunc, int x, int y, 
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     dim3 blockDim(x,y,z);
     this->ConfigureBlock(blockDim);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -538,6 +579,7 @@ CUresult EMULATED_DEVICE::_cuFuncSetCacheConfig(CUfunction hfunc, CUfunc_cache c
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuFuncSetCacheConfig\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -545,12 +587,14 @@ CUresult EMULATED_DEVICE::_cuFuncSetSharedSize (CUfunction hfunc, unsigned int b
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuFuncSetSharedSize\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuGetExportTable( const void **ppExportTable, const CUuuid *pExportTableId )
 {
     *ppExportTable = 0;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -558,6 +602,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsMapResources( unsigned int count, CUgraphic
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsMapResources\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -565,6 +610,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsResourceGetMappedPointer( CUdeviceptr *pDev
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -572,6 +618,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsResourceGetMappedPointer_v2( CUdeviceptr *p
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsResourceGetMappedPointer_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -579,6 +626,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsResourceSetMapFlags( CUgraphicsResource res
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsResourceSetMapFlags\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -586,6 +634,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsSubResourceGetMappedArray( CUarray *pArray,
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsSubResourceGetMappedArray\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -593,6 +642,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsUnmapResources( unsigned int count, CUgraph
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsUnmapResources\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -600,6 +650,7 @@ CUresult EMULATED_DEVICE::_cuGraphicsUnregisterResource(CUgraphicsResource resou
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuGraphicsUnregisterResource\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -607,15 +658,22 @@ CUresult EMULATED_DEVICE::_cuInit(unsigned int Flags)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     if (Flags == 0)
+	{
+		ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
         return CUDA_SUCCESS;
-    else
-        return CUDA_ERROR_INVALID_VALUE;
+	}
+	else
+    {
+		ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
+		return CUDA_ERROR_INVALID_VALUE;
+	}
 }
 
 CUresult EMULATED_DEVICE::_cuLaunch ( CUfunction f )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuLaunch\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -624,6 +682,7 @@ CUresult EMULATED_DEVICE::_cuLaunchGrid(CUfunction hfunc, int grid_width, int gr
     dim3 gridDim(grid_width, grid_height, 1);
     this->ConfigureGrid(gridDim);
     this->Execute((ENTRY*)hfunc);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -631,6 +690,7 @@ CUresult EMULATED_DEVICE::_cuLaunchGridAsync( CUfunction f, int grid_width, int 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuLaunchGridAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -639,6 +699,7 @@ CUresult EMULATED_DEVICE::_cuMemAlloc( CUdeviceptr *dptr, unsigned int bytesize)
     // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     *dptr = (CUdeviceptr)malloc(bytesize);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -647,6 +708,7 @@ CUresult EMULATED_DEVICE::_cuMemAlloc_v2( CUdeviceptr *dptr, unsigned int bytesi
     // Basic, no frills, allocation.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     *dptr = (CUdeviceptr)malloc(bytesize);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -654,6 +716,7 @@ CUresult EMULATED_DEVICE::_cuMemAllocHost(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemAllocHost\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -661,6 +724,7 @@ CUresult EMULATED_DEVICE::_cuMemAllocHost_v2(void **pp, unsigned int bytesize)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemAllocHost_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -668,6 +732,7 @@ CUresult EMULATED_DEVICE::_cuMemAllocPitch( CUdeviceptr *dptr, unsigned int *pPi
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemAllocPitch\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -675,6 +740,7 @@ CUresult EMULATED_DEVICE::_cuMemAllocPitch_v2( CUdeviceptr *dptr, unsigned int *
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemAllocPitch_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -682,6 +748,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2D( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2D\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -689,6 +756,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2D_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2D_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -696,6 +764,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2DAsync( const CUDA_MEMCPY2D *pCopy, CUstream
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2DAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -703,6 +772,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2DAsync_v2( const CUDA_MEMCPY2D *pCopy, CUstr
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2DAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -710,6 +780,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2DUnaligned( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2DUnaligned\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -717,6 +788,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy2DUnaligned_v2( const CUDA_MEMCPY2D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy2DUnaligned_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -724,6 +796,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy3D( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy3D\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -731,6 +804,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy3D_v2( const CUDA_MEMCPY3D *pCopy )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy3D_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -738,6 +812,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy3DAsync( const CUDA_MEMCPY3D *pCopy, CUstream
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy3DAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -745,6 +820,7 @@ CUresult EMULATED_DEVICE::_cuMemcpy3DAsync_v2( const CUDA_MEMCPY3D *pCopy, CUstr
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpy3DAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -752,6 +828,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoA( CUarray dstArray, unsigned int dstOffse
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoA\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -759,6 +836,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoA_v2( CUarray dstArray, unsigned int dstOf
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoA_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -766,6 +844,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoD ( CUdeviceptr dstDevice, CUarray srcArra
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoD\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -773,6 +852,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoD_v2 ( CUdeviceptr dstDevice, CUarray srcA
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoD_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -780,6 +860,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoH( void *dstHost, CUarray srcArray, unsign
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoH\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -787,6 +868,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoH_v2( void *dstHost, CUarray srcArray, uns
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoH_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -794,6 +876,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoHAsync( void *dstHost, CUarray srcArray, u
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoHAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -801,6 +884,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyAtoHAsync_v2( void *dstHost, CUarray srcArray
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyAtoHAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -808,6 +892,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoA ( CUarray dstArray, unsigned int dstOffs
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoA\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -815,6 +900,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoA_v2 ( CUarray dstArray, unsigned int dstO
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoA_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -822,6 +908,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoD (CUdeviceptr dstDevice, CUdeviceptr srcD
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoD\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -829,6 +916,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoD_v2 (CUdeviceptr dstDevice, CUdeviceptr s
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoD_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -836,6 +924,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoDAsync (CUdeviceptr dstDevice, CUdeviceptr
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoDAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -843,6 +932,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoDAsync_v2 (CUdeviceptr dstDevice, CUdevice
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoDAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -851,6 +941,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoH (void *dstHost, CUdeviceptr srcDevice, u
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     memcpy(dstHost, (void*)srcDevice, ByteCount);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -859,6 +950,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoH_v2 (void *dstHost, CUdeviceptr srcDevice
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     memcpy(dstHost, (void*)srcDevice, ByteCount);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -866,6 +958,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoHAsync (void *dstHost, CUdeviceptr srcDevi
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoHAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -873,6 +966,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyDtoHAsync_v2 (void *dstHost, CUdeviceptr srcD
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyDtoHAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -880,6 +974,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoA( CUarray dstArray, unsigned int dstOffse
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoA\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -887,6 +982,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoA_v2( CUarray dstArray, unsigned int dstOf
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoA_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -894,6 +990,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoAAsync( CUarray dstArray, unsigned int dst
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoAAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -901,6 +998,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoAAsync_v2( CUarray dstArray, unsigned int 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoAAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -909,6 +1007,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoD (CUdeviceptr dstDevice, const void *srcH
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     memcpy((void*)dstDevice, srcHost, ByteCount);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -917,6 +1016,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoD_v2 (CUdeviceptr dstDevice, const void *s
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     memcpy((void*)dstDevice, srcHost, ByteCount);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -924,6 +1024,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoDAsync\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -931,6 +1032,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync_v2 (CUdeviceptr dstDevice, const vo
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemcpyHtoDAsync_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -939,6 +1041,7 @@ CUresult EMULATED_DEVICE::_cuMemFree(CUdeviceptr dptr)
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     free((void*)dptr);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;     
 }
 
@@ -947,6 +1050,7 @@ CUresult EMULATED_DEVICE::_cuMemFree_v2(CUdeviceptr dptr)
     // Basic, no frills.
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     free((void*)dptr);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;     
 }
 
@@ -954,6 +1058,7 @@ CUresult EMULATED_DEVICE::_cuMemFreeHost(void *p)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemFreeHost\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -961,6 +1066,7 @@ CUresult EMULATED_DEVICE::_cuMemGetAddressRange( CUdeviceptr *pbase, unsigned in
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemGetAddressRange\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -968,6 +1074,7 @@ CUresult EMULATED_DEVICE::_cuMemGetAddressRange_v2( CUdeviceptr *pbase, unsigned
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemGetAddressRange_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -975,6 +1082,7 @@ CUresult EMULATED_DEVICE::_cuMemGetInfo(unsigned int *free, unsigned int *total)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemGetInfo\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -982,6 +1090,7 @@ CUresult EMULATED_DEVICE::_cuMemGetInfo_v2(unsigned int *free, unsigned int *tot
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemGetInfo_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -989,6 +1098,7 @@ CUresult EMULATED_DEVICE::_cuMemHostAlloc(void **pp, size_t bytesize, unsigned i
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemHostAlloc\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -996,6 +1106,7 @@ CUresult EMULATED_DEVICE::_cuMemHostGetDevicePointer( CUdeviceptr *pdptr, void *
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemHostGetDevicePointer\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1003,6 +1114,7 @@ CUresult EMULATED_DEVICE::_cuMemHostGetDevicePointer_v2( CUdeviceptr *pdptr, voi
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemHostGetDevicePointer_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1010,6 +1122,7 @@ CUresult EMULATED_DEVICE::_cuMemHostGetFlags( unsigned int *pFlags, void *p )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemHostGetFlags\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1017,6 +1130,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD16( CUdeviceptr dstDevice, unsigned short us
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD16\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1024,6 +1138,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD16_v2( CUdeviceptr dstDevice, unsigned short
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD16_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1031,6 +1146,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D16( CUdeviceptr dstDevice, unsigned int ds
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D16\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1038,6 +1154,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D16_v2( CUdeviceptr dstDevice, unsigned int
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D16_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1045,6 +1162,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D32( CUdeviceptr dstDevice, unsigned int ds
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D32\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1052,6 +1170,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D32_v2( CUdeviceptr dstDevice, unsigned int
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D32_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1059,6 +1178,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D8( CUdeviceptr dstDevice, unsigned int dst
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D8\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1066,6 +1186,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD2D8_v2( CUdeviceptr dstDevice, unsigned int 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD2D8_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1073,6 +1194,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD32( CUdeviceptr dstDevice, unsigned int ui, 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD32\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1080,6 +1202,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD32_v2( CUdeviceptr dstDevice, unsigned int u
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD32\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1087,6 +1210,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD8( CUdeviceptr dstDevice, unsigned char uc, 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD8\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1094,6 +1218,7 @@ CUresult EMULATED_DEVICE::_cuMemsetD8_v2( CUdeviceptr dstDevice, unsigned char u
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuMemsetD8_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1105,9 +1230,13 @@ CUresult EMULATED_DEVICE::_cuModuleGetFunction(CUfunction *hfunc, CUmodule hmod,
     MODULE * module = dynamic_cast<MODULE *>((MODULE *)foo);
     std::map<char*, ENTRY *, ltstr>::iterator j = module->entry.find((char*)name);
     if (j == module->entry.end())
+	{
+		ERRS * error = new ERRS(CUDA_ERROR_NOT_FOUND, __FILE__, " " + __LINE__);
         return CUDA_ERROR_NOT_FOUND;
-    ENTRY * data = j->second;
+	}
+	ENTRY * data = j->second;
     *hfunc = (CUfunction)data;
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -1115,6 +1244,7 @@ CUresult EMULATED_DEVICE::_cuModuleGetGlobal(CUdeviceptr *dptr, unsigned int *by
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleGetGlobal\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1122,6 +1252,7 @@ CUresult EMULATED_DEVICE::_cuModuleGetGlobal_v2(CUdeviceptr *dptr, unsigned int 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleGetGlobal_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1129,6 +1260,7 @@ CUresult EMULATED_DEVICE::_cuModuleGetSurfRef(CUsurfref *pSurfRef, CUmodule hmod
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleGetSurfRef\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1136,6 +1268,7 @@ CUresult EMULATED_DEVICE::_cuModuleGetTexRef(CUtexref *pTexRef, CUmodule hmod, c
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleGetTexRef\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1165,19 +1298,29 @@ CUresult EMULATED_DEVICE::_cuModuleLoad(CUmodule * hmod, const char *fname)
         buffer[count++] = 0;
     }
     if (count == 0)
+	{
+		ERRS * error = new ERRS(CUDA_ERROR_FILE_NOT_FOUND, __FILE__, " " + __LINE__);
         return CUDA_ERROR_FILE_NOT_FOUND;
-    MODULE * module = this->Parse(this->device, (char*)buffer);
+	}
+	MODULE * module = this->Parse(this->device, (char*)buffer);
     *hmod = (CUmodule)module;
     if (module != 0)
-        return CUDA_SUCCESS;
-    else
-        return CUDA_ERROR_INVALID_CONTEXT;
+    {
+		ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
+		return CUDA_SUCCESS;
+	}
+	else
+    {
+		ERRS * error = new ERRS(CUDA_ERROR_INVALID_CONTEXT, __FILE__, " " + __LINE__);
+		return CUDA_ERROR_INVALID_CONTEXT;
+	}
 }
 
 CUresult EMULATED_DEVICE::_cuModuleLoadData(CUmodule *module, const void *image)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleLoadData\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1185,6 +1328,7 @@ CUresult EMULATED_DEVICE::_cuModuleLoadDataEx(CUmodule *module, const void *imag
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleLoadDataEx\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1192,6 +1336,7 @@ CUresult EMULATED_DEVICE::_cuModuleLoadFatBinary(CUmodule *module, const void *f
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleLoadFatBinary\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1199,6 +1344,7 @@ CUresult EMULATED_DEVICE::_cuModuleUnload(CUmodule hmod)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuModuleUnload\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1206,6 +1352,7 @@ CUresult EMULATED_DEVICE::_cuParamSetf    (CUfunction hfunc, int offset, float v
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuParamSetf\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1213,12 +1360,14 @@ CUresult EMULATED_DEVICE::_cuParamSeti    (CUfunction hfunc, int offset, unsigne
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuParamSeti\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
 CUresult EMULATED_DEVICE::_cuParamSetSize(CUfunction hfunc, unsigned int numbytes)
 {
     // Unknown what to do for param size.
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -1226,6 +1375,7 @@ CUresult EMULATED_DEVICE::_cuParamSetTexRef(CUfunction hfunc, int texunit, CUtex
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuParamSetTexRef\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1238,6 +1388,7 @@ CUresult EMULATED_DEVICE::_cuParamSetv(CUfunction hfunc, int offset, void *ptr, 
     a->size = numbytes;
     a->offset = offset;
     this->arguments.push_back(a);
+	ERRS * error = new ERRS(CUDA_SUCCESS, __FILE__, " " + __LINE__);
     return CUDA_SUCCESS;
 }
 
@@ -1245,6 +1396,7 @@ CUresult EMULATED_DEVICE::_cuStreamCreate( CUstream *phStream, unsigned int Flag
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuStreamCreate\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1252,6 +1404,7 @@ CUresult EMULATED_DEVICE::_cuStreamDestroy( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuStreamDestroy\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1259,6 +1412,7 @@ CUresult EMULATED_DEVICE::_cuStreamQuery( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuStreamQuery\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1266,6 +1420,7 @@ CUresult EMULATED_DEVICE::_cuStreamSynchronize( CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuStreamSynchronize\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1273,6 +1428,7 @@ CUresult EMULATED_DEVICE::_cuSurfRefGetArray( CUarray *phArray, CUsurfref hSurfR
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuSurfRefGetArray\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1280,6 +1436,7 @@ CUresult EMULATED_DEVICE::_cuSurfRefSetArray( CUsurfref hSurfRef, CUarray hArray
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuSurfRefSetArray\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1287,6 +1444,7 @@ CUresult EMULATED_DEVICE::_cuTexRefCreate( CUtexref *pTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefCreate\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1294,6 +1452,7 @@ CUresult EMULATED_DEVICE::_cuTexRefDestroy( CUtexref hTexRef )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefDestroy\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1301,6 +1460,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetAddress( CUdeviceptr *pdptr, CUtexref hTex
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetAddress\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1308,6 +1468,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetAddress_v2( CUdeviceptr *pdptr, CUtexref h
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetAddress_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1315,6 +1476,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetAddressMode( CUaddress_mode *pam, CUtexref
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetAddressMode\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1322,6 +1484,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetArray( CUarray *phArray, CUtexref hTexRef 
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetArray\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1329,6 +1492,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetFilterMode( CUfilter_mode *pfm, CUtexref h
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetFilterMode\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1336,6 +1500,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetFlags( unsigned int *pFlags, CUtexref hTex
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetFlags\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1343,6 +1508,7 @@ CUresult EMULATED_DEVICE::_cuTexRefGetFormat( CUarray_format *pFormat, int *pNum
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefGetFormat\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1350,6 +1516,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetAddress( unsigned int *ByteOffset, CUtexre
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetAddress\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1357,6 +1524,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetAddress_v2( unsigned int *ByteOffset, CUte
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetAddress_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1364,6 +1532,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetAddress2D( CUtexref hTexRef, const CUDA_AR
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetAddress2D\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1371,6 +1540,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetAddress2D_v2( CUtexref hTexRef, const CUDA
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetAddress2D_v2\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1378,6 +1548,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetAddressMode( CUtexref hTexRef, int dim, CU
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetAddressMode\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1385,6 +1556,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetArray( CUtexref hTexRef, CUarray hArray, u
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetArray\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1392,6 +1564,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetFilterMode( CUtexref hTexRef, CUfilter_mod
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetFilterMode\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1399,6 +1572,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetFlags( CUtexref hTexRef, unsigned int Flag
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetFlags\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1406,6 +1580,7 @@ CUresult EMULATED_DEVICE::_cuTexRefSetFormat( CUtexref hTexRef, CUarray_format f
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cuTexRefSetFormat\n";
+	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
     return CUDA_ERROR_INVALID_VALUE;
 }
 
@@ -1422,6 +1597,7 @@ cudaError_t EMULATED_DEVICE::_cudaBindSurfaceToArray(const struct surfaceReferen
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Unimplemented function _cudaBindSurfaceToArray\n";
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1447,6 +1623,8 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture(size_t *offset, const struct textu
     i.first = (void*)texref;
     i.second = tr;
     this->texture_to_device_memory_binding.insert(i);
+
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
 
     return cudaSuccess;
 }
@@ -1476,7 +1654,7 @@ cudaError_t EMULATED_DEVICE::_cudaBindTexture2D(size_t *offset,const struct text
     i.first = (void*)texref;
     i.second = tr;
     this->texture_to_device_memory_binding.insert(i);
-
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1500,7 +1678,7 @@ cudaError_t EMULATED_DEVICE::_cudaBindTextureToArray(const struct textureReferen
     i.first = (void*)texref;
     i.second = ta;
     this->texture_to_array_binding.insert(i);
-
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1513,6 +1691,7 @@ cudaError_t EMULATED_DEVICE::_cudaChooseDevice(int *device, const struct cudaDev
         (*cu->output_stream) << "cudaChooseDevice called, " << context << ".\n\n";
     }
     *device = 0;
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1523,6 +1702,7 @@ cudaError_t EMULATED_DEVICE::_cudaConfigureCall(dim3 gridDim, dim3 blockDim, siz
     this->ConfigureGrid(gridDim);
     this->ConfigureSharedMemory(sharedMem);
     this->ConfigureStream(stream);
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1573,6 +1753,7 @@ cudaError_t EMULATED_DEVICE::_cudaDriverGetVersion(int *driverVersion)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaDriverGetVersion is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1581,6 +1762,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventCreate(cudaEvent_t *event)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventCreate is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1589,6 +1771,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventCreateWithFlags(cudaEvent_t *event, int f
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventCreateWithFlags is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1597,6 +1780,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventDestroy(cudaEvent_t event)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventDestroy is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1605,6 +1789,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventElapsedTime(float *ms, cudaEvent_t start,
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventElapsedTime is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1613,6 +1798,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventQuery(cudaEvent_t event)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventQuery is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1621,6 +1807,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventRecord(cudaEvent_t event, cudaStream_t st
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventRecord is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1629,6 +1816,7 @@ cudaError_t EMULATED_DEVICE::_cudaEventSynchronize(cudaEvent_t event)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaEventSynchronize is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1653,9 +1841,8 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
             << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+        return cudaErrorInvalidDevicePointer;
     }
 
     int di = this->FindAllocatedBlock(ptr);
@@ -1666,9 +1853,8 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
             << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+        return cudaErrorInvalidDevicePointer;
     }
     EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
     void * local = ((char*)ptr) - cu->padding_size;
@@ -1679,13 +1865,13 @@ cudaError_t EMULATED_DEVICE::_cudaFree(void * ptr)
             << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+        return cudaErrorInvalidDevicePointer;
     }
     (*this->alloc_list).erase((*this->alloc_list).begin() + di);
     this->CheckSinglePtrOverwrite(d);
     free(local);
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1711,9 +1897,8 @@ cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
                 << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+        return cudaErrorInvalidDevicePointer;
     }
 
     int di = this->FindAllocatedArray(ptr);
@@ -1724,14 +1909,14 @@ cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
                 << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+        return cudaErrorInvalidDevicePointer;
     }
     ARRAY * d = (ARRAY*) array;
     this->arrays.erase(this->arrays.begin() + di);
     free(d->memory);
     delete d;
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1758,9 +1943,8 @@ cudaError_t EMULATED_DEVICE::_cudaFreeHost(void * ptr)
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorInvalidDevicePointer;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+		return cudaErrorInvalidDevicePointer;
     }
 
     int di = this->FindAllocatedBlock(ptr);
@@ -1771,9 +1955,8 @@ cudaError_t EMULATED_DEVICE::_cudaFreeHost(void * ptr)
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorInvalidDevicePointer;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+		return cudaErrorInvalidDevicePointer;
     }
     EMULATED_DEVICE::data * d = &(*this->alloc_list)[di];
     void * local = ((char*)ptr) - cu->padding_size;
@@ -1784,12 +1967,12 @@ cudaError_t EMULATED_DEVICE::_cudaFreeHost(void * ptr)
                 << file_name_tail(file_name) << ", line " << line << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorInvalidDevicePointer;
-        return cudaErrorInvalidDevicePointer;
+		ERRS * error = new ERRS(cudaErrorInvalidDevicePointer, __FILE__, " " + __LINE__);
+		return cudaErrorMemoryAllocation;
     }
     (*this->alloc_list).erase((*this->alloc_list).begin() + di);
     this->CheckSinglePtrOverwrite(d);
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1798,6 +1981,7 @@ cudaError_t EMULATED_DEVICE::_cudaFuncGetAttributes(struct cudaFuncAttributes *a
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaFuncGetAttributes is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1806,6 +1990,7 @@ cudaError_t EMULATED_DEVICE::_cudaFuncSetCacheConfig(const char *func, enum cuda
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaFuncSetCacheConfig is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1819,6 +2004,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetChannelDesc(struct cudaChannelFormatDesc *d
     }
     ARRAY * arr = (ARRAY*)array;
     *desc = *arr->desc;
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1827,6 +2013,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetDevice(int *device)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetDevice is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1839,6 +2026,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetDeviceCount(int *count)
         (*cu->output_stream) << "cudaGetDeviceCount called, " << context << ".\n\n";
     }
     *count = 1;
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 
@@ -1895,15 +2083,24 @@ cudaError_t EMULATED_DEVICE::_cudaGetDeviceProperties(struct cudaDeviceProp *pro
         };
         *prop = p;
     }
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
+
+char buff[5000];
+
 
 const char* EMULATED_DEVICE::_cudaGetErrorString(cudaError_t error)
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaGetErrorString is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-    return 0;
+	ERRS * errs = ERRS::LastError();
+	std::string s = errs->String();
+	s = s + " ";
+	s = s + static_cast<std::ostringstream*>( &(std::ostringstream() << errs->Code()) )->str();
+	s = s + " ";
+	s = s + errs->Location();
+	strcpy(buff, s.c_str());
+	return buff;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetExportTable(const void **ppExportTable, const cudaUUID_t *pExportTableId)
@@ -1911,6 +2108,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetExportTable(const void **ppExportTable, con
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetExportTable is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1922,7 +2120,8 @@ cudaError_t EMULATED_DEVICE::_cudaGetLastError(void)
         char * context = cu->Context();
         (*cu->output_stream) << "cudaGetLastError called, " << context << ".\n\n";
     }
-    return cudaSuccess;
+	ERRS * error = ERRS::LastError();
+    return (cudaError_t)error->Code();
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetSurfaceAlignmentOffset(size_t *offset, const struct surfaceReference *surfref)
@@ -1930,6 +2129,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetSurfaceAlignmentOffset(size_t *offset, cons
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaBindTexture2D is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1938,6 +2138,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetSurfaceReference(const struct surfaceRefere
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetSurfaceReference is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1946,6 +2147,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetSymbolAddress(void **devPtr, const char *sy
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetSymbolAddress is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1954,6 +2156,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetSymbolSize(size_t *size, const char *symbol
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetSymbolSize is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1962,6 +2165,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetTextureAlignmentOffset(size_t *offset, cons
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetTextureAlignmentOffset is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1970,6 +2174,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetTextureReference(const struct textureRefere
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGetTextureReference is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1978,6 +2183,7 @@ cudaError_t EMULATED_DEVICE::_cudaGraphicsMapResources(int count, struct cudaGra
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGraphicsMapResources is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1986,6 +2192,7 @@ cudaError_t EMULATED_DEVICE::_cudaGraphicsResourceGetMappedPointer(void **devPtr
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGraphicsResourceGetMappedPointer is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -1994,6 +2201,7 @@ cudaError_t EMULATED_DEVICE::_cudaGraphicsResourceSetMapFlags(struct cudaGraphic
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGraphicsResourceSetMapFlags is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -2010,6 +2218,7 @@ cudaError_t EMULATED_DEVICE::_cudaGraphicsUnmapResources(int count, struct cudaG
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGraphicsUnmapResources is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -2018,6 +2227,7 @@ cudaError_t EMULATED_DEVICE::_cudaGraphicsUnregisterResource(struct cudaGraphics
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::cout << "Function _cudaGraphicsUnregisterResource is not implemented.\n";
     _CUDA_RUNTIME::Unimplemented();
+	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
     return cudaErrorNotYetImplemented;
 }
 
@@ -2040,8 +2250,7 @@ cudaError_t EMULATED_DEVICE::_cudaHostAlloc(void ** ptr, size_t size, unsigned i
             << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorMemoryAllocation, __FILE__, " " + __LINE__);
         return cudaErrorMemoryAllocation;
     }
 
@@ -2056,8 +2265,7 @@ cudaError_t EMULATED_DEVICE::_cudaHostAlloc(void ** ptr, size_t size, unsigned i
             << context << ".\n\n";
         if (cu->quit_on_error)
             exit(1);
-        if (cu->do_not_call_cuda_after_sanity_check_fail)
-            return cudaErrorMemoryAllocation;
+		ERRS * error = new ERRS(cudaErrorMemoryAllocation, __FILE__, " " + __LINE__);
         return cudaErrorMemoryAllocation;
     }
 
@@ -2084,6 +2292,7 @@ cudaError_t EMULATED_DEVICE::_cudaHostAlloc(void ** ptr, size_t size, unsigned i
     d.is_host = true;
     (*this->alloc_list).push_back(d);
     *ptr = ((char*)local) + cu->padding_size;
+	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
 

@@ -233,6 +233,7 @@
   <ItemGroup>
     <ClCompile Include="..\constant.cpp" />
     <ClCompile Include="..\emulated-device.cpp" />
+    <ClCompile Include="..\errors.cpp" />
     <ClCompile Include="..\instructions.cpp" />
     <ClCompile Include="..\nvidia-gpu.cpp" />
     <ClCompile Include="..\symbol-table.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="..\emulated-device.h" />
     <ClCompile Include="..\entry.h" />
     <ClCompile Include="..\module.h" />
+    <ClInclude Include="..\errors.h" />
     <ClInclude Include="..\ltstr.h" />
     <ClInclude Include="..\nvidia-gpu.h" />
     <ClInclude Include="..\regvar.h" />

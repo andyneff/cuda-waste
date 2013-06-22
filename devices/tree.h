@@ -50,7 +50,7 @@ class TREE
         int GetType();
         char * GetText();
         TREE * GetChild(int index);
-        int GetChildCount();
+        size_t GetChildCount();
         void SetText(char * text);
         void SetType(int type);
         void AddChild(TREE * child);

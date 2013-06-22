@@ -13,6 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NONSTDC_NO_DEPRECATE 1
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Based upon the code in API Hooking Revealed (http://www.codeproject.com/KB/system/hooksys.aspx)
@@ -47,7 +52,7 @@ BOOL PROCESS_MANAGER::PopulateProcess(DWORD dwProcessId, BOOL bPopulateModules)
     return m_pLibHandler->PopulateProcess(dwProcessId, bPopulateModules); 
 }
 
-DWORD PROCESS_MANAGER::GetProcessCount() const
+size_t PROCESS_MANAGER::GetProcessCount() const
 {
     return m_pProcesses->GetCount();
 }
@@ -85,7 +90,7 @@ ExecutableModule* CRunningProcesses::GetProcessById(DWORD dwProcessId)
 {
     ExecutableModule* pResult = NULL;
     ExecutableModule* pProcess;
-    for (long i = 0; i < GetCount(); i++)
+    for (DWORD i = 0; i < GetCount(); i++)
     {
         pProcess = static_cast<ExecutableModule*>( GetModule(i) );
         if (pProcess->Get_ProcessId() == dwProcessId)
@@ -423,7 +428,7 @@ Module* ModuleList::GetModule(DWORD dwIndex) const
     return at(dwIndex); 
 }
 
-DWORD ModuleList::GetCount() const
+size_t ModuleList::GetCount() const
 {
     return size();
 }
@@ -533,7 +538,7 @@ BOOL ExecutableModule::PopulateModules()
 }
 
 
-DWORD ExecutableModule::GetModuleCount()
+size_t ExecutableModule::GetModuleCount()
 {
     return m_pInternalList ? m_pInternalList->GetCount() : 0;
 }

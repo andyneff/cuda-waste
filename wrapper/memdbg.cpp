@@ -346,7 +346,7 @@ void MEMDBG::Output()
 			std::cout << "\n";
 		}
 	}
-	for (int i = 0; i < index_min_allocation_number; ++i)
+	for (unsigned int i = 0; i < index_min_allocation_number; ++i)
 	{
 		data * d = &this->allocs[i];
 		if (d->allocation_number != 0)

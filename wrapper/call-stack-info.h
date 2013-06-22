@@ -13,7 +13,7 @@ public:
     bool GetFunctionInfoFromAddresses( void * fnAddress, void * stackAddress, char * lpszSymbol );
     bool GetSourceInfoFromAddress( void * address, char * lpszSourceInfo, char * full_file_name );
     char * Context(int lines = 1);
-	void * * AddressContext(int lines = 20);
+	void * * AddressContext(size_t lines = 20);
     void ClassifyAsPrefix(char * file);
     std::list<void*> * CallTree();
 };

@@ -265,13 +265,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\cuda-memory-debug\cuda-memory-debug.vcxproj">
-      <Project>{2db76c7e-dd3a-4922-9f47-9b2e19ccc6ca}</Project>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\waste.cpp" />
   </ItemGroup>
   <ItemGroup>
