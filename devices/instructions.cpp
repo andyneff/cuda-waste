@@ -2885,416 +2885,427 @@ int THREAD::DoLd(TREE * inst)
     {
         TREE * dst = odst->GetChild( i);
         SYMBOL * sdst = 0;
-        assert(dst->GetType() == T_WORD);
-        sdst = this->symbol_table->FindSymbol(dst->GetText());
-        assert(sdst != 0);
-        TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+		if (dst->GetType() == T_UNDERSCORE)
+		{
+			// ignore destination store--bit bucket.
+		}
+		else
+		{
+			assert(dst->GetType() == T_WORD);
+			sdst = this->symbol_table->FindSymbol(dst->GetText());
+			assert(sdst != 0);
+			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-        TYPES::Types * s = (TYPES::Types*)addr;
+			TYPES::Types * s = (TYPES::Types*)addr;
 
-        // For targets that are register, we may widen to the size of the register.
-        if (sdst->storage_class == K_REG)
-            switch (sdst->type)
-            {
-                case K_U8:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->u8 = s->u8;
-                            break;
-                        case K_B8:
-                            d->u8 = s->b8;
-                            break;
-                        case K_S8:
-                            d->u8 = s->s8;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_U16:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->u16 = s->u8;
-                            break;
-                        case K_B8:
-                            d->u16 = s->b8;
-                            break;
-                        case K_S8:
-                            d->u16 = s->s8;
-                            break;
-                        case K_U16:
-                            d->u16 = s->u16;
-                            break;
-                        case K_B16:
-                            d->u16 = s->b16;
-                            break;
-                        case K_S16:
-                            d->u16 = s->s16;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_U32:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->u32 = s->u8;
-                            break;
-                        case K_B8:
-                            d->u32 = s->b8;
-                            break;
-                        case K_S8:
-                            d->u32 = s->s8;
-                            break;
-                        case K_U16:
-                            d->u32 = s->u16;
-                            break;
-                        case K_B16:
-                            d->u32 = s->b16;
-                            break;
-                        case K_S16:
-                            d->u32 = s->s16;
-                            break;
-                        case K_U32:
-                            d->u32 = s->u32;
-                            break;
-                        case K_B32:
-                            d->u32 = s->b32;
-                            break;
-                        case K_S32:
-                            d->u32 = s->s32;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_U64:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->u64 = s->u8;
-                            break;
-                        case K_B8:
-                            d->u64 = s->b8;
-                            break;
-                        case K_S8:
-                            d->u64 = s->s8;
-                            break;
-                        case K_U16:
-                            d->u64 = s->u16;
-                            break;
-                        case K_B16:
-                            d->u64 = s->b16;
-                            break;
-                        case K_S16:
-                            d->u64 = s->s16;
-                            break;
-                        case K_U32:
-                            d->u64 = s->u32;
-                            break;
-                        case K_B32:
-                            d->u64 = s->b32;
-                            break;
-                        case K_S32:
-                            d->u64 = s->s32;
-                            break;
-                        case K_U64:
-                            d->u64 = s->u64;
-                            break;
-                        case K_B64:
-                            d->u64 = s->b64;
-                            break;
-                        case K_S64:
-                            d->u64 = s->s64;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_S8:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->s8 = s->u8;
-                            break;
-                        case K_B8:
-                            d->s8 = s->b8;
-                            break;
-                        case K_S8:
-                            d->s8 = s->s8;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_S16:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->s16 = s->u8;
-                            break;
-                        case K_B8:
-                            d->s16 = s->b8;
-                            break;
-                        case K_S8:
-                            d->s16 = s->s8;
-                            break;
-                        case K_U16:
-                            d->s16 = s->u16;
-                            break;
-                        case K_B16:
-                            d->s16 = s->b16;
-                            break;
-                        case K_S16:
-                            d->s16 = s->s16;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_S32:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->s32 = s->u8;
-                            break;
-                        case K_B8:
-                            d->s32 = s->b8;
-                            break;
-                        case K_S8:
-                            d->s32 = s->s8;
-                            break;
-                        case K_U16:
-                            d->s32 = s->u16;
-                            break;
-                        case K_B16:
-                            d->s32 = s->b16;
-                            break;
-                        case K_S16:
-                            d->s32 = s->s16;
-                            break;
-                        case K_U32:
-                            d->s32 = s->u32;
-                            break;
-                        case K_B32:
-                            d->s32 = s->b32;
-                            break;
-                        case K_S32:
-                            d->s32 = s->s32;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_S64:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->s64 = s->u8;
-                            break;
-                        case K_B8:
-                            d->s64 = s->b8;
-                            break;
-                        case K_S8:
-                            d->s64 = s->s8;
-                            break;
-                        case K_U16:
-                            d->s64 = s->u16;
-                            break;
-                        case K_B16:
-                            d->s64 = s->b16;
-                            break;
-                        case K_S16:
-                            d->s64 = s->s16;
-                            break;
-                        case K_U32:
-                            d->s64 = s->u32;
-                            break;
-                        case K_B32:
-                            d->s64 = s->b32;
-                            break;
-                        case K_S32:
-                            d->s64 = s->s32;
-                            break;
-                        case K_U64:
-                            d->s64 = s->u64;
-                            break;
-                        case K_B64:
-                            d->s64 = s->b64;
-                            break;
-                        case K_S64:
-                            d->s64 = s->s64;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_B8:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->b8 = s->u8;
-                            break;
-                        case K_B8:
-                            d->b8 = s->b8;
-                            break;
-                        case K_S8:
-                            d->b8 = s->s8;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_B16:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->b16 = s->u8;
-                            break;
-                        case K_B8:
-                            d->b16 = s->b8;
-                            break;
-                        case K_S8:
-                            d->b16 = s->s8;
-                            break;
-                        case K_U16:
-                            d->b16 = s->u16;
-                            break;
-                        case K_B16:
-                            d->b16 = s->b16;
-                            break;
-                        case K_S16:
-                            d->b16 = s->s16;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_B32:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->b32 = s->u8;
-                            break;
-                        case K_B8:
-                            d->b32 = s->b8;
-                            break;
-                        case K_S8:
-                            d->b32 = s->s8;
-                            break;
-                        case K_U16:
-                            d->b32 = s->u16;
-                            break;
-                        case K_B16:
-                            d->b32 = s->b16;
-                            break;
-                        case K_S16:
-                            d->b32 = s->s16;
-                            break;
-                        case K_U32:
-                            d->b32 = s->u32;
-                            break;
-                        case K_B32:
-                            d->b32 = s->b32;
-                            break;
-                        case K_S32:
-                            d->b32 = s->s32;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_B64:
-                    switch (type)
-                    {
-                        case K_U8:
-                            d->b64 = s->u8;
-                            break;
-                        case K_B8:
-                            d->b64 = s->b8;
-                            break;
-                        case K_S8:
-                            d->b64 = s->s8;
-                            break;
-                        case K_U16:
-                            d->b64 = s->u16;
-                            break;
-                        case K_B16:
-                            d->b64 = s->b16;
-                            break;
-                        case K_S16:
-                            d->b64 = s->s16;
-                            break;
-                        case K_U32:
-                            d->b64 = s->u32;
-                            break;
-                        case K_B32:
-                            d->b64 = s->b32;
-                            break;
-                        case K_S32:
-                            d->b64 = s->s32;
-                            break;
-                        case K_U64:
-                            d->b64 = s->u64;
-                            break;
-                        case K_B64:
-                            d->b64 = s->b64;
-                            break;
-                        case K_S64:
-                            d->b64 = s->s64;
-                            break;
-                        default:
-                            assert(false);
-                    }
-                    break;
-                case K_F32:
-                    d->f32 = s->f32;
-                    break;
-                case K_F64:
-                    d->f64 = s->f64;
-                    break;
-                default:
-                    assert(false);
-            }
-        else
-            switch (type)
-            {
-                case K_U8:
-                    d->u8 = s->u8;
-                    break;
-                case K_U16:
-                    d->u16 = s->u16;
-                    break;
-                case K_U32:
-                    d->u32 = s->u32;
-                    break;
-                case K_U64:
-                    d->u64 = s->u64;
-                    break;
-                case K_S8:
-                    d->s8 = s->s8;
-                    break;
-                case K_S16:
-                    d->s16 = s->s16;
-                    break;
-                case K_S32:
-                    d->s32 = s->s32;
-                    break;
-                case K_S64:
-                    d->s64 = s->s64;
-                    break;
-                case K_F32:
-                    d->f32 = s->f32;
-                    break;
-                case K_F64:
-                    d->f64 = s->f64;
-                    break;
-                default:
-                    assert(false);
-            }
+			// For targets that are register, we may widen to the size of the register.
+			if (sdst->storage_class == K_REG)
+			{
+				switch (sdst->type)
+				{
+					case K_U8:
+						switch (type)
+						{
+							case K_U8:
+								d->u8 = s->u8;
+								break;
+							case K_B8:
+								d->u8 = s->b8;
+								break;
+							case K_S8:
+								d->u8 = s->s8;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_U16:
+						switch (type)
+						{
+							case K_U8:
+								d->u16 = s->u8;
+								break;
+							case K_B8:
+								d->u16 = s->b8;
+								break;
+							case K_S8:
+								d->u16 = s->s8;
+								break;
+							case K_U16:
+								d->u16 = s->u16;
+								break;
+							case K_B16:
+								d->u16 = s->b16;
+								break;
+							case K_S16:
+								d->u16 = s->s16;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_U32:
+						switch (type)
+						{
+							case K_U8:
+								d->u32 = s->u8;
+								break;
+							case K_B8:
+								d->u32 = s->b8;
+								break;
+							case K_S8:
+								d->u32 = s->s8;
+								break;
+							case K_U16:
+								d->u32 = s->u16;
+								break;
+							case K_B16:
+								d->u32 = s->b16;
+								break;
+							case K_S16:
+								d->u32 = s->s16;
+								break;
+							case K_U32:
+								d->u32 = s->u32;
+								break;
+							case K_B32:
+								d->u32 = s->b32;
+								break;
+							case K_S32:
+								d->u32 = s->s32;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_U64:
+						switch (type)
+						{
+							case K_U8:
+								d->u64 = s->u8;
+								break;
+							case K_B8:
+								d->u64 = s->b8;
+								break;
+							case K_S8:
+								d->u64 = s->s8;
+								break;
+							case K_U16:
+								d->u64 = s->u16;
+								break;
+							case K_B16:
+								d->u64 = s->b16;
+								break;
+							case K_S16:
+								d->u64 = s->s16;
+								break;
+							case K_U32:
+								d->u64 = s->u32;
+								break;
+							case K_B32:
+								d->u64 = s->b32;
+								break;
+							case K_S32:
+								d->u64 = s->s32;
+								break;
+							case K_U64:
+								d->u64 = s->u64;
+								break;
+							case K_B64:
+								d->u64 = s->b64;
+								break;
+							case K_S64:
+								d->u64 = s->s64;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_S8:
+						switch (type)
+						{
+							case K_U8:
+								d->s8 = s->u8;
+								break;
+							case K_B8:
+								d->s8 = s->b8;
+								break;
+							case K_S8:
+								d->s8 = s->s8;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_S16:
+						switch (type)
+						{
+							case K_U8:
+								d->s16 = s->u8;
+								break;
+							case K_B8:
+								d->s16 = s->b8;
+								break;
+							case K_S8:
+								d->s16 = s->s8;
+								break;
+							case K_U16:
+								d->s16 = s->u16;
+								break;
+							case K_B16:
+								d->s16 = s->b16;
+								break;
+							case K_S16:
+								d->s16 = s->s16;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_S32:
+						switch (type)
+						{
+							case K_U8:
+								d->s32 = s->u8;
+								break;
+							case K_B8:
+								d->s32 = s->b8;
+								break;
+							case K_S8:
+								d->s32 = s->s8;
+								break;
+							case K_U16:
+								d->s32 = s->u16;
+								break;
+							case K_B16:
+								d->s32 = s->b16;
+								break;
+							case K_S16:
+								d->s32 = s->s16;
+								break;
+							case K_U32:
+								d->s32 = s->u32;
+								break;
+							case K_B32:
+								d->s32 = s->b32;
+								break;
+							case K_S32:
+								d->s32 = s->s32;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_S64:
+						switch (type)
+						{
+							case K_U8:
+								d->s64 = s->u8;
+								break;
+							case K_B8:
+								d->s64 = s->b8;
+								break;
+							case K_S8:
+								d->s64 = s->s8;
+								break;
+							case K_U16:
+								d->s64 = s->u16;
+								break;
+							case K_B16:
+								d->s64 = s->b16;
+								break;
+							case K_S16:
+								d->s64 = s->s16;
+								break;
+							case K_U32:
+								d->s64 = s->u32;
+								break;
+							case K_B32:
+								d->s64 = s->b32;
+								break;
+							case K_S32:
+								d->s64 = s->s32;
+								break;
+							case K_U64:
+								d->s64 = s->u64;
+								break;
+							case K_B64:
+								d->s64 = s->b64;
+								break;
+							case K_S64:
+								d->s64 = s->s64;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_B8:
+						switch (type)
+						{
+							case K_U8:
+								d->b8 = s->u8;
+								break;
+							case K_B8:
+								d->b8 = s->b8;
+								break;
+							case K_S8:
+								d->b8 = s->s8;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_B16:
+						switch (type)
+						{
+							case K_U8:
+								d->b16 = s->u8;
+								break;
+							case K_B8:
+								d->b16 = s->b8;
+								break;
+							case K_S8:
+								d->b16 = s->s8;
+								break;
+							case K_U16:
+								d->b16 = s->u16;
+								break;
+							case K_B16:
+								d->b16 = s->b16;
+								break;
+							case K_S16:
+								d->b16 = s->s16;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_B32:
+						switch (type)
+						{
+							case K_U8:
+								d->b32 = s->u8;
+								break;
+							case K_B8:
+								d->b32 = s->b8;
+								break;
+							case K_S8:
+								d->b32 = s->s8;
+								break;
+							case K_U16:
+								d->b32 = s->u16;
+								break;
+							case K_B16:
+								d->b32 = s->b16;
+								break;
+							case K_S16:
+								d->b32 = s->s16;
+								break;
+							case K_U32:
+								d->b32 = s->u32;
+								break;
+							case K_B32:
+								d->b32 = s->b32;
+								break;
+							case K_S32:
+								d->b32 = s->s32;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_B64:
+						switch (type)
+						{
+							case K_U8:
+								d->b64 = s->u8;
+								break;
+							case K_B8:
+								d->b64 = s->b8;
+								break;
+							case K_S8:
+								d->b64 = s->s8;
+								break;
+							case K_U16:
+								d->b64 = s->u16;
+								break;
+							case K_B16:
+								d->b64 = s->b16;
+								break;
+							case K_S16:
+								d->b64 = s->s16;
+								break;
+							case K_U32:
+								d->b64 = s->u32;
+								break;
+							case K_B32:
+								d->b64 = s->b32;
+								break;
+							case K_S32:
+								d->b64 = s->s32;
+								break;
+							case K_U64:
+								d->b64 = s->u64;
+								break;
+							case K_B64:
+								d->b64 = s->b64;
+								break;
+							case K_S64:
+								d->b64 = s->s64;
+								break;
+							default:
+								assert(false);
+						}
+						break;
+					case K_F32:
+						d->f32 = s->f32;
+						break;
+					case K_F64:
+						d->f64 = s->f64;
+						break;
+					default:
+						assert(false);
+				}
+			}
+			else
+			{
+				switch (type)
+				{
+					case K_U8:
+						d->u8 = s->u8;
+						break;
+					case K_U16:
+						d->u16 = s->u16;
+						break;
+					case K_U32:
+						d->u32 = s->u32;
+						break;
+					case K_U64:
+						d->u64 = s->u64;
+						break;
+					case K_S8:
+						d->s8 = s->s8;
+						break;
+					case K_S16:
+						d->s16 = s->s16;
+						break;
+					case K_S32:
+						d->s32 = s->s32;
+						break;
+					case K_S64:
+						d->s64 = s->s64;
+						break;
+					case K_F32:
+						d->f32 = s->f32;
+						break;
+					case K_F64:
+						d->f64 = s->f64;
+						break;
+					default:
+						assert(false);
+				}
+			}
+		}
 
         addr = addr + this->device->Sizeof(type);
     }
@@ -3775,7 +3786,7 @@ int THREAD::DoMad(TREE * inst)
     switch (type)
     {
         case K_U16:
-			if (width == K_LO)
+			if (width == K_LO || width == 0)
 			{
 				unsigned __int32 vx = s1->u16;
 				vx = vx * s2->u16;
@@ -3799,7 +3810,7 @@ int THREAD::DoMad(TREE * inst)
             else assert(false);
             break;
         case K_S16:
-			if (width == K_LO)
+			if (width == K_LO || width == 0)
 			{
 				__int32 vx = s1->s16;
 				vx = vx * s2->s16;
@@ -3823,7 +3834,7 @@ int THREAD::DoMad(TREE * inst)
 			else assert(false);
 			break;
         case K_U32:
-			if (width == K_LO)
+			if (width == K_LO || width == 0)
 			{
 				unsigned __int64 vx = s1->u32;
 				vx = vx * s2->u32;
@@ -3847,7 +3858,7 @@ int THREAD::DoMad(TREE * inst)
 			else assert(false);
             break;
         case K_S32:
-			if (width == K_LO)
+			if (width == K_LO || width == 0)
 			{
 				__int64 vx = s1->s32;
 				vx = vx * s2->s32;
@@ -3870,7 +3881,24 @@ int THREAD::DoMad(TREE * inst)
 			}
 			else assert(false);
             break;
-        default:
+        case K_F32:
+			if (width == 0)
+			{
+				double vx = s1->f32;
+				vx = vx * s2->f32;
+				vx = vx + s3->f32;
+				d->f32 = (float)(vx);
+			}
+			else if (width == K_WIDE)
+			{
+				double vx = s1->f32;
+				vx = vx * s2->f32;
+				vx = vx + s3->f64;
+				d->f64 = vx;
+			}
+			else assert(false);
+            break;
+		default:
             assert(false);
     }
     return 0;
@@ -3936,6 +3964,7 @@ int THREAD::DoMov(TREE * inst)
             break;
         int gt = t->GetType();
         if (gt == K_PRED
+              || gt == K_B16 || gt == K_B32 || gt == K_B64
               || gt == K_U16 || gt == K_U32 || gt == K_U64
               || gt == K_S16 || gt == K_S32 || gt == K_S64
               || gt == K_F32 || gt == K_F64)
@@ -3966,17 +3995,26 @@ int THREAD::DoMov(TREE * inst)
         CONSTANT c = this->device->Eval(type, src->GetChild(0));
         switch (type)
         {
+            case K_B16:
+                s->b16 = c.value.b16;
+                break;
             case K_U16:
                 s->u16 = c.value.u16;
                 break;
             case K_S16:
                 s->s16 = c.value.s16;
                 break;
+            case K_B32:
+                s->b32 = c.value.b32;
+                break;
             case K_U32:
                 s->u32 = c.value.u32;
                 break;
             case K_S32:
                 s->s32 = c.value.s32;
+                break;
+            case K_B64:
+                s->b64 = c.value.b64;
                 break;
             case K_U64:
                 s->u64 = c.value.u64;
@@ -4037,6 +4075,15 @@ int THREAD::DoMov(TREE * inst)
 
     switch (type)
     {
+        case K_B16:
+            d->b16 = s->b16;
+            break;
+        case K_B32:
+            d->b32 = s->b32;
+            break;
+        case K_B64:
+            d->b64 = s->b64;
+            break;
         case K_U16:
             d->u16 = s->u16;
             break;
@@ -4959,7 +5006,7 @@ int THREAD::DoRcp(TREE * inst)
         else assert(false);
     }
     assert(ttype != 0);
-    this->device->unimplemented(ftz, "RCP.ftz not implemented.");
+    //this->device->unimplemented(ftz, "RCP.ftz not implemented.");
 
     int type = ttype->GetType();
     TREE * dst = odst->GetChild(0);
