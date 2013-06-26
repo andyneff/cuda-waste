@@ -2609,7 +2609,10 @@ cudaError_t EMULATED_DEVICE::_cudaGetLastError(void)
         (*cu->output_stream) << "cudaGetLastError called, " << context << ".\n\n";
     }
 	ERRS * error = ERRS::LastError();
-    return (cudaError_t)error->Code();
+	if (error != 0)
+	    return (cudaError_t)error->Code();
+	else
+		return cudaSuccess;
 }
 
 cudaError_t EMULATED_DEVICE::_cudaGetMipmappedArrayLevel()

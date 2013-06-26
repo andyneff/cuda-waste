@@ -2885,427 +2885,427 @@ int THREAD::DoLd(TREE * inst)
     {
         TREE * dst = odst->GetChild( i);
         SYMBOL * sdst = 0;
-		if (dst->GetType() == T_UNDERSCORE)
-		{
-			// ignore destination store--bit bucket.
-		}
-		else
-		{
-			assert(dst->GetType() == T_WORD);
-			sdst = this->symbol_table->FindSymbol(dst->GetText());
-			assert(sdst != 0);
-			TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+        if (dst->GetType() == T_UNDERSCORE)
+        {
+            // ignore destination store--bit bucket.
+        }
+        else
+        {
+            assert(dst->GetType() == T_WORD);
+            sdst = this->symbol_table->FindSymbol(dst->GetText());
+            assert(sdst != 0);
+            TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-			TYPES::Types * s = (TYPES::Types*)addr;
+            TYPES::Types * s = (TYPES::Types*)addr;
 
-			// For targets that are register, we may widen to the size of the register.
-			if (sdst->storage_class == K_REG)
-			{
-				switch (sdst->type)
-				{
-					case K_U8:
-						switch (type)
-						{
-							case K_U8:
-								d->u8 = s->u8;
-								break;
-							case K_B8:
-								d->u8 = s->b8;
-								break;
-							case K_S8:
-								d->u8 = s->s8;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_U16:
-						switch (type)
-						{
-							case K_U8:
-								d->u16 = s->u8;
-								break;
-							case K_B8:
-								d->u16 = s->b8;
-								break;
-							case K_S8:
-								d->u16 = s->s8;
-								break;
-							case K_U16:
-								d->u16 = s->u16;
-								break;
-							case K_B16:
-								d->u16 = s->b16;
-								break;
-							case K_S16:
-								d->u16 = s->s16;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_U32:
-						switch (type)
-						{
-							case K_U8:
-								d->u32 = s->u8;
-								break;
-							case K_B8:
-								d->u32 = s->b8;
-								break;
-							case K_S8:
-								d->u32 = s->s8;
-								break;
-							case K_U16:
-								d->u32 = s->u16;
-								break;
-							case K_B16:
-								d->u32 = s->b16;
-								break;
-							case K_S16:
-								d->u32 = s->s16;
-								break;
-							case K_U32:
-								d->u32 = s->u32;
-								break;
-							case K_B32:
-								d->u32 = s->b32;
-								break;
-							case K_S32:
-								d->u32 = s->s32;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_U64:
-						switch (type)
-						{
-							case K_U8:
-								d->u64 = s->u8;
-								break;
-							case K_B8:
-								d->u64 = s->b8;
-								break;
-							case K_S8:
-								d->u64 = s->s8;
-								break;
-							case K_U16:
-								d->u64 = s->u16;
-								break;
-							case K_B16:
-								d->u64 = s->b16;
-								break;
-							case K_S16:
-								d->u64 = s->s16;
-								break;
-							case K_U32:
-								d->u64 = s->u32;
-								break;
-							case K_B32:
-								d->u64 = s->b32;
-								break;
-							case K_S32:
-								d->u64 = s->s32;
-								break;
-							case K_U64:
-								d->u64 = s->u64;
-								break;
-							case K_B64:
-								d->u64 = s->b64;
-								break;
-							case K_S64:
-								d->u64 = s->s64;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_S8:
-						switch (type)
-						{
-							case K_U8:
-								d->s8 = s->u8;
-								break;
-							case K_B8:
-								d->s8 = s->b8;
-								break;
-							case K_S8:
-								d->s8 = s->s8;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_S16:
-						switch (type)
-						{
-							case K_U8:
-								d->s16 = s->u8;
-								break;
-							case K_B8:
-								d->s16 = s->b8;
-								break;
-							case K_S8:
-								d->s16 = s->s8;
-								break;
-							case K_U16:
-								d->s16 = s->u16;
-								break;
-							case K_B16:
-								d->s16 = s->b16;
-								break;
-							case K_S16:
-								d->s16 = s->s16;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_S32:
-						switch (type)
-						{
-							case K_U8:
-								d->s32 = s->u8;
-								break;
-							case K_B8:
-								d->s32 = s->b8;
-								break;
-							case K_S8:
-								d->s32 = s->s8;
-								break;
-							case K_U16:
-								d->s32 = s->u16;
-								break;
-							case K_B16:
-								d->s32 = s->b16;
-								break;
-							case K_S16:
-								d->s32 = s->s16;
-								break;
-							case K_U32:
-								d->s32 = s->u32;
-								break;
-							case K_B32:
-								d->s32 = s->b32;
-								break;
-							case K_S32:
-								d->s32 = s->s32;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_S64:
-						switch (type)
-						{
-							case K_U8:
-								d->s64 = s->u8;
-								break;
-							case K_B8:
-								d->s64 = s->b8;
-								break;
-							case K_S8:
-								d->s64 = s->s8;
-								break;
-							case K_U16:
-								d->s64 = s->u16;
-								break;
-							case K_B16:
-								d->s64 = s->b16;
-								break;
-							case K_S16:
-								d->s64 = s->s16;
-								break;
-							case K_U32:
-								d->s64 = s->u32;
-								break;
-							case K_B32:
-								d->s64 = s->b32;
-								break;
-							case K_S32:
-								d->s64 = s->s32;
-								break;
-							case K_U64:
-								d->s64 = s->u64;
-								break;
-							case K_B64:
-								d->s64 = s->b64;
-								break;
-							case K_S64:
-								d->s64 = s->s64;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_B8:
-						switch (type)
-						{
-							case K_U8:
-								d->b8 = s->u8;
-								break;
-							case K_B8:
-								d->b8 = s->b8;
-								break;
-							case K_S8:
-								d->b8 = s->s8;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_B16:
-						switch (type)
-						{
-							case K_U8:
-								d->b16 = s->u8;
-								break;
-							case K_B8:
-								d->b16 = s->b8;
-								break;
-							case K_S8:
-								d->b16 = s->s8;
-								break;
-							case K_U16:
-								d->b16 = s->u16;
-								break;
-							case K_B16:
-								d->b16 = s->b16;
-								break;
-							case K_S16:
-								d->b16 = s->s16;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_B32:
-						switch (type)
-						{
-							case K_U8:
-								d->b32 = s->u8;
-								break;
-							case K_B8:
-								d->b32 = s->b8;
-								break;
-							case K_S8:
-								d->b32 = s->s8;
-								break;
-							case K_U16:
-								d->b32 = s->u16;
-								break;
-							case K_B16:
-								d->b32 = s->b16;
-								break;
-							case K_S16:
-								d->b32 = s->s16;
-								break;
-							case K_U32:
-								d->b32 = s->u32;
-								break;
-							case K_B32:
-								d->b32 = s->b32;
-								break;
-							case K_S32:
-								d->b32 = s->s32;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_B64:
-						switch (type)
-						{
-							case K_U8:
-								d->b64 = s->u8;
-								break;
-							case K_B8:
-								d->b64 = s->b8;
-								break;
-							case K_S8:
-								d->b64 = s->s8;
-								break;
-							case K_U16:
-								d->b64 = s->u16;
-								break;
-							case K_B16:
-								d->b64 = s->b16;
-								break;
-							case K_S16:
-								d->b64 = s->s16;
-								break;
-							case K_U32:
-								d->b64 = s->u32;
-								break;
-							case K_B32:
-								d->b64 = s->b32;
-								break;
-							case K_S32:
-								d->b64 = s->s32;
-								break;
-							case K_U64:
-								d->b64 = s->u64;
-								break;
-							case K_B64:
-								d->b64 = s->b64;
-								break;
-							case K_S64:
-								d->b64 = s->s64;
-								break;
-							default:
-								assert(false);
-						}
-						break;
-					case K_F32:
-						d->f32 = s->f32;
-						break;
-					case K_F64:
-						d->f64 = s->f64;
-						break;
-					default:
-						assert(false);
-				}
-			}
-			else
-			{
-				switch (type)
-				{
-					case K_U8:
-						d->u8 = s->u8;
-						break;
-					case K_U16:
-						d->u16 = s->u16;
-						break;
-					case K_U32:
-						d->u32 = s->u32;
-						break;
-					case K_U64:
-						d->u64 = s->u64;
-						break;
-					case K_S8:
-						d->s8 = s->s8;
-						break;
-					case K_S16:
-						d->s16 = s->s16;
-						break;
-					case K_S32:
-						d->s32 = s->s32;
-						break;
-					case K_S64:
-						d->s64 = s->s64;
-						break;
-					case K_F32:
-						d->f32 = s->f32;
-						break;
-					case K_F64:
-						d->f64 = s->f64;
-						break;
-					default:
-						assert(false);
-				}
-			}
-		}
+            // For targets that are register, we may widen to the size of the register.
+            if (sdst->storage_class == K_REG)
+            {
+                switch (sdst->type)
+                {
+                    case K_U8:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->u8 = s->u8;
+                                break;
+                            case K_B8:
+                                d->u8 = s->b8;
+                                break;
+                            case K_S8:
+                                d->u8 = s->s8;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_U16:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->u16 = s->u8;
+                                break;
+                            case K_B8:
+                                d->u16 = s->b8;
+                                break;
+                            case K_S8:
+                                d->u16 = s->s8;
+                                break;
+                            case K_U16:
+                                d->u16 = s->u16;
+                                break;
+                            case K_B16:
+                                d->u16 = s->b16;
+                                break;
+                            case K_S16:
+                                d->u16 = s->s16;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_U32:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->u32 = s->u8;
+                                break;
+                            case K_B8:
+                                d->u32 = s->b8;
+                                break;
+                            case K_S8:
+                                d->u32 = s->s8;
+                                break;
+                            case K_U16:
+                                d->u32 = s->u16;
+                                break;
+                            case K_B16:
+                                d->u32 = s->b16;
+                                break;
+                            case K_S16:
+                                d->u32 = s->s16;
+                                break;
+                            case K_U32:
+                                d->u32 = s->u32;
+                                break;
+                            case K_B32:
+                                d->u32 = s->b32;
+                                break;
+                            case K_S32:
+                                d->u32 = s->s32;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_U64:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->u64 = s->u8;
+                                break;
+                            case K_B8:
+                                d->u64 = s->b8;
+                                break;
+                            case K_S8:
+                                d->u64 = s->s8;
+                                break;
+                            case K_U16:
+                                d->u64 = s->u16;
+                                break;
+                            case K_B16:
+                                d->u64 = s->b16;
+                                break;
+                            case K_S16:
+                                d->u64 = s->s16;
+                                break;
+                            case K_U32:
+                                d->u64 = s->u32;
+                                break;
+                            case K_B32:
+                                d->u64 = s->b32;
+                                break;
+                            case K_S32:
+                                d->u64 = s->s32;
+                                break;
+                            case K_U64:
+                                d->u64 = s->u64;
+                                break;
+                            case K_B64:
+                                d->u64 = s->b64;
+                                break;
+                            case K_S64:
+                                d->u64 = s->s64;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_S8:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->s8 = s->u8;
+                                break;
+                            case K_B8:
+                                d->s8 = s->b8;
+                                break;
+                            case K_S8:
+                                d->s8 = s->s8;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_S16:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->s16 = s->u8;
+                                break;
+                            case K_B8:
+                                d->s16 = s->b8;
+                                break;
+                            case K_S8:
+                                d->s16 = s->s8;
+                                break;
+                            case K_U16:
+                                d->s16 = s->u16;
+                                break;
+                            case K_B16:
+                                d->s16 = s->b16;
+                                break;
+                            case K_S16:
+                                d->s16 = s->s16;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_S32:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->s32 = s->u8;
+                                break;
+                            case K_B8:
+                                d->s32 = s->b8;
+                                break;
+                            case K_S8:
+                                d->s32 = s->s8;
+                                break;
+                            case K_U16:
+                                d->s32 = s->u16;
+                                break;
+                            case K_B16:
+                                d->s32 = s->b16;
+                                break;
+                            case K_S16:
+                                d->s32 = s->s16;
+                                break;
+                            case K_U32:
+                                d->s32 = s->u32;
+                                break;
+                            case K_B32:
+                                d->s32 = s->b32;
+                                break;
+                            case K_S32:
+                                d->s32 = s->s32;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_S64:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->s64 = s->u8;
+                                break;
+                            case K_B8:
+                                d->s64 = s->b8;
+                                break;
+                            case K_S8:
+                                d->s64 = s->s8;
+                                break;
+                            case K_U16:
+                                d->s64 = s->u16;
+                                break;
+                            case K_B16:
+                                d->s64 = s->b16;
+                                break;
+                            case K_S16:
+                                d->s64 = s->s16;
+                                break;
+                            case K_U32:
+                                d->s64 = s->u32;
+                                break;
+                            case K_B32:
+                                d->s64 = s->b32;
+                                break;
+                            case K_S32:
+                                d->s64 = s->s32;
+                                break;
+                            case K_U64:
+                                d->s64 = s->u64;
+                                break;
+                            case K_B64:
+                                d->s64 = s->b64;
+                                break;
+                            case K_S64:
+                                d->s64 = s->s64;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_B8:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->b8 = s->u8;
+                                break;
+                            case K_B8:
+                                d->b8 = s->b8;
+                                break;
+                            case K_S8:
+                                d->b8 = s->s8;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_B16:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->b16 = s->u8;
+                                break;
+                            case K_B8:
+                                d->b16 = s->b8;
+                                break;
+                            case K_S8:
+                                d->b16 = s->s8;
+                                break;
+                            case K_U16:
+                                d->b16 = s->u16;
+                                break;
+                            case K_B16:
+                                d->b16 = s->b16;
+                                break;
+                            case K_S16:
+                                d->b16 = s->s16;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_B32:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->b32 = s->u8;
+                                break;
+                            case K_B8:
+                                d->b32 = s->b8;
+                                break;
+                            case K_S8:
+                                d->b32 = s->s8;
+                                break;
+                            case K_U16:
+                                d->b32 = s->u16;
+                                break;
+                            case K_B16:
+                                d->b32 = s->b16;
+                                break;
+                            case K_S16:
+                                d->b32 = s->s16;
+                                break;
+                            case K_U32:
+                                d->b32 = s->u32;
+                                break;
+                            case K_B32:
+                                d->b32 = s->b32;
+                                break;
+                            case K_S32:
+                                d->b32 = s->s32;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_B64:
+                        switch (type)
+                        {
+                            case K_U8:
+                                d->b64 = s->u8;
+                                break;
+                            case K_B8:
+                                d->b64 = s->b8;
+                                break;
+                            case K_S8:
+                                d->b64 = s->s8;
+                                break;
+                            case K_U16:
+                                d->b64 = s->u16;
+                                break;
+                            case K_B16:
+                                d->b64 = s->b16;
+                                break;
+                            case K_S16:
+                                d->b64 = s->s16;
+                                break;
+                            case K_U32:
+                                d->b64 = s->u32;
+                                break;
+                            case K_B32:
+                                d->b64 = s->b32;
+                                break;
+                            case K_S32:
+                                d->b64 = s->s32;
+                                break;
+                            case K_U64:
+                                d->b64 = s->u64;
+                                break;
+                            case K_B64:
+                                d->b64 = s->b64;
+                                break;
+                            case K_S64:
+                                d->b64 = s->s64;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    case K_F64:
+                        d->f64 = s->f64;
+                        break;
+                    default:
+                        assert(false);
+                }
+            }
+            else
+            {
+                switch (type)
+                {
+                    case K_U8:
+                        d->u8 = s->u8;
+                        break;
+                    case K_U16:
+                        d->u16 = s->u16;
+                        break;
+                    case K_U32:
+                        d->u32 = s->u32;
+                        break;
+                    case K_U64:
+                        d->u64 = s->u64;
+                        break;
+                    case K_S8:
+                        d->s8 = s->s8;
+                        break;
+                    case K_S16:
+                        d->s16 = s->s16;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_S64:
+                        d->s64 = s->s64;
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    case K_F64:
+                        d->f64 = s->f64;
+                        break;
+                    default:
+                        assert(false);
+                }
+            }
+        }
 
         addr = addr + this->device->Sizeof(type);
     }
@@ -3786,119 +3786,119 @@ int THREAD::DoMad(TREE * inst)
     switch (type)
     {
         case K_U16:
-			if (width == K_LO || width == 0)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				vx = vx + s3->u16;
-				d->u16 = vx;
-			}
+            if (width == K_LO || width == 0)
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                vx = vx + s3->u16;
+                d->u16 = vx;
+            }
             else if (width == K_HI)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				vx = vx + s3->u16;
-				d->u16 = vx >> 16;
-			}
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                vx = vx + s3->u16;
+                d->u16 = vx >> 16;
+            }
             else if (width == K_WIDE)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				vx = vx + s3->u32;
-				d->u32 = vx;
-			}
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                vx = vx + s3->u32;
+                d->u32 = vx;
+            }
             else assert(false);
             break;
         case K_S16:
-			if (width == K_LO || width == 0)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				vx = vx + s3->s16;
-				d->s16 = vx;
-			}
-			else if (width == K_HI)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				vx = vx + s3->s16;
-				d->s16 = vx >> 16;
-			}
-			else if (width == K_WIDE)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				vx = vx + s3->s32;
-				d->s32 = vx;
-			}
-			else assert(false);
-			break;
+            if (width == K_LO || width == 0)
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                vx = vx + s3->s16;
+                d->s16 = vx;
+            }
+            else if (width == K_HI)
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                vx = vx + s3->s16;
+                d->s16 = vx >> 16;
+            }
+            else if (width == K_WIDE)
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                vx = vx + s3->s32;
+                d->s32 = vx;
+            }
+            else assert(false);
+            break;
         case K_U32:
-			if (width == K_LO || width == 0)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				vx = vx + s3->u32;
-				d->u32 = (unsigned __int32)(0xffffffff & vx);
-			}
-			else if (width == K_HI)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				vx = vx + s3->u32;
-				d->u32 = vx >> 32;
-			}
-			else if (width == K_WIDE)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				vx = vx + s3->u64;
-				d->u64 = vx;
-			}
-			else assert(false);
+            if (width == K_LO || width == 0)
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                vx = vx + s3->u32;
+                d->u32 = (unsigned __int32)(0xffffffff & vx);
+            }
+            else if (width == K_HI)
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                vx = vx + s3->u32;
+                d->u32 = vx >> 32;
+            }
+            else if (width == K_WIDE)
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                vx = vx + s3->u64;
+                d->u64 = vx;
+            }
+            else assert(false);
             break;
         case K_S32:
-			if (width == K_LO || width == 0)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				vx = vx + s3->s32;
-				d->s32 = (__int32)(0xffffffff & vx);
-			}
-			else if (width == K_HI)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				vx = vx + s3->s32;
-				d->s32 = vx >> 32;
-			}
-			else if (width == K_WIDE)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				vx = vx + s3->s64;
-				d->s64 = vx;
-			}
-			else assert(false);
+            if (width == K_LO || width == 0)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                vx = vx + s3->s32;
+                d->s32 = (__int32)(0xffffffff & vx);
+            }
+            else if (width == K_HI)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                vx = vx + s3->s32;
+                d->s32 = vx >> 32;
+            }
+            else if (width == K_WIDE)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                vx = vx + s3->s64;
+                d->s64 = vx;
+            }
+            else assert(false);
             break;
         case K_F32:
-			if (width == 0)
-			{
-				double vx = s1->f32;
-				vx = vx * s2->f32;
-				vx = vx + s3->f32;
-				d->f32 = (float)(vx);
-			}
-			else if (width == K_WIDE)
-			{
-				double vx = s1->f32;
-				vx = vx * s2->f32;
-				vx = vx + s3->f64;
-				d->f64 = vx;
-			}
-			else assert(false);
+            if (width == 0)
+            {
+                double vx = s1->f32;
+                vx = vx * s2->f32;
+                vx = vx + s3->f32;
+                d->f32 = (float)(vx);
+            }
+            else if (width == K_WIDE)
+            {
+                double vx = s1->f32;
+                vx = vx * s2->f32;
+                vx = vx + s3->f64;
+                d->f64 = vx;
+            }
+            else assert(false);
             break;
-		default:
+        default:
             assert(false);
     }
     return 0;
@@ -4257,97 +4257,97 @@ int THREAD::DoMul(TREE * inst)
     {
         case K_U16:
             if (width == K_LO)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				d->u16 = vx;
-			}
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                d->u16 = vx;
+            }
             else if (width == K_HI)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				d->u16 = vx >> 16;
-			}
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                d->u16 = vx >> 16;
+            }
             else if (width == K_WIDE)
-			{
-				unsigned __int32 vx = s1->u16;
-				vx = vx * s2->u16;
-				d->u32 = vx;
-			}
+            {
+                unsigned __int32 vx = s1->u16;
+                vx = vx * s2->u16;
+                d->u32 = vx;
+            }
             else assert(false);
             break;
         case K_S16:
             if (width == K_LO)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				d->s16 = vx;
-			}
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                d->s16 = vx;
+            }
             else if (width == K_HI)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				d->s16 = vx >> 16;
-			}
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                d->s16 = vx >> 16;
+            }
             else if (width == K_WIDE)
-			{
-				__int32 vx = s1->s16;
-				vx = vx * s2->s16;
-				d->s32 = vx;
-			}
+            {
+                __int32 vx = s1->s16;
+                vx = vx * s2->s16;
+                d->s32 = vx;
+            }
             else assert(false);
             break;
         case K_U32:
             if (width == K_LO)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				d->u32 = (unsigned __int32)(0xffffffff & vx);
-			}
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                d->u32 = (unsigned __int32)(0xffffffff & vx);
+            }
             else if (width == K_HI)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				d->u32 = vx >> 32;
-			}
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                d->u32 = vx >> 32;
+            }
             else if (width == K_WIDE)
-			{
-				unsigned __int64 vx = s1->u32;
-				vx = vx * s2->u32;
-				d->u64 = vx;
-			}
+            {
+                unsigned __int64 vx = s1->u32;
+                vx = vx * s2->u32;
+                d->u64 = vx;
+            }
             else assert(false);
             break;
         case K_S32:
-			if (width == K_LO)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				d->s32 = (__int32)(0xffffffff & vx);
-			}
-			else if (width == K_HI)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				d->s32 = vx >> 32;
-			}
-			else if (width == K_WIDE)
-			{
-				__int64 vx = s1->s32;
-				vx = vx * s2->s32;
-				d->s64 = vx;
-			}
+            if (width == K_LO)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                d->s32 = (__int32)(0xffffffff & vx);
+            }
+            else if (width == K_HI)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                d->s32 = vx >> 32;
+            }
+            else if (width == K_WIDE)
+            {
+                __int64 vx = s1->s32;
+                vx = vx * s2->s32;
+                d->s64 = vx;
+            }
             else assert(false);
             break;
         case K_F32:
-			assert(width == 0);
+            assert(width == 0);
             d->f32 = s1->f32 * s2->f32;
             break;
         case K_F64:
-			assert(width == 0);
+            assert(width == 0);
             d->f64 = s1->f64 * s2->f64;
             break;
-		default:
+        default:
             assert(false);
     }
     return 0;
@@ -7830,6 +7830,29 @@ int THREAD::DoTestp(TREE * inst)
     throw new EMULATED_DEVICE::EMU_ERROR("TESTP unimplemented");
 }
 
+// Compute the sum of the number of bits for each of x, y, z, and w,
+// depending on "component".  If component is zero, then return just x.
+// If component is 1, then return x + y. If component is 2, then return
+// x + y + z. etc.  If component is 4 or larger, or negative, throw an
+// error.
+int prefix_sum_channel_size(struct cudaChannelFormatDesc * desc, int component)
+{
+	if (component == 0)
+		return 0;
+	else if (component == 1)
+		return desc->x;
+	else if (component == 2)
+		return desc->x + desc->y;
+	else if (component == 3)
+		return desc->x + desc->y + desc->z;
+	return 0;
+}
+
+int total_sum_channel_size(struct cudaChannelFormatDesc * desc)
+{
+	return desc->x + desc->y + desc->z + desc->w;
+}
+
 int THREAD::DoTex(TREE * inst)
 {
     int start = 0;
@@ -7880,6 +7903,7 @@ int THREAD::DoTex(TREE * inst)
     bool _1d = false;
     bool _2d = false;
     bool _3d = false;
+    int vec = 0;
     int stype = 0;
     int dtype = 0;
     for (int i = 0; ; ++i)
@@ -7895,7 +7919,7 @@ int THREAD::DoTex(TREE * inst)
         else if (gt == K_3D)
             _3d = true;
         else if (gt == K_V4)
-            ;
+            vec = gt;
         else if (dtype == 0)
         {
             if (gt == K_U32 || gt == K_S32 || gt == K_F32)
@@ -7914,7 +7938,6 @@ int THREAD::DoTex(TREE * inst)
     assert(dtype != 0);
 
     int type = ttype->GetType();
-    TREE * dst1 = odst1->GetChild(0);
     TREE * src1 = osrc1->GetChild(0);
     TREE * src2 = osrc2->GetChild(0);
 
@@ -7932,6 +7955,10 @@ int THREAD::DoTex(TREE * inst)
     std::map<char*, TEXTURE*, ltstr>::iterator i = this->device->texturename_to_texture.find(tex->name);
     assert(i != this->device->texturename_to_texture.end());
     TEXTURE * texture = i->second;
+
+    int times = 1;
+    if (vec == K_V4)
+        times = 4;
 
     // Find texture binding from texture.
     // There are going to be only one of two possible ways:
@@ -7981,21 +8008,40 @@ int THREAD::DoTex(TREE * inst)
                     assert(false);
             }
 
-            // Add value to texture binding address and dereference to get and assign value.
-            SYMBOL * sdst = 0;
-            if (dst1->GetType() == T_WORD)
+            for (int i = 0; i < times; ++i)
             {
-                sdst = this->symbol_table->FindSymbol(dst1->GetText());
-            } else assert(false);
+                s = (TYPES::Types*)(texture_binding->devPtr);
+                unsigned char * addr = 0;
+                addr = ((unsigned char*)s);
+                int index = (int) findex;
 
-            s = (TYPES::Types*)(texture_binding->devPtr);
-            unsigned char * addr = 0;
-            addr = (unsigned char*)s;
+				s = (TYPES::Types*)(addr
+									+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+									+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-            int index = (int) findex;
+				TREE * dst1 = odst1->GetChild(i);
+				SYMBOL * sdst = 0;
+				if (dst1->GetType() == T_WORD)
+				{
+					sdst = this->symbol_table->FindSymbol(dst1->GetText());
+				} else assert(false);
+				TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-
+				switch (dtype)
+				{
+					case K_U32:
+						d->u32 = s->u32;
+						break;
+					case K_S32:
+						d->s32 = s->s32;
+						break;
+					case K_F32:
+						d->f32 = s->f32;
+						break;
+					default:
+						assert(false);
+				}
+            }
         } else  if (_2d)
         {
             // Compute actual source.
@@ -8062,42 +8108,47 @@ int THREAD::DoTex(TREE * inst)
                     assert(false);
             }
 
-            s = (TYPES::Types*)(texture_binding->devPtr);
-            unsigned char * addr = 0;
-            addr = (unsigned char*)s;
+            for (int i = 0; i < times; ++i)
+            {
+                s = (TYPES::Types*)(texture_binding->devPtr);
+                unsigned char * addr = 0;
+				addr = ((unsigned char*)s);
+                int index = (int) findex;
 
-            int index = (int) findex;
+				s = (TYPES::Types*)(addr
+									+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+									+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-        }
+				TREE * dst1 = odst1->GetChild(i);
+                SYMBOL * sdst = 0;
+                if (dst1->GetType() == T_WORD)
+                {
+                    sdst = this->symbol_table->FindSymbol(dst1->GetText());
+                } else assert(false);
+                TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-        SYMBOL * sdst = 0;
-        if (dst1->GetType() == T_WORD)
-        {
-            sdst = this->symbol_table->FindSymbol(dst1->GetText());
-        } else assert(false);
-        TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
-
-        switch (dtype)
-        {
-            case K_U32:
-                d->u32 = s->u32;
-                break;
-            case K_S32:
-                d->s32 = s->s32;
-                break;
-            case K_F32:
-                d->f32 = s->f32;
-                break;
-            default:
-                assert(false);
+                switch (dtype)
+                {
+                    case K_U32:
+                        d->u32 = s->u32;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    default:
+                        assert(false);
+                }
+            }
         }
     }
     else {
         // Array bound texture.  Perform filtering.
         std::map<void*, TEXARR*>::iterator k = this->device->texture_to_array_binding.find(texture->hostVar);
         assert(k != this->device->texture_to_array_binding.end());
-        
+
         // Texture bound to array.
         TEXARR * texture_binding = k->second;
         cudaArray * cudaArr = texture_binding->array;
@@ -8143,72 +8194,85 @@ int THREAD::DoTex(TREE * inst)
                     assert(false);
             }
 
-            // Add value to texture binding address and dereference to get and assign value.
-            SYMBOL * sdst = 0;
-            if (dst1->GetType() == T_WORD)
+            for (int i = 0; i < times; ++i)
             {
-                sdst = this->symbol_table->FindSymbol(dst1->GetText());
-            } else assert(false);
-            TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+                s = (TYPES::Types*)(arr->memory + cu->padding_size);
+                unsigned char * addr = 0;
+				addr = ((unsigned char*)s);
 
-            s = (TYPES::Types*)(arr->memory + cu->padding_size);
-            unsigned char * addr = 0;
-            addr = (unsigned char*)s;
+				TREE * dst1 = odst1->GetChild(i);
 
-            if (texture->hostVar->filterMode & cudaFilterModeLinear)
-            {
-                // Perform interpolation.
-                // findex will be between floor(findex) and ceil(findex).  However, before grabbing the values
-                // at these two indices, perform index range checking.
-                int i1 = (int)floor(findex - 0.5);
-                int i2 = i1 + 1;
-                if (i1 < 0)
+				// Add value to texture binding address and dereference to get and assign value.
+				SYMBOL * sdst = 0;
+				if (dst1->GetType() == T_WORD)
+				{
+					sdst = this->symbol_table->FindSymbol(dst1->GetText());
+				} else assert(false);
+				TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+
+                if (texture->hostVar->filterMode & cudaFilterModeLinear)
                 {
-                    i1 = 0;
-                    i2 = 0;
+                    // Perform interpolation.
+                    // findex will be between floor(findex) and ceil(findex).  However, before grabbing the values
+                    // at these two indices, perform index range checking.
+                    int i1 = (int)floor(findex - 0.5);
+                    int i2 = i1 + 1;
+                    if (i1 < 0)
+                    {
+                        i1 = 0;
+                        i2 = 0;
+                    }
+                    if (i1+1 >= arr->width)
+                    {
+                        i1 = arr->width - 1;
+                        i2 = i1;
+                    }
+
+					s = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+										+ i1 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+					
+                    TYPES::Types* s1 = s;
+					int xx = total_sum_channel_size(&texture_binding->texref->channelDesc);
+					xx = xx / 8;
+					TYPES::Types* s2 = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ i2 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+                    switch (dtype)
+                    {
+                        case K_U32:
+                            d->u32 = s->s32;
+                            break;
+                        case K_S32:
+                            d->s32 = s->s32;
+                            break;
+                        case K_F32:
+                            d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
+                            break;
+                        default:
+                            assert(false);
+                    }
+
                 }
-                if (i1+1 >= arr->width)
-                {
-                    i1 = arr->width - 1;
-                    i2 = i1;
-                }
-                s = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
-                TYPES::Types* s1 = (TYPES::Types*)(addr + i1 * (this->device->Sizeof(dtype)));
-                TYPES::Types* s2 = (TYPES::Types*)(addr + i2 * (this->device->Sizeof(dtype)));
+                else {
+                    int index = (int) findex;
+                    s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
 
-                switch (dtype)
-                {
-                    case K_U32:
-                        d->u32 = s->s32;
-                        break;
-                    case K_S32:
-                        d->s32 = s->s32;
-                        break;
-                    case K_F32:
-                        d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
-                        break;
-                    default:
-                        assert(false);
-                }
-
-            }
-            else {
-                int index = (int) findex;
-                s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-
-                switch (dtype)
-                {
-                    case K_U32:
-                        d->u32 = s->u32;
-                        break;
-                    case K_S32:
-                        d->s32 = s->s32;
-                        break;
-                    case K_F32:
-                        d->f32 = s->f32;
-                        break;
-                    default:
-                        assert(false);
+                    switch (dtype)
+                    {
+                        case K_U32:
+                            d->u32 = s->u32;
+                            break;
+                        case K_S32:
+                            d->s32 = s->s32;
+                            break;
+                        case K_F32:
+                            d->f32 = s->f32;
+                            break;
+                        default:
+                            assert(false);
+                    }
                 }
             }
         } else  if (_2d)
@@ -8277,33 +8341,38 @@ int THREAD::DoTex(TREE * inst)
                     assert(false);
             }
 
-            s = (TYPES::Types*)(arr->memory + cu->padding_size);
-            unsigned char * addr = 0;
-            addr = (unsigned char*)s;
-
-            int index = (int) findex;
-
-            s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
-            SYMBOL * sdst = 0;
-            if (dst1->GetType() == T_WORD)
+            for (int i = 0; i < times; ++i)
             {
-                sdst = this->symbol_table->FindSymbol(dst1->GetText());
-            } else assert(false);
-            TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+                s = (TYPES::Types*)(arr->memory + cu->padding_size);
+                unsigned char * addr = 0;
+                addr = ((unsigned char*)s) + i * (this->device->Sizeof(stype));
 
-            switch (dtype)
-            {
-                case K_U32:
-                    d->u32 = s->u32;
-                    break;
-                case K_S32:
-                    d->s32 = s->s32;
-                    break;
-                case K_F32:
-                    d->f32 = s->f32;
-                    break;
-                default:
-                    assert(false);
+                int index = (int) findex;
+
+                TREE * dst1 = odst1->GetChild(i);
+
+                s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
+                SYMBOL * sdst = 0;
+                if (dst1->GetType() == T_WORD)
+                {
+                    sdst = this->symbol_table->FindSymbol(dst1->GetText());
+                } else assert(false);
+                TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+
+                switch (dtype)
+                {
+                    case K_U32:
+                        d->u32 = s->u32;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    default:
+                        assert(false);
+                }
             }
         }
     }
