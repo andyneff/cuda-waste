@@ -1,4 +1,4 @@
 #pragma once
 
-static char * WASTE_VERSION = "r192";
+static char * WASTE_VERSION = "r197";
 
