@@ -21,7 +21,7 @@ __global__ void transformKernel(float* output, int width, int height, int output
     // Calculate normalized texture coordinates
     unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
-     
+    
     float u = x / (float)width;
     float v = y / (float)height;
 

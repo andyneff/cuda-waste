@@ -4243,6 +4243,9 @@ int THREAD::DoMul(TREE * inst)
             case K_S32:
                 s2->s32 = c.value.s32;
                 break;
+            case K_F32:
+                s2->f32 = c.value.f32;
+                break;
             default:
                 assert(false);
         }
@@ -8044,7 +8047,8 @@ int THREAD::DoTex(TREE * inst)
             }
         } else  if (_2d)
         {
-            // Compute actual source.
+			float findex_x;
+			float findex_y;
             TYPES::Types value;
             SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
             SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
@@ -8071,10 +8075,10 @@ int THREAD::DoTex(TREE * inst)
             switch (stype)
             {
                 case K_S32:
-                    findex = s->s32;
+                    findex_x = s->s32;
                     break;
                 case K_F32:
-                    findex = s->f32;
+                    findex_x = s->f32;
                     break;
                 default:
                     assert(false);
@@ -8099,13 +8103,38 @@ int THREAD::DoTex(TREE * inst)
             switch (stype)
             {
                 case K_S32:
-                    findex = findex + texture_binding->width * s->s32;
+                    findex_y = s->s32;
                     break;
                 case K_F32:
-                    findex = findex + texture_binding->width * s->f32;
+                    findex_y = s->f32;
                     break;
                 default:
                     assert(false);
+            }
+
+			float increment = 0;
+
+            int ix1 = (int)floor(findex_x - increment);
+            int ix2 = ix1 + 1;
+            int iy1 = (int)floor(findex_y - increment);
+            int iy2 = iy1 + 1;
+            if (ix1 < 0)
+            {
+                ix1 = 0;
+            }
+            if (ix2 >= texture_binding->width)
+            {
+                ix2 = texture_binding->width - 1;
+				ix1 = ix2;
+            }
+            if (iy1 < 0)
+            {
+                iy1 = 0;
+            }
+            if (iy2 >= texture_binding->height)
+            {
+                iy2 = texture_binding->height - 1;
+				iy1 = iy2;
             }
 
             for (int i = 0; i < times; ++i)
@@ -8113,7 +8142,9 @@ int THREAD::DoTex(TREE * inst)
                 s = (TYPES::Types*)(texture_binding->devPtr);
                 unsigned char * addr = 0;
 				addr = ((unsigned char*)s);
-                int index = (int) findex;
+
+				// Linear memory, so do not interpolate. So, we only need one value to fetch.
+				int index =  ix1 + iy1 * texture_binding->width;
 
 				s = (TYPES::Types*)(addr
 									+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
@@ -8233,8 +8264,6 @@ int THREAD::DoTex(TREE * inst)
 										+ i1 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 					
                     TYPES::Types* s1 = s;
-					int xx = total_sum_channel_size(&texture_binding->texref->channelDesc);
-					xx = xx / 8;
 					TYPES::Types* s2 = (TYPES::Types*)(addr
 						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
 						+ i2 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
@@ -8277,6 +8306,8 @@ int THREAD::DoTex(TREE * inst)
             }
         } else  if (_2d)
         {
+			float findex_x;
+			float findex_y;
             // Compute actual source.
             TYPES::Types value;
             SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
@@ -8304,10 +8335,10 @@ int THREAD::DoTex(TREE * inst)
             switch (stype)
             {
                 case K_S32:
-                    findex = s->s32;
+                    findex_x = s->s32;
                     break;
                 case K_F32:
-                    findex = s->f32;
+                    findex_x = s->f32;
                     break;
                 default:
                     assert(false);
@@ -8332,26 +8363,54 @@ int THREAD::DoTex(TREE * inst)
             switch (stype)
             {
                 case K_S32:
-                    findex = findex + arr->width * s->s32;
+                    findex_y = s->s32;
                     break;
                 case K_F32:
-                    findex = findex + arr->width * s->f32;
+                    findex_y = s->f32;
                     break;
                 default:
                     assert(false);
+            }
+
+			float increment = (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32) ? 0.5 : 0;
+			float r_findex_x = findex_x - increment;
+			float r_findex_y = findex_y - increment;
+			if (r_findex_x < 0)
+				r_findex_x = 0;
+			if (r_findex_y < 0)
+				r_findex_y = 0;
+
+            int ix1 = (int)floor(r_findex_x);
+            int ix2 = ix1 + 1;
+            int iy1 = (int)floor(r_findex_y);
+            int iy2 = iy1 + 1;
+            if (ix1 < 0)
+            {
+                ix1 = 0;
+            }
+            if (ix2 >= arr->width)
+            {
+                ix2 = arr->width - 1;
+				ix1 = ix2;
+            }
+            if (iy1 < 0)
+            {
+                iy1 = 0;
+            }
+            if (iy2 >= arr->height)
+            {
+                iy2 = arr->height - 1;
+				iy1 = iy2;
             }
 
             for (int i = 0; i < times; ++i)
             {
                 s = (TYPES::Types*)(arr->memory + cu->padding_size);
                 unsigned char * addr = 0;
-                addr = ((unsigned char*)s) + i * (this->device->Sizeof(stype));
-
-                int index = (int) findex;
+                addr = ((unsigned char*)s);
 
                 TREE * dst1 = odst1->GetChild(i);
 
-                s = (TYPES::Types*)(addr + index * (this->device->Sizeof(dtype)));
                 SYMBOL * sdst = 0;
                 if (dst1->GetType() == T_WORD)
                 {
@@ -8359,20 +8418,73 @@ int THREAD::DoTex(TREE * inst)
                 } else assert(false);
                 TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-                switch (dtype)
+                if (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32)
                 {
-                    case K_U32:
-                        d->u32 = s->u32;
-                        break;
-                    case K_S32:
-                        d->s32 = s->s32;
-                        break;
-                    case K_F32:
-                        d->f32 = s->f32;
-                        break;
-                    default:
-                        assert(false);
-                }
+					int index_q11 = ix1 + arr->width * iy1;
+					int index_q12 = ix1 + arr->width * iy2;
+					int index_q21 = ix2 + arr->width * iy1;
+					int index_q22 = ix2 + arr->width * iy2;
+
+					TYPES::Types* q11 = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ index_q11 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+					TYPES::Types* q12 = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ index_q12 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+					TYPES::Types* q21 = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ index_q21 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+					TYPES::Types* q22 = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ index_q22 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+					// ix1 - ix2, as well as iy1 - iy2, can never be zero.  Basica assumption in binear
+					// interpolation.  In this case, create adjusted x and y coordinates so that it looks
+					// like a flat function.
+
+					if (ix1 - ix2 == 0)
+					{
+						ix2 = ix1 + 1;
+					}
+					if (iy1 - iy2 == 0)
+					{
+						iy2 = iy1 + 1;
+					}
+
+					float p1 = q11->f32 * (ix2 - r_findex_x) * (iy2 - r_findex_y);
+					float p2 = q21->f32 * (r_findex_x - ix1) * (iy2 - r_findex_y);
+					float p3 = q12->f32 * (ix2 - r_findex_x) * (r_findex_y - iy1);
+					float p4 = q22->f32 * (r_findex_x - ix1) * (r_findex_y - iy1);
+
+					d->f32 = p1 + p2 + p3 + p4;
+				}
+				else
+				{
+					// Linear memory, so do not interpolate. So, we only need one value to fetch.
+					int index = ix1 + arr->width * iy1;
+
+					s = (TYPES::Types*)(addr
+						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+						+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+
+					switch (dtype)
+					{
+						case K_U32:
+							d->u32 = s->u32;
+							break;
+						case K_S32:
+							d->s32 = s->s32;
+							break;
+						case K_F32:
+							d->f32 = s->f32;
+							break;
+						default:
+							assert(false);
+					}
+				}
             }
         }
     }
