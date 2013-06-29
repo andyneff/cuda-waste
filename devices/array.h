@@ -20,14 +20,56 @@
  */
 class ARRAY
 {
-public:
-	ARRAY()
-	{
-	};
-	
+private:
 	struct cudaChannelFormatDesc *desc;
 	size_t width;
 	size_t height;
 	unsigned int flags;
 	unsigned char * memory;
+
+public:
+	ARRAY(struct cudaChannelFormatDesc * _desc, size_t _width, 	size_t _height, unsigned int _flags)
+	{
+		this->desc = _desc;
+		this->width = _width;
+		this->height = _height;
+		this->flags = _flags;
+		this->memory = 0;
+	};
+
+	~ARRAY()
+	{
+		delete this->memory;
+	};
+
+	const struct cudaChannelFormatDesc * Desc()
+	{
+		return const_cast<const struct cudaChannelFormatDesc *>(this->desc);
+	}
+
+	size_t Width()
+	{
+		return this->width;
+	}
+
+	size_t Height()
+	{
+		return this->height;
+	}
+
+	unsigned int Flags()
+	{
+		return this->flags;
+	}
+
+	unsigned char * Memory()
+	{
+		return this->memory;
+	}
+	
+	void Memory(unsigned char * _memory)
+	{
+		this->memory = _memory;
+	}
+	
 };

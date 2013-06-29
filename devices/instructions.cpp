@@ -3911,7 +3911,258 @@ int THREAD::DoMad24(TREE * inst)
 
 int THREAD::DoMax(TREE * inst)
 {
-    throw new EMULATED_DEVICE::EMU_ERROR("MAX unimplemented");
+    int start = 0;
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
+        start++;
+    assert(inst->GetChild(start)->GetType() == KI_ADD);
+    start++;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    for (;; ++start)
+    {
+        TREE * t = inst->GetChild(start);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    bool ftz = false;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = ttype->GetChild(i);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == K_U16 || gt == K_U32 || gt == K_U64
+                 || gt == K_S16 || gt == K_S32 || gt == K_S64)
+            ttype = t;
+        else if (gt == K_F32 || gt == K_F64)
+            ttype = t;
+        else if (gt == K_FTZ)
+            ftz = true;
+        else assert(false);
+    }
+    assert(ttype != 0);
+    this->device->unimplemented(ftz, "MAX.ftz not implemented.");
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+
+    SYMBOL * sdst = 0;
+    if (dst->GetType() == T_WORD)
+    {
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
+    } else assert(false);
+
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types value3;
+    char * dummy;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
+    // used for carry out calculation.
+    TYPES::Types * temp = &value3;
+
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s1->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src1->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
+        assert(ssrc1 != 0);
+        assert(ssrc1->size == this->device->Sizeof(type));
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = psrc1_value->u16;
+                break;
+            case K_S16:
+                s1->s16 = psrc1_value->s16;
+                break;
+            case K_U32:
+                s1->u32 = psrc1_value->u32;
+                break;
+            case K_S32:
+                s1->s32 = psrc1_value->s32;
+                break;
+            case K_U64:
+                s1->u64 = psrc1_value->u64;
+                break;
+            case K_S64:
+                s1->s64 = psrc1_value->s64;
+                break;
+            case K_F32:
+                s1->f32 = psrc1_value->f32;
+                break;
+            case K_F64:
+                s1->f64 = psrc1_value->f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s2->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src2->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
+        assert(ssrc2 != 0);
+        assert(ssrc2->size == this->device->Sizeof(type));
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = psrc2_value->u16;
+                break;
+            case K_S16:
+                s2->s16 = psrc2_value->s16;
+                break;
+            case K_U32:
+                s2->u32 = psrc2_value->u32;
+                break;
+            case K_S32:
+                s2->s32 = psrc2_value->s32;
+                break;
+            case K_U64:
+                s2->u64 = psrc2_value->u64;
+                break;
+            case K_S64:
+                s2->s64 = psrc2_value->s64;
+                break;
+            case K_F32:
+                s2->f32 = psrc2_value->f32;
+                break;
+            case K_F64:
+                s2->f64 = psrc2_value->f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U16:
+            d->u16 = s1->u16 > s2->u16 ? s1->u16 : s2->u16;
+            break;
+        case K_S16:
+            d->s16 = s1->s16 > s2->s16 ? s1->s16 : s2->s16;
+            break;
+        case K_U32:
+            d->u32 = s1->u32 > s2->u32 ? s1->u32 : s2->u32;
+            break;
+        case K_S32:
+            d->s32 = s1->s32 > s2->s32 ? s1->s32 : s2->s32;
+            break;
+        case K_U64:
+            d->u64 = s1->u64 > s2->u64 ? s1->u64 : s2->u64;
+            break;
+        case K_S64:
+            d->s64 = s1->s64 > s2->s64 ? s1->s64 : s2->s64;
+            break;
+        case K_F32:
+			if (_isnan(s1->f32))
+				d->f32 = s2->f32;
+			else if (_isnan(s2->f32))
+				d->f32 = s1->f32;
+            else
+				d->f32 = s1->f32 > s2->f32 ? s1->f32 : s2->f32;
+            break;
+        case K_F64:
+			if (_isnan(s1->f64))
+				d->f64 = s2->f64;
+			else if (_isnan(s2->f64))
+				d->f64 = s1->f64;
+            else
+				d->f64 = s1->f64 > s2->f64 ? s1->f64 : s2->f64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 int THREAD::DoMembar(TREE * inst)
@@ -3921,7 +4172,258 @@ int THREAD::DoMembar(TREE * inst)
 
 int THREAD::DoMin(TREE * inst)
 {
-    throw new EMULATED_DEVICE::EMU_ERROR("MIN unimplemented");
+    int start = 0;
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
+        start++;
+    assert(inst->GetChild(start)->GetType() == KI_ADD);
+    start++;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    for (;; ++start)
+    {
+        TREE * t = inst->GetChild(start);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    bool ftz = false;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = ttype->GetChild(i);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == K_U16 || gt == K_U32 || gt == K_U64
+                 || gt == K_S16 || gt == K_S32 || gt == K_S64)
+            ttype = t;
+        else if (gt == K_F32 || gt == K_F64)
+            ttype = t;
+        else if (gt == K_FTZ)
+            ftz = true;
+        else assert(false);
+    }
+    assert(ttype != 0);
+    this->device->unimplemented(ftz, "MAX.ftz not implemented.");
+    int type = ttype->GetType();
+    TREE * dst = odst->GetChild(0);
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+
+    SYMBOL * sdst = 0;
+    if (dst->GetType() == T_WORD)
+    {
+        sdst = this->symbol_table->FindSymbol(dst->GetText());
+    } else assert(false);
+
+    TYPES::Types value1;
+    TYPES::Types value2;
+    TYPES::Types value3;
+    char * dummy;
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types * s2 = &value2;
+    // used for carry out calculation.
+    TYPES::Types * temp = &value3;
+
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s1->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src1->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
+        assert(ssrc1 != 0);
+        assert(ssrc1->size == this->device->Sizeof(type));
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s1->u16 = psrc1_value->u16;
+                break;
+            case K_S16:
+                s1->s16 = psrc1_value->s16;
+                break;
+            case K_U32:
+                s1->u32 = psrc1_value->u32;
+                break;
+            case K_S32:
+                s1->s32 = psrc1_value->s32;
+                break;
+            case K_U64:
+                s1->u64 = psrc1_value->u64;
+                break;
+            case K_S64:
+                s1->s64 = psrc1_value->s64;
+                break;
+            case K_F32:
+                s1->f32 = psrc1_value->f32;
+                break;
+            case K_F64:
+                s1->f64 = psrc1_value->f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = c.value.u16;
+                break;
+            case K_S16:
+                s2->s16 = c.value.s16;
+                break;
+            case K_U32:
+                s2->u32 = c.value.u32;
+                break;
+            case K_S32:
+                s2->s32 = c.value.s32;
+                break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src2->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
+        assert(ssrc2 != 0);
+        assert(ssrc2->size == this->device->Sizeof(type));
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
+        switch (type)
+        {
+            case K_U16:
+                s2->u16 = psrc2_value->u16;
+                break;
+            case K_S16:
+                s2->s16 = psrc2_value->s16;
+                break;
+            case K_U32:
+                s2->u32 = psrc2_value->u32;
+                break;
+            case K_S32:
+                s2->s32 = psrc2_value->s32;
+                break;
+            case K_U64:
+                s2->u64 = psrc2_value->u64;
+                break;
+            case K_S64:
+                s2->s64 = psrc2_value->s64;
+                break;
+            case K_F32:
+                s2->f32 = psrc2_value->f32;
+                break;
+            case K_F64:
+                s2->f64 = psrc2_value->f64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+    switch (type)
+    {
+        case K_U16:
+            d->u16 = s1->u16 < s2->u16 ? s1->u16 : s2->u16;
+            break;
+        case K_S16:
+            d->s16 = s1->s16 < s2->s16 ? s1->s16 : s2->s16;
+            break;
+        case K_U32:
+            d->u32 = s1->u32 < s2->u32 ? s1->u32 : s2->u32;
+            break;
+        case K_S32:
+            d->s32 = s1->s32 < s2->s32 ? s1->s32 : s2->s32;
+            break;
+        case K_U64:
+            d->u64 = s1->u64 < s2->u64 ? s1->u64 : s2->u64;
+            break;
+        case K_S64:
+            d->s64 = s1->s64 < s2->s64 ? s1->s64 : s2->s64;
+            break;
+        case K_F32:
+			if (_isnan(s1->f32))
+				d->f32 = s2->f32;
+			else if (_isnan(s2->f32))
+				d->f32 = s1->f32;
+            else
+				d->f32 = s1->f32 < s2->f32 ? s1->f32 : s2->f32;
+            break;
+        case K_F64:
+			if (_isnan(s1->f64))
+				d->f64 = s2->f64;
+			else if (_isnan(s2->f64))
+				d->f64 = s1->f64;
+            else
+				d->f64 = s1->f64 < s2->f64 ? s1->f64 : s2->f64;
+            break;
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 int THREAD::DoMov(TREE * inst)
@@ -8227,7 +8729,7 @@ int THREAD::DoTex(TREE * inst)
 
             for (int i = 0; i < times; ++i)
             {
-                s = (TYPES::Types*)(arr->memory + cu->padding_size);
+                s = (TYPES::Types*)(arr->Memory() + cu->padding_size);
                 unsigned char * addr = 0;
 				addr = ((unsigned char*)s);
 
@@ -8253,9 +8755,9 @@ int THREAD::DoTex(TREE * inst)
                         i1 = 0;
                         i2 = 0;
                     }
-                    if (i1+1 >= arr->width)
+                    if (i1+1 >= arr->Width())
                     {
-                        i1 = arr->width - 1;
+                        i1 = arr->Width() - 1;
                         i2 = i1;
                     }
 
@@ -8388,24 +8890,24 @@ int THREAD::DoTex(TREE * inst)
             {
                 ix1 = 0;
             }
-            if (ix2 >= arr->width)
+            if (ix2 >= arr->Width())
             {
-                ix2 = arr->width - 1;
+                ix2 = arr->Width() - 1;
 				ix1 = ix2;
             }
             if (iy1 < 0)
             {
                 iy1 = 0;
             }
-            if (iy2 >= arr->height)
+            if (iy2 >= arr->Height())
             {
-                iy2 = arr->height - 1;
+                iy2 = arr->Height() - 1;
 				iy1 = iy2;
             }
 
             for (int i = 0; i < times; ++i)
             {
-                s = (TYPES::Types*)(arr->memory + cu->padding_size);
+                s = (TYPES::Types*)(arr->Memory() + cu->padding_size);
                 unsigned char * addr = 0;
                 addr = ((unsigned char*)s);
 
@@ -8420,10 +8922,10 @@ int THREAD::DoTex(TREE * inst)
 
                 if (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32)
                 {
-					int index_q11 = ix1 + arr->width * iy1;
-					int index_q12 = ix1 + arr->width * iy2;
-					int index_q21 = ix2 + arr->width * iy1;
-					int index_q22 = ix2 + arr->width * iy2;
+					int index_q11 = ix1 + arr->Width() * iy1;
+					int index_q12 = ix1 + arr->Width() * iy2;
+					int index_q21 = ix2 + arr->Width() * iy1;
+					int index_q22 = ix2 + arr->Width() * iy2;
 
 					TYPES::Types* q11 = (TYPES::Types*)(addr
 						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
@@ -8464,7 +8966,7 @@ int THREAD::DoTex(TREE * inst)
 				else
 				{
 					// Linear memory, so do not interpolate. So, we only need one value to fetch.
-					int index = ix1 + arr->width * iy1;
+					int index = ix1 + arr->Width() * iy1;
 
 					s = (TYPES::Types*)(addr
 						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8

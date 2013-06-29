@@ -2386,7 +2386,7 @@ cudaError_t EMULATED_DEVICE::_cudaFreeArray(struct cudaArray *array)
     }
     ARRAY * d = (ARRAY*) array;
     this->arrays.erase(this->arrays.begin() + di);
-    free(d->memory);
+    free(d->Memory());
     delete d;
 	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
@@ -2491,7 +2491,7 @@ cudaError_t EMULATED_DEVICE::_cudaGetChannelDesc(struct cudaChannelFormatDesc *d
         (*cu->output_stream) << "_cudaGetChannelDesc called, " << context << ".\n\n";
     }
     ARRAY * arr = (ARRAY*)array;
-    *desc = *arr->desc;
+    *desc = *arr->Desc();
 	ERRS * error = new ERRS(cudaSuccess, __FILE__, " " + __LINE__);
     return cudaSuccess;
 }
@@ -3201,11 +3201,7 @@ cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const st
     // calculate size.
     // NOTE: a cudaChannelFormatDesc is a structure of the sizes of components of a linear piece of memory.  It is not a 4D cube.
     unsigned int size = width * height * (desc->x + desc->y + desc->z + desc->w)/8;  // bytes.
-    ARRAY * arr = new ARRAY();
-    arr->desc = (struct cudaChannelFormatDesc *)desc;
-    arr->width = width;
-    arr->height = height;
-    arr->flags = flags;
+    ARRAY * arr = new ARRAY((struct cudaChannelFormatDesc *)desc, width, height, flags);
 
     // Allocate a cuda memory buffer that is "bytes" long plus padding on either side.
     local = (void*) malloc(size+2*cu->padding_size);
@@ -3233,7 +3229,7 @@ cudaError_t EMULATED_DEVICE::_cudaMallocArray(struct cudaArray **array, const st
         *init = 0;
     }
     
-    arr->memory = (unsigned char*)(((char*)local));
+    arr->Memory((unsigned char*)(((char*)local)));
 
     *array = (struct cudaArray*) arr;
     this->arrays.push_back(arr);
@@ -3905,7 +3901,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
 
         // Perform copy.
         cudaError_t err;
-        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        copy_aux((char*)arr->Memory() + cu->padding_size, width, (char*)src, spitch, width, height);
         err = cudaSuccess;
         // Perform overwrite check again.
 		ERRS * error = new ERRS(err, __FILE__, " " + __LINE__);
@@ -3965,7 +3961,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
 
         // Perform copy.
         cudaError_t err;
-        copy_aux((char*)arr->memory + cu->padding_size, width, (char*)src, spitch, width, height);
+        copy_aux((char*)arr->Memory() + cu->padding_size, width, (char*)src, spitch, width, height);
         err = cudaSuccess;
         // Perform overwrite check again.
 		ERRS * error = new ERRS(err, __FILE__, " " + __LINE__);
@@ -4377,7 +4373,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
 
         // Perform copy.
         cudaError_t err;
-        memcpy((char*)arr->memory + cu->padding_size, src, count);
+        memcpy((char*)arr->Memory() + cu->padding_size, src, count);
         err = cudaSuccess;
         // Perform overwrite check again.
 		ERRS * error = new ERRS(err, __FILE__, " " + __LINE__);
@@ -4437,7 +4433,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
 
         // Perform copy.
         cudaError_t err;
-        memcpy((char*)arr->memory + cu->padding_size, src, count);
+        memcpy((char*)arr->Memory() + cu->padding_size, src, count);
         err = cudaSuccess;
         // Perform overwrite check again.
 		ERRS * error = new ERRS(err, __FILE__, " " + __LINE__);
