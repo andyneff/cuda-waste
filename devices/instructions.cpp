@@ -3914,7 +3914,7 @@ int THREAD::DoMax(TREE * inst)
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(inst->GetChild(start)->GetType() == KI_ADD);
+    assert(inst->GetChild(start)->GetType() == KI_MAX);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
@@ -4175,7 +4175,7 @@ int THREAD::DoMin(TREE * inst)
     int start = 0;
     if (inst->GetChild(start)->GetType() == TREE_PRED)
         start++;
-    assert(inst->GetChild(start)->GetType() == KI_ADD);
+    assert(inst->GetChild(start)->GetType() == KI_MIN);
     start++;
     TREE * ttype = 0;
     TREE * odst = 0;
