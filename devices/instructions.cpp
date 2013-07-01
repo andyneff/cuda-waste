@@ -61,8 +61,12 @@ int THREAD::DoAbs(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -80,7 +84,8 @@ int THREAD::DoAbs(TREE * inst)
             ttype = t;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "ABS.ftz not implemented.");
@@ -93,7 +98,9 @@ int THREAD::DoAbs(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -121,7 +128,7 @@ int THREAD::DoAbs(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -147,9 +154,11 @@ int THREAD::DoAbs(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
 
     switch (type)
     {
@@ -169,7 +178,7 @@ int THREAD::DoAbs(TREE * inst)
             d->f64 = abs(s1->f64);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ABS instruction");
     }
     return 0;
 }
@@ -204,8 +213,12 @@ int THREAD::DoAdd(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -234,7 +247,8 @@ int THREAD::DoAdd(TREE * inst)
             rnd = gt;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "ADD.ftz not implemented.");
@@ -247,7 +261,9 @@ int THREAD::DoAdd(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -289,7 +305,7 @@ int THREAD::DoAdd(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -324,9 +340,11 @@ int THREAD::DoAdd(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -358,7 +376,7 @@ int THREAD::DoAdd(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -393,9 +411,11 @@ int THREAD::DoAdd(TREE * inst)
                 s2->f64 = psrc2_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
 
     switch (type)
     {
@@ -489,7 +509,7 @@ int THREAD::DoAdd(TREE * inst)
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADD instruction");
     }
     return 0;
 }
@@ -524,8 +544,12 @@ int THREAD::DoAddc(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -543,7 +567,8 @@ int THREAD::DoAddc(TREE * inst)
             type = gt;
         else if (gt == K_CC)
             cc = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -554,7 +579,9 @@ int THREAD::DoAddc(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -584,7 +611,7 @@ int THREAD::DoAddc(TREE * inst)
                 s1->s32 = c.value.u64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -607,9 +634,11 @@ int THREAD::DoAddc(TREE * inst)
                 s1->u64 = psrc1_value->u64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -629,7 +658,7 @@ int THREAD::DoAddc(TREE * inst)
                 s1->u64 = c.value.u64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -652,9 +681,11 @@ int THREAD::DoAddc(TREE * inst)
                 s2->u64 = psrc2_value->u64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
 
     switch (type)
     {
@@ -687,7 +718,7 @@ int THREAD::DoAddc(TREE * inst)
             d->s32 = temp->s32;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ADDC instruction");
     }
     return 0;
 }
@@ -722,8 +753,12 @@ int THREAD::DoAnd(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -738,7 +773,8 @@ int THREAD::DoAnd(TREE * inst)
         int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -749,7 +785,9 @@ int THREAD::DoAnd(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -776,7 +814,7 @@ int THREAD::DoAnd(TREE * inst)
                 s1->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -799,9 +837,11 @@ int THREAD::DoAnd(TREE * inst)
                 s1->pred = psrc1_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -821,7 +861,7 @@ int THREAD::DoAnd(TREE * inst)
                 s2->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -844,9 +884,11 @@ int THREAD::DoAnd(TREE * inst)
                 s2->pred = psrc2_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
 
     switch (type)
     {
@@ -863,7 +905,7 @@ int THREAD::DoAnd(TREE * inst)
             d->pred = s1->pred & s2->pred;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected AND instruction");
     }
     return 0;
 }
@@ -903,8 +945,12 @@ int THREAD::DoAtom(TREE * inst)
             } else if (osrc3 == 0)
             {
                 osrc3 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -933,7 +979,8 @@ int THREAD::DoAtom(TREE * inst)
                  gt == K_INC || gt == K_DEC ||
                  gt == K_MIN || gt == K_MAX)
             op = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
     }
     assert(op != 0);
     assert(type != 0);
@@ -980,7 +1027,7 @@ int THREAD::DoAtom(TREE * inst)
         }
         break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
     }
     switch (value.type)
     {
@@ -1027,7 +1074,7 @@ int THREAD::DoAtom(TREE * inst)
             addr = (addr + value.value.s32);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
     }
 
     SYMBOL * sdst = 0;
@@ -1063,7 +1110,7 @@ int THREAD::DoAtom(TREE * inst)
                 s2->f32 = c.value.f32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -1092,9 +1139,11 @@ int THREAD::DoAtom(TREE * inst)
                 s2->f32 = psrc2_value->f32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
 
     switch (type)
     {
@@ -1118,7 +1167,7 @@ int THREAD::DoAtom(TREE * inst)
                     s1->b32 = s1->b32 + s2->b32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         case K_B64:
@@ -1141,7 +1190,7 @@ int THREAD::DoAtom(TREE * inst)
                     s1->b64 = s1->b64 + s2->b64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         case K_U32:
@@ -1164,7 +1213,7 @@ int THREAD::DoAtom(TREE * inst)
                     s1->u32 = s1->u32 + s2->u32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         case K_U64:
@@ -1187,7 +1236,7 @@ int THREAD::DoAtom(TREE * inst)
                     s1->u64 = s1->u64 + s2->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         case K_S32:
@@ -1210,7 +1259,7 @@ int THREAD::DoAtom(TREE * inst)
                     s1->s32 = s1->s32 + s2->s32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         case K_F32:
@@ -1221,11 +1270,11 @@ int THREAD::DoAtom(TREE * inst)
                     s1->f32 = s1->f32 + s2->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ATOM instruction");
     }
 
     return 0;
@@ -1254,8 +1303,12 @@ int THREAD::DoBar(TREE * inst)
             if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else this->device->unimplemented(true, "BAR with two or more operands unimplemented.");
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BAR instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BAR instruction");
     }
     assert(ttype != 0);
     assert(osrc1 != 0);
@@ -1305,7 +1358,7 @@ int THREAD::DoBar(TREE * inst)
                 s1->u32 = c.value.u32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BAR instruction");
         }
         this->device->unimplemented(c.value.u32 != 0, "BAR with non-zero argument not implemented.");
     } else if (src1->GetType() == T_WORD)
@@ -1320,9 +1373,11 @@ int THREAD::DoBar(TREE * inst)
                 s1->u32 = psrc1_value->u32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BAR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BAR instruction");
 
     this->device->unimplemented(s1->u32 != 0, "BAR with non-zero argument not implemented.");
 
@@ -1365,8 +1420,12 @@ int THREAD::DoBfe(TREE * inst)
             } else if (osrc3 == 0)
             {
                 osrc3 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -1384,7 +1443,8 @@ int THREAD::DoBfe(TREE * inst)
         if (gt == K_U32 || gt == K_U64
             || gt == K_S32)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
     }
     assert(type != 0);
 
@@ -1407,7 +1467,7 @@ int THREAD::DoBfe(TREE * inst)
     TYPES::Types value3;
     TYPES::Types * s3 = &value3;
 
-	if (src1->GetType() == TREE_CONSTANT_EXPR)
+    if (src1->GetType() == TREE_CONSTANT_EXPR)
     {
         CONSTANT c = this->device->Eval(type, src1->GetChild(0));
         switch (type)
@@ -1425,7 +1485,7 @@ int THREAD::DoBfe(TREE * inst)
                 s1->s64 = c.value.s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -1448,11 +1508,13 @@ int THREAD::DoBfe(TREE * inst)
                 s1->s64 = psrc1_value->s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
 
-	if (src2->GetType() == TREE_CONSTANT_EXPR)
+    if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
         CONSTANT c = this->device->Eval(type, src2->GetChild(0));
         s2->u32 = c.value.u32;
@@ -1462,9 +1524,11 @@ int THREAD::DoBfe(TREE * inst)
         assert(ssrc2 != 0);
         TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
         s2->u32 = psrc2_value->u32;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
 
-	if (src3->GetType() == TREE_CONSTANT_EXPR)
+    if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
         CONSTANT c = this->device->Eval(type, src3->GetChild(0));
         s3->u32 = c.value.u32;
@@ -1474,109 +1538,111 @@ int THREAD::DoBfe(TREE * inst)
         assert(ssrc3 != 0);
         TYPES::Types * psrc3_value = (TYPES::Types*)ssrc3->pvalue;
         s3->u32 = psrc3_value->u32;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
 
 
-	// Bits are numbered least significant bit to most significant bit.
+    // Bits are numbered least significant bit to most significant bit.
     switch (type)
     {
         case K_U32:
-			{
-				std::bitset<32> in_bs;
-				std::bitset<32> out_bs;
-				unsigned _int32 a = s1->u32;
-				in_bs = a;
-				int msb = 31;
-				int pos = s2->u32 & 0xff;
-				int len = s3->u32 & 0xff;
-				int sbit = 0; // U32
-				unsigned __int32 r = 0;
-				a = a >> pos;
-				for (int i = 0; i <= msb; ++i)
-				{
-					if (i < len && pos + i <= msb)
-						out_bs[i] = in_bs[pos+i];
-					else
-						out_bs[i] = sbit;
-				}
-				d->u32 = 0xffffffff & out_bs.to_ulong();
-			}
+            {
+                std::bitset<32> in_bs;
+                std::bitset<32> out_bs;
+                unsigned _int32 a = s1->u32;
+                in_bs = a;
+                int msb = 31;
+                int pos = s2->u32 & 0xff;
+                int len = s3->u32 & 0xff;
+                int sbit = 0; // U32
+                unsigned __int32 r = 0;
+                a = a >> pos;
+                for (int i = 0; i <= msb; ++i)
+                {
+                    if (i < len && pos + i <= msb)
+                        out_bs[i] = in_bs[pos+i];
+                    else
+                        out_bs[i] = sbit;
+                }
+                d->u32 = 0xffffffff & out_bs.to_ulong();
+            }
             break;
         case K_U64:
-			{
-				std::bitset<64> in_bs;
-				std::bitset<64> out_bs;
-				unsigned _int64 a = s1->u64;
-				in_bs = a;
-				int msb = 63;
-				int pos = s2->u32 & 0xff;
-				int len = s3->u32 & 0xff;
-				int sbit = 0; // U64
-				unsigned __int64 r = 0;
-				a = a >> pos;
-				for (int i = 0; i <= msb; ++i)
-				{
-					if (i < len && pos + i <= msb)
-						out_bs[i] = in_bs[pos+i];
-					else
-						out_bs[i] = sbit;
-				}
-				d->u64 = out_bs.to_ulong();
-			}
+            {
+                std::bitset<64> in_bs;
+                std::bitset<64> out_bs;
+                unsigned _int64 a = s1->u64;
+                in_bs = a;
+                int msb = 63;
+                int pos = s2->u32 & 0xff;
+                int len = s3->u32 & 0xff;
+                int sbit = 0; // U64
+                unsigned __int64 r = 0;
+                a = a >> pos;
+                for (int i = 0; i <= msb; ++i)
+                {
+                    if (i < len && pos + i <= msb)
+                        out_bs[i] = in_bs[pos+i];
+                    else
+                        out_bs[i] = sbit;
+                }
+                d->u64 = out_bs.to_ulong();
+            }
             break;
         case K_S32:
-			{
-				std::bitset<32> in_bs;
-				std::bitset<32> out_bs;
-				_int32 a = s1->s32;
-				in_bs = a;
-				int msb = 31;
-				int pos = s2->u32 & 0xff;
-				int len = s3->u32 & 0xff;
-				int sbit;
-				if (len == 0)
-					sbit = 0;
-				else
-					sbit = (a >> (min(pos + len - 1, msb))) & 1;
-				__int32 r = 0;
-				a = a >> pos;
-				for (int i = 0; i <= msb; ++i)
-				{
-					if (i < len && pos + i <= msb)
-						out_bs[i] = in_bs[pos+i];
-					else
-						out_bs[i] = sbit;
-				}
-				d->u32 = (__int32)(0xffffffff & out_bs.to_ulong());
-			}
-			break;
+            {
+                std::bitset<32> in_bs;
+                std::bitset<32> out_bs;
+                _int32 a = s1->s32;
+                in_bs = a;
+                int msb = 31;
+                int pos = s2->u32 & 0xff;
+                int len = s3->u32 & 0xff;
+                int sbit;
+                if (len == 0)
+                    sbit = 0;
+                else
+                    sbit = (a >> (min(pos + len - 1, msb))) & 1;
+                __int32 r = 0;
+                a = a >> pos;
+                for (int i = 0; i <= msb; ++i)
+                {
+                    if (i < len && pos + i <= msb)
+                        out_bs[i] = in_bs[pos+i];
+                    else
+                        out_bs[i] = sbit;
+                }
+                d->u32 = (__int32)(0xffffffff & out_bs.to_ulong());
+            }
+            break;
         case K_S64:
-			{
-				std::bitset<64> in_bs;
-				std::bitset<64> out_bs;
-				_int64 a = s1->s64;
-				int msb = 63;
-				int pos = s2->u32 & 0xff;
-				int len = s3->u32 & 0xff;
-				int sbit;
-				if (len == 0)
-					sbit = 0;
-				else
-					sbit = (a >> (min(pos + len - 1, msb))) & 1;
-				__int64 r = 0;
-				a = a >> pos;
-				for (int i = 0; i <= msb; ++i)
-				{
-					if (i < len && pos + i <= msb)
-						out_bs[i] = in_bs[pos+i];
-					else
-						out_bs[i] = sbit;
-				}
-				d->s64 = (__int64) out_bs.to_ulong();
-			}
-			break;
+            {
+                std::bitset<64> in_bs;
+                std::bitset<64> out_bs;
+                _int64 a = s1->s64;
+                int msb = 63;
+                int pos = s2->u32 & 0xff;
+                int len = s3->u32 & 0xff;
+                int sbit;
+                if (len == 0)
+                    sbit = 0;
+                else
+                    sbit = (a >> (min(pos + len - 1, msb))) & 1;
+                __int64 r = 0;
+                a = a >> pos;
+                for (int i = 0; i <= msb; ++i)
+                {
+                    if (i < len && pos + i <= msb)
+                        out_bs[i] = in_bs[pos+i];
+                    else
+                        out_bs[i] = sbit;
+                }
+                d->s64 = (__int64) out_bs.to_ulong();
+            }
+            break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected BFE instruction");
     }
 
     return 0;
@@ -1649,7 +1715,8 @@ int THREAD::DoCall(TREE * inst)
                 start_params = start;
         } else if (gt == T_WORD)
             tfunc = t;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CALL instruction");
     }
 
     // Call of vprintf only thing supported...
@@ -1668,7 +1735,8 @@ int THREAD::DoCall(TREE * inst)
         int gt = t->GetType();
         if (gt == K_UNI)
             uni = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CALL instruction");
     }
 
     // allow only _ for return; allow only direct calls.
@@ -1788,8 +1856,11 @@ int THREAD::DoCnot(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
+        } else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -1803,7 +1874,8 @@ int THREAD::DoCnot(TREE * inst)
         int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -1813,7 +1885,9 @@ int THREAD::DoCnot(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -1838,7 +1912,7 @@ int THREAD::DoCnot(TREE * inst)
                 s1->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -1861,9 +1935,11 @@ int THREAD::DoCnot(TREE * inst)
                 s1->pred = psrc1_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
 
     switch (type)
     {
@@ -1880,7 +1956,7 @@ int THREAD::DoCnot(TREE * inst)
             d->pred = s1->pred == 0 ? 1 : 0;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CNOT instruction");
     }
     return 0;
 }
@@ -1947,7 +2023,8 @@ int THREAD::DoCvt(TREE * inst)
             int gt = t->GetType();
             if (gt == K_RNI || gt == K_RZI || gt == K_RMI || gt == K_RPI)
                 irnd = gt;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
         }
     }
     if (tfrnd != 0)
@@ -1960,7 +2037,8 @@ int THREAD::DoCvt(TREE * inst)
             int gt = t->GetType();
             if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
                 frnd = gt;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
         }
     }
 
@@ -1997,7 +2075,9 @@ int THREAD::DoCvt(TREE * inst)
         } else if (qual == K_Z)
         {
             src_value = (TYPES::Types*) &(((dim3*)s2->pvalue)->z);
-        } else assert(false);
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
     } else
         src_value = (TYPES::Types*)s2->pvalue;
 
@@ -2037,7 +2117,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->u8;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_U16:
@@ -2074,7 +2154,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->u16;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_U32:
@@ -2111,7 +2191,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->u32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_U64:
@@ -2148,7 +2228,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_S8:
@@ -2185,7 +2265,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->s8;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_S16:
@@ -2222,7 +2302,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->s16;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_S32:
@@ -2259,7 +2339,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->s32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_S64:
@@ -2296,7 +2376,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->s64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_F32:
@@ -2333,7 +2413,7 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
         case K_F64:
@@ -2370,12 +2450,12 @@ int THREAD::DoCvt(TREE * inst)
                     dst_value->f64 = src_value->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
             }
             break;
 
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVT instruction");
     }
     return 0;
 }
@@ -2408,8 +2488,12 @@ int THREAD::DoCvta(TREE * inst)
             } else if (osrc == 0)
             {
                 osrc = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVTA instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVTA instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -2428,7 +2512,8 @@ int THREAD::DoCvta(TREE * inst)
             storage_class = gt;
         else if (gt == K_TO)
             to = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVTA instruction");
     }
     assert(ttype);
     int type = ttype->GetType();
@@ -2439,7 +2524,9 @@ int THREAD::DoCvta(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVTA instruction");
 
     TYPES::Types * d;
     TYPES::Types * s;
@@ -2482,7 +2569,7 @@ int THREAD::DoCvta(TREE * inst)
             d->u64 = s->u64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected CVTA instruction");
     }
     return 0;
 }
@@ -2602,14 +2689,16 @@ int THREAD::DoDiv(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected DIV instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected DIV instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -2641,14 +2730,16 @@ int THREAD::DoDiv(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected DIV instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected DIV instruction");
 
     switch (type)
     {
@@ -2677,7 +2768,7 @@ int THREAD::DoDiv(TREE * inst)
             d->f64 = s1->f64 / s2->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected DIV instruction");
     }
     return 0;
 }
@@ -2708,8 +2799,12 @@ int THREAD::DoEx2(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -2730,7 +2825,8 @@ int THREAD::DoEx2(TREE * inst)
             ;
         else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
             rnd = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "EX2.ftz not implemented.");
@@ -2743,7 +2839,9 @@ int THREAD::DoEx2(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -2762,7 +2860,7 @@ int THREAD::DoEx2(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -2779,9 +2877,11 @@ int THREAD::DoEx2(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
 
     switch (type)
     {
@@ -2792,7 +2892,7 @@ int THREAD::DoEx2(TREE * inst)
             d->f64 = pow(2, s1->f64);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected EX2 instruction");
     }
     return 0;
 }
@@ -2902,14 +3002,16 @@ int THREAD::DoFma(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -2923,14 +3025,16 @@ int THREAD::DoFma(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -2944,14 +3048,16 @@ int THREAD::DoFma(TREE * inst)
                 s3->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
         }
     } else if (src3->GetType() == T_WORD)
     {
         ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
 
     switch (type)
     {
@@ -2962,7 +3068,7 @@ int THREAD::DoFma(TREE * inst)
             d->f64 = s1->f64 * s2->f64 + s3->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected FMA instruction");
     }
     return 0;
 }
@@ -2998,8 +3104,12 @@ int THREAD::DoLd(TREE * inst)
             } else if (osrc == 0)
             {
                 osrc = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -3027,7 +3137,8 @@ int THREAD::DoLd(TREE * inst)
             vec = gt;
         else if (gt == K_VOLATILE)
             vol = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
     }
     assert(ttype != 0);
     assert(cop == 0);
@@ -3078,7 +3189,7 @@ int THREAD::DoLd(TREE * inst)
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
     }
     switch (value.type)
     {
@@ -3125,7 +3236,7 @@ int THREAD::DoLd(TREE * inst)
             addr = (addr + value.value.s32);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
     }
 
     for (int i = 0; i < times; ++i)
@@ -3163,7 +3274,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->u8 = s->s8;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_U16:
@@ -3188,7 +3299,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->u16 = s->s16;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_U32:
@@ -3222,7 +3333,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->u32 = s->s32;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_U64:
@@ -3265,7 +3376,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->u64 = s->s64;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_S8:
@@ -3281,7 +3392,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->s8 = s->s8;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_S16:
@@ -3306,7 +3417,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->s16 = s->s16;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_S32:
@@ -3340,7 +3451,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->s32 = s->s32;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_S64:
@@ -3383,7 +3494,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->s64 = s->s64;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_B8:
@@ -3399,7 +3510,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->b8 = s->s8;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_B16:
@@ -3424,7 +3535,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->b16 = s->s16;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_B32:
@@ -3458,7 +3569,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->b32 = s->s32;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_B64:
@@ -3501,7 +3612,7 @@ int THREAD::DoLd(TREE * inst)
                                 d->b64 = s->s64;
                                 break;
                             default:
-                                assert(false);
+                                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                         }
                         break;
                     case K_F32:
@@ -3511,7 +3622,7 @@ int THREAD::DoLd(TREE * inst)
                         d->f64 = s->f64;
                         break;
                     default:
-                        assert(false);
+                        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                 }
             }
             else
@@ -3549,7 +3660,7 @@ int THREAD::DoLd(TREE * inst)
                         d->f64 = s->f64;
                         break;
                     default:
-                        assert(false);
+                        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LD instruction");
                 }
             }
         }
@@ -3585,8 +3696,12 @@ int THREAD::DoLdu(TREE * inst)
             } else if (osrc == 0)
             {
                 osrc = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LDU instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LDU instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -3611,7 +3726,8 @@ int THREAD::DoLdu(TREE * inst)
             cop = gt;
         else if (gt == K_V2 || gt == K_V4)
             vec = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LDU instruction");
     }
     assert(ttype != 0);
     assert(vec == 0);
@@ -3675,7 +3791,7 @@ int THREAD::DoLdu(TREE * inst)
             s = (TYPES::Types*)(((unsigned char *)addr) + value.value.s64);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LDU instruction");
         }
     }
     else
@@ -3714,7 +3830,7 @@ int THREAD::DoLdu(TREE * inst)
             d->f64 = s->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LDU instruction");
     }
     return 0;
 }
@@ -3745,8 +3861,12 @@ int THREAD::DoLg2(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -3767,7 +3887,8 @@ int THREAD::DoLg2(TREE * inst)
             ;
         else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
             rnd = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "LG2.ftz not implemented.");
@@ -3780,7 +3901,9 @@ int THREAD::DoLg2(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -3799,7 +3922,7 @@ int THREAD::DoLg2(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -3816,9 +3939,11 @@ int THREAD::DoLg2(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
 
     switch (type)
     {
@@ -3829,7 +3954,7 @@ int THREAD::DoLg2(TREE * inst)
             d->f64 = log(s1->f64) / log(2.0);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected LG2 instruction");
     }
     return 0;
 }
@@ -3955,14 +4080,16 @@ int THREAD::DoMad(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -3988,14 +4115,16 @@ int THREAD::DoMad(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
 
     if (src3->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4021,14 +4150,16 @@ int THREAD::DoMad(TREE * inst)
                 s3->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
         }
     } else if (src3->GetType() == T_WORD)
     {
         ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
         assert(ssrc3 != 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
 
     switch (type)
     {
@@ -4054,7 +4185,8 @@ int THREAD::DoMad(TREE * inst)
                 vx = vx + s3->u32;
                 d->u32 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
             break;
         case K_S16:
             if (width == K_LO || width == 0)
@@ -4078,7 +4210,8 @@ int THREAD::DoMad(TREE * inst)
                 vx = vx + s3->s32;
                 d->s32 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
             break;
         case K_U32:
             if (width == K_LO || width == 0)
@@ -4102,7 +4235,8 @@ int THREAD::DoMad(TREE * inst)
                 vx = vx + s3->u64;
                 d->u64 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
             break;
         case K_S32:
             if (width == K_LO || width == 0)
@@ -4126,7 +4260,8 @@ int THREAD::DoMad(TREE * inst)
                 vx = vx + s3->s64;
                 d->s64 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
             break;
         case K_F32:
             if (width == 0)
@@ -4143,10 +4278,11 @@ int THREAD::DoMad(TREE * inst)
                 vx = vx + s3->f64;
                 d->f64 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAD instruction");
     }
     return 0;
 }
@@ -4186,8 +4322,12 @@ int THREAD::DoMax(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -4207,7 +4347,8 @@ int THREAD::DoMax(TREE * inst)
             ttype = t;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "MAX.ftz not implemented.");
@@ -4220,7 +4361,9 @@ int THREAD::DoMax(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -4262,7 +4405,7 @@ int THREAD::DoMax(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -4297,9 +4440,11 @@ int THREAD::DoMax(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4331,7 +4476,7 @@ int THREAD::DoMax(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -4366,9 +4511,11 @@ int THREAD::DoMax(TREE * inst)
                 s2->f64 = psrc2_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
 
     switch (type)
     {
@@ -4391,23 +4538,23 @@ int THREAD::DoMax(TREE * inst)
             d->s64 = s1->s64 > s2->s64 ? s1->s64 : s2->s64;
             break;
         case K_F32:
-			if (_isnan(s1->f32))
-				d->f32 = s2->f32;
-			else if (_isnan(s2->f32))
-				d->f32 = s1->f32;
+            if (_isnan(s1->f32))
+                d->f32 = s2->f32;
+            else if (_isnan(s2->f32))
+                d->f32 = s1->f32;
             else
-				d->f32 = s1->f32 > s2->f32 ? s1->f32 : s2->f32;
+                d->f32 = s1->f32 > s2->f32 ? s1->f32 : s2->f32;
             break;
         case K_F64:
-			if (_isnan(s1->f64))
-				d->f64 = s2->f64;
-			else if (_isnan(s2->f64))
-				d->f64 = s1->f64;
+            if (_isnan(s1->f64))
+                d->f64 = s2->f64;
+            else if (_isnan(s2->f64))
+                d->f64 = s1->f64;
             else
-				d->f64 = s1->f64 > s2->f64 ? s1->f64 : s2->f64;
+                d->f64 = s1->f64 > s2->f64 ? s1->f64 : s2->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MAX instruction");
     }
     return 0;
 }
@@ -4447,8 +4594,12 @@ int THREAD::DoMin(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -4468,7 +4619,8 @@ int THREAD::DoMin(TREE * inst)
             ttype = t;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "MAX.ftz not implemented.");
@@ -4481,7 +4633,9 @@ int THREAD::DoMin(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -4523,7 +4677,7 @@ int THREAD::DoMin(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -4558,9 +4712,11 @@ int THREAD::DoMin(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4592,7 +4748,7 @@ int THREAD::DoMin(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -4627,9 +4783,11 @@ int THREAD::DoMin(TREE * inst)
                 s2->f64 = psrc2_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
 
     switch (type)
     {
@@ -4652,23 +4810,23 @@ int THREAD::DoMin(TREE * inst)
             d->s64 = s1->s64 < s2->s64 ? s1->s64 : s2->s64;
             break;
         case K_F32:
-			if (_isnan(s1->f32))
-				d->f32 = s2->f32;
-			else if (_isnan(s2->f32))
-				d->f32 = s1->f32;
+            if (_isnan(s1->f32))
+                d->f32 = s2->f32;
+            else if (_isnan(s2->f32))
+                d->f32 = s1->f32;
             else
-				d->f32 = s1->f32 < s2->f32 ? s1->f32 : s2->f32;
+                d->f32 = s1->f32 < s2->f32 ? s1->f32 : s2->f32;
             break;
         case K_F64:
-			if (_isnan(s1->f64))
-				d->f64 = s2->f64;
-			else if (_isnan(s2->f64))
-				d->f64 = s1->f64;
+            if (_isnan(s1->f64))
+                d->f64 = s2->f64;
+            else if (_isnan(s2->f64))
+                d->f64 = s1->f64;
             else
-				d->f64 = s1->f64 < s2->f64 ? s1->f64 : s2->f64;
+                d->f64 = s1->f64 < s2->f64 ? s1->f64 : s2->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MIN instruction");
     }
     return 0;
 }
@@ -4700,8 +4858,12 @@ int THREAD::DoMov(TREE * inst)
             } else if (osrc == 0)
             {
                 osrc = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -4718,7 +4880,8 @@ int THREAD::DoMov(TREE * inst)
               || gt == K_S16 || gt == K_S32 || gt == K_S64
               || gt == K_F32 || gt == K_F64)
             ttype = t;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
     }
     assert(ttype);
     int type = ttype->GetType();
@@ -4729,7 +4892,9 @@ int THREAD::DoMov(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
 
     TYPES::Types * d;
     TYPES::Types * s;
@@ -4778,7 +4943,7 @@ int THREAD::DoMov(TREE * inst)
                 s->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
         }
     } else if (src->GetType() == T_WORD)
     {
@@ -4818,7 +4983,8 @@ int THREAD::DoMov(TREE * inst)
             {
                 s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->z;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
         }
     }
 
@@ -4858,7 +5024,7 @@ int THREAD::DoMov(TREE * inst)
             d->f64 = s->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MOV instruction");
     }
     return 0;
 }
@@ -4966,14 +5132,16 @@ int THREAD::DoMul(TREE * inst)
                 s1->s32 = c.value.s32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -4996,14 +5164,16 @@ int THREAD::DoMul(TREE * inst)
                 s2->f32 = c.value.f32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
 
     switch (type)
     {
@@ -5026,7 +5196,8 @@ int THREAD::DoMul(TREE * inst)
                 vx = vx * s2->u16;
                 d->u32 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
             break;
         case K_S16:
             if (width == K_LO)
@@ -5047,7 +5218,8 @@ int THREAD::DoMul(TREE * inst)
                 vx = vx * s2->s16;
                 d->s32 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
             break;
         case K_U32:
             if (width == K_LO)
@@ -5068,7 +5240,8 @@ int THREAD::DoMul(TREE * inst)
                 vx = vx * s2->u32;
                 d->u64 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
             break;
         case K_S32:
             if (width == K_LO)
@@ -5089,7 +5262,8 @@ int THREAD::DoMul(TREE * inst)
                 vx = vx * s2->s32;
                 d->s64 = vx;
             }
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
             break;
         case K_F32:
             assert(width == 0);
@@ -5100,7 +5274,7 @@ int THREAD::DoMul(TREE * inst)
             d->f64 = s1->f64 * s2->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
     }
     return 0;
 }
@@ -5137,8 +5311,12 @@ int THREAD::DoMul24(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5155,7 +5333,8 @@ int THREAD::DoMul24(TREE * inst)
             ttype = t;
         else if (gt== K_LO || gt == K_HI)
             twidth = t;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
     }
     assert(ttype != 0);
     int type = ttype->GetType();
@@ -5192,14 +5371,16 @@ int THREAD::DoMul24(TREE * inst)
                 s1->s32 = c.value.s32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5213,14 +5394,16 @@ int THREAD::DoMul24(TREE * inst)
                 s2->s32 = c.value.s32;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
 
     switch (type)
     {
@@ -5229,17 +5412,19 @@ int THREAD::DoMul24(TREE * inst)
                 d->u32 = (s1->u32 * s2->u32) & 0xffffffff;
             else if (width == K_HI)
                 d->u32 = (s1->u32 * s2->u32 ) >> 16;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
             break;
         case K_S32:
             if (width == K_LO)
                 d->s32 = (s1->s32 * s2->s32) & 0xffffffff;
             else if (width == K_HI)
                 d->s32 = (s1->s32 * s2->s32 ) >> 16;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL24 instruction");
     }
     return 0;
 }
@@ -5270,8 +5455,12 @@ int THREAD::DoNeg(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5289,7 +5478,8 @@ int THREAD::DoNeg(TREE * inst)
             ttype = t;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "NEG.ftz not implemented.");
@@ -5302,7 +5492,9 @@ int THREAD::DoNeg(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -5330,7 +5522,7 @@ int THREAD::DoNeg(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -5356,9 +5548,11 @@ int THREAD::DoNeg(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
 
     switch (type)
     {
@@ -5378,7 +5572,7 @@ int THREAD::DoNeg(TREE * inst)
             d->f64 = - s1->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NEG instruction");
     }
     return 0;
 }
@@ -5409,8 +5603,12 @@ int THREAD::DoNot(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5424,7 +5622,8 @@ int THREAD::DoNot(TREE * inst)
         int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -5434,7 +5633,9 @@ int THREAD::DoNot(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -5459,7 +5660,7 @@ int THREAD::DoNot(TREE * inst)
                 s1->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -5482,9 +5683,11 @@ int THREAD::DoNot(TREE * inst)
                 s1->pred = psrc1_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
 
     switch (type)
     {
@@ -5501,7 +5704,7 @@ int THREAD::DoNot(TREE * inst)
             d->pred = ! s1->pred; // THIS WORKS, BUT THE FOLLOWING DOES NOT WORK!!! ~s1->pred;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected NOT instruction");
     }
     return 0;
 }
@@ -5536,8 +5739,12 @@ int THREAD::DoOr(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5552,7 +5759,8 @@ int THREAD::DoOr(TREE * inst)
         int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -5563,7 +5771,9 @@ int THREAD::DoOr(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -5590,7 +5800,7 @@ int THREAD::DoOr(TREE * inst)
                 s1->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -5613,9 +5823,11 @@ int THREAD::DoOr(TREE * inst)
                 s1->pred = psrc1_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5635,7 +5847,7 @@ int THREAD::DoOr(TREE * inst)
                 s2->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -5658,9 +5870,11 @@ int THREAD::DoOr(TREE * inst)
                 s2->pred = psrc2_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
 
     switch (type)
     {
@@ -5677,7 +5891,7 @@ int THREAD::DoOr(TREE * inst)
             d->pred = s1->pred | s2->pred;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected OR instruction");
     }
     return 0;
 }
@@ -5733,8 +5947,12 @@ int THREAD::DoRcp(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5755,7 +5973,8 @@ int THREAD::DoRcp(TREE * inst)
             ;
         else if (gt == K_RN || gt == K_RZ || gt == K_RM || gt == K_RP)
             rnd = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
     }
     assert(ttype != 0);
     //this->device->unimplemented(ftz, "RCP.ftz not implemented.");
@@ -5768,7 +5987,9 @@ int THREAD::DoRcp(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
 
     TYPES::Types value1;
     char * dummy;
@@ -5787,7 +6008,7 @@ int THREAD::DoRcp(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -5804,9 +6025,11 @@ int THREAD::DoRcp(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
 
     switch (type)
     {
@@ -5817,7 +6040,7 @@ int THREAD::DoRcp(TREE * inst)
             d->f64 = 1 / s1->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected RCP instruction");
     }
     return 0;
 }
@@ -5857,8 +6080,12 @@ int THREAD::DoRem(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -5874,7 +6101,8 @@ int THREAD::DoRem(TREE * inst)
         if (gt == K_U16 || gt == K_U32 || gt == K_U64
                  || gt == K_S16 || gt == K_S32 || gt == K_S64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -5924,14 +6152,16 @@ int THREAD::DoRem(TREE * inst)
                 s1->s64 = c.value.s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -5957,14 +6187,16 @@ int THREAD::DoRem(TREE * inst)
                 s2->s64 = c.value.s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
         ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
         assert(ssrc2 != 0);
         s2 = (TYPES::Types*)ssrc2->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
 
     switch (type)
     {
@@ -5987,7 +6219,7 @@ int THREAD::DoRem(TREE * inst)
             d->s64 = s1->s64 % s2->s64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected REM instruction");
     }
     return 0;
 }
@@ -6041,8 +6273,12 @@ int THREAD::DoSelp(TREE * inst)
             } else if (osrc3 == 0)
             {
                 osrc3 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -6061,7 +6297,8 @@ int THREAD::DoSelp(TREE * inst)
                  || gt == K_B16 || gt == K_B32 || gt == K_B64
                  || gt == K_F32 || gt == K_F64)
             ttype = t;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
     }
     assert(ttype != 0);
     this->device->unimplemented(ftz, "SELP.ftz not implemented.");
@@ -6076,7 +6313,9 @@ int THREAD::DoSelp(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
 
     TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
     TYPES::Types value1;
@@ -6125,7 +6364,7 @@ int THREAD::DoSelp(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -6169,9 +6408,11 @@ int THREAD::DoSelp(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -6212,7 +6453,7 @@ int THREAD::DoSelp(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -6256,9 +6497,11 @@ int THREAD::DoSelp(TREE * inst)
                 s2->f64 = psrc2_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
 
     if (src3->GetType() == T_WORD)
     {
@@ -6267,7 +6510,9 @@ int THREAD::DoSelp(TREE * inst)
 // FIX      assert(strcmp(ssrc3->type, ".pred") == 0);
         s3 = (TYPES::Types*)ssrc3->pvalue;
         assert(s3 != 0);
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
 
     switch (type)
     {
@@ -6305,7 +6550,7 @@ int THREAD::DoSelp(TREE * inst)
             d->f64 = s3->pred == 1 ? s1->f64 : s2->f64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SELP instruction");
     }
     return 0;
 }
@@ -6346,8 +6591,11 @@ int THREAD::DoSet(TREE * inst)
             {
                 osrc3 = t;
             }
-            else assert(false);
-        } else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
     }
     assert(ttype != 0);
     assert(odst1 != 0);
@@ -6381,14 +6629,16 @@ int THREAD::DoSet(TREE * inst)
                 dtype = gt;
             else if (stype == 0)
                 stype = gt;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
         }
         else if (gt == K_EQ || gt == K_NE || gt == K_LT || gt == K_LE || gt == K_GT || gt == K_GE
                  || gt == K_LO || gt == K_LS || gt == K_HI || gt == K_HS
                  || gt == K_EQU || gt == K_NEU || gt == K_LTU || gt == K_LEU
                  || gt == K_GTU || gt == K_GEU || gt == K_NUM || gt == K_NAN)
             op = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
     }
     assert(dtype != 0);
     assert(stype != 0);
@@ -6410,7 +6660,9 @@ int THREAD::DoSet(TREE * inst)
     if (dst1->GetType() == T_WORD)
     {
         sdst1 = this->symbol_table->FindSymbol(dst1->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
 
     TYPES::Types * d = (TYPES::Types*)sdst1->pvalue;
 
@@ -6460,10 +6712,11 @@ int THREAD::DoSet(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
         }
     }
-    else assert(false);
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
 
     if (src2->GetType() == T_WORD)
     {
@@ -6511,10 +6764,11 @@ int THREAD::DoSet(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
         }
     }
-    else assert(false);
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
 
     bool compare = false;
     
@@ -6557,7 +6811,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 == s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_NE:
@@ -6597,7 +6851,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 != s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_LT:
@@ -6637,7 +6891,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 < s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_LE:
@@ -6677,7 +6931,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 <= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_GT:
@@ -6717,7 +6971,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 > s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_GE:
@@ -6757,7 +7011,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 >= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_LO:
@@ -6797,7 +7051,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 < s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_LS:
@@ -6837,7 +7091,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 <= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_HI:
@@ -6877,7 +7131,7 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 > s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         case K_HS:
@@ -6917,11 +7171,11 @@ int THREAD::DoSet(TREE * inst)
                     compare = s1->f64 >= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
             break;
     }
 
@@ -6938,7 +7192,7 @@ int THREAD::DoSet(TREE * inst)
             d->f32 = (compare)? 1.0 : 0;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SET instruction");
     }
     return 0;
 }
@@ -6979,8 +7233,11 @@ int THREAD::DoSetp(TREE * inst)
             {
                 osrc3 = t;
             }
-            else assert(false);
-        } else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
     }
     assert(ttype != 0);
     assert(odst1 != 0);
@@ -7014,7 +7271,8 @@ int THREAD::DoSetp(TREE * inst)
                  || gt == K_EQU || gt == K_NEU || gt == K_LTU || gt == K_LEU
                  || gt == K_GTU || gt == K_GEU || gt == K_NUM || gt == K_NAN)
             op = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
     }
     assert(ttype != 0);
     assert(op != 0);
@@ -7036,7 +7294,9 @@ int THREAD::DoSetp(TREE * inst)
     if (dst1->GetType() == T_WORD)
     {
         sdst1 = this->symbol_table->FindSymbol(dst1->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
 
     TYPES::Types * d = (TYPES::Types*)sdst1->pvalue;
 
@@ -7086,10 +7346,11 @@ int THREAD::DoSetp(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
         }
     }
-    else assert(false);
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
 
     if (src2->GetType() == T_WORD)
     {
@@ -7137,10 +7398,11 @@ int THREAD::DoSetp(TREE * inst)
                 s2->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
         }
     }
-    else assert(false);
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
 
     switch (op)
     {
@@ -7181,7 +7443,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 == s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_NE:
@@ -7221,7 +7483,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 != s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_LT:
@@ -7252,7 +7514,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 < s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_LE:
@@ -7283,7 +7545,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 <= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_GT:
@@ -7314,7 +7576,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 > s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_GE:
@@ -7345,7 +7607,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->f64 >= s2->f64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_LO:
@@ -7361,7 +7623,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->u64 < s2->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_LS:
@@ -7377,7 +7639,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->u64 <= s2->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_HI:
@@ -7393,7 +7655,7 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->u64 > s2->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         case K_HS:
@@ -7409,11 +7671,11 @@ int THREAD::DoSetp(TREE * inst)
                     d->pred = s1->u64 >= s2->u64;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SETP instruction");
             break;
     }
     return 0;
@@ -7449,8 +7711,12 @@ int THREAD::DoShl(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -7465,7 +7731,8 @@ int THREAD::DoShl(TREE * inst)
         int gt = t->GetType();
         if (gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -7476,7 +7743,9 @@ int THREAD::DoShl(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -7500,7 +7769,7 @@ int THREAD::DoShl(TREE * inst)
                 s1->b64 = c.value.b64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -7520,9 +7789,11 @@ int THREAD::DoShl(TREE * inst)
                 s1->b64 = psrc1_value->b64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -7539,7 +7810,7 @@ int THREAD::DoShl(TREE * inst)
                 s2->b64 = c.value.b64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -7559,9 +7830,11 @@ int THREAD::DoShl(TREE * inst)
                 s2->b64 = psrc2_value->b64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
 
     switch (type)
     {
@@ -7575,7 +7848,7 @@ int THREAD::DoShl(TREE * inst)
             d->b64 = s1->b64 << s2->b64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHL instruction");
     }
     return 0;
 }
@@ -7610,8 +7883,12 @@ int THREAD::DoShr(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -7628,7 +7905,8 @@ int THREAD::DoShr(TREE * inst)
               || gt == K_U16 || gt == K_U32 || gt == K_U64
               || gt == K_S16 || gt == K_S32 || gt == K_S64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -7639,7 +7917,9 @@ int THREAD::DoShr(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -7681,7 +7961,7 @@ int THREAD::DoShr(TREE * inst)
                 s1->s64 = c.value.s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -7719,9 +7999,11 @@ int THREAD::DoShr(TREE * inst)
                 s1->s64 = psrc1_value->s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -7756,7 +8038,7 @@ int THREAD::DoShr(TREE * inst)
                 s2->s64 = c.value.s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -7794,9 +8076,11 @@ int THREAD::DoShr(TREE * inst)
                 s2->s64 = psrc2_value->s64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
 
     switch (type)
     {
@@ -7828,7 +8112,7 @@ int THREAD::DoShr(TREE * inst)
             d->s64 = s1->s64 >> s2->s64;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SHR instruction");
     }
     return 0;
 }
@@ -7869,8 +8153,12 @@ int THREAD::DoSqrt(TREE * inst)
             } else if (osrc1 == 0)
             {
                 osrc1 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -7891,7 +8179,8 @@ int THREAD::DoSqrt(TREE * inst)
             tfrnd = t;
         else if (gt == K_FULL || gt == K_APPROX)
             ;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
     }
     assert(ttype != 0);
     assert(ftz == 0);  // unimplemented.
@@ -7926,14 +8215,16 @@ int THREAD::DoSqrt(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
         ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
         assert(ssrc1 != 0);
         s1 = (TYPES::Types*)ssrc1->pvalue;
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
 
     switch (type)
     {
@@ -7944,7 +8235,7 @@ int THREAD::DoSqrt(TREE * inst)
             d->f64 = sqrt(s1->f64);
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SQRT instruction");
     }
     return 0;
 }
@@ -7975,8 +8266,12 @@ int THREAD::DoSt(TREE * inst)
             } else if (osrc == 0)
             {
                 osrc = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -8005,7 +8300,8 @@ int THREAD::DoSt(TREE * inst)
             vec = gt;
         else if (gt == K_VOLATILE)
             vol = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
     }
     assert(ttype != 0);
     assert(cop == 0);
@@ -8046,7 +8342,7 @@ int THREAD::DoSt(TREE * inst)
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
     }
 
     switch (value.type)
@@ -8094,7 +8390,7 @@ int THREAD::DoSt(TREE * inst)
             addr = addr + value.value.s32;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
     }
 
     int times = 1;
@@ -8154,9 +8450,12 @@ int THREAD::DoSt(TREE * inst)
                 {
                     s = (TYPES::Types*)& ((dim3*)ssrc->pvalue)->z;
                 }
-                else assert(false);
+                else
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
             }
-        } else assert(false);
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
 
         // Determine if there is a write in or out of bounds.
         switch (ss)
@@ -8224,7 +8523,7 @@ int THREAD::DoSt(TREE * inst)
                 d->f64 = s->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected ST instruction");
         }
 
         addr = addr + this->device->Sizeof(type);
@@ -8263,8 +8562,12 @@ int THREAD::DoSub(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -8293,7 +8596,8 @@ int THREAD::DoSub(TREE * inst)
             rnd = gt;
         else if (gt == K_FTZ)
             ftz = true;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
     }
     assert(ttype != 0);
     int type = ttype->GetType();
@@ -8305,7 +8609,9 @@ int THREAD::DoSub(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -8347,7 +8653,7 @@ int THREAD::DoSub(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -8382,9 +8688,11 @@ int THREAD::DoSub(TREE * inst)
                 s1->f64 = psrc1_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -8416,7 +8724,7 @@ int THREAD::DoSub(TREE * inst)
                 s1->f64 = c.value.f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -8451,9 +8759,11 @@ int THREAD::DoSub(TREE * inst)
                 s2->f64 = psrc2_value->f64;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
 
     switch (type)
     {
@@ -8547,7 +8857,7 @@ int THREAD::DoSub(TREE * inst)
             }
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected SUB instruction");
     }
     return 0;
 }
@@ -8589,20 +8899,20 @@ int THREAD::DoTestp(TREE * inst)
 // error.
 int prefix_sum_channel_size(struct cudaChannelFormatDesc * desc, int component)
 {
-	if (component == 0)
-		return 0;
-	else if (component == 1)
-		return desc->x;
-	else if (component == 2)
-		return desc->x + desc->y;
-	else if (component == 3)
-		return desc->x + desc->y + desc->z;
-	return 0;
+    if (component == 0)
+        return 0;
+    else if (component == 1)
+        return desc->x;
+    else if (component == 2)
+        return desc->x + desc->y;
+    else if (component == 3)
+        return desc->x + desc->y + desc->z;
+    return 0;
 }
 
 int total_sum_channel_size(struct cudaChannelFormatDesc * desc)
 {
-	return desc->x + desc->y + desc->z + desc->w;
+    return desc->x + desc->y + desc->z + desc->w;
 }
 
 int THREAD::DoTex(TREE * inst)
@@ -8641,8 +8951,10 @@ int THREAD::DoTex(TREE * inst)
             {
                 osrc3 = t;
             }
-            else assert(false);
-        } else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
+        } else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
     }
     assert(ttype != 0);
     assert(odst1 != 0);
@@ -8676,15 +8988,18 @@ int THREAD::DoTex(TREE * inst)
         {
             if (gt == K_U32 || gt == K_S32 || gt == K_F32)
                 dtype = gt;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
         }
         else if (stype == 0)
         {
             if (gt == K_U32 || gt == K_S32 || gt == K_F32)
                 stype = gt;
-            else assert(false);
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
         }
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
     }
     assert(stype != 0);
     assert(dtype != 0);
@@ -8698,7 +9013,9 @@ int THREAD::DoTex(TREE * inst)
     if (src1->GetType() == T_WORD)
     {
         tex = this->symbol_table->FindSymbol(src1->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
     // Get details of the texture.
     assert(tex != 0);
     
@@ -8737,7 +9054,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -8757,7 +9074,7 @@ int THREAD::DoTex(TREE * inst)
                     findex = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
             for (int i = 0; i < times; ++i)
@@ -8767,37 +9084,39 @@ int THREAD::DoTex(TREE * inst)
                 addr = ((unsigned char*)s);
                 int index = (int) findex;
 
-				s = (TYPES::Types*)(addr
-									+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-									+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                s = (TYPES::Types*)(addr
+                                    + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                                    + index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-				TREE * dst1 = odst1->GetChild(i);
-				SYMBOL * sdst = 0;
-				if (dst1->GetType() == T_WORD)
-				{
-					sdst = this->symbol_table->FindSymbol(dst1->GetText());
-				} else assert(false);
-				TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+                TREE * dst1 = odst1->GetChild(i);
+                SYMBOL * sdst = 0;
+                if (dst1->GetType() == T_WORD)
+                {
+                    sdst = this->symbol_table->FindSymbol(dst1->GetText());
+                }
+                else
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
+                TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
-				switch (dtype)
-				{
-					case K_U32:
-						d->u32 = s->u32;
-						break;
-					case K_S32:
-						d->s32 = s->s32;
-						break;
-					case K_F32:
-						d->f32 = s->f32;
-						break;
-					default:
-						assert(false);
-				}
+                switch (dtype)
+                {
+                    case K_U32:
+                        d->u32 = s->u32;
+                        break;
+                    case K_S32:
+                        d->s32 = s->s32;
+                        break;
+                    case K_F32:
+                        d->f32 = s->f32;
+                        break;
+                    default:
+                        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
+                }
             }
         } else  if (_2d)
         {
-			float findex_x;
-			float findex_y;
+            float findex_x;
+            float findex_y;
             TYPES::Types value;
             SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
             SYMBOL * ssrcb2 = this->symbol_table->FindSymbol(osrc2->GetChild(1)->GetText());
@@ -8810,7 +9129,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -8830,7 +9149,7 @@ int THREAD::DoTex(TREE * inst)
                     findex_x = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
             switch (ssrcb2->storage_class)
@@ -8840,7 +9159,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -8858,10 +9177,10 @@ int THREAD::DoTex(TREE * inst)
                     findex_y = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
-			float increment = 0;
+            float increment = 0;
 
             int ix1 = (int)floor(findex_x - increment);
             int ix2 = ix1 + 1;
@@ -8874,7 +9193,7 @@ int THREAD::DoTex(TREE * inst)
             if (ix2 >= texture_binding->width)
             {
                 ix2 = texture_binding->width - 1;
-				ix1 = ix2;
+                ix1 = ix2;
             }
             if (iy1 < 0)
             {
@@ -8883,28 +9202,30 @@ int THREAD::DoTex(TREE * inst)
             if (iy2 >= texture_binding->height)
             {
                 iy2 = texture_binding->height - 1;
-				iy1 = iy2;
+                iy1 = iy2;
             }
 
             for (int i = 0; i < times; ++i)
             {
                 s = (TYPES::Types*)(texture_binding->devPtr);
                 unsigned char * addr = 0;
-				addr = ((unsigned char*)s);
+                addr = ((unsigned char*)s);
 
-				// Linear memory, so do not interpolate. So, we only need one value to fetch.
-				int index =  ix1 + iy1 * texture_binding->width;
+                // Linear memory, so do not interpolate. So, we only need one value to fetch.
+                int index =  ix1 + iy1 * texture_binding->width;
 
-				s = (TYPES::Types*)(addr
-									+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-									+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                s = (TYPES::Types*)(addr
+                                    + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                                    + index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-				TREE * dst1 = odst1->GetChild(i);
+                TREE * dst1 = odst1->GetChild(i);
                 SYMBOL * sdst = 0;
                 if (dst1->GetType() == T_WORD)
                 {
                     sdst = this->symbol_table->FindSymbol(dst1->GetText());
-                } else assert(false);
+                }
+                else
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                 TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
                 switch (dtype)
@@ -8919,7 +9240,7 @@ int THREAD::DoTex(TREE * inst)
                         d->f32 = s->f32;
                         break;
                     default:
-                        assert(false);
+                        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                 }
             }
         }
@@ -8951,7 +9272,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -8971,24 +9292,26 @@ int THREAD::DoTex(TREE * inst)
                     findex = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
             for (int i = 0; i < times; ++i)
             {
                 s = (TYPES::Types*)(arr->Memory() + cu->padding_size);
                 unsigned char * addr = 0;
-				addr = ((unsigned char*)s);
+                addr = ((unsigned char*)s);
 
-				TREE * dst1 = odst1->GetChild(i);
+                TREE * dst1 = odst1->GetChild(i);
 
-				// Add value to texture binding address and dereference to get and assign value.
-				SYMBOL * sdst = 0;
-				if (dst1->GetType() == T_WORD)
-				{
-					sdst = this->symbol_table->FindSymbol(dst1->GetText());
-				} else assert(false);
-				TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+                // Add value to texture binding address and dereference to get and assign value.
+                SYMBOL * sdst = 0;
+                if (dst1->GetType() == T_WORD)
+                {
+                    sdst = this->symbol_table->FindSymbol(dst1->GetText());
+                }
+                else
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
+                TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
                 if (texture->hostVar->filterMode & cudaFilterModeLinear)
                 {
@@ -9008,14 +9331,14 @@ int THREAD::DoTex(TREE * inst)
                         i2 = i1;
                     }
 
-					s = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-										+ i1 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
-					
+                    s = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                                        + i1 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    
                     TYPES::Types* s1 = s;
-					TYPES::Types* s2 = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ i2 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    TYPES::Types* s2 = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + i2 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
                     switch (dtype)
                     {
@@ -9029,7 +9352,7 @@ int THREAD::DoTex(TREE * inst)
                             d->f32 = s1->f32 + (s2->f32 - s1->f32) * (findex - 0.5 - i1);
                             break;
                         default:
-                            assert(false);
+                            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     }
 
                 }
@@ -9049,14 +9372,14 @@ int THREAD::DoTex(TREE * inst)
                             d->f32 = s->f32;
                             break;
                         default:
-                            assert(false);
+                            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     }
                 }
             }
         } else  if (_2d)
         {
-			float findex_x;
-			float findex_y;
+            float findex_x;
+            float findex_y;
             // Compute actual source.
             TYPES::Types value;
             SYMBOL * ssrca2 = this->symbol_table->FindSymbol(osrc2->GetChild(0)->GetText());
@@ -9070,7 +9393,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -9090,7 +9413,7 @@ int THREAD::DoTex(TREE * inst)
                     findex_x = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
             switch (ssrcb2->storage_class)
@@ -9100,7 +9423,7 @@ int THREAD::DoTex(TREE * inst)
                 case K_PARAM:
                 case K_SHARED:
                 case K_CONST:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                     break;
                 case K_REG:
                     // names in instructions refer to the contents of the
@@ -9118,16 +9441,16 @@ int THREAD::DoTex(TREE * inst)
                     findex_y = s->f32;
                     break;
                 default:
-                    assert(false);
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
             }
 
-			float increment = (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32) ? 0.5 : 0;
-			float r_findex_x = findex_x - increment;
-			float r_findex_y = findex_y - increment;
-			if (r_findex_x < 0)
-				r_findex_x = 0;
-			if (r_findex_y < 0)
-				r_findex_y = 0;
+            float increment = (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32) ? 0.5 : 0;
+            float r_findex_x = findex_x - increment;
+            float r_findex_y = findex_y - increment;
+            if (r_findex_x < 0)
+                r_findex_x = 0;
+            if (r_findex_y < 0)
+                r_findex_y = 0;
 
             int ix1 = (int)floor(r_findex_x);
             int ix2 = ix1 + 1;
@@ -9140,7 +9463,7 @@ int THREAD::DoTex(TREE * inst)
             if (ix2 >= arr->Width())
             {
                 ix2 = arr->Width() - 1;
-				ix1 = ix2;
+                ix1 = ix2;
             }
             if (iy1 < 0)
             {
@@ -9149,7 +9472,7 @@ int THREAD::DoTex(TREE * inst)
             if (iy2 >= arr->Height())
             {
                 iy2 = arr->Height() - 1;
-				iy1 = iy2;
+                iy1 = iy2;
             }
 
             for (int i = 0; i < times; ++i)
@@ -9164,76 +9487,78 @@ int THREAD::DoTex(TREE * inst)
                 if (dst1->GetType() == T_WORD)
                 {
                     sdst = this->symbol_table->FindSymbol(dst1->GetText());
-                } else assert(false);
+                }
+                else
+                    throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
                 TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
 
                 if (texture->hostVar->filterMode & cudaFilterModeLinear && dtype == K_F32)
                 {
-					int index_q11 = ix1 + arr->Width() * iy1;
-					int index_q12 = ix1 + arr->Width() * iy2;
-					int index_q21 = ix2 + arr->Width() * iy1;
-					int index_q22 = ix2 + arr->Width() * iy2;
+                    int index_q11 = ix1 + arr->Width() * iy1;
+                    int index_q12 = ix1 + arr->Width() * iy2;
+                    int index_q21 = ix2 + arr->Width() * iy1;
+                    int index_q22 = ix2 + arr->Width() * iy2;
 
-					TYPES::Types* q11 = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ index_q11 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    TYPES::Types* q11 = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + index_q11 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-					TYPES::Types* q12 = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ index_q12 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    TYPES::Types* q12 = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + index_q12 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-					TYPES::Types* q21 = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ index_q21 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    TYPES::Types* q21 = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + index_q21 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-					TYPES::Types* q22 = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ index_q22 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    TYPES::Types* q22 = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + index_q22 * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-					// ix1 - ix2, as well as iy1 - iy2, can never be zero.  Basica assumption in binear
-					// interpolation.  In this case, create adjusted x and y coordinates so that it looks
-					// like a flat function.
+                    // ix1 - ix2, as well as iy1 - iy2, can never be zero.  Basica assumption in binear
+                    // interpolation.  In this case, create adjusted x and y coordinates so that it looks
+                    // like a flat function.
 
-					if (ix1 - ix2 == 0)
-					{
-						ix2 = ix1 + 1;
-					}
-					if (iy1 - iy2 == 0)
-					{
-						iy2 = iy1 + 1;
-					}
+                    if (ix1 - ix2 == 0)
+                    {
+                        ix2 = ix1 + 1;
+                    }
+                    if (iy1 - iy2 == 0)
+                    {
+                        iy2 = iy1 + 1;
+                    }
 
-					float p1 = q11->f32 * (ix2 - r_findex_x) * (iy2 - r_findex_y);
-					float p2 = q21->f32 * (r_findex_x - ix1) * (iy2 - r_findex_y);
-					float p3 = q12->f32 * (ix2 - r_findex_x) * (r_findex_y - iy1);
-					float p4 = q22->f32 * (r_findex_x - ix1) * (r_findex_y - iy1);
+                    float p1 = q11->f32 * (ix2 - r_findex_x) * (iy2 - r_findex_y);
+                    float p2 = q21->f32 * (r_findex_x - ix1) * (iy2 - r_findex_y);
+                    float p3 = q12->f32 * (ix2 - r_findex_x) * (r_findex_y - iy1);
+                    float p4 = q22->f32 * (r_findex_x - ix1) * (r_findex_y - iy1);
 
-					d->f32 = p1 + p2 + p3 + p4;
-				}
-				else
-				{
-					// Linear memory, so do not interpolate. So, we only need one value to fetch.
-					int index = ix1 + arr->Width() * iy1;
+                    d->f32 = p1 + p2 + p3 + p4;
+                }
+                else
+                {
+                    // Linear memory, so do not interpolate. So, we only need one value to fetch.
+                    int index = ix1 + arr->Width() * iy1;
 
-					s = (TYPES::Types*)(addr
-						+ prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
-						+ index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
+                    s = (TYPES::Types*)(addr
+                        + prefix_sum_channel_size(&texture_binding->texref->channelDesc, i) / 8
+                        + index * (total_sum_channel_size(&texture_binding->texref->channelDesc) / 8));
 
-					switch (dtype)
-					{
-						case K_U32:
-							d->u32 = s->u32;
-							break;
-						case K_S32:
-							d->s32 = s->s32;
-							break;
-						case K_F32:
-							d->f32 = s->f32;
-							break;
-						default:
-							assert(false);
-					}
-				}
+                    switch (dtype)
+                    {
+                        case K_U32:
+                            d->u32 = s->u32;
+                            break;
+                        case K_S32:
+                            d->s32 = s->s32;
+                            break;
+                        case K_F32:
+                            d->f32 = s->f32;
+                            break;
+                        default:
+                            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected TEX instruction");
+                    }
+                }
             }
         }
     }
@@ -9330,8 +9655,12 @@ int THREAD::DoXor(TREE * inst)
             } else if (osrc2 == 0)
             {
                 osrc2 = t;
-            } else assert(false);
-        } else assert(false);
+            }
+            else
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
+        }
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
     }
     assert(ttype != 0);
     assert(odst != 0);
@@ -9346,7 +9675,8 @@ int THREAD::DoXor(TREE * inst)
         int gt = t->GetType();
         if (gt == K_PRED || gt == K_B16 || gt == K_B32 || gt == K_B64)
             type = gt;
-        else assert(false);
+        else
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
     }
     assert(type != 0);
     TREE * dst = odst->GetChild(0);
@@ -9357,7 +9687,9 @@ int THREAD::DoXor(TREE * inst)
     if (dst->GetType() == T_WORD)
     {
         sdst = this->symbol_table->FindSymbol(dst->GetText());
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
 
     TYPES::Types value1;
     TYPES::Types value2;
@@ -9384,7 +9716,7 @@ int THREAD::DoXor(TREE * inst)
                 s1->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
         }
     } else if (src1->GetType() == T_WORD)
     {
@@ -9407,9 +9739,11 @@ int THREAD::DoXor(TREE * inst)
                 s1->pred = psrc1_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
 
     if (src2->GetType() == TREE_CONSTANT_EXPR)
     {
@@ -9429,7 +9763,7 @@ int THREAD::DoXor(TREE * inst)
                 s2->pred = c.value.pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
         }
     } else if (src2->GetType() == T_WORD)
     {
@@ -9452,9 +9786,11 @@ int THREAD::DoXor(TREE * inst)
                 s2->pred = psrc2_value->pred;
                 break;
             default:
-                assert(false);
+                throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
         }
-    } else assert(false);
+    }
+    else
+        throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
 
     switch (type)
     {
@@ -9471,7 +9807,7 @@ int THREAD::DoXor(TREE * inst)
             d->pred = s1->pred ^ s2->pred;
             break;
         default:
-            assert(false);
+            throw new EMULATED_DEVICE::EMU_ERROR("Unexpected XOR instruction");
     }
     return 0;
 }
