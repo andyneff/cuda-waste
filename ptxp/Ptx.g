@@ -322,7 +322,9 @@ tokens {
     U_DEBUG_ABBREV;
     U_DEBUG_INFO;
     U_DEBUG_LINE;
+    U_DEBUG_LOC;
     U_DEBUG_PUBNAMES;
+    U_DEBUG_RANGES;
     WS;
     TREE_OPR;
     TREE_TYPE;
@@ -673,11 +675,25 @@ dwarf
     ;
 
 file
-    : a=K_FILE b=integer c=T_STRING -> ^( TREE_DEBUG $a $b $c )
+    : a=K_FILE b=integer c=T_STRING (T_COMMA integer)* -> ^( TREE_DEBUG $a $b $c )
     ;
 
 section
-    : a=K_SECTION -> ^( TREE_DEBUG $a )         // not complete.
+    : a=K_SECTION
+    section_name
+    T_OC
+    data_declarator_list*
+    T_CC
+	-> ^( TREE_DEBUG $a )         // not complete.
+    ;
+
+section_name
+    : T_WORD | U_DEBUG_ABBREV | U_DEBUG_INFO | U_DEBUG_LINE | (U_DEBUG_LOC (T_PLUS integer)?) | U_DEBUG_PUBNAMES | U_DEBUG_RANGES
+    ;
+
+data_declarator_list
+    : type
+    (integer | T_WORD | U_DEBUG_ABBREV | U_DEBUG_INFO | U_DEBUG_LINE | (U_DEBUG_LOC (T_PLUS integer)?) | U_DEBUG_PUBNAMES | U_DEBUG_RANGES)
     ;
 
 loc
@@ -3250,10 +3266,12 @@ K_3D: '.3d';
 K_2D: '.2d';
 K_1D: '.1d';
 
-U_DEBUG_PUBNAMES: '.debug_pubnames';
-U_DEBUG_LINE: '.debug_line';
-U_DEBUG_INFO: '.debug_info';
 U_DEBUG_ABBREV: '.debug_abbrev';
+U_DEBUG_INFO: '.debug_info';
+U_DEBUG_LINE: '.debug_line';
+U_DEBUG_LOC: '.debug_loc';
+U_DEBUG_PUBNAMES: '.debug_pubnames';
+U_DEBUG_RANGES: '.debug_ranges';
 U_BYTE: '.byte';
 U_4BYTE: '.4byte';
 T_EQ: '=';

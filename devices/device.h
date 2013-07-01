@@ -32,8 +32,8 @@
 class DEVICE
 {
 public:
-    DEVICE(){};
-    ~DEVICE(){};
+    DEVICE();
+    ~DEVICE();
 
     // cuda_runtime.h equivalents.
     virtual cudaError_t _cudaArrayGetInfo() = 0;
@@ -199,9 +199,9 @@ public:
     virtual cudaError_t _cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0)) = 0;
     virtual cudaError_t _cudaMemGetInfo(size_t *free, size_t *total) = 0;
     virtual cudaError_t _cudaMemset(void * devPtr, int value, size_t count) = 0;          
-    virtual cudaError_t _cudaMemsetAsync() = 0;
+	virtual cudaError_t _cudaMemsetAsync(void * devPtr, int value, size_t count, cudaStream_t stream __dv(0)) = 0;
     virtual cudaError_t _cudaMemset2D(void *devPtr, size_t pitch, int value, size_t width, size_t height) = 0;
-    virtual cudaError_t _cudaMemset2DAsync() = 0;
+    virtual cudaError_t _cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream = 0) = 0;
     virtual cudaError_t _cudaMemset3D(struct cudaPitchedPtr pitchedDevPtr, int value, struct cudaExtent extent) = 0;
     virtual cudaError_t _cudaMemset3DAsync() = 0;
     virtual cudaError_t _cudaPeekAtLastError(void) = 0;

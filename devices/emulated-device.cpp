@@ -1023,9 +1023,7 @@ CUresult EMULATED_DEVICE::_cuMemcpyHtoD_v2 (CUdeviceptr dstDevice, const void *s
 CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Unimplemented function _cuMemcpyHtoDAsync\n";
-	ERRS * error = new ERRS(CUDA_ERROR_INVALID_VALUE, __FILE__, " " + __LINE__);
-    return CUDA_ERROR_INVALID_VALUE;
+	return this->_cuMemcpyHtoD(dstDevice, srcHost, ByteCount);
 }
 
 CUresult EMULATED_DEVICE::_cuMemcpyHtoDAsync_v2 (CUdeviceptr dstDevice, const void *srcHost, unsigned int ByteCount, CUstream hStream )
@@ -3979,10 +3977,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArray(struct cudaArray *dst, size_t 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy2DToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpy2DToArrayAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpy2DToArray(dst, wOffset, hOffset, src, spitch, width, height, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy3D(const struct cudaMemcpy3DParms *p)
@@ -3997,10 +3992,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpy3D(const struct cudaMemcpy3DParms *p)
 cudaError_t EMULATED_DEVICE::_cudaMemcpy3DAsync(const struct cudaMemcpy3DParms *p, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpy3DAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpy3D(p);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpy3DPeer()
@@ -4031,10 +4023,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyArrayToArray(struct cudaArray *dst, size
 cudaError_t EMULATED_DEVICE::_cudaMemcpyAsync(void *dst, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpy(dst, src, count, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArray(void *dst, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t count, enum cudaMemcpyKind kind)
@@ -4049,10 +4038,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArray(void *dst, const struct cudaAr
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromArrayAsync(void *dst, const struct cudaArray *src, size_t wOffset, size_t hOffset, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyFromArrayAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpyFromArray(dst, src, wOffset, hOffset, count, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbol(void *dst, const char *symbol, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyDeviceToHost))
@@ -4257,10 +4243,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbol(void *dst, const char *symbol
 cudaError_t EMULATED_DEVICE::_cudaMemcpyFromSymbolAsync(void *dst, const char *symbol, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyFromSymbolAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpyFromSymbol(dst, symbol, count, offset, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyPeer()
@@ -4451,10 +4434,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToArray(struct cudaArray *dst, size_t wO
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToArrayAsync(struct cudaArray *dst, size_t wOffset, size_t hOffset, const void *src, size_t count, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyToArrayAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpyToArray(dst, wOffset, hOffset, src, count, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbol(const char *symbol, const void *src, size_t count, size_t offset __dv(0), enum cudaMemcpyKind kind __dv(cudaMemcpyHostToDevice))
@@ -4639,10 +4619,7 @@ cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbol(const char *symbol, const void 
 cudaError_t EMULATED_DEVICE::_cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0))
 {
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-    std::cout << "Function _cudaMemcpyToSymbolAsync is not implemented.\n";
-    _CUDA_RUNTIME::Unimplemented();
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-    return cudaErrorNotYetImplemented;
+	return this->_cudaMemcpyToSymbol(symbol, src, count, offset, kind);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemGetInfo(size_t *free, size_t *total)
@@ -4746,12 +4723,10 @@ cudaError_t EMULATED_DEVICE::_cudaMemset(void * dst, int value, size_t count)
     return err;
 }
 
-cudaError_t EMULATED_DEVICE::_cudaMemsetAsync()
+cudaError_t EMULATED_DEVICE::_cudaMemsetAsync(void * dst, int value, size_t count, cudaStream_t stream = 0)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cudaMemsetAsync\n";
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-	return cudaErrorNotYetImplemented;
+	return this->_cudaMemset(dst, value, count);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemset2D(void *devPtr, size_t pitch, int value, size_t width, size_t height)
@@ -4763,12 +4738,10 @@ cudaError_t EMULATED_DEVICE::_cudaMemset2D(void *devPtr, size_t pitch, int value
     return cudaErrorNotYetImplemented;
 }
 
-cudaError_t EMULATED_DEVICE::_cudaMemset2DAsync()
+cudaError_t EMULATED_DEVICE::_cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream = 0)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	std::cout << "Unimplemented function _cudaMemset2DAsync\n";
-	ERRS * error = new ERRS(cudaErrorNotYetImplemented, __FILE__, " " + __LINE__);
-	return cudaErrorNotYetImplemented;
+	return this->_cudaMemset2D(devPtr, pitch, value, width, height);
 }
 
 cudaError_t EMULATED_DEVICE::_cudaMemset3D(struct cudaPitchedPtr pitchedDevPtr, int value, struct cudaExtent extent)
@@ -5313,7 +5286,7 @@ EMULATED_DEVICE::EMULATED_DEVICE()
 {
     this->device = "compute_20";
     this->string_table = new STRING_TABLE();
-    this->trace_level = 0;
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     this->extern_memory_buffer = 0;
     this->num_threads = 1;
     this->max_instruction_thread = 100;
@@ -5323,7 +5296,6 @@ EMULATED_DEVICE::EMULATED_DEVICE()
 
 void EMULATED_DEVICE::SetTrace(int level)
 {
-    this->trace_level = level;
 }
 
 // In ptxp/driver.cpp.
@@ -5334,7 +5306,7 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
     CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
 
     // parse all modules, regardless of module name selected.
-    if (this->trace_level > 1 || cu->trace_all_calls)
+    if (cu->Level() > 1 || cu->trace_all_calls)
     {
         std::cout << "====================================================\n";
         std::cout << "PROFILE = " << module_name << std::endl;
@@ -5349,7 +5321,7 @@ MODULE * EMULATED_DEVICE::Parse(char * module_name, char * source)
         std::cout << "Error: cannot parse PTX!\n";
         return false;
     }
-    if (this->trace_level > 1 || cu->trace_all_calls)
+    if (cu->Level() > 1 || cu->trace_all_calls)
     {
         std::cout << "====================================================\n";
         std::cout << "TREE: " << std::endl;
@@ -5823,6 +5795,8 @@ void EMULATED_DEVICE::ResetArgs()
 
 void EMULATED_DEVICE::Execute(ENTRY * entry)
 {
+	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+
 //    _CrtMemState state_begin;
 //    _CrtMemCheckpoint(&state_begin);
 
@@ -5855,7 +5829,7 @@ void EMULATED_DEVICE::Execute(ENTRY * entry)
     // way to get this optimization working again.
     bool do_thread_synch = true;
     // = CodeRequiresThreadSynchronization(code);
-    if (this->trace_level > 1)
+    if (cu->Level() > 1)
         std::cout << "Thread synchronization " << (do_thread_synch ? "is" : "is not") << " required.\n";
     for (int bidx = 0; bidx < conf.gridDim.x; ++bidx)
     {
@@ -5906,6 +5880,7 @@ bool EMULATED_DEVICE::CodeRequiresThreadSynchronization(TREE * code)
 
 void EMULATED_DEVICE::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_thread_synch, TREE * code, int bidx, int bidy, int bidz)
 {
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
     std::queue<THREAD *> wait_queue;
     std::queue<THREAD *> active_queue;
 
@@ -6047,7 +6022,7 @@ void EMULATED_DEVICE::ExecuteSingleBlock(SYMBOL_TABLE * symbol_table, bool do_th
         // thread synchronization assumes all threads wait.
         if (num_waiting_threads != 0 && num_waiting_threads == wait_queue.size())
         {
-            if (this->trace_level > 1)
+            if (cu->Level() > 1)
                 std::cout << "All " << num_waiting_threads << " threads synchronized!\n";
             // all threads waiting.  Reset all threads to not wait.
             for (int i = 0; i < num_waiting_threads; ++i)
@@ -6347,3 +6322,10 @@ bool EMULATED_DEVICE::IsBadPointer(const void * ptr)
     return bad;
 }
 
+
+
+int EMULATED_DEVICE::TraceLevel()
+{
+    CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
+    return cu->Level();
+}

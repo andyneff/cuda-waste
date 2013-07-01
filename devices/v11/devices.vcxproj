@@ -232,6 +232,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\constant.cpp" />
+    <ClCompile Include="..\device.cpp" />
     <ClCompile Include="..\emulated-device.cpp" />
     <ClCompile Include="..\errors.cpp" />
     <ClCompile Include="..\instructions.cpp" />

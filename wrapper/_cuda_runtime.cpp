@@ -1289,10 +1289,10 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset(void * devPtr, int value, size_
 	return cu->CurrentDevice()->_cudaMemset(devPtr, value, count);
 }
 
-cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemsetAsync()
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemsetAsync(void * devPtr, int value, size_t count, cudaStream_t stream __dv(0))
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return cu->CurrentDevice()->_cudaMemsetAsync();
+	return cu->CurrentDevice()->_cudaMemsetAsync(devPtr, value, count, stream);
 }
 
 cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset2D(void *devPtr, size_t pitch, int value, size_t width, size_t height)
@@ -1301,10 +1301,10 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset2D(void *devPtr, size_t pitch, i
 	return cu->CurrentDevice()->_cudaMemset2D(devPtr, pitch, value, width, height);
 }
 
-cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset2DAsync()
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream __dv(0))
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return cu->CurrentDevice()->_cudaMemset2DAsync();
+	return cu->CurrentDevice()->_cudaMemset2DAsync(devPtr, pitch, value, width, height, stream);
 }
 
 cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMemset3D(struct cudaPitchedPtr pitchedDevPtr, int value, struct cudaExtent extent)

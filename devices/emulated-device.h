@@ -66,14 +66,9 @@ private:
     friend std::vector<data>;
     std::vector<data> * alloc_list;
 
-private:
-    int trace_level;
 
 public:
-    int TraceLevel()
-    {
-        return trace_level;
-    }
+    int TraceLevel();
 
 public:
     struct arg
@@ -331,9 +326,9 @@ public:
     cudaError_t _cudaMemcpyToSymbolAsync(const char *symbol, const void *src, size_t count, size_t offset, enum cudaMemcpyKind kind, cudaStream_t stream __dv(0));
     cudaError_t _cudaMemGetInfo(size_t *free, size_t *total);
     cudaError_t _cudaMemset(void * devPtr, int value, size_t count);          
-	cudaError_t _cudaMemsetAsync();
+	cudaError_t _cudaMemsetAsync(void * devPtr, int value, size_t count, cudaStream_t stream __dv(0));
     cudaError_t _cudaMemset2D(void *devPtr, size_t pitch, int value, size_t width, size_t height);
-	cudaError_t _cudaMemset2DAsync();
+	cudaError_t _cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream __dv(0));
     cudaError_t _cudaMemset3D(struct cudaPitchedPtr pitchedDevPtr, int value, struct cudaExtent extent);
 	cudaError_t _cudaMemset3DAsync();
     cudaError_t _cudaPeekAtLastError(void);

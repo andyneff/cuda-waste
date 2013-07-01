@@ -62,7 +62,14 @@ public:
     static char * Context(int lines = 1);
     char * global_context;
     char * device; // device to run.
+private:
 	int level;
+public:
+	int Level()
+	{
+		return this->level;
+	}
+
 	bool do_debugger;
 	int stack_size;
     _CUDA * _cuda;

@@ -60,6 +60,14 @@ CUDA_WRAPPER * CUDA_WRAPPER::Singleton()
     if (CUDA_WRAPPER::singleton)
         return CUDA_WRAPPER::singleton;
     CUDA_WRAPPER::singleton = new CUDA_WRAPPER();
+
+	// Continue with mutually dependent initializations.
+    CUDA_WRAPPER::singleton->_cuda = new _CUDA();
+    CUDA_WRAPPER::singleton->_cuda_runtime = new _CUDA_RUNTIME();
+	EMULATED_DEVICE * ed = new EMULATED_DEVICE();
+	CUDA_WRAPPER::singleton->devices->push_back((DEVICE*)ed);
+	CUDA_WRAPPER::singleton->current_device = (DEVICE*)ed;
+
     return CUDA_WRAPPER::singleton;
 }
 
@@ -83,14 +91,9 @@ CUDA_WRAPPER::CUDA_WRAPPER()
     this->do_debug_halt = false;
     this->level = 0;
     this->device = 0; // nothing specific.
-    this->_cuda = new _CUDA();
-    this->_cuda_runtime = new _CUDA_RUNTIME();
     this->stack_size = 10 * 1024 * 1024;
-	EMULATED_DEVICE * ed = new EMULATED_DEVICE();
 	if (devices == 0)
 		devices = new std::list<DEVICE*>();
-	devices->push_back((DEVICE*)ed);
-	this->current_device = (DEVICE*)ed;
     if (atexit(CUDA_WRAPPER::ExitHandler))
     {
         std::cerr << "Cannot register CUDA_WRAPPER exit handler during initialization.  Memory leaks will not be detected.\n";
@@ -777,7 +780,7 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
             WriteProcessMemory(hProcess, pstr, (LPVOID) str, strlen(str) + 1, &written);
 
             // Load address of SetTrace string into rad.
-            // mov rad, 0x000000000
+            // mov rcx, 0x000000000
             AddBytes(code, 0x48, 0xba);
             AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
             JmpAbsoluteAddress(code, size-8, pstr);
@@ -802,8 +805,14 @@ HANDLE __stdcall CUDA_WRAPPER::StartProcess(char * command)
             AddBytes(code, 0x48, 0x89, 0x44, 0x24, 0x10);
 
             // Load level for SetTrace()
+            // mov rax, 0x000000000
+            AddBytes(code, 0x48, 0xb9);
+            AddBytes(code, 0, 0, 0, 0, 0, 0, 0, 0);
+            JmpAbsoluteAddress(code, size-8, level);
+
+            // Load level for SetTrace()
             //  mov         cl,level  
-            AddBytes(code, 0xB1, level);
+//            AddBytes(code, 0xB1, level);
             
             // Call SetTrace
             // call        qword ptr [rsp+10h] 

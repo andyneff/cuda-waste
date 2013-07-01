@@ -31,6 +31,7 @@
 #include "array.h"
 #include "texarr.h"
 #include "../libc/k_stdio.h"
+#include <bitset>
 
 #define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 
@@ -1332,7 +1333,253 @@ int THREAD::DoBar(TREE * inst)
 
 int THREAD::DoBfe(TREE * inst)
 {
-    throw new EMULATED_DEVICE::EMU_ERROR("BFE unimplemented");
+    int start = 0;
+    if (inst->GetChild(start)->GetType() == TREE_PRED)
+        start++;
+    assert(inst->GetChild(start)->GetType() == KI_BFE);
+    start++;
+    TREE * ttype = 0;
+    TREE * odst = 0;
+    TREE * osrc1 = 0;
+    TREE * osrc2 = 0;
+    TREE * osrc3 = 0;
+    for (;; ++start)
+    {
+        TREE * t = inst->GetChild(start);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == TREE_TYPE)
+            ttype = t;
+        else if (gt == TREE_OPR)
+        {
+            if (odst == 0)
+            {
+                odst = t;
+            } else if (osrc1 == 0)
+            {
+                osrc1 = t;
+            } else if (osrc2 == 0)
+            {
+                osrc2 = t;
+            } else if (osrc3 == 0)
+            {
+                osrc3 = t;
+            } else assert(false);
+        } else assert(false);
+    }
+    assert(ttype != 0);
+    assert(odst != 0);
+    assert(osrc1 != 0);
+    assert(osrc2 != 0);
+    assert(osrc3 != 0);
+    int type = 0;
+    int storage_class = 0;
+    for (int i = 0; ; ++i)
+    {
+        TREE * t = ttype->GetChild(i);
+        if (t == 0)
+            break;
+        int gt = t->GetType();
+        if (gt == K_U32 || gt == K_U64
+            || gt == K_S32)
+            type = gt;
+        else assert(false);
+    }
+    assert(type != 0);
+
+    TREE * dst = odst->GetChild(0);
+    // Note src1 is not really only a source operand. It is a
+    // destination operand, too.
+    TREE * src1 = osrc1->GetChild(0);
+    TREE * src2 = osrc2->GetChild(0);
+    TREE * src3 = osrc3->GetChild(0);
+
+    SYMBOL * sdst = 0;
+    assert(dst->GetType() == T_WORD);
+    sdst = this->symbol_table->FindSymbol(dst->GetText());
+    assert(sdst != 0);
+    TYPES::Types * d = (TYPES::Types*)sdst->pvalue;
+    TYPES::Types value1;
+    TYPES::Types * s1 = &value1;
+    TYPES::Types value2;
+    TYPES::Types * s2 = &value2;
+    TYPES::Types value3;
+    TYPES::Types * s3 = &value3;
+
+	if (src1->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src1->GetChild(0));
+        switch (type)
+        {
+            case K_U32:
+                s1->u32 = c.value.u32;
+                break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S32:
+                s1->s32 = c.value.s32;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else if (src1->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc1 = this->symbol_table->FindSymbol(src1->GetText());
+        assert(ssrc1 != 0);
+        assert(ssrc1->size == this->device->Sizeof(type));
+        TYPES::Types * psrc1_value = (TYPES::Types*)ssrc1->pvalue;
+        switch (type)
+        {
+            case K_U32:
+                s1->u32 = psrc1_value->u32;
+                break;
+            case K_U64:
+                s1->u64 = psrc1_value->u64;
+                break;
+            case K_S32:
+                s1->s32 = psrc1_value->s32;
+                break;
+            case K_S64:
+                s1->s64 = psrc1_value->s64;
+                break;
+            default:
+                assert(false);
+        }
+    } else assert(false);
+
+	if (src2->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src2->GetChild(0));
+        s2->u32 = c.value.u32;
+    } else if (src2->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc2 = this->symbol_table->FindSymbol(src2->GetText());
+        assert(ssrc2 != 0);
+        TYPES::Types * psrc2_value = (TYPES::Types*)ssrc2->pvalue;
+        s2->u32 = psrc2_value->u32;
+    } else assert(false);
+
+	if (src3->GetType() == TREE_CONSTANT_EXPR)
+    {
+        CONSTANT c = this->device->Eval(type, src3->GetChild(0));
+        s3->u32 = c.value.u32;
+    } else if (src2->GetType() == T_WORD)
+    {
+        SYMBOL * ssrc3 = this->symbol_table->FindSymbol(src3->GetText());
+        assert(ssrc3 != 0);
+        TYPES::Types * psrc3_value = (TYPES::Types*)ssrc3->pvalue;
+        s3->u32 = psrc3_value->u32;
+    } else assert(false);
+
+
+	// Bits are numbered least significant bit to most significant bit.
+    switch (type)
+    {
+        case K_U32:
+			{
+				std::bitset<32> in_bs;
+				std::bitset<32> out_bs;
+				unsigned _int32 a = s1->u32;
+				in_bs = a;
+				int msb = 31;
+				int pos = s2->u32 & 0xff;
+				int len = s3->u32 & 0xff;
+				int sbit = 0; // U32
+				unsigned __int32 r = 0;
+				a = a >> pos;
+				for (int i = 0; i <= msb; ++i)
+				{
+					if (i < len && pos + i <= msb)
+						out_bs[i] = in_bs[pos+i];
+					else
+						out_bs[i] = sbit;
+				}
+				d->u32 = 0xffffffff & out_bs.to_ulong();
+			}
+            break;
+        case K_U64:
+			{
+				std::bitset<64> in_bs;
+				std::bitset<64> out_bs;
+				unsigned _int64 a = s1->u64;
+				in_bs = a;
+				int msb = 63;
+				int pos = s2->u32 & 0xff;
+				int len = s3->u32 & 0xff;
+				int sbit = 0; // U64
+				unsigned __int64 r = 0;
+				a = a >> pos;
+				for (int i = 0; i <= msb; ++i)
+				{
+					if (i < len && pos + i <= msb)
+						out_bs[i] = in_bs[pos+i];
+					else
+						out_bs[i] = sbit;
+				}
+				d->u64 = out_bs.to_ulong();
+			}
+            break;
+        case K_S32:
+			{
+				std::bitset<32> in_bs;
+				std::bitset<32> out_bs;
+				_int32 a = s1->s32;
+				in_bs = a;
+				int msb = 31;
+				int pos = s2->u32 & 0xff;
+				int len = s3->u32 & 0xff;
+				int sbit;
+				if (len == 0)
+					sbit = 0;
+				else
+					sbit = (a >> (min(pos + len - 1, msb))) & 1;
+				__int32 r = 0;
+				a = a >> pos;
+				for (int i = 0; i <= msb; ++i)
+				{
+					if (i < len && pos + i <= msb)
+						out_bs[i] = in_bs[pos+i];
+					else
+						out_bs[i] = sbit;
+				}
+				d->u32 = (__int32)(0xffffffff & out_bs.to_ulong());
+			}
+			break;
+        case K_S64:
+			{
+				std::bitset<64> in_bs;
+				std::bitset<64> out_bs;
+				_int64 a = s1->s64;
+				int msb = 63;
+				int pos = s2->u32 & 0xff;
+				int len = s3->u32 & 0xff;
+				int sbit;
+				if (len == 0)
+					sbit = 0;
+				else
+					sbit = (a >> (min(pos + len - 1, msb))) & 1;
+				__int64 r = 0;
+				a = a >> pos;
+				for (int i = 0; i <= msb; ++i)
+				{
+					if (i < len && pos + i <= msb)
+						out_bs[i] = in_bs[pos+i];
+					else
+						out_bs[i] = sbit;
+				}
+				d->s64 = (__int64) out_bs.to_ulong();
+			}
+			break;
+        default:
+            assert(false);
+    }
+
+    return 0;
 }
 
 int THREAD::DoBfi(TREE * inst)
@@ -5251,7 +5498,7 @@ int THREAD::DoNot(TREE * inst)
             d->b64 = ~s1->b64;
             break;
         case K_PRED:
-            d->pred = ~s1->pred;
+            d->pred = ! s1->pred; // THIS WORKS, BUT THE FOLLOWING DOES NOT WORK!!! ~s1->pred;
             break;
         default:
             assert(false);
