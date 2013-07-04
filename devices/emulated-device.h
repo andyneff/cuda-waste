@@ -294,8 +294,8 @@ public:
 	cudaError_t _cudaIpcOpenMemHandle();
     cudaError_t _cudaLaunch(const char *entry);
     cudaError_t _cudaMalloc(void ** ptr, size_t size);
-	cudaError_t _cudaMalloc3D();
-    cudaError_t _cudaMalloc3DArray(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent);
+	cudaError_t _cudaMalloc3D(struct cudaPitchedPtr * pitchedDevPtr, struct cudaExtent extent);
+    cudaError_t _cudaMalloc3DArray(struct cudaArray ** array, const struct cudaChannelFormatDesc * desc, struct cudaExtent extent, unsigned int flags = 0);
     cudaError_t _cudaMallocArray(struct cudaArray **array, const struct cudaChannelFormatDesc *desc, size_t width, size_t height __dv(0), unsigned int flags __dv(0));
     cudaError_t _cudaMallocHost(void **ptr, size_t size);
 	cudaError_t _cudaMallocMipmappedArray();

@@ -24,6 +24,9 @@ private:
 	struct cudaChannelFormatDesc *desc;
 	size_t width;
 	size_t height;
+	size_t depth;
+	size_t pitch;
+	int dim;
 	unsigned int flags;
 	unsigned char * memory;
 
@@ -33,6 +36,19 @@ public:
 		this->desc = _desc;
 		this->width = _width;
 		this->height = _height;
+		this->depth = 1;
+		this->dim = 2;
+		this->flags = _flags;
+		this->memory = 0;
+	};
+
+	ARRAY(struct cudaChannelFormatDesc * _desc, size_t _width, 	size_t _height, size_t _depth, unsigned int _flags)
+	{
+		this->desc = _desc;
+		this->width = _width;
+		this->height = _height;
+		this->depth = _depth;
+		this->dim = 3;
 		this->flags = _flags;
 		this->memory = 0;
 	};

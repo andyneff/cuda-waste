@@ -285,8 +285,8 @@ public:
     static cudaError_t CUDARTAPI _cudaIpcOpenMemHandle();
     static cudaError_t CUDARTAPI _cudaLaunch(const char *entry);
     static cudaError_t CUDARTAPI _cudaMalloc(void ** ptr, size_t size);
-    static cudaError_t CUDARTAPI _cudaMalloc3D();
-    static cudaError_t CUDARTAPI _cudaMalloc3DArray(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent);
+    static cudaError_t CUDARTAPI _cudaMalloc3D(struct cudaPitchedPtr * pitchedDevPtr, struct cudaExtent extent);
+    static cudaError_t CUDARTAPI _cudaMalloc3DArray(struct cudaArray ** array, const struct cudaChannelFormatDesc * desc, struct cudaExtent extent, unsigned int flags = 0);
     static cudaError_t CUDARTAPI _cudaMallocArray(struct cudaArray **array, const struct cudaChannelFormatDesc *desc, size_t width, size_t height __dv(0), unsigned int flags __dv(0));
     static cudaError_t CUDARTAPI _cudaMallocHost(void **ptr, size_t size);
     static cudaError_t CUDARTAPI _cudaMallocMipmappedArray();

@@ -5131,6 +5131,18 @@ int THREAD::DoMul(TREE * inst)
             case K_S32:
                 s1->s32 = c.value.s32;
                 break;
+            case K_U64:
+                s1->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s1->s64 = c.value.s64;
+                break;
+            case K_F32:
+                s1->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s1->f64 = c.value.f64;
+                break;
             default:
                 throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
         }
@@ -5160,8 +5172,17 @@ int THREAD::DoMul(TREE * inst)
             case K_S32:
                 s2->s32 = c.value.s32;
                 break;
+            case K_U64:
+                s2->u64 = c.value.u64;
+                break;
+            case K_S64:
+                s2->s64 = c.value.s64;
+                break;
             case K_F32:
                 s2->f32 = c.value.f32;
+                break;
+            case K_F64:
+                s2->f64 = c.value.f64;
                 break;
             default:
                 throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
@@ -5264,6 +5285,20 @@ int THREAD::DoMul(TREE * inst)
             }
             else
                 throw new EMULATED_DEVICE::EMU_ERROR("Unexpected MUL instruction");
+            break;
+		case K_U64:
+			{
+				unsigned __int64 vx = s1->u32;
+				vx = vx * s2->u64;
+				d->u64 = vx;
+			}
+            break;
+        case K_S64:
+			{
+				__int64 vx = s1->s32;
+				vx = vx * s2->s64;
+				d->s64 = vx;
+			}
             break;
         case K_F32:
             assert(width == 0);

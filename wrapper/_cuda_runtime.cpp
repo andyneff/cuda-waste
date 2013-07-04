@@ -1097,16 +1097,16 @@ cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMalloc(void ** ptr, size_t size)
 	return cu->CurrentDevice()->_cudaMalloc(ptr, size);
 }
 
-cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMalloc3D()
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMalloc3D(struct cudaPitchedPtr * pitchedDevPtr, struct cudaExtent extent)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return cu->CurrentDevice()->_cudaMalloc3D();
+	return cu->CurrentDevice()->_cudaMalloc3D(pitchedDevPtr, extent);
 }
 
-cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMalloc3DArray(struct cudaPitchedPtr* pitchedDevPtr, struct cudaExtent extent)
+cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMalloc3DArray(struct cudaArray ** array, const struct cudaChannelFormatDesc * desc, struct cudaExtent extent, unsigned int flags)
 {
 	CUDA_WRAPPER * cu = CUDA_WRAPPER::Singleton();
-	return cu->CurrentDevice()->_cudaMalloc3DArray(pitchedDevPtr, extent);
+	return cu->CurrentDevice()->_cudaMalloc3DArray(array, desc, extent, flags);
 }
 
 cudaError_t CUDARTAPI _CUDA_RUNTIME::_cudaMallocArray(struct cudaArray **array, const struct cudaChannelFormatDesc *desc, size_t width, size_t height __dv(0), unsigned int flags __dv(0))
